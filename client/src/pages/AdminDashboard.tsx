@@ -99,7 +99,7 @@ export default function AdminDashboard() {
           contentMap[content.identifier] = {
             title: content.title,
             description: content.description,
-            price: content.metadata ? JSON.parse(content.metadata).price : ""
+            price: (content as any).metadata ? JSON.parse((content as any).metadata as string).price || "" : ""
           };
           if (content.imageUrl) {
             imageMap[content.identifier] = content.imageUrl;

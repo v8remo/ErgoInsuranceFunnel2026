@@ -33,6 +33,7 @@ export const content = pgTable("content", {
   price: text("price"),
   features: jsonb("features"), // array of feature strings
   imageUrl: text("image_url"),
+  metadata: jsonb("metadata"), // additional metadata as JSON
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
