@@ -45,6 +45,8 @@ export default function AdminDashboard() {
   const [editingContent, setEditingContent] = useState<Content | null>(null);
   const [uploadingImages, setUploadingImages] = useState<{[key: string]: boolean}>({});
   const [imageUrls, setImageUrls] = useState<{[key: string]: string}>({});
+  const [contentData, setContentData] = useState<{[key: string]: {title: string, description: string, price: string}}>({});
+  const [savingContent, setSavingContent] = useState<{[key: string]: boolean}>({});
   const fileInputRefs = useRef<{[key: string]: HTMLInputElement | null}>({});
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -79,6 +81,36 @@ export default function AdminDashboard() {
     queryKey: ["/api/dashboard/stats"],
     enabled: isAuthenticated
   });
+
+  // Content query to load existing content
+  const { data: existingContent } = useQuery<Content[]>({
+    queryKey: ["/api/content"],
+    enabled: isAuthenticated
+  });
+
+  // Initialize content data when existing content loads
+  useEffect(() => {
+    if (existingContent) {
+      const contentMap: {[key: string]: {title: string, description: string, price: string}} = {};
+      const imageMap: {[key: string]: string} = {};
+      
+      existingContent.forEach((content: Content) => {
+        if (content.type === "insurance") {
+          contentMap[content.identifier] = {
+            title: content.title,
+            description: content.description,
+            price: content.metadata ? JSON.parse(content.metadata).price : ""
+          };
+          if (content.imageUrl) {
+            imageMap[content.identifier] = content.imageUrl;
+          }
+        }
+      });
+      
+      setContentData(contentMap);
+      setImageUrls(imageMap);
+    }
+  }, [existingContent]);
 
   // Leads query with filters
   const { data: leads = [], isLoading } = useQuery<Lead[]>({
@@ -198,6 +230,73 @@ export default function AdminDashboard() {
     if (file) {
       handleImageUpload(file, insuranceId);
     }
+  };
+
+  // Save content mutation
+  const saveContentMutation = useMutation({
+    mutationFn: async ({ insuranceId, data }: { insuranceId: string, data: any }) => {
+      // Check if content already exists
+      const existingItem = existingContent?.find((c: Content) => c.identifier === insuranceId && c.type === "insurance");
+      
+      const contentPayload = {
+        type: "insurance",
+        identifier: insuranceId,
+        title: data.title,
+        description: data.description,
+        imageUrl: imageUrls[insuranceId] || data.currentImage,
+        metadata: JSON.stringify({ price: data.price })
+      };
+
+      if (existingItem) {
+        // Update existing content
+        const response = await apiRequest("PUT", `/api/content/${existingItem.id}`, contentPayload);
+        return response.json();
+      } else {
+        // Create new content
+        const response = await apiRequest("POST", "/api/content", contentPayload);
+        return response.json();
+      }
+    },
+    onSuccess: (data, variables) => {
+      setSavingContent(prev => ({ ...prev, [variables.insuranceId]: false }));
+      queryClient.invalidateQueries({ queryKey: ["/api/content"] });
+      toast({
+        title: "Erfolgreich gespeichert",
+        description: "Die Änderungen wurden in der Datenbank gespeichert"
+      });
+    },
+    onError: (error, variables) => {
+      setSavingContent(prev => ({ ...prev, [variables.insuranceId]: false }));
+      toast({
+        title: "Speichern fehlgeschlagen",
+        description: "Die Änderungen konnten nicht gespeichert werden",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const handleSaveContent = (insuranceId: string, insuranceData: any) => {
+    setSavingContent(prev => ({ ...prev, [insuranceId]: true }));
+    
+    const formData = contentData[insuranceId] || {};
+    const dataToSave = {
+      title: formData.title || insuranceData.name,
+      description: formData.description || insuranceData.description,
+      price: formData.price || insuranceData.price,
+      currentImage: insuranceData.currentImage
+    };
+    
+    saveContentMutation.mutate({ insuranceId, data: dataToSave });
+  };
+
+  const handleContentChange = (insuranceId: string, field: string, value: string) => {
+    setContentData(prev => ({
+      ...prev,
+      [insuranceId]: {
+        ...prev[insuranceId],
+        [field]: value
+      }
+    }));
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -594,7 +693,8 @@ export default function AdminDashboard() {
                             Titel
                           </label>
                           <Input 
-                            defaultValue={insurance.name}
+                            value={contentData[insurance.id]?.title || insurance.name}
+                            onChange={(e) => handleContentChange(insurance.id, 'title', e.target.value)}
                             placeholder="Versicherungstitel"
                           />
                         </div>
@@ -607,7 +707,8 @@ export default function AdminDashboard() {
                             className="w-full p-3 border border-gray-300 rounded-md resize-none"
                             rows={3}
                             placeholder="Beschreibung der Versicherung"
-                            defaultValue={insurance.description}
+                            value={contentData[insurance.id]?.description || insurance.description}
+                            onChange={(e) => handleContentChange(insurance.id, 'description', e.target.value)}
                           />
                         </div>
                         
@@ -617,13 +718,27 @@ export default function AdminDashboard() {
                           </label>
                           <Input 
                             placeholder="ab 10€/Monat"
-                            defaultValue={insurance.price}
+                            value={contentData[insurance.id]?.price || insurance.price}
+                            onChange={(e) => handleContentChange(insurance.id, 'price', e.target.value)}
                           />
                         </div>
                         
-                        <Button className="bg-ergo-red hover:bg-ergo-red-hover text-white w-full">
-                          <Save className="w-4 h-4 mr-2" />
-                          Änderungen speichern
+                        <Button 
+                          className="bg-ergo-red hover:bg-ergo-red-hover text-white w-full"
+                          onClick={() => handleSaveContent(insurance.id, insurance)}
+                          disabled={savingContent[insurance.id]}
+                        >
+                          {savingContent[insurance.id] ? (
+                            <>
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                              Speichert...
+                            </>
+                          ) : (
+                            <>
+                              <Save className="w-4 h-4 mr-2" />
+                              Änderungen speichern
+                            </>
+                          )}
                         </Button>
                       </div>
                     </div>
