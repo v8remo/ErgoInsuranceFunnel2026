@@ -135,6 +135,71 @@ export default function AdminDashboard() {
     }
   });
 
+  // Image upload functionality
+  const handleImageUpload = async (file: File, insuranceId: string) => {
+    setUploadingImages(prev => ({ ...prev, [insuranceId]: true }));
+    
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setImageUrls(prev => ({ ...prev, [insuranceId]: result.imageUrl }));
+        toast({
+          title: "Bild hochgeladen",
+          description: "Das Bild wurde erfolgreich hochgeladen"
+        });
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      toast({
+        title: "Upload fehlgeschlagen",
+        description: "Das Bild konnte nicht hochgeladen werden",
+        variant: "destructive"
+      });
+    } finally {
+      setUploadingImages(prev => ({ ...prev, [insuranceId]: false }));
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent, insuranceId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const files = Array.from(e.dataTransfer.files);
+    const imageFile = files.find(file => file.type.startsWith('image/'));
+    
+    if (imageFile) {
+      handleImageUpload(imageFile, insuranceId);
+    } else {
+      toast({
+        title: "Ungültiger Dateityp",
+        description: "Bitte laden Sie nur Bilddateien hoch",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>, insuranceId: string) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleImageUpload(file, insuranceId);
+    }
+  };
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     loginMutation.mutate(password);
@@ -476,16 +541,48 @@ export default function AdminDashboard() {
                         </label>
                         <div className="mb-4">
                           <img 
-                            src={insurance.currentImage} 
+                            src={imageUrls[insurance.id] || insurance.currentImage} 
                             alt={insurance.name}
                             className="w-full h-32 object-cover rounded border"
                           />
                         </div>
-                        <Input 
-                          placeholder="Neue Bild-URL eingeben"
-                          className="mb-2"
+                        
+                        {/* Drag & Drop Upload Area */}
+                        <div 
+                          className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer transition-colors hover:border-ergo-red hover:bg-gray-50 ${
+                            uploadingImages[insurance.id] ? 'border-ergo-red bg-gray-50' : ''
+                          }`}
+                          onDragOver={handleDragOver}
+                          onDrop={(e) => handleDrop(e, insurance.id)}
+                          onClick={() => fileInputRefs.current[insurance.id]?.click()}
+                        >
+                          {uploadingImages[insurance.id] ? (
+                            <div className="flex items-center justify-center">
+                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-ergo-red"></div>
+                              <span className="ml-2 text-gray-600">Lädt...</span>
+                            </div>
+                          ) : (
+                            <div>
+                              <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                              <p className="text-sm text-gray-600 mb-1">
+                                Bild hierher ziehen oder klicken zum Auswählen
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                PNG, JPG, GIF bis 5MB
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <input 
+                          type="file"
+                          ref={(el) => fileInputRefs.current[insurance.id] = el}
+                          onChange={(e) => handleFileInputChange(e, insurance.id)}
+                          accept="image/*"
+                          className="hidden"
                         />
-                        <p className="text-sm text-gray-500">
+                        
+                        <p className="text-sm text-gray-500 mt-2">
                           Empfohlene Größe: 400x250px
                         </p>
                       </div>
