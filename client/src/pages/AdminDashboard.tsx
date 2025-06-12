@@ -426,35 +426,35 @@ export default function AdminDashboard() {
                 { 
                   id: "hausrat", 
                   name: "Hausratversicherung", 
-                  currentImage: "https://assets.ergo.com/content/dam/ergo/produkte/sach/hausratversicherung.c538x0x810x540.dam.jpg",
+                  currentImage: "https://images.unsplash.com/photo-1556909045-f7de0ad5eab5?w=400&h=250&fit=crop&q=80",
                   description: "Schutz für Ihr Hab und Gut. Absicherung gegen Einbruch, Feuer, Wasser und Sturm.",
                   price: "ab 15€/Monat"
                 },
                 { 
                   id: "haftpflicht", 
                   name: "Haftpflichtversicherung", 
-                  currentImage: "https://assets.ergo.com/content/dam/ergo/produkte/privathaftpflicht/privathaftpflichtversicherung.dam.jpg",
+                  currentImage: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=250&fit=crop&q=80",
                   description: "Schutz vor existenzbedrohenden Schadenersatzforderungen. Ein Muss für jeden.",
                   price: "ab 8€/Monat"
                 },
                 { 
                   id: "wohngebaeude", 
                   name: "Wohngebäudeversicherung", 
-                  currentImage: "https://assets.ergo.com/content/dam/ergo/produkte/sach/wohngebaeudeversicherung/wohngebaeudeversicherung.dam.jpg",
+                  currentImage: "/attached_assets/wohngebaeudeversicherung.dam_1749718195826.jpg",
                   description: "Für den wichtigsten Ort der Welt: Ihr Zuhause. Mit der \"Haus-zurück-Garantie\" bekommen Sie die Kosten für die Wiederherstellung in einen neuwertigen Zustand zu aktuellen Preisen erstattet.",
                   price: "z.B. 28,99€/Monat"
                 },
                 { 
                   id: "rechtsschutz", 
                   name: "Rechtsschutzversicherung", 
-                  currentImage: "https://assets.ergo.com/content/dam/ergo/produkte/rechtsschutz/rechtsschutzversicherung.dam.jpg",
+                  currentImage: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&h=250&fit=crop&q=80",
                   description: "Durchsetzen Ihres Rechts ohne finanzielle Sorgen. Anwalts- und Gerichtskosten abgedeckt.",
                   price: "ab 18€/Monat"
                 },
                 { 
                   id: "zahnzusatz", 
                   name: "Zahnzusatzversicherung", 
-                  currentImage: "https://assets.ergo.com/content/dam/ergo/produkte/kranken/zahnzusatzversicherung.dam.jpg",
+                  currentImage: "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=400&h=250&fit=crop&q=80",
                   description: "Für schöne und gesunde Zähne. Ohne Wartezeit und mit Sofortleistung.",
                   price: "ab 10€/Monat"
                 }

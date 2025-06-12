@@ -1,10 +1,15 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import express from "express";
+import path from "path";
 import { storage } from "./storage";
 import { insertLeadSchema, insertContentSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Static file serving for attached assets
+  app.use('/attached_assets', express.static(path.join(process.cwd(), 'attached_assets')));
+  
   // Lead management routes
   app.post("/api/leads", async (req, res) => {
     try {
