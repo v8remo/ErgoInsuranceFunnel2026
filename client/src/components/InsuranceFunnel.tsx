@@ -47,22 +47,33 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
   // Submit lead mutation
   const submitMutation = useMutation({
     mutationFn: async (leadData: InsertLead) => {
+      console.log("Submitting lead data:", leadData);
       const response = await apiRequest("POST", "/api/leads", leadData);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("Lead successfully created:", data);
       trackEvent("lead_generated", {
         insurance_type: insuranceType,
         lead_value: getLeadValue(insuranceType)
       });
       setCurrentStep(4);
       
-      // Auto close after 5 seconds
+      toast({
+        title: "Anfrage erfolgreich übermittelt!",
+        description: "Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
+      });
+      
+      // Auto close after 8 seconds
       setTimeout(() => {
         onClose();
-      }, 5000);
+      }, 8000);
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Lead submission error:", error);
       toast({
         title: "Fehler beim Senden",
         description: "Ihre Anfrage konnte nicht übermittelt werden. Bitte versuchen Sie es erneut.",
@@ -128,6 +139,8 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
   };
 
   const submitForm = () => {
+    console.log("submitForm called with formData:", formData);
+    
     const leadData: InsertLead = {
       insuranceType,
       firstName: formData.firstName,
@@ -141,6 +154,7 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
       source: "website_funnel"
     };
 
+    console.log("About to submit leadData:", leadData);
     submitMutation.mutate(leadData);
   };
 
