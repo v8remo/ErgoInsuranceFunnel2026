@@ -347,14 +347,14 @@ export default function AdminDashboard() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-ergo-gray-light flex items-center justify-center">
+      <div className="min-h-screen bg-ergo-gray-light flex items-center justify-center p-4">
         <Card className="w-full max-w-md shadow-xl">
           <CardHeader className="bg-ergo-red text-white rounded-t-lg">
-            <CardTitle className="text-center text-white">
+            <CardTitle className="text-center text-white text-lg sm:text-xl">
               ERGO Admin Dashboard
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-6">
+          <CardContent className="p-4 sm:p-6">
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-ergo-dark mb-2">
@@ -366,12 +366,12 @@ export default function AdminDashboard() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Admin-Passwort eingeben"
                   required
-                  className="border-gray-300 focus:border-ergo-red focus:ring-ergo-red"
+                  className="border-gray-300 focus:border-ergo-red focus:ring-ergo-red text-base"
                 />
               </div>
               <Button 
                 type="submit"
-                className="w-full bg-ergo-red hover:bg-ergo-red-hover text-white"
+                className="w-full bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base py-2 sm:py-3"
                 disabled={loginMutation.isPending}
               >
                 {loginMutation.isPending ? "Anmeldung..." : "Anmelden"}
@@ -385,13 +385,13 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-ergo-gray-light">
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6 border-t-4 border-ergo-red">
-          <div className="flex justify-between items-center mb-6">
+        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 border-t-4 border-ergo-red">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-ergo-dark">ERGO Admin Dashboard</h1>
-              <p className="text-ergo-dark-light">Leads verwalten und Inhalte bearbeiten</p>
+              <h1 className="text-xl sm:text-2xl font-bold text-ergo-dark">ERGO Admin Dashboard</h1>
+              <p className="text-sm sm:text-base text-ergo-dark-light">Leads verwalten und Inhalte bearbeiten</p>
             </div>
           </div>
           

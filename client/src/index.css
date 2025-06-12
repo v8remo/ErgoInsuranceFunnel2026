@@ -67,6 +67,68 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
+
+  /* Mobile-optimized touch targets and interactions */
+  @media (max-width: 768px) {
+    /* Minimum 44px touch targets for mobile accessibility */
+    button, 
+    [role="button"], 
+    input, 
+    select, 
+    textarea,
+    .touch-target {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Better mobile form interactions */
+    input, 
+    textarea, 
+    select {
+      font-size: 16px; /* Prevents zoom on iOS */
+      padding: 12px 16px;
+    }
+
+    /* Improved mobile card spacing */
+    .insurance-card {
+      margin-bottom: 16px;
+    }
+
+    /* Mobile-friendly modal scrolling */
+    .modal-content {
+      max-height: calc(100vh - 32px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Better mobile navigation */
+    .mobile-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+    }
+  }
+
+  /* Smooth animations for all screen sizes */
+  .fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Focus styles for accessibility */
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--ergo-red);
+    outline-offset: 2px;
+  }
 }
 
 @layer components {

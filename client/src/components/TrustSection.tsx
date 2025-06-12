@@ -50,39 +50,39 @@ const trustBadges = [
 
 export default function TrustSection() {
   return (
-    <section className="py-16 bg-ergo-gray">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-ergo-dark mb-4">
+    <section className="py-8 sm:py-12 lg:py-16 bg-ergo-gray">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4">
             Über 1000 zufriedene Kunden vertrauen uns
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600">
             Erfahren Sie, warum sich unsere Kunden für ERGO entscheiden
           </p>
         </div>
 
         {/* Testimonials */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-10 lg:mb-12">
           {testimonials.map((testimonial, index) => (
             <Card key={index} className="bg-white">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex items-center mb-3 sm:mb-4">
                   <div className="flex text-yellow-400">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
+                      <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
                     ))}
                   </div>
                 </div>
-                <p className="text-gray-600 mb-4">
+                <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 leading-relaxed">
                   "{testimonial.text}"
                 </p>
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-ergo-red rounded-full flex items-center justify-center mr-3">
-                    <span className="text-white font-semibold text-sm">{testimonial.initials}</span>
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 bg-ergo-red rounded-full flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <span className="text-white font-semibold text-xs sm:text-sm">{testimonial.initials}</span>
                   </div>
-                  <div>
-                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.location}</p>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-gray-900 text-sm sm:text-base truncate">{testimonial.name}</p>
+                    <p className="text-xs sm:text-sm text-gray-500">{testimonial.location}</p>
                   </div>
                 </div>
               </CardContent>
@@ -91,14 +91,14 @@ export default function TrustSection() {
         </div>
 
         {/* Trust Badges */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {trustBadges.map((badge, index) => (
             <div key={index} className="text-center">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-                <badge.icon className="w-8 h-8 text-ergo-red" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-4 shadow-sm">
+                <badge.icon className="w-6 h-6 sm:w-8 sm:h-8 text-ergo-red" />
               </div>
-              <h3 className="font-semibold text-ergo-dark mb-1">{badge.title}</h3>
-              <p className="text-sm text-gray-600">{badge.description}</p>
+              <h3 className="font-semibold text-ergo-dark mb-1 text-sm sm:text-base">{badge.title}</h3>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{badge.description}</p>
             </div>
           ))}
         </div>

@@ -471,12 +471,12 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
 
         {/* Navigation */}
         {currentStep < 4 && (
-          <div className="flex justify-between items-center p-6 border-t bg-gray-50 rounded-b-xl">
+          <div className="flex justify-between items-center p-4 sm:p-6 border-t bg-gray-50 rounded-b-lg sm:rounded-b-xl gap-4">
             <Button
               variant="ghost"
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={currentStep === 1 ? "invisible" : ""}
+              className={`text-sm sm:text-base ${currentStep === 1 ? "invisible" : ""}`}
             >
               Zurück
             </Button>
@@ -484,7 +484,7 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
             <Button
               onClick={nextStep}
               disabled={!validateCurrentStep() || submitMutation.isPending}
-              className="bg-ergo-red hover:bg-ergo-red-hover"
+              className="bg-ergo-red hover:bg-ergo-red-hover text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3 flex-shrink-0"
             >
               {submitMutation.isPending ? (
                 "Wird gesendet..."
