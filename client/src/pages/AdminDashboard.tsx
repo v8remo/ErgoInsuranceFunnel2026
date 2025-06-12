@@ -423,11 +423,41 @@ export default function AdminDashboard() {
           <CardContent>
             <div className="grid gap-6">
               {[
-                { id: "hausrat", name: "Hausratversicherung", currentImage: "https://images.unsplash.com/photo-1556909045-f7de0ad5eab5?w=400&h=250&fit=crop" },
-                { id: "haftpflicht", name: "Haftpflichtversicherung", currentImage: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=400&h=250&fit=crop" },
-                { id: "wohngebaeude", name: "Wohngebäudeversicherung", currentImage: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=250&fit=crop" },
-                { id: "rechtsschutz", name: "Rechtsschutzversicherung", currentImage: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&h=250&fit=crop" },
-                { id: "zahnzusatz", name: "Zahnzusatzversicherung", currentImage: "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=400&h=250&fit=crop" }
+                { 
+                  id: "hausrat", 
+                  name: "Hausratversicherung", 
+                  currentImage: "https://assets.ergo.com/content/dam/ergo/produkte/sach/hausratversicherung.c538x0x810x540.dam.jpg",
+                  description: "Schutz für Ihr Hab und Gut. Absicherung gegen Einbruch, Feuer, Wasser und Sturm.",
+                  price: "ab 15€/Monat"
+                },
+                { 
+                  id: "haftpflicht", 
+                  name: "Haftpflichtversicherung", 
+                  currentImage: "https://assets.ergo.com/content/dam/ergo/produkte/privathaftpflicht/privathaftpflichtversicherung.dam.jpg",
+                  description: "Schutz vor existenzbedrohenden Schadenersatzforderungen. Ein Muss für jeden.",
+                  price: "ab 8€/Monat"
+                },
+                { 
+                  id: "wohngebaeude", 
+                  name: "Wohngebäudeversicherung", 
+                  currentImage: "https://assets.ergo.com/content/dam/ergo/produkte/sach/wohngebaeudeversicherung/wohngebaeudeversicherung.dam.jpg",
+                  description: "Für den wichtigsten Ort der Welt: Ihr Zuhause. Mit der \"Haus-zurück-Garantie\" bekommen Sie die Kosten für die Wiederherstellung in einen neuwertigen Zustand zu aktuellen Preisen erstattet.",
+                  price: "z.B. 28,99€/Monat"
+                },
+                { 
+                  id: "rechtsschutz", 
+                  name: "Rechtsschutzversicherung", 
+                  currentImage: "https://assets.ergo.com/content/dam/ergo/produkte/rechtsschutz/rechtsschutzversicherung.dam.jpg",
+                  description: "Durchsetzen Ihres Rechts ohne finanzielle Sorgen. Anwalts- und Gerichtskosten abgedeckt.",
+                  price: "ab 18€/Monat"
+                },
+                { 
+                  id: "zahnzusatz", 
+                  name: "Zahnzusatzversicherung", 
+                  currentImage: "https://assets.ergo.com/content/dam/ergo/produkte/kranken/zahnzusatzversicherung.dam.jpg",
+                  description: "Für schöne und gesunde Zähne. Ohne Wartezeit und mit Sofortleistung.",
+                  price: "ab 10€/Monat"
+                }
               ].map((insurance) => (
                 <Card key={insurance.id} className="border border-gray-200">
                   <CardHeader>
@@ -476,7 +506,7 @@ export default function AdminDashboard() {
                             className="w-full p-3 border border-gray-300 rounded-md resize-none"
                             rows={3}
                             placeholder="Beschreibung der Versicherung"
-                            defaultValue={`Umfassender Schutz für Ihre ${insurance.name.toLowerCase()}. Profitieren Sie von erstklassigen Leistungen und individueller Beratung.`}
+                            defaultValue={insurance.description}
                           />
                         </div>
                         
@@ -486,7 +516,7 @@ export default function AdminDashboard() {
                           </label>
                           <Input 
                             placeholder="ab 10€/Monat"
-                            defaultValue="ab 15€/Monat"
+                            defaultValue={insurance.price}
                           />
                         </div>
                         

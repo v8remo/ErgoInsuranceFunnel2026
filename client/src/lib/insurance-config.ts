@@ -105,49 +105,61 @@ export const insuranceConfig = {
   },
   wohngebaeude: {
     title: "Wohngebäudeversicherung",
-    description: "Rundum-Schutz für Ihr Eigenheim gegen alle Gefahren. Ihre Investition ist sicher.",
-    price: "ab 25€/Monat",
+    description: "Für den wichtigsten Ort der Welt: Ihr Zuhause. Mit der \"Haus-zurück-Garantie\" bekommen Sie die Kosten für die Wiederherstellung in einen neuwertigen Zustand zu aktuellen Preisen erstattet.",
+    price: "z.B. 28,99€/Monat",
     icon: Building,
     features: [
       {
-        title: "Komplettsanierung",
-        description: "Vollständiger Wiederaufbau bei Totalschaden"
+        title: "Finanziell gut abgesichert",
+        description: "Rundum-Absicherung bei Schäden durch Feuer, Leitungswasser und Naturgefahren"
       },
       {
-        title: "Modernste Technik",
-        description: "Photovoltaik und Smart Home inklusive"
+        title: "Naturgefahren ohne Selbstbeteiligung",
+        description: "All-in-One-Lösung bei Naturkatastrophen - Sturm, Hagel, Überschwemmung, Erdrutsch, Erdbeben"
       },
       {
-        title: "Elementarschutz",
-        description: "Schutz vor Naturkatastrophen"
+        title: "Diebstahlschutz von Grundstücksbestandteilen",
+        description: "Schutz für Wärmepumpen, Photovoltaikanlagen und andere fest verbundene Anlagen"
       }
     ],
     benefits: [
       {
-        title: "Elementarschutz",
-        description: "Überschwemmung, Erdrutsch, Rückstau"
+        title: "Haus-zurück-Garantie",
+        description: "Wiederherstellung in neuwertigen Zustand zu aktuellen Preisen"
       },
       {
-        title: "Photovoltaik inklusive", 
-        description: "Solaranlagen automatisch mitversichert"
+        title: "Beitragsersparnis bei Modernisierung", 
+        description: "ERGO belohnt Ihre Modernisierungs- und Präventionsmaßnahmen"
       },
       {
-        title: "Glasbruch",
-        description: "Fenster und Türen vollständig abgedeckt"
+        title: "Schnelle Hilfe im Schadenfall",
+        description: "Direkte Unterstützung bei Schäden an Ihrem Haus"
       }
     ],
     questions: [
       {
         type: "select" as const,
-        question: "Baujahr Ihres Hauses?",
-        name: "construction_year",
-        options: ["Vor 1980", "1980-2000", "2001-2010", "Nach 2010"]
+        question: "Wie nutzen Sie aktuell Ihre Immobilie?",
+        name: "property_usage",
+        options: ["Eigenheim", "Kapitalanlage"]
       },
       {
-        type: "radio" as const,
-        question: "Haben Sie eine Photovoltaikanlage?",
-        name: "solar_panel",
-        options: ["Ja", "Geplant", "Nein"]
+        type: "select" as const,
+        question: "Um welchen Gebäudetyp handelt es sich?",
+        name: "building_type",
+        options: ["Einfamilienhaus", "Reihenhaus", "Doppelhaushälfte", "Mehrfamilienhaus"]
+      },
+      {
+        type: "select" as const,
+        question: "Was möchten Sie absichern?",
+        name: "insurance_scope",
+        options: ["Hausrat", "Gebäude", "Beides"]
+      },
+      {
+        type: "select" as const,
+        question: "Vermieten Sie das Gebäude?",
+        name: "rental_status",
+        options: ["Nein (Eigennutzung)", "Teilweise (Einliegerwohnung)", "Ja"]
       }
     ]
   },
