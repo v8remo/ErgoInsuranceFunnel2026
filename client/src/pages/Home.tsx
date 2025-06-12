@@ -126,14 +126,14 @@ export default function Home() {
       
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="py-12 sm:py-16 bg-gradient-to-br from-ergo-red-light to-white">
+        <section className="py-12 sm:py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-16">
               {/* Professional advisor image */}
               <img 
                 src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=128&h=128&fit=crop&crop=face" 
                 alt="Morino Stübe - Ihr ERGO Versicherungsexperte" 
-                className="w-32 h-32 rounded-full mx-auto mb-8 shadow-lg object-cover"
+                className="w-32 h-32 rounded-full mx-auto mb-8 shadow-lg object-cover border-4 border-white"
               />
               
               <h1 className="text-4xl sm:text-5xl font-bold text-ergo-dark mb-6">
@@ -141,22 +141,22 @@ export default function Home() {
                 in Ganderkesee
               </h1>
               
-              <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              <p className="text-xl text-ergo-dark-light mb-8 max-w-3xl mx-auto">
                 Persönliche Beratung für maßgeschneiderte Versicherungslösungen. 
                 Profitieren Sie von über 10 Jahren Erfahrung und modernster digitaler Beratung.
               </p>
               
               {/* Trust Indicators */}
               <div className="flex flex-wrap justify-center items-center gap-8 mb-12">
-                <div className="flex items-center text-gray-600">
+                <div className="flex items-center text-ergo-dark">
                   <Shield className="w-5 h-5 text-ergo-red mr-2" />
                   <span className="font-medium">Über 1000 zufriedene Kunden</span>
                 </div>
-                <div className="flex items-center text-gray-600">
+                <div className="flex items-center text-ergo-dark">
                   <Clock className="w-5 h-5 text-ergo-red mr-2" />
                   <span className="font-medium">24h Schadenservice</span>
                 </div>
-                <div className="flex items-center text-gray-600">
+                <div className="flex items-center text-ergo-dark">
                   <Award className="w-5 h-5 text-ergo-red mr-2" />
                   <span className="font-medium">ERGO Qualitätspartner</span>
                 </div>
@@ -214,7 +214,7 @@ export default function Home() {
 
               {/* Combination Package */}
               <Card 
-                className="insurance-card cursor-pointer bg-gradient-to-br from-ergo-red to-red-700 text-white hover:shadow-xl transition-all duration-300"
+                className="insurance-card cursor-pointer bg-gradient-to-br from-ergo-red to-ergo-red-dark text-white hover:shadow-xl transition-all duration-300"
                 onClick={() => handleInsuranceSelection("kombi")}
               >
                 <CardContent className="p-0">
@@ -230,28 +230,28 @@ export default function Home() {
                       <h3 className="text-xl font-bold">Rundumschutz-Paket</h3>
                     </div>
                     
-                    <p className="text-red-100 mb-6">
+                    <p className="text-white/90 mb-6">
                       Sparen Sie mit unseren Kombipaketen. Bis zu 20% Rabatt bei mehreren Versicherungen.
                     </p>
                     
                     <div className="flex justify-between items-center mb-6">
-                      <span className="text-2xl font-bold text-yellow-300">Bis zu 20% sparen</span>
-                      <Badge className="bg-yellow-300 text-red-700 font-bold">
+                      <span className="text-2xl font-bold text-white">Bis zu 20% sparen</span>
+                      <Badge className="bg-white text-ergo-red font-bold">
                         TOP DEAL
                       </Badge>
                     </div>
                     
-                    <ul className="text-sm text-red-100 mb-6 space-y-2">
+                    <ul className="text-sm text-white/90 mb-6 space-y-2">
                       <li className="flex items-center">
-                        <div className="w-2 h-2 bg-yellow-300 rounded-full mr-2" />
+                        <div className="w-2 h-2 bg-white rounded-full mr-2" />
                         Individuelle Beratung
                       </li>
                       <li className="flex items-center">
-                        <div className="w-2 h-2 bg-yellow-300 rounded-full mr-2" />
+                        <div className="w-2 h-2 bg-white rounded-full mr-2" />
                         Ein Ansprechpartner
                       </li>
                       <li className="flex items-center">
-                        <div className="w-2 h-2 bg-yellow-300 rounded-full mr-2" />
+                        <div className="w-2 h-2 bg-white rounded-full mr-2" />
                         Mengenrabatt
                       </li>
                     </ul>

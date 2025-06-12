@@ -171,17 +171,17 @@ export default function AdminDashboard() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-ergo-gray flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-center text-ergo-dark">
-              Admin Dashboard
+      <div className="min-h-screen bg-ergo-gray-light flex items-center justify-center">
+        <Card className="w-full max-w-md shadow-xl">
+          <CardHeader className="bg-ergo-red text-white rounded-t-lg">
+            <CardTitle className="text-center text-white">
+              ERGO Admin Dashboard
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6">
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-ergo-dark mb-2">
                   Passwort
                 </label>
                 <Input
@@ -190,11 +190,12 @@ export default function AdminDashboard() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Admin-Passwort eingeben"
                   required
+                  className="border-gray-300 focus:border-ergo-red focus:ring-ergo-red"
                 />
               </div>
               <Button 
                 type="submit"
-                className="w-full bg-ergo-red hover:bg-ergo-red-hover"
+                className="w-full bg-ergo-red hover:bg-ergo-red-hover text-white"
                 disabled={loginMutation.isPending}
               >
                 {loginMutation.isPending ? "Anmeldung..." : "Anmelden"}

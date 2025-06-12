@@ -47,26 +47,26 @@ export default function Insurance() {
       
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="py-16 bg-gradient-to-br from-ergo-red-light to-white">
+        <section className="py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
             <div className="mb-8">
               <insurance.icon className="w-16 h-16 text-ergo-red mx-auto mb-6" />
               <h1 className="text-4xl sm:text-5xl font-bold text-ergo-dark mb-6">
                 {insurance.title}
               </h1>
-              <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+              <p className="text-xl text-ergo-dark-light mb-8 max-w-2xl mx-auto">
                 {insurance.description}
               </p>
             </div>
 
             <div className="flex flex-wrap justify-center items-center gap-4 mb-8">
-              <Badge className="bg-green-100 text-green-800 px-4 py-2 text-base">
+              <Badge className="bg-ergo-red text-white px-4 py-2 text-base font-semibold">
                 {insurance.price}
               </Badge>
-              <Badge className="bg-blue-100 text-blue-800 px-4 py-2 text-base">
+              <Badge className="bg-ergo-blue-light text-ergo-dark px-4 py-2 text-base">
                 Ohne Wartezeit
               </Badge>
-              <Badge className="bg-purple-100 text-purple-800 px-4 py-2 text-base">
+              <Badge className="bg-ergo-gray text-ergo-dark px-4 py-2 text-base">
                 Sofortige Deckung
               </Badge>
             </div>

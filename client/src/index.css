@@ -24,12 +24,17 @@
   --ring: hsl(20, 14.3%, 4.1%);
   --radius: 0.5rem;
 
-  /* ERGO Brand Colors */
-  --ergo-red: hsl(355, 95%, 44%);
-  --ergo-red-hover: hsl(355, 95%, 39%);
-  --ergo-red-light: hsl(355, 100%, 97%);
-  --ergo-dark: hsl(215, 25%, 27%);
-  --ergo-gray: hsl(210, 40%, 98%);
+  /* ERGO Brand Colors - Official ERGO Design System */
+  --ergo-red: hsl(355, 85%, 50%);
+  --ergo-red-hover: hsl(355, 85%, 45%);
+  --ergo-red-light: hsl(355, 100%, 98%);
+  --ergo-red-dark: hsl(355, 85%, 40%);
+  --ergo-dark: hsl(216, 30%, 15%);
+  --ergo-dark-light: hsl(216, 20%, 25%);
+  --ergo-gray: hsl(220, 15%, 97%);
+  --ergo-gray-light: hsl(220, 20%, 99%);
+  --ergo-blue: hsl(220, 90%, 50%);
+  --ergo-blue-light: hsl(220, 100%, 97%);
 }
 
 .dark {
@@ -71,6 +76,7 @@
   
   .bg-ergo-red {
     background-color: var(--ergo-red);
+    color: white;
   }
   
   .border-ergo-red {
@@ -83,14 +89,45 @@
   
   .bg-ergo-red-light {
     background-color: var(--ergo-red-light);
+    color: var(--ergo-dark);
+  }
+  
+  .bg-ergo-red-dark {
+    background-color: var(--ergo-red-dark);
+    color: white;
   }
   
   .text-ergo-dark {
     color: var(--ergo-dark);
   }
   
+  .text-ergo-dark-light {
+    color: var(--ergo-dark-light);
+  }
+  
+  .bg-ergo-dark {
+    background-color: var(--ergo-dark);
+    color: white;
+  }
+  
   .bg-ergo-gray {
     background-color: var(--ergo-gray);
+    color: var(--ergo-dark);
+  }
+  
+  .bg-ergo-gray-light {
+    background-color: var(--ergo-gray-light);
+    color: var(--ergo-dark);
+  }
+  
+  .bg-ergo-blue {
+    background-color: var(--ergo-blue);
+    color: white;
+  }
+  
+  .bg-ergo-blue-light {
+    background-color: var(--ergo-blue-light);
+    color: var(--ergo-dark);
   }
 
   .insurance-card {
