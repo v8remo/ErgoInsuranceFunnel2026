@@ -127,85 +127,86 @@ export default function Home() {
       <Header />
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="py-12 sm:py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="text-center mb-16">
+        <section className="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8 sm:mb-12 lg:mb-16">
               {/* Professional advisor image */}
               <img 
                 src={_089_Ti9r4yWZjrM} 
                 alt="ERGO Versicherungsexperte - Deutschlandweite Beratung" 
-                className="w-32 h-32 rounded-full mx-auto mb-8 shadow-lg object-cover border-4 border-white"
+                className="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-6 sm:mb-8 shadow-lg object-cover border-4 border-white"
               />
               
-              <h1 className="text-4xl sm:text-5xl font-bold text-ergo-dark mb-6">
-                Ihr <span className="text-ergo-red">ERGO Versicherungsexperte</span><br />
-                deutschlandweit
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-ergo-dark mb-4 sm:mb-6 px-2">
+                Ihr <span className="text-ergo-red">ERGO Versicherungsexperte</span>
+                <br className="hidden sm:block" />
+                <span className="sm:hidden"> </span>deutschlandweit
               </h1>
               
-              <p className="text-xl text-ergo-dark-light mb-8 max-w-3xl mx-auto">
+              <p className="text-base sm:text-lg lg:text-xl text-ergo-dark-light mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
                 Persönliche Beratung für maßgeschneiderte Versicherungslösungen. 
                 Profitieren Sie von über 10 Jahren Erfahrung und modernster digitaler Beratung.
               </p>
               
               {/* Trust Indicators */}
-              <div className="flex flex-wrap justify-center items-center gap-8 mb-12">
-                <div className="flex items-center text-ergo-dark">
-                  <Shield className="w-5 h-5 text-ergo-red mr-2" />
+              <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 px-4">
+                <div className="flex items-center text-ergo-dark text-sm sm:text-base">
+                  <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-ergo-red mr-2 flex-shrink-0" />
                   <span className="font-medium">Über 1000 zufriedene Kunden</span>
                 </div>
-                <div className="flex items-center text-ergo-dark">
-                  <Clock className="w-5 h-5 text-ergo-red mr-2" />
+                <div className="flex items-center text-ergo-dark text-sm sm:text-base">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-ergo-red mr-2 flex-shrink-0" />
                   <span className="font-medium">24h Schadenservice</span>
                 </div>
-                <div className="flex items-center text-ergo-dark">
-                  <Award className="w-5 h-5 text-ergo-red mr-2" />
+                <div className="flex items-center text-ergo-dark text-sm sm:text-base">
+                  <Award className="w-4 h-4 sm:w-5 sm:h-5 text-ergo-red mr-2 flex-shrink-0" />
                   <span className="font-medium">ERGO Qualitätspartner</span>
                 </div>
               </div>
             </div>
 
             {/* Insurance Products Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 lg:mb-16 px-2 sm:px-0">
               {insuranceProducts.map((product) => (
                 <Card 
                   key={product.id}
-                  className="insurance-card cursor-pointer hover:shadow-xl transition-all duration-300"
+                  className="insurance-card cursor-pointer hover:shadow-xl transition-all duration-300 w-full"
                   onClick={() => handleInsuranceSelection(product.id)}
                 >
                   <CardContent className="p-0">
                     <img 
                       src={product.image}
                       alt={product.title}
-                      className="w-full h-48 object-cover rounded-t-lg"
+                      className="w-full h-40 sm:h-48 object-cover rounded-t-lg"
                     />
                     
-                    <div className="p-6">
-                      <div className="flex items-center mb-4">
-                        <product.icon className="w-6 h-6 text-ergo-red mr-3" />
-                        <h3 className="text-xl font-bold text-ergo-dark">{product.title}</h3>
+                    <div className="p-4 sm:p-6">
+                      <div className="flex items-start mb-3 sm:mb-4">
+                        <product.icon className="w-5 h-5 sm:w-6 sm:h-6 text-ergo-red mr-2 sm:mr-3 mt-1 flex-shrink-0" />
+                        <h3 className="text-lg sm:text-xl font-bold text-ergo-dark leading-tight">{product.title}</h3>
                       </div>
                       
-                      <p className="text-gray-600 mb-6">
+                      <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">
                         {product.description}
                       </p>
                       
-                      <div className="flex justify-between items-center mb-6">
-                        <span className="text-2xl font-bold text-ergo-red">{product.price}</span>
-                        <Badge className={product.badgeColor}>
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-2 sm:gap-0">
+                        <span className="text-xl sm:text-2xl font-bold text-ergo-red">{product.price}</span>
+                        <Badge className={`${product.badgeColor} text-xs sm:text-sm w-fit`}>
                           {product.badge}
                         </Badge>
                       </div>
                       
-                      <ul className="text-sm text-gray-600 mb-6 space-y-2">
+                      <ul className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6 space-y-1 sm:space-y-2">
                         {product.features.map((feature, index) => (
                           <li key={index} className="flex items-center">
-                            <div className="w-2 h-2 bg-green-500 rounded-full mr-2" />
-                            {feature}
+                            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full mr-2 flex-shrink-0" />
+                            <span className="leading-relaxed">{feature}</span>
                           </li>
                         ))}
                       </ul>
                       
-                      <Button className="w-full bg-ergo-red hover:bg-ergo-red-hover text-white">
+                      <Button className="w-full bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base py-2 sm:py-3">
                         Jetzt Angebot anfordern
                       </Button>
                     </div>
@@ -215,49 +216,49 @@ export default function Home() {
 
               {/* Combination Package */}
               <Card 
-                className="insurance-card cursor-pointer bg-gradient-to-br from-ergo-red to-ergo-red-dark text-white hover:shadow-xl transition-all duration-300"
+                className="insurance-card cursor-pointer bg-gradient-to-br from-ergo-red to-ergo-red-dark text-white hover:shadow-xl transition-all duration-300 w-full"
                 onClick={() => handleInsuranceSelection("kombi")}
               >
                 <CardContent className="p-0">
                   <img 
                     src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=400&h=250&fit=crop"
                     alt="Familie unter einem Regenschirm als Symbol für Schutz"
-                    className="w-full h-48 object-cover rounded-t-lg"
+                    className="w-full h-40 sm:h-48 object-cover rounded-t-lg"
                   />
                   
-                  <div className="p-6 bg-ergo-red">
-                    <div className="flex items-center mb-4">
-                      <Star className="w-6 h-6 text-yellow-300 mr-3" />
-                      <h3 className="text-xl font-bold text-white">Rundumschutz-Paket</h3>
+                  <div className="p-4 sm:p-6 bg-ergo-red">
+                    <div className="flex items-start mb-3 sm:mb-4">
+                      <Star className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-300 mr-2 sm:mr-3 mt-1 flex-shrink-0" />
+                      <h3 className="text-lg sm:text-xl font-bold text-white leading-tight">Rundumschutz-Paket</h3>
                     </div>
                     
-                    <p className="text-white mb-6">
+                    <p className="text-white mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">
                       Sparen Sie mit unseren Kombipaketen. Bis zu 20% Rabatt bei mehreren Versicherungen.
                     </p>
                     
-                    <div className="flex justify-between items-center mb-6">
-                      <span className="text-2xl font-bold text-white">Bis zu 20% sparen</span>
-                      <Badge className="bg-yellow-300 text-ergo-red font-bold">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-2 sm:gap-0">
+                      <span className="text-xl sm:text-2xl font-bold text-white">Bis zu 20% sparen</span>
+                      <Badge className="bg-yellow-300 text-ergo-red font-bold text-xs sm:text-sm w-fit">
                         TOP DEAL
                       </Badge>
                     </div>
                     
-                    <ul className="text-sm text-white mb-6 space-y-2">
+                    <ul className="text-xs sm:text-sm text-white mb-4 sm:mb-6 space-y-1 sm:space-y-2">
                       <li className="flex items-center">
-                        <div className="w-2 h-2 bg-yellow-300 rounded-full mr-2" />
-                        Individuelle Beratung
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-300 rounded-full mr-2 flex-shrink-0" />
+                        <span>Individuelle Beratung</span>
                       </li>
                       <li className="flex items-center">
-                        <div className="w-2 h-2 bg-yellow-300 rounded-full mr-2" />
-                        Ein Ansprechpartner
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-300 rounded-full mr-2 flex-shrink-0" />
+                        <span>Ein Ansprechpartner</span>
                       </li>
                       <li className="flex items-center">
-                        <div className="w-2 h-2 bg-yellow-300 rounded-full mr-2" />
-                        Mengenrabatt
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-300 rounded-full mr-2 flex-shrink-0" />
+                        <span>Mengenrabatt</span>
                       </li>
                     </ul>
                     
-                    <Button className="w-full bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold">
+                    <Button className="w-full bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold text-sm sm:text-base py-2 sm:py-3">
                       Beratungstermin vereinbaren
                     </Button>
                   </div>

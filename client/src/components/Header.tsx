@@ -9,16 +9,19 @@ export default function Header() {
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex justify-between items-center h-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo and Brand */}
-          <Link href="/" className="flex items-center space-x-4">
-            <div className="w-8 h-8 bg-ergo-red rounded-lg flex items-center justify-center">
-              <div className="w-4 h-4 bg-white rounded-sm" />
+          <Link href="/" className="flex items-center space-x-2 sm:space-x-4">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-ergo-red rounded-lg flex items-center justify-center flex-shrink-0">
+              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-white rounded-sm" />
             </div>
-            <div className="hidden md:block">
-              <span className="text-xl font-bold text-ergo-dark">ERGO Deutschland</span>
-              <p className="text-sm text-gray-600">Deutschlandweite Beratung</p>
+            <div className="hidden sm:block">
+              <span className="text-lg sm:text-xl font-bold text-ergo-dark">ERGO Deutschland</span>
+              <p className="text-xs sm:text-sm text-gray-600">Deutschlandweite Beratung</p>
+            </div>
+            <div className="block sm:hidden">
+              <span className="text-lg font-bold text-ergo-dark">ERGO</span>
             </div>
           </Link>
 
@@ -45,23 +48,30 @@ export default function Header() {
           </nav>
 
           {/* Contact and Mobile Menu */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <a 
               href="tel:015566771019" 
-              className="hidden sm:flex items-center text-ergo-red hover:text-red-700 transition-colors"
+              className="hidden lg:flex items-center text-ergo-red hover:text-red-700 transition-colors"
             >
               <Phone className="w-4 h-4 mr-2" />
               <span className="font-medium">015566771019</span>
             </a>
             
+            <a 
+              href="tel:015566771019" 
+              className="flex lg:hidden items-center text-ergo-red hover:text-red-700 transition-colors p-2"
+            >
+              <Phone className="w-5 h-5" />
+            </a>
+            
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="md:hidden">
+                <Button variant="ghost" size="sm" className="md:hidden p-2">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-80">
+              <SheetContent side="right" className="w-full sm:w-80">
                 <div className="flex flex-col space-y-4 mt-8">
                   <Link href="/" className="text-lg font-medium text-gray-900 hover:text-ergo-red">
                     Startseite
