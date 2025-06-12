@@ -73,21 +73,40 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
 
   const nextStep = () => {
     if (validateCurrentStep()) {
-      if (currentStep < 4) {
-        setCurrentStep(currentStep + 1);
+      if (currentStep === 1) {
+        // Check if this insurance has questions, if not skip to step 3
+        if (insurance?.questions && insurance.questions.length > 0) {
+          setCurrentStep(2);
+        } else {
+          setCurrentStep(3);
+        }
         trackEvent("funnel_step_completed", {
           insurance_type: insuranceType,
           step: currentStep
         });
-      } else {
+      } else if (currentStep === 2) {
+        setCurrentStep(3);
+        trackEvent("funnel_step_completed", {
+          insurance_type: insuranceType,
+          step: currentStep
+        });
+      } else if (currentStep === 3) {
+        // Submit the form after step 3 (contact information)
         submitForm();
       }
     }
   };
 
   const prevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
+    if (currentStep === 3) {
+      // Check if previous step should be 2 or 1
+      if (insurance?.questions && insurance.questions.length > 0) {
+        setCurrentStep(2);
+      } else {
+        setCurrentStep(1);
+      }
+    } else if (currentStep === 2) {
+      setCurrentStep(1);
     }
   };
 
@@ -96,10 +115,10 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
       case 1:
         return formData.age !== "";
       case 2:
-        if (!insurance?.questions) return true;
+        if (!insurance?.questions || insurance.questions.length === 0) return true;
         return insurance.questions.every(question => {
           const value = formData.specificData[question.name];
-          return value !== undefined && value !== "";
+          return value !== undefined && value !== "" && value !== null;
         });
       case 3:
         return formData.firstName && formData.lastName && formData.email && formData.phone && formData.location;
