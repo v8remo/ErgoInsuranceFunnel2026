@@ -96,10 +96,25 @@ export default function AdminDashboard() {
       
       existingContent.forEach((content: Content) => {
         if (content.type === "insurance") {
+          let price = "";
+          try {
+            const metadata = (content as any).metadata;
+            if (metadata) {
+              if (typeof metadata === 'string') {
+                price = JSON.parse(metadata).price || "";
+              } else if (typeof metadata === 'object' && metadata.price) {
+                price = metadata.price;
+              }
+            }
+          } catch (error) {
+            console.warn('Error parsing metadata for content:', content.identifier, error);
+            price = "";
+          }
+          
           contentMap[content.identifier] = {
             title: content.title,
             description: content.description,
-            price: (content as any).metadata ? JSON.parse((content as any).metadata as string).price || "" : ""
+            price: price
           };
           if (content.imageUrl) {
             imageMap[content.identifier] = content.imageUrl;
