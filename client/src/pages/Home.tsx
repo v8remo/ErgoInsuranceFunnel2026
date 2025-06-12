@@ -61,7 +61,7 @@ const insuranceProducts = [
     badge: "Premium",
     badgeColor: "bg-blue-100 text-blue-800",
     icon: Building,
-    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=250&fit=crop",
+    image: "@assets/wohngebaeudeversicherung.dam_1749718195826.jpg",
     features: [
       "Elementarschutz",
       "Photovoltaik inklusive",
