@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,8 @@ import {
   X,
   Image,
   FileText,
-  Settings
+  Settings,
+  Upload
 } from "lucide-react";
 import type { Lead, Content } from "@shared/schema";
 
@@ -42,6 +43,9 @@ export default function AdminDashboard() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [activeTab, setActiveTab] = useState("leads");
   const [editingContent, setEditingContent] = useState<Content | null>(null);
+  const [uploadingImages, setUploadingImages] = useState<{[key: string]: boolean}>({});
+  const [imageUrls, setImageUrls] = useState<{[key: string]: string}>({});
+  const fileInputRefs = useRef<{[key: string]: HTMLInputElement | null}>({});
   const { toast } = useToast();
   const queryClient = useQueryClient();
 

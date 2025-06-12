@@ -2,13 +2,56 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import express from "express";
 import path from "path";
+import multer from "multer";
 import { storage } from "./storage";
 import { insertLeadSchema, insertContentSchema } from "@shared/schema";
 import { z } from "zod";
 
+// Configure multer for file uploads
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'attached_assets/');
+    },
+    filename: (req, file, cb) => {
+      const timestamp = Date.now();
+      const originalName = file.originalname.replace(/\s+/g, '_');
+      cb(null, `${timestamp}_${originalName}`);
+    }
+  }),
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  }
+});
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Static file serving for attached assets
   app.use('/attached_assets', express.static(path.join(process.cwd(), 'attached_assets')));
+  
+  // Image upload endpoint
+  app.post('/api/upload-image', upload.single('image'), (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: 'No image file provided' });
+      }
+      
+      const imageUrl = `/attached_assets/${req.file.filename}`;
+      res.json({ 
+        success: true, 
+        imageUrl,
+        filename: req.file.filename 
+      });
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to upload image' });
+    }
+  });
   
   // Lead management routes
   app.post("/api/leads", async (req, res) => {
