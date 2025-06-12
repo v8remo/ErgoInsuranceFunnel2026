@@ -113,6 +113,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Content management routes
+  app.get("/api/content", async (req, res) => {
+    try {
+      const content = await storage.getAllContent();
+      res.json(content);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch content" });
+    }
+  });
+
+  app.get("/api/content/:type/:identifier", async (req, res) => {
+    try {
+      const { type, identifier } = req.params;
+      const content = await storage.getContent(type, identifier);
+      if (content) {
+        res.json(content);
+      } else {
+        res.status(404).json({ message: "Content not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch content" });
+    }
+  });
+
+  app.post("/api/content", async (req, res) => {
+    try {
+      const contentData = insertContentSchema.parse(req.body);
+      const content = await storage.createContent(contentData);
+      res.json(content);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ message: "Invalid content data", errors: error.errors });
+      } else {
+        res.status(500).json({ message: "Failed to create content" });
+      }
+    }
+  });
+
+  app.put("/api/content/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      const content = await storage.updateContent(id, updates);
+      if (content) {
+        res.json(content);
+      } else {
+        res.status(404).json({ message: "Content not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update content" });
+    }
+  });
+
+  app.delete("/api/content/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteContent(id);
+      res.json({ message: "Content deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete content" });
+    }
+  });
+
   // Simple admin authentication
   app.post("/api/admin/login", (req, res) => {
     const { password } = req.body;

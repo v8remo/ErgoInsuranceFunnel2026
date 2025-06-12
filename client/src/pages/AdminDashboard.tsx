@@ -18,9 +18,15 @@ import {
   Eye,
   Phone,
   Mail,
-  MapPin
+  MapPin,
+  Edit,
+  Save,
+  X,
+  Image,
+  FileText,
+  Settings
 } from "lucide-react";
-import type { Lead } from "@shared/schema";
+import type { Lead, Content } from "@shared/schema";
 
 interface DashboardStats {
   totalLeads: number;
@@ -34,6 +40,8 @@ export default function AdminDashboard() {
   const [password, setPassword] = useState("");
   const [filterInsurance, setFilterInsurance] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState("leads");
+  const [editingContent, setEditingContent] = useState<Content | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -212,12 +220,46 @@ export default function AdminDashboard() {
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6 border-t-4 border-ergo-red">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-ergo-dark">ERGO Lead Management Dashboard</h1>
-              <p className="text-ergo-dark-light">Alle Anfragen auf einen Blick</p>
+              <h1 className="text-2xl font-bold text-ergo-dark">ERGO Admin Dashboard</h1>
+              <p className="text-ergo-dark-light">Leads verwalten und Inhalte bearbeiten</p>
             </div>
-            <div className="flex items-center space-x-4">
+          </div>
+          
+          {/* Tab Navigation */}
+          <div className="flex space-x-1 bg-ergo-gray-light rounded-lg p-1">
+            <button
+              onClick={() => setActiveTab("leads")}
+              className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                activeTab === "leads" 
+                  ? "bg-white text-ergo-red shadow-sm" 
+                  : "text-ergo-dark-light hover:text-ergo-dark"
+              }`}
+            >
+              <Users className="w-4 h-4 mr-2" />
+              Lead Management
+            </button>
+            <button
+              onClick={() => setActiveTab("content")}
+              className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                activeTab === "content" 
+                  ? "bg-white text-ergo-red shadow-sm" 
+                  : "text-ergo-dark-light hover:text-ergo-dark"
+              }`}
+            >
+              <Settings className="w-4 h-4 mr-2" />
+              Content Management
+            </button>
+          </div>
+        </div>
+
+        {/* Lead Management Tab */}
+        {activeTab === "leads" && (
+          <>
+            <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center space-x-4">
               <Select value={filterInsurance} onValueChange={setFilterInsurance}>
                 <SelectTrigger className="w-48">
                   <SelectValue placeholder="Versicherung filtern" />
@@ -232,14 +274,16 @@ export default function AdminDashboard() {
                 </SelectContent>
               </Select>
               
-              <Button 
-                onClick={() => exportMutation.mutate()}
-                disabled={exportMutation.isPending}
-                variant="outline"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                {exportMutation.isPending ? "Exportiere..." : "Export CSV"}
-              </Button>
+                  <Button 
+                    onClick={() => exportMutation.mutate()}
+                    disabled={exportMutation.isPending}
+                    variant="outline"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    {exportMutation.isPending ? "Exportiere..." : "Export CSV"}
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -395,6 +439,89 @@ export default function AdminDashboard() {
             )}
           </CardContent>
         </Card>
+        </>
+        )}
+
+        {/* Content Management Tab */}
+        {activeTab === "content" && (
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-ergo-dark mb-2">Content Management</h2>
+              <p className="text-ergo-dark-light">Bearbeiten Sie Texte und Bilder für alle Versicherungsseiten</p>
+            </div>
+            
+            <div className="grid gap-6">
+              {[
+                { id: "hausrat", name: "Hausratversicherung" },
+                { id: "haftpflicht", name: "Haftpflichtversicherung" },
+                { id: "wohngebaeude", name: "Wohngebäudeversicherung" },
+                { id: "rechtsschutz", name: "Rechtsschutzversicherung" },
+                { id: "zahnzusatz", name: "Zahnzusatzversicherung" }
+              ].map((insurance) => (
+                <Card key={insurance.id} className="border border-gray-200">
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <span>{insurance.name}</span>
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4 mr-2" />
+                        Bearbeiten
+                      </Button>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Bild URL
+                        </label>
+                        <Input 
+                          placeholder="https://example.com/image.jpg"
+                          className="mb-2"
+                        />
+                        <div className="flex items-center space-x-2">
+                          <Image className="w-4 h-4 text-gray-400" />
+                          <span className="text-sm text-gray-500">
+                            Empfohlene Größe: 400x250px
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Titel
+                        </label>
+                        <Input placeholder="Versicherungstitel eingeben" />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Beschreibung
+                        </label>
+                        <textarea 
+                          className="w-full p-3 border border-gray-300 rounded-md resize-none"
+                          rows={3}
+                          placeholder="Beschreibung der Versicherung eingeben"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Preis
+                        </label>
+                        <Input placeholder="ab 10€/Monat" />
+                      </div>
+                      
+                      <Button className="bg-ergo-red hover:bg-ergo-red-hover text-white">
+                        <Save className="w-4 h-4 mr-2" />
+                        Änderungen speichern
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
