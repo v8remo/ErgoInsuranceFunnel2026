@@ -4,23 +4,23 @@ import { Star, Award, Shield, Handshake, Clock } from "lucide-react";
 const testimonials = [
   {
     name: "Michael K.",
-    location: "Ganderkesee",
+    location: "Hamburg",
     rating: 5,
-    text: "Herr Stübe hat mich hervorragend beraten. Schnell, kompetent und immer erreichbar. Meine Hausratversicherung war in wenigen Tagen abgeschlossen.",
+    text: "Hervorragende Beratung durch ERGO! Schnell, kompetent und immer erreichbar. Meine Hausratversicherung war in wenigen Tagen abgeschlossen.",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
   },
   {
     name: "Sarah M.",
-    location: "Delmenhorst", 
+    location: "München", 
     rating: 5,
     text: "Endlich eine Zahnzusatzversicherung ohne Wartezeit! Die Beratung war top und ich bin sehr zufrieden mit den Leistungen.",
     image: "https://images.unsplash.com/photo-1494790108755-2616b612b05b?w=100&h=100&fit=crop&crop=face"
   },
   {
     name: "Thomas W.",
-    location: "Bookholzberg",
+    location: "Berlin",
     rating: 5,
-    text: "Perfekte Betreuung! Als Hausbesitzer brauchte ich eine umfassende Beratung. Herr Stübe hat alle meine Fragen beantwortet.",
+    text: "Perfekte Betreuung! Als Hausbesitzer brauchte ich eine umfassende Beratung. ERGO hat alle meine Fragen beantwortet.",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
   }
 ];

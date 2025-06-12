@@ -133,13 +133,13 @@ export default function Home() {
               {/* Professional advisor image */}
               <img 
                 src={_089_Ti9r4yWZjrM} 
-                alt="Morino Stübe - Ihr ERGO Versicherungsexperte" 
+                alt="ERGO Versicherungsexperte - Deutschlandweite Beratung" 
                 className="w-32 h-32 rounded-full mx-auto mb-8 shadow-lg object-cover border-4 border-white"
               />
               
               <h1 className="text-4xl sm:text-5xl font-bold text-ergo-dark mb-6">
                 Ihr <span className="text-ergo-red">ERGO Versicherungsexperte</span><br />
-                in Ganderkesee
+                deutschlandweit
               </h1>
               
               <p className="text-xl text-ergo-dark-light mb-8 max-w-3xl mx-auto">

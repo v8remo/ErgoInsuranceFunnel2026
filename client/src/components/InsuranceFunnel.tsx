@@ -407,7 +407,7 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
                     id="location"
                     value={formData.location}
                     onChange={(e) => updateFormData({ location: e.target.value })}
-                    placeholder="z.B. 27777 Ganderkesee"
+                    placeholder="z.B. 10115 Berlin"
                     required
                   />
                 </div>
