@@ -227,39 +227,12 @@ export default function AdminDashboard() {
             </div>
           </div>
           
-          {/* Tab Navigation */}
-          <div className="flex space-x-1 bg-ergo-gray-light rounded-lg p-1">
-            <button
-              onClick={() => setActiveTab("leads")}
-              className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeTab === "leads" 
-                  ? "bg-white text-ergo-red shadow-sm" 
-                  : "text-ergo-dark-light hover:text-ergo-dark"
-              }`}
-            >
-              <Users className="w-4 h-4 mr-2" />
-              Lead Management
-            </button>
-            <button
-              onClick={() => setActiveTab("content")}
-              className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeTab === "content" 
-                  ? "bg-white text-ergo-red shadow-sm" 
-                  : "text-ergo-dark-light hover:text-ergo-dark"
-              }`}
-            >
-              <Settings className="w-4 h-4 mr-2" />
-              Content Management
-            </button>
-          </div>
         </div>
 
-        {/* Lead Management Tab */}
-        {activeTab === "leads" && (
-          <>
-            <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center space-x-4">
+        {/* Filters and Export */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-4">
               <Select value={filterInsurance} onValueChange={setFilterInsurance}>
                 <SelectTrigger className="w-48">
                   <SelectValue placeholder="Versicherung filtern" />
@@ -274,16 +247,14 @@ export default function AdminDashboard() {
                 </SelectContent>
               </Select>
               
-                  <Button 
-                    onClick={() => exportMutation.mutate()}
-                    disabled={exportMutation.isPending}
-                    variant="outline"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    {exportMutation.isPending ? "Exportiere..." : "Export CSV"}
-                  </Button>
-                </div>
-              </div>
+              <Button 
+                onClick={() => exportMutation.mutate()}
+                disabled={exportMutation.isPending}
+                variant="outline"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                {exportMutation.isPending ? "Exportiere..." : "Export CSV"}
+              </Button>
             </div>
           </div>
         </div>
@@ -439,89 +410,98 @@ export default function AdminDashboard() {
             )}
           </CardContent>
         </Card>
-        </>
-        )}
 
-        {/* Content Management Tab */}
-        {activeTab === "content" && (
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-ergo-dark mb-2">Content Management</h2>
-              <p className="text-ergo-dark-light">Bearbeiten Sie Texte und Bilder für alle Versicherungsseiten</p>
-            </div>
-            
+        {/* Content Management Section */}
+        <Card className="bg-white shadow-lg border-t-4 border-ergo-red">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Settings className="w-5 h-5 text-ergo-red mr-2" />
+              Content Management
+            </CardTitle>
+            <p className="text-ergo-dark-light">Bearbeiten Sie Bilder und Texte für alle Versicherungsseiten</p>
+          </CardHeader>
+          <CardContent>
             <div className="grid gap-6">
               {[
-                { id: "hausrat", name: "Hausratversicherung" },
-                { id: "haftpflicht", name: "Haftpflichtversicherung" },
-                { id: "wohngebaeude", name: "Wohngebäudeversicherung" },
-                { id: "rechtsschutz", name: "Rechtsschutzversicherung" },
-                { id: "zahnzusatz", name: "Zahnzusatzversicherung" }
+                { id: "hausrat", name: "Hausratversicherung", currentImage: "https://images.unsplash.com/photo-1556909045-f7de0ad5eab5?w=400&h=250&fit=crop" },
+                { id: "haftpflicht", name: "Haftpflichtversicherung", currentImage: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=400&h=250&fit=crop" },
+                { id: "wohngebaeude", name: "Wohngebäudeversicherung", currentImage: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=250&fit=crop" },
+                { id: "rechtsschutz", name: "Rechtsschutzversicherung", currentImage: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&h=250&fit=crop" },
+                { id: "zahnzusatz", name: "Zahnzusatzversicherung", currentImage: "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=400&h=250&fit=crop" }
               ].map((insurance) => (
                 <Card key={insurance.id} className="border border-gray-200">
                   <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <span>{insurance.name}</span>
-                      <Button variant="outline" size="sm">
-                        <Edit className="w-4 h-4 mr-2" />
-                        Bearbeiten
-                      </Button>
-                    </CardTitle>
+                    <CardTitle className="text-lg text-ergo-dark">{insurance.name}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Bild URL
+                          <Image className="w-4 h-4 inline mr-1" />
+                          Aktuelles Bild
                         </label>
+                        <div className="mb-4">
+                          <img 
+                            src={insurance.currentImage} 
+                            alt={insurance.name}
+                            className="w-full h-32 object-cover rounded border"
+                          />
+                        </div>
                         <Input 
-                          placeholder="https://example.com/image.jpg"
+                          placeholder="Neue Bild-URL eingeben"
                           className="mb-2"
                         />
-                        <div className="flex items-center space-x-2">
-                          <Image className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-500">
-                            Empfohlene Größe: 400x250px
-                          </span>
+                        <p className="text-sm text-gray-500">
+                          Empfohlene Größe: 400x250px
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <FileText className="w-4 h-4 inline mr-1" />
+                            Titel
+                          </label>
+                          <Input 
+                            defaultValue={insurance.name}
+                            placeholder="Versicherungstitel"
+                          />
                         </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Beschreibung
+                          </label>
+                          <textarea 
+                            className="w-full p-3 border border-gray-300 rounded-md resize-none"
+                            rows={3}
+                            placeholder="Beschreibung der Versicherung"
+                            defaultValue={`Umfassender Schutz für Ihre ${insurance.name.toLowerCase()}. Profitieren Sie von erstklassigen Leistungen und individueller Beratung.`}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Preis
+                          </label>
+                          <Input 
+                            placeholder="ab 10€/Monat"
+                            defaultValue="ab 15€/Monat"
+                          />
+                        </div>
+                        
+                        <Button className="bg-ergo-red hover:bg-ergo-red-hover text-white w-full">
+                          <Save className="w-4 h-4 mr-2" />
+                          Änderungen speichern
+                        </Button>
                       </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Titel
-                        </label>
-                        <Input placeholder="Versicherungstitel eingeben" />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Beschreibung
-                        </label>
-                        <textarea 
-                          className="w-full p-3 border border-gray-300 rounded-md resize-none"
-                          rows={3}
-                          placeholder="Beschreibung der Versicherung eingeben"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Preis
-                        </label>
-                        <Input placeholder="ab 10€/Monat" />
-                      </div>
-                      
-                      <Button className="bg-ergo-red hover:bg-ergo-red-hover text-white">
-                        <Save className="w-4 h-4 mr-2" />
-                        Änderungen speichern
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
-          </div>
-        )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
