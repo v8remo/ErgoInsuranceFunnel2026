@@ -24,6 +24,19 @@ export const leads = pgTable("leads", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const content = pgTable("content", {
+  id: serial("id").primaryKey(),
+  type: text("type").notNull(), // 'insurance' or 'general'
+  identifier: text("identifier").notNull(), // insurance type or page identifier
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  price: text("price"),
+  features: jsonb("features"), // array of feature strings
+  imageUrl: text("image_url"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -35,7 +48,15 @@ export const insertLeadSchema = createInsertSchema(leads).omit({
   updatedAt: true,
 });
 
+export const insertContentSchema = createInsertSchema(content).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertLead = z.infer<typeof insertLeadSchema>;
 export type Lead = typeof leads.$inferSelect;
+export type InsertContent = z.infer<typeof insertContentSchema>;
+export type Content = typeof content.$inferSelect;

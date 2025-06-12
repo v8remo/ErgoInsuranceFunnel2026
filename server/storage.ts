@@ -1,4 +1,4 @@
-import { users, leads, type User, type InsertUser, type Lead, type InsertLead } from "@shared/schema";
+import { users, leads, content, type User, type InsertUser, type Lead, type InsertLead, type Content, type InsertContent } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, gte, desc, sql } from "drizzle-orm";
 
@@ -19,6 +19,13 @@ export interface IStorage {
     conversionRate: number;
     openLeads: number;
   }>;
+  
+  // Content management methods
+  getContent(type: string, identifier: string): Promise<Content | undefined>;
+  getAllContent(): Promise<Content[]>;
+  createContent(content: InsertContent): Promise<Content>;
+  updateContent(id: number, updates: Partial<Content>): Promise<Content | undefined>;
+  deleteContent(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -136,6 +143,39 @@ export class DatabaseStorage implements IStorage {
       conversionRate,
       openLeads
     };
+  }
+
+  // Content management methods
+  async getContent(type: string, identifier: string): Promise<Content | undefined> {
+    const [result] = await db.select().from(content).where(
+      and(eq(content.type, type), eq(content.identifier, identifier))
+    );
+    return result || undefined;
+  }
+
+  async getAllContent(): Promise<Content[]> {
+    return await db.select().from(content).orderBy(content.type, content.identifier);
+  }
+
+  async createContent(contentData: InsertContent): Promise<Content> {
+    const [result] = await db
+      .insert(content)
+      .values(contentData)
+      .returning();
+    return result;
+  }
+
+  async updateContent(id: number, updates: Partial<Content>): Promise<Content | undefined> {
+    const [result] = await db
+      .update(content)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(content.id, id))
+      .returning();
+    return result || undefined;
+  }
+
+  async deleteContent(id: number): Promise<void> {
+    await db.delete(content).where(eq(content.id, id));
   }
 }
 
