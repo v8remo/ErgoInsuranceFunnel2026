@@ -208,14 +208,14 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-ergo-gray">
+    <div className="min-h-screen bg-ergo-gray-light">
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6 border-t-4 border-ergo-red">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-ergo-dark">Lead Management Dashboard</h1>
-              <p className="text-gray-600">Alle Anfragen auf einen Blick</p>
+              <h1 className="text-2xl font-bold text-ergo-dark">ERGO Lead Management Dashboard</h1>
+              <p className="text-ergo-dark-light">Alle Anfragen auf einen Blick</p>
             </div>
             <div className="flex items-center space-x-4">
               <Select value={filterInsurance} onValueChange={setFilterInsurance}>
