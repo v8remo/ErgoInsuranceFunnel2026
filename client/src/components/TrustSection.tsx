@@ -7,21 +7,21 @@ const testimonials = [
     location: "Hamburg",
     rating: 5,
     text: "Hervorragende Beratung durch ERGO! Schnell, kompetent und immer erreichbar. Meine Hausratversicherung war in wenigen Tagen abgeschlossen.",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+    initials: "MK"
   },
   {
     name: "Sarah M.",
     location: "München", 
     rating: 5,
     text: "Endlich eine Zahnzusatzversicherung ohne Wartezeit! Die Beratung war top und ich bin sehr zufrieden mit den Leistungen.",
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b05b?w=100&h=100&fit=crop&crop=face"
+    initials: "SM"
   },
   {
     name: "Thomas W.",
     location: "Berlin",
     rating: 5,
     text: "Perfekte Betreuung! Als Hausbesitzer brauchte ich eine umfassende Beratung. ERGO hat alle meine Fragen beantwortet.",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
+    initials: "TW"
   }
 ];
 
@@ -77,11 +77,9 @@ export default function TrustSection() {
                   "{testimonial.text}"
                 </p>
                 <div className="flex items-center">
-                  <img 
-                    src={testimonial.image}
-                    alt={`${testimonial.name} - Zufriedener Kunde`}
-                    className="w-12 h-12 rounded-full mr-3 object-cover"
-                  />
+                  <div className="w-12 h-12 bg-ergo-red rounded-full flex items-center justify-center mr-3">
+                    <span className="text-white font-semibold text-sm">{testimonial.initials}</span>
+                  </div>
                   <div>
                     <p className="font-semibold text-gray-900">{testimonial.name}</p>
                     <p className="text-sm text-gray-500">{testimonial.location}</p>
