@@ -199,43 +199,43 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 sm:p-4">
+      <div className="bg-white rounded-lg sm:rounded-xl shadow-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
         
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b p-6 rounded-t-xl">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold text-ergo-dark">{insurance.title}</h2>
-              <p className="text-gray-600">Nur noch wenige Schritte zu Ihrem persönlichen Angebot</p>
+        <div className="sticky top-0 bg-white border-b p-4 sm:p-6 rounded-t-lg sm:rounded-t-xl">
+          <div className="flex justify-between items-start gap-4">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-lg sm:text-2xl font-bold text-ergo-dark leading-tight">{insurance.title}</h2>
+              <p className="text-sm sm:text-base text-gray-600 mt-1">Nur noch wenige Schritte zu Ihrem persönlichen Angebot</p>
             </div>
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <X className="w-5 h-5" />
+            <Button variant="ghost" size="sm" onClick={onClose} className="flex-shrink-0 p-2">
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </div>
           
           {/* Progress */}
-          <div className="mt-4">
-            <div className="flex justify-between text-sm text-gray-500 mb-2">
+          <div className="mt-3 sm:mt-4">
+            <div className="flex justify-between text-xs sm:text-sm text-gray-500 mb-2">
               <span>Schritt {currentStep} von 4</span>
               <span>{Math.round(progress)}%</span>
             </div>
-            <Progress value={progress} className="h-2" />
+            <Progress value={progress} className="h-1.5 sm:h-2" />
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           
           {/* Step 1: Age Selection */}
           {currentStep === 1 && (
             <div className="fade-in">
-              <div className="text-center mb-8">
-                <insurance.icon className="w-12 h-12 text-ergo-red mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-ergo-dark mb-2">
+              <div className="text-center mb-6 sm:mb-8">
+                <insurance.icon className="w-8 h-8 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-3 sm:mb-4" />
+                <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2">
                   Wie alt sind Sie ungefähr?
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600">
                   Für eine genaue Beitragsberechnung geben Sie bitte Ihr Alter an
                 </p>
               </div>
@@ -243,14 +243,14 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
               <RadioGroup
                 value={formData.age}
                 onValueChange={(value) => updateFormData({ age: value })}
-                className="grid grid-cols-2 gap-4"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
               >
                 {["18-30 Jahre", "31-45 Jahre", "46-60 Jahre", "Über 60 Jahre"].map((age) => (
-                  <div key={age} className="flex items-center space-x-2">
-                    <RadioGroupItem value={age} id={age} />
+                  <div key={age} className="flex items-center space-x-3">
+                    <RadioGroupItem value={age} id={age} className="flex-shrink-0" />
                     <Label 
                       htmlFor={age}
-                      className="flex-1 cursor-pointer border-2 border-gray-200 rounded-lg p-4 text-center hover:border-ergo-red transition-colors"
+                      className="flex-1 cursor-pointer border-2 border-gray-200 rounded-lg p-3 sm:p-4 text-center text-sm sm:text-base hover:border-ergo-red transition-colors"
                     >
                       {age}
                     </Label>
@@ -263,20 +263,20 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
           {/* Step 2: Specific Questions */}
           {currentStep === 2 && insurance.questions && (
             <div className="fade-in">
-              <div className="text-center mb-8">
-                <insurance.icon className="w-12 h-12 text-ergo-red mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-ergo-dark mb-2">
+              <div className="text-center mb-6 sm:mb-8">
+                <insurance.icon className="w-8 h-8 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-3 sm:mb-4" />
+                <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2">
                   Weitere Angaben
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600">
                   Damit wir Ihnen das passende Angebot erstellen können
                 </p>
               </div>
               
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {insurance.questions.map((question, index) => (
                   <div key={index}>
-                    <h4 className="text-lg font-semibold text-ergo-dark mb-4">
+                    <h4 className="text-base sm:text-lg font-semibold text-ergo-dark mb-3 sm:mb-4">
                       {question.question}
                     </h4>
                     
@@ -287,9 +287,9 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
                         className="space-y-2"
                       >
                         {question.options.map((option) => (
-                          <div key={option} className="flex items-center space-x-2">
-                            <RadioGroupItem value={option} id={option} />
-                            <Label htmlFor={option} className="cursor-pointer flex-1 p-3 border border-gray-200 rounded-lg hover:border-ergo-red transition-colors">
+                          <div key={option} className="flex items-center space-x-3">
+                            <RadioGroupItem value={option} id={option} className="flex-shrink-0" />
+                            <Label htmlFor={option} className="cursor-pointer flex-1 p-3 border border-gray-200 rounded-lg text-sm sm:text-base hover:border-ergo-red transition-colors">
                               {option}
                             </Label>
                           </div>
@@ -346,68 +346,78 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
           {/* Step 3: Contact Information */}
           {currentStep === 3 && (
             <div className="fade-in">
-              <div className="text-center mb-8">
-                <div className="w-12 h-12 bg-ergo-red-light rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Phone className="w-6 h-6 text-ergo-red" />
+              <div className="text-center mb-6 sm:mb-8">
+                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-ergo-red-light rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <Phone className="w-4 h-4 sm:w-6 sm:h-6 text-ergo-red" />
                 </div>
-                <h3 className="text-xl font-semibold text-ergo-dark mb-2">
+                <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2">
                   Ihre Kontaktdaten
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600">
                   Wir melden uns innerhalb von 24 Stunden bei Ihnen
                 </p>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="firstName">Vorname*</Label>
-                  <Input
-                    id="firstName"
-                    value={formData.firstName}
-                    onChange={(e) => updateFormData({ firstName: e.target.value })}
-                    placeholder="Ihr Vorname"
-                    required
-                  />
+              <div className="grid grid-cols-1 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                  <div>
+                    <Label htmlFor="firstName" className="text-sm font-medium">Vorname*</Label>
+                    <Input
+                      id="firstName"
+                      value={formData.firstName}
+                      onChange={(e) => updateFormData({ firstName: e.target.value })}
+                      placeholder="Ihr Vorname"
+                      className="mt-1 text-base"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName" className="text-sm font-medium">Nachname*</Label>
+                    <Input
+                      id="lastName"
+                      value={formData.lastName}
+                      onChange={(e) => updateFormData({ lastName: e.target.value })}
+                      placeholder="Ihr Nachname"
+                      className="mt-1 text-base"
+                      required
+                    />
+                  </div>
                 </div>
+                
                 <div>
-                  <Label htmlFor="lastName">Nachname*</Label>
-                  <Input
-                    id="lastName"
-                    value={formData.lastName}
-                    onChange={(e) => updateFormData({ lastName: e.target.value })}
-                    placeholder="Ihr Nachname"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="email">E-Mail*</Label>
+                  <Label htmlFor="email" className="text-sm font-medium">E-Mail*</Label>
                   <Input
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => updateFormData({ email: e.target.value })}
                     placeholder="ihre@email.de"
+                    className="mt-1 text-base"
                     required
                   />
                 </div>
+                
                 <div>
-                  <Label htmlFor="phone">Telefon*</Label>
+                  <Label htmlFor="phone" className="text-sm font-medium">Telefon*</Label>
                   <Input
                     id="phone"
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => updateFormData({ phone: e.target.value })}
                     placeholder="0171 1234567"
+                    className="mt-1 text-base"
                     required
                   />
                 </div>
-                <div className="md:col-span-2">
-                  <Label htmlFor="location">PLZ & Ort*</Label>
+                
+                <div>
+                  <Label htmlFor="location" className="text-sm font-medium">PLZ & Ort*</Label>
                   <Input
                     id="location"
                     value={formData.location}
                     onChange={(e) => updateFormData({ location: e.target.value })}
                     placeholder="z.B. 10115 Berlin"
+                    className="mt-1 text-base"
                     required
                   />
                 </div>
@@ -418,27 +428,27 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
           {/* Step 4: Confirmation */}
           {currentStep === 4 && (
             <div className="fade-in text-center">
-              <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-ergo-dark mb-2">
+              <CheckCircle className="w-12 h-12 sm:w-16 sm:h-16 text-green-500 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2">
                 Vielen Dank!
               </h3>
-              <p className="text-gray-600 mb-8">
+              <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
                 Ihre Anfrage wurde erfolgreich übermittelt
               </p>
               
-              <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
-                <h4 className="font-semibold text-green-800 mb-4">Was passiert jetzt?</h4>
-                <div className="space-y-3 text-green-700">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+                <h4 className="font-semibold text-green-800 mb-3 sm:mb-4 text-sm sm:text-base">Was passiert jetzt?</h4>
+                <div className="space-y-2 sm:space-y-3 text-green-700 text-sm sm:text-base">
                   <div className="flex items-center">
-                    <Clock className="w-5 h-5 mr-3" />
+                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0" />
                     <span>Wir melden uns innerhalb von 24 Stunden</span>
                   </div>
                   <div className="flex items-center">
-                    <Calculator className="w-5 h-5 mr-3" />
+                    <Calculator className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0" />
                     <span>Sie erhalten Ihr persönliches Angebot</span>
                   </div>
                   <div className="flex items-center">
-                    <Handshake className="w-5 h-5 mr-3" />
+                    <Handshake className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0" />
                     <span>Kostenlose & unverbindliche Beratung</span>
                   </div>
                 </div>
