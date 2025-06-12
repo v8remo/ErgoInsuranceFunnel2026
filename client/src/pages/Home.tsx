@@ -224,39 +224,39 @@ export default function Home() {
                     className="w-full h-48 object-cover rounded-t-lg"
                   />
                   
-                  <div className="p-6">
+                  <div className="p-6 bg-ergo-red">
                     <div className="flex items-center mb-4">
                       <Star className="w-6 h-6 text-yellow-300 mr-3" />
-                      <h3 className="text-xl font-bold">Rundumschutz-Paket</h3>
+                      <h3 className="text-xl font-bold text-white">Rundumschutz-Paket</h3>
                     </div>
                     
-                    <p className="text-white/90 mb-6">
+                    <p className="text-white mb-6">
                       Sparen Sie mit unseren Kombipaketen. Bis zu 20% Rabatt bei mehreren Versicherungen.
                     </p>
                     
                     <div className="flex justify-between items-center mb-6">
                       <span className="text-2xl font-bold text-white">Bis zu 20% sparen</span>
-                      <Badge className="bg-white text-ergo-red font-bold">
+                      <Badge className="bg-yellow-300 text-ergo-red font-bold">
                         TOP DEAL
                       </Badge>
                     </div>
                     
-                    <ul className="text-sm text-white/90 mb-6 space-y-2">
+                    <ul className="text-sm text-white mb-6 space-y-2">
                       <li className="flex items-center">
-                        <div className="w-2 h-2 bg-white rounded-full mr-2" />
+                        <div className="w-2 h-2 bg-yellow-300 rounded-full mr-2" />
                         Individuelle Beratung
                       </li>
                       <li className="flex items-center">
-                        <div className="w-2 h-2 bg-white rounded-full mr-2" />
+                        <div className="w-2 h-2 bg-yellow-300 rounded-full mr-2" />
                         Ein Ansprechpartner
                       </li>
                       <li className="flex items-center">
-                        <div className="w-2 h-2 bg-white rounded-full mr-2" />
+                        <div className="w-2 h-2 bg-yellow-300 rounded-full mr-2" />
                         Mengenrabatt
                       </li>
                     </ul>
                     
-                    <Button className="w-full bg-white text-ergo-red hover:bg-gray-100 font-bold">
+                    <Button className="w-full bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold">
                       Beratungstermin vereinbaren
                     </Button>
                   </div>
