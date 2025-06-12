@@ -20,6 +20,8 @@ import {
   Award
 } from "lucide-react";
 
+import _089_Ti9r4yWZjrM from "@assets/089-Ti9r4yWZjrM.jpeg";
+
 const insuranceProducts = [
   {
     id: "hausrat",
@@ -123,7 +125,6 @@ export default function Home() {
   return (
     <>
       <Header />
-      
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="py-12 sm:py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white">
@@ -131,7 +132,7 @@ export default function Home() {
             <div className="text-center mb-16">
               {/* Professional advisor image */}
               <img 
-                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=128&h=128&fit=crop&crop=face" 
+                src={_089_Ti9r4yWZjrM} 
                 alt="Morino Stübe - Ihr ERGO Versicherungsexperte" 
                 className="w-32 h-32 rounded-full mx-auto mb-8 shadow-lg object-cover border-4 border-white"
               />
@@ -276,7 +277,6 @@ export default function Home() {
           />
         )}
       </main>
-
       <Footer />
     </>
   );
