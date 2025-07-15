@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ergo-versicherung.replit.app/sitemap.xml
