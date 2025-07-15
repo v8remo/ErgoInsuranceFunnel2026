@@ -82,6 +82,8 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
 - 2025-01-17: Rechtssichere Impressum und Datenschutz erstellt
 - 2025-01-17: Morino Stübe's Bild für Vertrauensaufbau integriert
 - 2025-01-17: Alle Texte auf "ERGO Ganderkesee" als selbständige Agentur angepasst
+- 2025-01-17: E-Mail-Benachrichtigungen mit Resend API implementiert
+- 2025-01-17: Automatische Lead-Benachrichtigung an stuebe@shopgrow.de
 
 ## User Preferences
 - Admin-Passwort: admin123
