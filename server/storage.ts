@@ -1,4 +1,4 @@
-import { users, leads, content, type User, type InsertUser, type Lead, type InsertLead, type Content, type InsertContent } from "@shared/schema";
+import { users, leads, content, adminConfig, type User, type InsertUser, type Lead, type InsertLead, type Content, type InsertContent, type AdminConfig, type InsertAdminConfig } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, gte, desc, sql } from "drizzle-orm";
 
@@ -26,6 +26,11 @@ export interface IStorage {
   createContent(content: InsertContent): Promise<Content>;
   updateContent(id: number, updates: Partial<Content>): Promise<Content | undefined>;
   deleteContent(id: number): Promise<void>;
+  
+  // Admin configuration methods
+  getAdminConfig(key: string): Promise<AdminConfig | undefined>;
+  setAdminConfig(key: string, value: string): Promise<AdminConfig>;
+  updateAdminPassword(newPassword: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -176,6 +181,34 @@ export class DatabaseStorage implements IStorage {
 
   async deleteContent(id: number): Promise<void> {
     await db.delete(content).where(eq(content.id, id));
+  }
+  
+  // Admin configuration methods
+  async getAdminConfig(key: string): Promise<AdminConfig | undefined> {
+    const [result] = await db.select().from(adminConfig).where(eq(adminConfig.configKey, key));
+    return result || undefined;
+  }
+
+  async setAdminConfig(key: string, value: string): Promise<AdminConfig> {
+    const existing = await this.getAdminConfig(key);
+    if (existing) {
+      const [updated] = await db
+        .update(adminConfig)
+        .set({ configValue: value, updatedAt: new Date() })
+        .where(eq(adminConfig.configKey, key))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(adminConfig)
+        .values({ configKey: key, configValue: value })
+        .returning();
+      return created;
+    }
+  }
+
+  async updateAdminPassword(newPassword: string): Promise<void> {
+    await this.setAdminConfig('admin_password', newPassword);
   }
 }
 

@@ -231,13 +231,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Simple admin authentication
-  app.post("/api/admin/login", (req, res) => {
-    const { password } = req.body;
-    if (password === process.env.ADMIN_PASSWORD || password === "admin123") {
-      res.json({ success: true, message: "Login successful" });
-    } else {
-      res.status(401).json({ success: false, message: "Invalid password" });
+  // Admin authentication with database stored password
+  app.post("/api/admin/login", async (req, res) => {
+    try {
+      const { password } = req.body;
+      
+      // Check if admin password is set in database
+      const adminPassword = await storage.getAdminConfig('admin_password');
+      
+      // If no password set in database, use default
+      const expectedPassword = adminPassword ? adminPassword.configValue : "ERGOsicher2025!";
+      
+      if (password === expectedPassword) {
+        res.json({ success: true, message: "Login successful" });
+      } else {
+        res.status(401).json({ success: false, message: "Invalid password" });
+      }
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Authentication error" });
+    }
+  });
+
+  // Change admin password
+  app.post("/api/admin/change-password", async (req, res) => {
+    try {
+      const { currentPassword, newPassword } = req.body;
+      
+      // Verify current password
+      const adminPassword = await storage.getAdminConfig('admin_password');
+      const expectedPassword = adminPassword ? adminPassword.configValue : "ERGOsicher2025!";
+      
+      if (currentPassword !== expectedPassword) {
+        return res.status(401).json({ success: false, message: "Current password is incorrect" });
+      }
+      
+      if (!newPassword || newPassword.length < 8) {
+        return res.status(400).json({ success: false, message: "New password must be at least 8 characters long" });
+      }
+      
+      // Update password
+      await storage.updateAdminPassword(newPassword);
+      
+      res.json({ success: true, message: "Password updated successfully" });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Failed to update password" });
     }
   });
 

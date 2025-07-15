@@ -93,8 +93,12 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
 - 2025-01-17: Automatisches Scrollen nach oben bei Seitenwechsel implementiert
 - 2025-01-17: Google Ads Tracking (AW-17132012984) direkt in HTML und Analytics integriert
 - 2025-01-17: Google Ads Conversion-Tracking für Lead-Generierung implementiert
+- 2025-01-17: Sicheres Admin-Authentifizierungssystem mit Passwort-Änderungsfunktion
+- 2025-01-17: Zurück- und Abmelden-Buttons im Admin-Dashboard hinzugefügt
+- 2025-01-17: Standard-Admin-Passwort auf "ERGOsicher2025!" geändert
 
 ## User Preferences
-- Admin-Passwort: admin123
+- Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)
 - E-Mail-Benachrichtigungen für neue Leads gewünscht
 - Platform soll Google Ads ready sein
+- Sichere Admin-Authentifizierung mit Passwort-Änderungsfunktion gewünscht

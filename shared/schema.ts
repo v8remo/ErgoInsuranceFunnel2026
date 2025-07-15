@@ -38,6 +38,13 @@ export const content = pgTable("content", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const adminConfig = pgTable("admin_config", {
+  id: serial("id").primaryKey(),
+  configKey: text("config_key").notNull().unique(),
+  configValue: text("config_value").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -55,9 +62,16 @@ export const insertContentSchema = createInsertSchema(content).omit({
   updatedAt: true,
 });
 
+export const insertAdminConfigSchema = createInsertSchema(adminConfig).omit({
+  id: true,
+  updatedAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertLead = z.infer<typeof insertLeadSchema>;
 export type Lead = typeof leads.$inferSelect;
 export type InsertContent = z.infer<typeof insertContentSchema>;
 export type Content = typeof content.$inferSelect;
+export type InsertAdminConfig = z.infer<typeof insertAdminConfigSchema>;
+export type AdminConfig = typeof adminConfig.$inferSelect;

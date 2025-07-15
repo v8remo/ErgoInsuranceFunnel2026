@@ -26,7 +26,10 @@ import {
   FileText,
   Settings,
   Upload,
-  Trash2
+  Trash2,
+  ArrowLeft,
+  LogOut,
+  Lock
 } from "lucide-react";
 import type { Lead, Content } from "@shared/schema";
 
@@ -48,6 +51,10 @@ export default function AdminDashboard() {
   const [imageUrls, setImageUrls] = useState<{[key: string]: string}>({});
   const [contentData, setContentData] = useState<{[key: string]: {title: string, description: string, price: string}}>({});
   const [savingContent, setSavingContent] = useState<{[key: string]: boolean}>({});
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const fileInputRefs = useRef<{[key: string]: HTMLInputElement | null}>({});
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -72,6 +79,33 @@ export default function AdminDashboard() {
       toast({
         title: "Anmeldung fehlgeschlagen",
         description: "Falsches Passwort",
+        variant: "destructive"
+      });
+    }
+  });
+
+  // Password change mutation
+  const changePasswordMutation = useMutation({
+    mutationFn: async (data: { currentPassword: string; newPassword: string }) => {
+      const response = await apiRequest("POST", "/api/admin/change-password", data);
+      return response.json();
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        setShowPasswordChange(false);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        toast({
+          title: "Passwort erfolgreich geändert",
+          description: "Ihr neues Passwort wurde gespeichert"
+        });
+      }
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Passwort-Änderung fehlgeschlagen",
+        description: error.message || "Fehler beim Ändern des Passworts",
         variant: "destructive"
       });
     }
@@ -350,6 +384,51 @@ export default function AdminDashboard() {
     loginMutation.mutate(password);
   };
 
+  const handlePasswordChange = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (newPassword !== confirmPassword) {
+      toast({
+        title: "Passwörter stimmen nicht überein",
+        description: "Bitte überprüfen Sie die Eingabe",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (newPassword.length < 8) {
+      toast({
+        title: "Passwort zu kurz",
+        description: "Das Passwort muss mindestens 8 Zeichen lang sein",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    changePasswordMutation.mutate({
+      currentPassword,
+      newPassword
+    });
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setPassword("");
+    setActiveTab("leads");
+    setShowPasswordChange(false);
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    toast({
+      title: "Erfolgreich abgemeldet",
+      description: "Sie wurden vom Admin Dashboard abgemeldet"
+    });
+  };
+
+  const handleBackToHome = () => {
+    window.location.href = "/";
+  };
+
   const handleStatusUpdate = (leadId: number, newStatus: string) => {
     updateLeadMutation.mutate({ id: leadId, status: newStatus });
   };
@@ -423,6 +502,16 @@ export default function AdminDashboard() {
                 {loginMutation.isPending ? "Anmeldung..." : "Anmelden"}
               </Button>
             </form>
+            <div className="mt-4 pt-4 border-t">
+              <Button
+                variant="outline"
+                onClick={handleBackToHome}
+                className="w-full"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Zurück zur Startseite
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -438,6 +527,32 @@ export default function AdminDashboard() {
             <div>
               <h1 className="text-xl sm:text-2xl font-bold text-ergo-dark">ERGO Admin Dashboard</h1>
               <p className="text-sm sm:text-base text-ergo-dark-light">Leads verwalten und Inhalte bearbeiten</p>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                onClick={handleBackToHome}
+                className="flex items-center gap-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Zurück
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowPasswordChange(true)}
+                className="flex items-center gap-2"
+              >
+                <Lock className="h-4 w-4" />
+                Passwort ändern
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleLogout}
+                className="flex items-center gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Abmelden
+              </Button>
             </div>
           </div>
           
@@ -807,6 +922,75 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Password Change Modal */}
+      {showPasswordChange && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle className="text-lg">Passwort ändern</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handlePasswordChange} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Aktuelles Passwort
+                  </label>
+                  <Input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    required
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Neues Passwort (mind. 8 Zeichen)
+                  </label>
+                  <Input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                    minLength={8}
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Passwort bestätigen
+                  </label>
+                  <Input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    className="w-full"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setShowPasswordChange(false)}
+                    className="flex-1"
+                  >
+                    Abbrechen
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="flex-1 bg-ergo-red hover:bg-ergo-red-hover"
+                    disabled={changePasswordMutation.isPending}
+                  >
+                    {changePasswordMutation.isPending ? "Ändern..." : "Ändern"}
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }
