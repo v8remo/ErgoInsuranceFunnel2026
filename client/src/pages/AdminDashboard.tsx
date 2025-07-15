@@ -25,7 +25,8 @@ import {
   Image,
   FileText,
   Settings,
-  Upload
+  Upload,
+  Trash2
 } from "lucide-react";
 import type { Lead, Content } from "@shared/schema";
 
@@ -181,6 +182,36 @@ export default function AdminDashboard() {
       });
     }
   });
+
+  // Delete lead mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (leadId: number) => {
+      const response = await apiRequest("DELETE", `/api/leads/${leadId}`);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/leads'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/dashboard/stats'] });
+      trackEvent("lead_deleted");
+      toast({
+        title: "Lead gelöscht",
+        description: "Der Lead wurde erfolgreich gelöscht"
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Fehler",
+        description: "Der Lead konnte nicht gelöscht werden",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const handleDeleteLead = (leadId: number) => {
+    if (confirm("Sind Sie sicher, dass Sie diesen Lead löschen möchten?")) {
+      deleteMutation.mutate(leadId);
+    }
+  };
 
   // Image upload functionality
   const handleImageUpload = async (file: File, insuranceId: string) => {
@@ -568,22 +599,33 @@ export default function AdminDashboard() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           {getStatusBadge(lead.status)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                          <Select 
-                            value={lead.status} 
-                            onValueChange={(value) => handleStatusUpdate(lead.id, value)}
-                          >
-                            <SelectTrigger className="w-32">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="new">Neu</SelectItem>
-                              <SelectItem value="contacted">Kontaktiert</SelectItem>
-                              <SelectItem value="qualified">Qualifiziert</SelectItem>
-                              <SelectItem value="converted">Abgeschlossen</SelectItem>
-                              <SelectItem value="lost">Verloren</SelectItem>
-                            </SelectContent>
-                          </Select>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <div className="flex items-center space-x-2">
+                            <Select 
+                              value={lead.status} 
+                              onValueChange={(value) => handleStatusUpdate(lead.id, value)}
+                            >
+                              <SelectTrigger className="w-32">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="new">Neu</SelectItem>
+                                <SelectItem value="contacted">Kontaktiert</SelectItem>
+                                <SelectItem value="qualified">Qualifiziert</SelectItem>
+                                <SelectItem value="converted">Abgeschlossen</SelectItem>
+                                <SelectItem value="lost">Verloren</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => handleDeleteLead(lead.id)}
+                              disabled={deleteMutation.isPending}
+                              className="px-3 py-1"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}
