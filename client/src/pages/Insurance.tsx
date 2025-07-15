@@ -173,7 +173,7 @@ export default function Insurance() {
                     </p>
                     <div className="text-gray-600 mb-6">
                       <p className="mb-2">
-                        <span className="font-semibold">ERGO Agentur Ganderkesee</span><br />
+                        <span className="font-semibold">ERGO Ganderkesee</span><br />
                         Friedensstraße 91 A, 27777 Ganderkesee
                       </p>
                       <p className="text-sm">

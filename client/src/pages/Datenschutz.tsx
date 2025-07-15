@@ -40,10 +40,12 @@ export default function Datenschutz() {
             <h3 className="text-xl font-semibold text-ergo-dark mb-3">Hinweis zur verantwortlichen Stelle</h3>
             <p className="mb-6">
               Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:<br />
-              <strong>ERGO Versicherungsgruppe</strong><br />
+              <strong>ERGO Ganderkesee</strong><br />
               Morino Stübe<br />
-              Telefon: 015566771019<br />
-              E-Mail: info@ergo-deutschland.de
+              Friedensstraße 91 A<br />
+              27777 Ganderkesee<br />
+              Telefon: 01556 6771019<br />
+              E-Mail: morino.stuebe@ergo.de
             </p>
 
             <h2 className="text-2xl font-semibold text-ergo-dark mb-4">4. Datenerfassung auf dieser Website</h2>

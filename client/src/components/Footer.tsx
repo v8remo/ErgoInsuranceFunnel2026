@@ -12,28 +12,28 @@ export default function Footer() {
           <div className="mb-6 sm:mb-0">
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Kontakt</h3>
             <div className="space-y-2 sm:space-y-3 text-gray-300 text-sm sm:text-base">
-              <p className="font-medium text-white">ERGO Versicherungsgruppe</p>
-              <p>Deutschlandweite Beratung</p>
+              <p className="font-medium text-white">ERGO Ganderkesee</p>
+              <p>Morino Stübe</p>
               
               <div className="flex items-start">
                 <MapPin className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p>Bundesweiter Service</p>
-                  <p>Deutschland</p>
+                  <p>Friedensstraße 91 A</p>
+                  <p>27777 Ganderkesee</p>
                 </div>
               </div>
               
               <div className="flex items-center">
                 <Phone className="w-4 h-4 mr-2 flex-shrink-0" />
                 <a href="tel:015566771019" className="hover:text-white transition-colors break-all">
-                  015566771019
+                  01556 6771019
                 </a>
               </div>
               
               <div className="flex items-start">
                 <Mail className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5" />
-                <a href="mailto:info@ergo-deutschland.de" className="hover:text-white transition-colors break-all">
-                  info@ergo-deutschland.de
+                <a href="mailto:morino.stuebe@ergo.de" className="hover:text-white transition-colors break-all">
+                  morino.stuebe@ergo.de
                 </a>
               </div>
             </div>

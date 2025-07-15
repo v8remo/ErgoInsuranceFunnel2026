@@ -86,7 +86,7 @@ export default function TrustSection() {
                   <div className="text-gray-600 mb-4">
                     <p className="mb-2">
                       <span className="font-semibold">Versicherungsfachmann nach § 84 HGB</span><br />
-                      ERGO Agentur Ganderkesee
+                      ERGO Ganderkesee
                     </p>
                     <p className="text-sm">
                       Reg.-Nr.: D-5H7J-7DUI1-10

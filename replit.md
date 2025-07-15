@@ -79,6 +79,9 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
 - 2025-01-17: JSON-Parsing-Fehler im Admin Dashboard behoben
 - 2025-01-17: SEO-Optimierungen hinzugefügt (Sitemap, robots.txt)
 - 2025-01-17: Live-Schaltungs-Check durchgeführt
+- 2025-01-17: Rechtssichere Impressum und Datenschutz erstellt
+- 2025-01-17: Morino Stübe's Bild für Vertrauensaufbau integriert
+- 2025-01-17: Alle Texte auf "ERGO Ganderkesee" als selbständige Agentur angepasst
 
 ## User Preferences
 - Admin-Passwort: admin123

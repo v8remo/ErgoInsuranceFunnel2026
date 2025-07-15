@@ -17,9 +17,9 @@ export default function Impressum() {
                 <section>
                   <h2 className="text-xl font-semibold text-ergo-dark mb-3">Angaben gemäß § 5 TMG</h2>
                   <p className="leading-relaxed">
+                    ERGO Ganderkesee<br />
                     Morino Stübe<br />
                     Versicherungsfachmann nach § 84 HGB<br />
-                    ERGO Agentur Ganderkesee<br />
                     Friedensstraße 91 A<br />
                     27777 Ganderkesee
                   </p>
