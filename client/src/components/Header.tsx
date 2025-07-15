@@ -17,7 +17,7 @@ export default function Header() {
               <div className="w-3 h-3 sm:w-4 sm:h-4 bg-white rounded-sm" />
             </div>
             <div className="hidden sm:block">
-              <span className="text-lg sm:text-xl font-bold text-ergo-dark">ERGO Deutschland</span>
+              <span className="text-lg sm:text-xl font-bold text-ergo-dark">ERGO Ganderkesee</span>
               <p className="text-xs sm:text-sm text-gray-600">Deutschlandweite Beratung</p>
             </div>
             <div className="block sm:hidden">
