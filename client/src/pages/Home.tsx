@@ -199,7 +199,7 @@ export default function Home() {
                     <div className="p-4 sm:p-6">
                       <div className="flex items-start mb-3 sm:mb-4">
                         <product.icon className="w-5 h-5 sm:w-6 sm:h-6 text-ergo-red mr-2 sm:mr-3 mt-1 flex-shrink-0" />
-                        <h3 className="text-lg sm:text-xl font-bold text-ergo-dark leading-tight">{product.title}</h3>
+                        <h3 className="text-base sm:text-lg lg:text-xl font-bold text-ergo-dark leading-tight break-words hyphens-auto">{product.title}</h3>
                       </div>
                       
                       <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">
@@ -245,7 +245,7 @@ export default function Home() {
                   <div className="p-4 sm:p-6 bg-ergo-red">
                     <div className="flex items-start mb-3 sm:mb-4">
                       <Star className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-300 mr-2 sm:mr-3 mt-1 flex-shrink-0" />
-                      <h3 className="text-lg sm:text-xl font-bold text-white leading-tight">Rundumschutz-Paket</h3>
+                      <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white leading-tight break-words hyphens-auto">Rundumschutz-Paket</h3>
                     </div>
                     
                     <p className="text-white mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">

@@ -54,10 +54,10 @@ export default function TrustSection() {
     <section className="py-8 sm:py-12 lg:py-16 bg-ergo-gray">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2">
             Über 1000 zufriedene Kunden vertrauen uns
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600">
+          <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
             Erfahren Sie, warum sich unsere Kunden für ERGO entscheiden
           </p>
         </div>
@@ -77,10 +77,10 @@ export default function TrustSection() {
                   </div>
                 </div>
                 <div className="flex-1 text-center lg:text-left">
-                  <h3 className="text-xl sm:text-2xl font-bold text-ergo-dark mb-2">
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-ergo-dark mb-2">
                     Morino Stübe
                   </h3>
-                  <p className="text-lg font-semibold text-ergo-red mb-3">
+                  <p className="text-base sm:text-lg font-semibold text-ergo-red mb-3">
                     Ihr Versicherungsexperte
                   </p>
                   <div className="text-gray-600 mb-4">
