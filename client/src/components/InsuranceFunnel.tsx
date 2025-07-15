@@ -484,7 +484,7 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
             <Button
               onClick={nextStep}
               disabled={!validateCurrentStep() || submitMutation.isPending}
-              className="bg-ergo-red hover:bg-ergo-red-hover text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3 flex-shrink-0"
+              className="bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3 flex-shrink-0"
             >
               {submitMutation.isPending ? (
                 "Wird gesendet..."
