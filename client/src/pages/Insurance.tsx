@@ -66,7 +66,7 @@ export default function Insurance() {
               <Badge className="bg-ergo-blue-light text-ergo-dark px-4 py-2 text-base">
                 Ohne Wartezeit
               </Badge>
-              <Badge className="bg-ergo-gray text-ergo-dark px-4 py-2 text-base">
+              <Badge className="bg-green-100 text-green-800 px-4 py-2 text-base">
                 Sofortige Deckung
               </Badge>
             </div>
@@ -159,8 +159,7 @@ export default function Insurance() {
               </Button>
               <Button 
                 size="lg" 
-                variant="outline" 
-                className="border-white text-white hover:bg-white hover:text-ergo-red px-8 py-4 text-lg"
+                className="border-2 border-white text-white hover:bg-white hover:text-ergo-red px-8 py-4 text-lg bg-transparent backdrop-blur-sm"
                 onClick={() => window.location.href = 'tel:015566771019'}
               >
                 Sofort anrufen: 015566771019
