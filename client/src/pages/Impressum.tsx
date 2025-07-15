@@ -1,68 +1,122 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function Impressum() {
   return (
     <>
       <Header />
-      
-      <main className="min-h-screen bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16">
-          <h1 className="text-4xl font-bold text-ergo-dark mb-8">Impressum</h1>
-          
-          <div className="prose prose-lg max-w-none">
-            <h2 className="text-2xl font-semibold text-ergo-dark mb-4">Angaben gemäß § 5 TMG</h2>
-            <p className="mb-6">
-              <strong>ERGO Versicherungsgruppe</strong><br />
-              Morino Stübe<br />
-              Deutschlandweite Beratung<br />
-              Deutschland
-            </p>
+      <main className="min-h-screen bg-ergo-gray py-8 sm:py-12 lg:py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Card className="bg-white shadow-lg">
+            <CardContent className="p-6 sm:p-8 lg:p-12">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-ergo-dark mb-8">Impressum</h1>
+              
+              <div className="space-y-6 text-gray-700">
+                <section>
+                  <h2 className="text-xl font-semibold text-ergo-dark mb-3">Angaben gemäß § 5 TMG</h2>
+                  <p className="leading-relaxed">
+                    Morino Stübe<br />
+                    Versicherungsfachmann nach § 84 HGB<br />
+                    ERGO Agentur Ganderkesee<br />
+                    Friedensstraße 91 A<br />
+                    27777 Ganderkesee
+                  </p>
+                </section>
 
-            <h2 className="text-2xl font-semibold text-ergo-dark mb-4">Kontakt</h2>
-            <p className="mb-6">
-              Telefon: 015566771019<br />
-              E-Mail: info@ergo-deutschland.de
-            </p>
+                <section>
+                  <h2 className="text-xl font-semibold text-ergo-dark mb-3">Kontakt</h2>
+                  <p className="leading-relaxed">
+                    Telefon: 01556 6771019<br />
+                    E-Mail: morino.stuebe@ergo.de
+                  </p>
+                </section>
 
-            <h2 className="text-2xl font-semibold text-ergo-dark mb-4">Berufsbezeichnung und berufsrechtliche Regelungen</h2>
-            <p className="mb-6">
-              Berufsbezeichnung: Versicherungsvermittler<br />
-              Zuständige Kammer: IHK<br />
-              Verliehen durch: Deutschland
-            </p>
+                <section>
+                  <h2 className="text-xl font-semibold text-ergo-dark mb-3">Registereintrag</h2>
+                  <p className="leading-relaxed">
+                    Vermittlerregister-Nr.: D-5H7J-7DUI1-10<br />
+                    Das Vermittlerregister wird geführt bei:<br />
+                    Deutscher Industrie- und Handelskammertag (DIHK) e.V.<br />
+                    Breite Straße 29, 10178 Berlin<br />
+                    <a href="https://www.vermittlerregister.info" target="_blank" rel="noopener noreferrer" className="text-ergo-red hover:underline">
+                      www.vermittlerregister.info
+                    </a>
+                  </p>
+                </section>
 
-            <h2 className="text-2xl font-semibold text-ergo-dark mb-4">Registrierung</h2>
-            <p className="mb-6">
-              Vermittlerregister: <a href="https://www.vermittlerregister.info" target="_blank" rel="noopener noreferrer" className="text-ergo-red hover:underline">www.vermittlerregister.info</a>
-            </p>
+                <section>
+                  <h2 className="text-xl font-semibold text-ergo-dark mb-3">Berufshaftpflichtversicherung</h2>
+                  <p className="leading-relaxed">
+                    Name und Sitz des Versicherers:<br />
+                    ERGO Versicherung AG<br />
+                    ERGO-Platz 1<br />
+                    40477 Düsseldorf
+                  </p>
+                  <p className="mt-3 leading-relaxed">
+                    Geltungsraum der Versicherung: Deutschland
+                  </p>
+                </section>
 
-            <h2 className="text-2xl font-semibold text-ergo-dark mb-4">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
-            <p className="mb-6">
-              Morino Stübe<br />
-              ERGO Versicherungsgruppe<br />
-              Deutschland
-            </p>
+                <section>
+                  <h2 className="text-xl font-semibold text-ergo-dark mb-3">Zuständige Aufsichtsbehörde</h2>
+                  <p className="leading-relaxed">
+                    Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin)<br />
+                    Graurheindorfer Straße 108<br />
+                    53117 Bonn<br />
+                    <a href="https://www.bafin.de" target="_blank" rel="noopener noreferrer" className="text-ergo-red hover:underline">
+                      www.bafin.de
+                    </a>
+                  </p>
+                </section>
 
-            <h2 className="text-2xl font-semibold text-ergo-dark mb-4">Haftung für Inhalte</h2>
-            <p className="mb-6">
-              Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht unter der Verpflichtung, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
-            </p>
+                <section>
+                  <h2 className="text-xl font-semibold text-ergo-dark mb-3">Streitschlichtung</h2>
+                  <p className="leading-relaxed">
+                    Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:
+                    <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" className="text-ergo-red hover:underline ml-1">
+                      https://ec.europa.eu/consumers/odr/
+                    </a>
+                  </p>
+                  <p className="mt-3 leading-relaxed">
+                    Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer 
+                    Verbraucherschlichtungsstelle teilzunehmen.
+                  </p>
+                </section>
 
-            <h2 className="text-2xl font-semibold text-ergo-dark mb-4">Haftung für Links</h2>
-            <p className="mb-6">
-              Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
-            </p>
+                <section>
+                  <h2 className="text-xl font-semibold text-ergo-dark mb-3">Hinweis zur Vermittlertätigkeit</h2>
+                  <p className="leading-relaxed">
+                    Als gebundener Versicherungsvertreter bin ich ausschließlich für die ERGO Versicherung AG tätig 
+                    und vermittle nur deren Versicherungsprodukte. Die Beratung erfolgt auf Grundlage einer 
+                    eingeschränkten Auswahl von Versicherungsverträgen gemäß § 34d Abs. 4 GewO.
+                  </p>
+                </section>
 
-            <h2 className="text-2xl font-semibold text-ergo-dark mb-4">Urheberrecht</h2>
-            <p className="mb-6">
-              Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
-            </p>
-          </div>
+                <section>
+                  <h2 className="text-xl font-semibold text-ergo-dark mb-3">Haftung für Inhalte</h2>
+                  <p className="leading-relaxed">
+                    Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den 
+                    allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht 
+                    verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen 
+                    zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+                  </p>
+                </section>
+
+                <section>
+                  <h2 className="text-xl font-semibold text-ergo-dark mb-3">Urheberrecht</h2>
+                  <p className="leading-relaxed">
+                    Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen 
+                    Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der 
+                    Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
+                  </p>
+                </section>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
-
       <Footer />
     </>
   );
