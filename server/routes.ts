@@ -6,6 +6,7 @@ import multer from "multer";
 import { storage } from "./storage";
 import { insertLeadSchema, insertContentSchema } from "@shared/schema";
 import { z } from "zod";
+import { sendLeadNotification } from "./email";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -58,6 +59,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const leadData = insertLeadSchema.parse(req.body);
       const lead = await storage.createLead(leadData);
+      
+      // Send email notification asynchronously
+      sendLeadNotification(lead).catch(error => {
+        console.error('Failed to send lead notification email:', error);
+      });
+      
       res.json(lead);
     } catch (error) {
       if (error instanceof z.ZodError) {
