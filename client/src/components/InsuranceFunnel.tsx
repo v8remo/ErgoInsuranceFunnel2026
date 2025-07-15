@@ -11,8 +11,9 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { trackEvent } from "@/lib/analytics";
 import { insuranceConfig } from "@/lib/insurance-config";
-import { X, CheckCircle, Phone, Clock, Calculator, Handshake } from "lucide-react";
+import { X, CheckCircle, Phone, Clock, Calculator, Handshake, Shield } from "lucide-react";
 import type { InsertLead } from "@shared/schema";
+import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
 
 interface InsuranceFunnelProps {
   insuranceType: string;
@@ -450,6 +451,35 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
                   <div className="flex items-center">
                     <Handshake className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0" />
                     <span>Kostenlose & unverbindliche Beratung</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Expert Contact Section */}
+              <div className="bg-ergo-gray border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden shadow-lg">
+                      <img 
+                        src={morinoImage} 
+                        alt="Morino Stübe - Ihr Experte" 
+                        className="w-full h-full object-cover object-center"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1 text-center sm:text-left">
+                    <h4 className="font-semibold text-ergo-dark mb-1">Morino Stübe</h4>
+                    <p className="text-sm text-ergo-red mb-2">Ihr Versicherungsexperte</p>
+                    <div className="flex flex-wrap justify-center sm:justify-start gap-3 text-xs">
+                      <div className="flex items-center gap-1">
+                        <Shield className="w-3 h-3 text-ergo-red" />
+                        <span>Zertifiziert</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <CheckCircle className="w-3 h-3 text-ergo-red" />
+                        <span>10+ Jahre</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

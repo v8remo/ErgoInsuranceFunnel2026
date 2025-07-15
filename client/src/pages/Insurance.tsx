@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { trackEvent } from "@/lib/analytics";
 import { insuranceConfig } from "@/lib/insurance-config";
+import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
+import { Award, Shield, Handshake, Clock } from "lucide-react";
 
 export default function Insurance() {
   const { type } = useParams();
@@ -135,6 +137,71 @@ export default function Insurance() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Expert Section */}
+        <section className="py-16 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-ergo-dark mb-4">
+                Ihr persönlicher Versicherungsexperte
+              </h2>
+              <p className="text-xl text-gray-600">
+                Professionelle Beratung mit über 10 Jahren Erfahrung
+              </p>
+            </div>
+
+            <Card className="bg-ergo-gray shadow-lg">
+              <CardContent className="p-8">
+                <div className="flex flex-col lg:flex-row items-center gap-8">
+                  <div className="flex-shrink-0">
+                    <div className="w-40 h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-lg">
+                      <img 
+                        src={morinoImage} 
+                        alt="Morino Stübe - Ihr Versicherungsexperte" 
+                        className="w-full h-full object-cover object-center"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1 text-center lg:text-left">
+                    <h3 className="text-2xl font-bold text-ergo-dark mb-2">
+                      Morino Stübe
+                    </h3>
+                    <p className="text-lg font-semibold text-ergo-red mb-4">
+                      Versicherungsfachmann nach § 84 HGB
+                    </p>
+                    <div className="text-gray-600 mb-6">
+                      <p className="mb-2">
+                        <span className="font-semibold">ERGO Agentur Ganderkesee</span><br />
+                        Friedensstraße 91 A, 27777 Ganderkesee
+                      </p>
+                      <p className="text-sm">
+                        Tel: 01556 6771019 | E-Mail: morino.stuebe@ergo.de
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="flex items-center gap-2">
+                        <Award className="w-4 h-4 text-ergo-red" />
+                        <span>Zertifizierter Experte</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-ergo-red" />
+                        <span>Über 10 Jahre Erfahrung</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Handshake className="w-4 h-4 text-ergo-red" />
+                        <span>Persönliche Beratung</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-ergo-red" />
+                        <span>Schnelle Abwicklung</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </section>
 

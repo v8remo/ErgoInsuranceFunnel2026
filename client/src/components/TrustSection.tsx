@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Award, Shield, Handshake, Clock } from "lucide-react";
+import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
 
 const testimonials = [
   {
@@ -59,6 +60,56 @@ export default function TrustSection() {
           <p className="text-base sm:text-lg lg:text-xl text-gray-600">
             Erfahren Sie, warum sich unsere Kunden für ERGO entscheiden
           </p>
+        </div>
+
+        {/* Ihr Experte Section */}
+        <div className="mb-8 sm:mb-10 lg:mb-12">
+          <Card className="bg-white shadow-lg max-w-4xl mx-auto">
+            <CardContent className="p-6 sm:p-8">
+              <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-8">
+                <div className="flex-shrink-0">
+                  <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-lg">
+                    <img 
+                      src={morinoImage} 
+                      alt="Morino Stübe - Ihr Versicherungsexperte" 
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </div>
+                </div>
+                <div className="flex-1 text-center lg:text-left">
+                  <h3 className="text-xl sm:text-2xl font-bold text-ergo-dark mb-2">
+                    Morino Stübe
+                  </h3>
+                  <p className="text-lg font-semibold text-ergo-red mb-3">
+                    Ihr Versicherungsexperte
+                  </p>
+                  <div className="text-gray-600 mb-4">
+                    <p className="mb-2">
+                      <span className="font-semibold">Versicherungsfachmann nach § 84 HGB</span><br />
+                      ERGO Agentur Ganderkesee
+                    </p>
+                    <p className="text-sm">
+                      Reg.-Nr.: D-5H7J-7DUI1-10
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-4 text-sm">
+                    <div className="flex items-center gap-2">
+                      <Award className="w-4 h-4 text-ergo-red" />
+                      <span>Zertifizierter Experte</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-ergo-red" />
+                      <span>Über 10 Jahre Erfahrung</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Handshake className="w-4 h-4 text-ergo-red" />
+                      <span>Persönliche Beratung</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Testimonials */}
