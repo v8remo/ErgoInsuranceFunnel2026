@@ -91,6 +91,8 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
 - 2025-01-17: Wörter bleiben komplett ganz und springen in die nächste Zeile - keine Wortumbrüche
 - 2025-01-17: Mobiles Menü schließt sich automatisch nach Navigation
 - 2025-01-17: Automatisches Scrollen nach oben bei Seitenwechsel implementiert
+- 2025-01-17: Google Ads Tracking (AW-17132012984) direkt in HTML und Analytics integriert
+- 2025-01-17: Google Ads Conversion-Tracking für Lead-Generierung implementiert
 
 ## User Preferences
 - Admin-Passwort: admin123

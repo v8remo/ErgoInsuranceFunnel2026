@@ -7,33 +7,17 @@ declare global {
   }
 }
 
-// Initialize Google Analytics
+// Initialize Google Analytics with Google Ads ID
 export const initGA = () => {
-  const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-
-  if (!measurementId) {
-    console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
-    return;
+  const measurementId = 'AW-17132012984'; // Google Ads ID
+  
+  // Note: The Google tag is already loaded in index.html
+  // This function ensures gtag is available for tracking
+  if (typeof window !== 'undefined' && window.gtag) {
+    console.log('Google Analytics (Google Ads) initialized with ID:', measurementId);
+  } else {
+    console.warn('Google Analytics not loaded. Check if gtag script is properly included.');
   }
-
-  // Add Google Analytics script to the head
-  const script1 = document.createElement('script');
-  script1.async = true;
-  script1.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
-  document.head.appendChild(script1);
-
-  // Initialize gtag
-  const script2 = document.createElement('script');
-  script2.innerHTML = `
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '${measurementId}', {
-      page_title: document.title,
-      page_location: window.location.href
-    });
-  `;
-  document.head.appendChild(script2);
 };
 
 // Initialize Meta Pixel
@@ -76,16 +60,14 @@ export const initMetaPixel = () => {
 export const trackPageView = (url: string) => {
   if (typeof window === 'undefined') return;
   
-  // Google Analytics tracking
+  // Google Analytics tracking with Google Ads ID
   if (window.gtag) {
-    const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-    if (measurementId) {
-      window.gtag('config', measurementId, {
-        page_path: url,
-        page_title: document.title,
-        page_location: window.location.href
-      });
-    }
+    const measurementId = 'AW-17132012984'; // Google Ads ID
+    window.gtag('config', measurementId, {
+      page_path: url,
+      page_title: document.title,
+      page_location: window.location.href
+    });
   }
 
   // Meta Pixel page view tracking
@@ -223,6 +205,20 @@ export const trackLeadGeneration = (leadData: {
   leadValue?: number;
 }) => {
   const value = leadData.leadValue || getLeadValue(leadData.insuranceType);
+  
+  // Google Ads Conversion tracking
+  if (window.gtag) {
+    window.gtag('event', 'conversion', {
+      'send_to': 'AW-17132012984/lead_generated',
+      'value': value,
+      'currency': 'EUR',
+      'custom_parameters': {
+        'insurance_type': leadData.insuranceType,
+        'age_group': leadData.age,
+        'location': leadData.location
+      }
+    });
+  }
   
   trackEvent('lead_generated', {
     event_category: 'Conversion',
