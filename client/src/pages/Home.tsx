@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { trackEvent } from "@/lib/analytics";
+import { useQuery } from "@tanstack/react-query";
 import { 
   Home as HomeIcon, 
   Handshake, 
@@ -21,6 +22,7 @@ import {
 } from "lucide-react";
 
 import _089_Ti9r4yWZjrM from "@assets/089-Ti9r4yWZjrM.jpeg";
+import type { Content } from "@shared/schema";
 
 const insuranceProducts = [
   {
@@ -104,6 +106,20 @@ export default function Home() {
   const [selectedInsurance, setSelectedInsurance] = useState<string | null>(null);
   const [funnelOpen, setFunnelOpen] = useState(false);
 
+  // Load content from database
+  const { data: content = [] } = useQuery<Content[]>({
+    queryKey: ['/api/content'],
+    queryFn: async () => {
+      const response = await fetch('/api/content');
+      return response.json();
+    }
+  });
+
+  // Helper function to get content for specific insurance
+  const getInsuranceContent = (insuranceId: string) => {
+    return content.find(c => c.type === 'insurance' && c.identifier === insuranceId);
+  };
+
   const handleInsuranceSelection = (insuranceId: string) => {
     if (insuranceId === "kombi") {
       // Handle combination package - redirect to contact
@@ -175,7 +191,7 @@ export default function Home() {
                 >
                   <CardContent className="p-0">
                     <img 
-                      src={product.image}
+                      src={getInsuranceContent(product.id)?.imageUrl || product.image}
                       alt={product.title}
                       className="w-full h-40 sm:h-48 object-cover rounded-t-lg"
                     />

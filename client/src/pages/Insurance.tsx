@@ -8,14 +8,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { trackEvent } from "@/lib/analytics";
 import { insuranceConfig } from "@/lib/insurance-config";
+import { useQuery } from "@tanstack/react-query";
 import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
 import { Award, Shield, Handshake, Clock } from "lucide-react";
+import type { Content } from "@shared/schema";
 
 export default function Insurance() {
   const { type } = useParams();
   const [funnelOpen, setFunnelOpen] = useState(false);
   
   const insurance = insuranceConfig[type as keyof typeof insuranceConfig];
+
+  // Load content from database
+  const { data: content } = useQuery<Content>({
+    queryKey: ['/api/content', 'insurance', type],
+    queryFn: async () => {
+      const response = await fetch(`/api/content/insurance/${type}`);
+      if (!response.ok) return null;
+      return response.json();
+    }
+  });
 
   useEffect(() => {
     if (type) {
@@ -50,36 +62,51 @@ export default function Insurance() {
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <div className="mb-8">
-              <insurance.icon className="w-16 h-16 text-ergo-red mx-auto mb-6" />
-              <h1 className="text-4xl sm:text-5xl font-bold text-ergo-dark mb-6">
-                {insurance.title}
-              </h1>
-              <p className="text-xl text-ergo-dark-light mb-8 max-w-2xl mx-auto">
-                {insurance.description}
-              </p>
-            </div>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="text-center lg:text-left">
+                <div className="mb-8">
+                  <insurance.icon className="w-16 h-16 text-ergo-red mx-auto lg:mx-0 mb-6" />
+                  <h1 className="text-4xl sm:text-5xl font-bold text-ergo-dark mb-6">
+                    {insurance.title}
+                  </h1>
+                  <p className="text-xl text-ergo-dark-light mb-8">
+                    {insurance.description}
+                  </p>
+                </div>
 
-            <div className="flex flex-wrap justify-center items-center gap-4 mb-8">
-              <Badge className="bg-ergo-red text-white px-4 py-2 text-base font-semibold">
-                {insurance.price}
-              </Badge>
-              <Badge className="bg-ergo-blue-light text-ergo-dark px-4 py-2 text-base">
-                Ohne Wartezeit
-              </Badge>
-              <Badge className="bg-green-100 text-green-800 px-4 py-2 text-base">
-                Sofortige Deckung
-              </Badge>
-            </div>
+                <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 mb-8">
+                  <Badge className="bg-ergo-red text-white px-4 py-2 text-base font-semibold">
+                    {insurance.price}
+                  </Badge>
+                  <Badge className="bg-ergo-blue-light text-ergo-dark px-4 py-2 text-base">
+                    Ohne Wartezeit
+                  </Badge>
+                  <Badge className="bg-green-100 text-green-800 px-4 py-2 text-base">
+                    Sofortige Deckung
+                  </Badge>
+                </div>
 
-            <Button 
-              size="lg" 
-              className="bg-ergo-red hover:bg-ergo-red-hover text-white px-8 py-4 text-lg"
-              onClick={handleStartFunnel}
-            >
-              Kostenloses Angebot anfordern
-            </Button>
+                <Button 
+                  size="lg" 
+                  className="bg-ergo-red hover:bg-ergo-red-hover text-white px-8 py-4 text-lg"
+                  onClick={handleStartFunnel}
+                >
+                  Kostenloses Angebot anfordern
+                </Button>
+              </div>
+
+              {/* Hero Image */}
+              <div className="flex justify-center lg:justify-end">
+                <div className="w-full max-w-md">
+                  <img 
+                    src={content?.imageUrl || "https://images.unsplash.com/photo-1556909045-f7de0ad5eab5?w=500&h=400&fit=crop&q=80"}
+                    alt={insurance.title}
+                    className="w-full h-80 object-cover rounded-lg shadow-xl"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
