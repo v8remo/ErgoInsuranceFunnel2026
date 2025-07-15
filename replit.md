@@ -87,6 +87,7 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
 - 2025-01-17: Vollständige mobile Optimierung aller Seiten und Überschriften
 - 2025-01-17: CSS-Regeln für automatische Wortumbrüche bei langen Wörtern hinzugefügt
 - 2025-01-17: Responsive Schriftgrößen für alle Bildschirmgrößen implementiert
+- 2025-01-17: Professionelle Wortumbrüche ohne Bindestriche für deutsche Versicherungsbegriffe
 
 ## User Preferences
 - Admin-Passwort: admin123
