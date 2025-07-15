@@ -7,6 +7,14 @@ import { Menu, Phone } from "lucide-react";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleMobileMenuClick = () => {
+    setIsOpen(false);
+    // Small delay to ensure menu closes before scrolling
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  };
+
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,22 +81,22 @@ export default function Header() {
               </SheetTrigger>
               <SheetContent side="right" className="w-full sm:w-80">
                 <div className="flex flex-col space-y-4 mt-8">
-                  <Link href="/" className="text-lg font-medium text-gray-900 hover:text-ergo-red">
+                  <Link href="/" className="text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
                     Startseite
                   </Link>
-                  <Link href="/versicherung/hausrat" className="text-lg font-medium text-gray-900 hover:text-ergo-red">
+                  <Link href="/versicherung/hausrat" className="text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
                     Hausratversicherung
                   </Link>
-                  <Link href="/versicherung/haftpflicht" className="text-lg font-medium text-gray-900 hover:text-ergo-red">
+                  <Link href="/versicherung/haftpflicht" className="text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
                     Haftpflichtversicherung
                   </Link>
-                  <Link href="/versicherung/wohngebaeude" className="text-lg font-medium text-gray-900 hover:text-ergo-red">
+                  <Link href="/versicherung/wohngebaeude" className="text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
                     Wohngebäudeversicherung
                   </Link>
-                  <Link href="/versicherung/rechtsschutz" className="text-lg font-medium text-gray-900 hover:text-ergo-red">
+                  <Link href="/versicherung/rechtsschutz" className="text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
                     Rechtsschutzversicherung
                   </Link>
-                  <Link href="/versicherung/zahnzusatz" className="text-lg font-medium text-gray-900 hover:text-ergo-red">
+                  <Link href="/versicherung/zahnzusatz" className="text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
                     Zahnzusatzversicherung
                   </Link>
                   
