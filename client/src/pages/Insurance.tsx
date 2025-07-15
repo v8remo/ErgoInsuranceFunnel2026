@@ -159,8 +159,7 @@ export default function Insurance() {
               </Button>
               <Button 
                 size="lg" 
-                className="border-2 border-white hover:bg-white hover:text-ergo-red px-8 py-4 text-lg bg-transparent backdrop-blur-sm"
-                style={{ color: '#ff0000' }}
+                className="border-2 border-white hover:bg-white hover:text-ergo-red px-8 py-4 text-lg bg-transparent backdrop-blur-sm text-white"
                 onClick={() => window.location.href = 'tel:015566771019'}
               >
                 Sofort anrufen: 015566771019
