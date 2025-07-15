@@ -61,35 +61,35 @@ export default function Insurance() {
       
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white">
+        <section className="py-12 sm:py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
               <div className="text-center lg:text-left">
-                <div className="mb-8">
-                  <insurance.icon className="w-16 h-16 text-ergo-red mx-auto lg:mx-0 mb-6" />
-                  <h1 className="text-4xl sm:text-5xl font-bold text-ergo-dark mb-6">
+                <div className="mb-6 sm:mb-8">
+                  <insurance.icon className="w-12 h-12 sm:w-16 sm:h-16 text-ergo-red mx-auto lg:mx-0 mb-4 sm:mb-6" />
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-ergo-dark mb-4 sm:mb-6">
                     {insurance.title}
                   </h1>
-                  <p className="text-xl text-ergo-dark-light mb-8">
+                  <p className="text-base sm:text-xl text-ergo-dark-light mb-6 sm:mb-8">
                     {insurance.description}
                   </p>
                 </div>
 
-                <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 mb-8">
-                  <Badge className="bg-ergo-red text-white px-4 py-2 text-base font-semibold">
+                <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
+                  <Badge className="bg-ergo-red text-white px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base font-semibold">
                     {insurance.price}
                   </Badge>
-                  <Badge className="bg-ergo-blue-light text-ergo-dark px-4 py-2 text-base">
+                  <Badge className="bg-ergo-blue-light text-ergo-dark px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
                     Ohne Wartezeit
                   </Badge>
-                  <Badge className="bg-green-100 text-green-800 px-4 py-2 text-base">
+                  <Badge className="bg-green-100 text-green-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
                     Sofortige Deckung
                   </Badge>
                 </div>
 
                 <Button 
                   size="lg" 
-                  className="bg-ergo-red hover:bg-ergo-red-hover text-white px-8 py-4 text-lg"
+                  className="bg-ergo-red hover:bg-ergo-red-hover text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto"
                   onClick={handleStartFunnel}
                 >
                   Kostenloses Angebot anfordern
@@ -97,12 +97,12 @@ export default function Insurance() {
               </div>
 
               {/* Hero Image */}
-              <div className="flex justify-center lg:justify-end">
+              <div className="flex justify-center lg:justify-end mt-8 lg:mt-0">
                 <div className="w-full max-w-md">
                   <img 
                     src={content?.imageUrl || "https://images.unsplash.com/photo-1556909045-f7de0ad5eab5?w=500&h=400&fit=crop&q=80"}
                     alt={insurance.title}
-                    className="w-full h-80 object-cover rounded-lg shadow-xl"
+                    className="w-full h-60 sm:h-80 object-cover rounded-lg shadow-xl"
                   />
                 </div>
               </div>
@@ -111,28 +111,28 @@ export default function Insurance() {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 bg-white">
+        <section className="py-12 sm:py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-ergo-dark mb-4">
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4">
                 Ihre Vorteile auf einen Blick
               </h2>
-              <p className="text-xl text-gray-600">
+              <p className="text-base sm:text-xl text-gray-600">
                 Warum sich über 1000 Kunden für unsere {insurance.title} entschieden haben
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {insurance.features.map((feature, index) => (
                 <Card key={index} className="text-center">
-                  <CardContent className="pt-6">
-                    <div className="w-12 h-12 bg-ergo-red-light rounded-full flex items-center justify-center mx-auto mb-4">
-                      <div className="w-6 h-6 bg-ergo-red rounded-full" />
+                  <CardContent className="p-4 sm:pt-6">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-ergo-red-light rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                      <div className="w-5 h-5 sm:w-6 sm:h-6 bg-ergo-red rounded-full" />
                     </div>
-                    <h3 className="text-lg font-semibold text-ergo-dark mb-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-ergo-dark mb-2">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-sm sm:text-base text-gray-600">
                       {feature.description}
                     </p>
                   </CardContent>
@@ -143,23 +143,23 @@ export default function Insurance() {
         </section>
 
         {/* Benefits Section */}
-        <section className="py-16 bg-ergo-gray">
+        <section className="py-12 sm:py-16 bg-ergo-gray">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-ergo-dark mb-4">
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4">
                 Was ist in Ihrer {insurance.title} enthalten?
               </h2>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
               {insurance.benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start">
-                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">
-                    <div className="w-3 h-3 bg-white rounded-full" />
+                  <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full flex items-center justify-center mr-3 sm:mr-4 mt-0.5 sm:mt-1 flex-shrink-0">
+                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-white rounded-full" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-ergo-dark mb-1">{benefit.title}</h4>
-                    <p className="text-gray-600">{benefit.description}</p>
+                    <h4 className="font-semibold text-ergo-dark mb-1 text-sm sm:text-base">{benefit.title}</h4>
+                    <p className="text-gray-600 text-sm sm:text-base">{benefit.description}</p>
                   </div>
                 </div>
               ))}
@@ -168,22 +168,22 @@ export default function Insurance() {
         </section>
 
         {/* Expert Section */}
-        <section className="py-16 bg-white">
+        <section className="py-12 sm:py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-ergo-dark mb-4">
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4">
                 Ihr persönlicher Versicherungsexperte
               </h2>
-              <p className="text-xl text-gray-600">
+              <p className="text-base sm:text-xl text-gray-600">
                 Professionelle Beratung mit über 10 Jahren Erfahrung
               </p>
             </div>
 
             <Card className="bg-ergo-gray shadow-lg">
-              <CardContent className="p-8">
-                <div className="flex flex-col lg:flex-row items-center gap-8">
+              <CardContent className="p-4 sm:p-6 lg:p-8">
+                <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-6 lg:gap-8">
                   <div className="flex-shrink-0">
-                    <div className="w-40 h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-lg">
+                    <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-lg">
                       <img 
                         src={morinoImage} 
                         alt="Morino Stübe - Ihr Versicherungsexperte" 
@@ -192,22 +192,22 @@ export default function Insurance() {
                     </div>
                   </div>
                   <div className="flex-1 text-center lg:text-left">
-                    <h3 className="text-2xl font-bold text-ergo-dark mb-2">
+                    <h3 className="text-xl sm:text-2xl font-bold text-ergo-dark mb-2">
                       Morino Stübe
                     </h3>
-                    <p className="text-lg font-semibold text-ergo-red mb-4">
+                    <p className="text-base sm:text-lg font-semibold text-ergo-red mb-3 sm:mb-4">
                       Versicherungsfachmann nach § 84 HGB
                     </p>
-                    <div className="text-gray-600 mb-6">
+                    <div className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
                       <p className="mb-2">
                         <span className="font-semibold">ERGO Ganderkesee</span><br />
                         Friedensstraße 91 A, 27777 Ganderkesee
                       </p>
-                      <p className="text-sm">
+                      <p className="text-xs sm:text-sm">
                         Tel: 01556 6771019 | E-Mail: morino.stuebe@ergo.de
                       </p>
                     </div>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                       <div className="flex items-center gap-2">
                         <Award className="w-4 h-4 text-ergo-red" />
                         <span>Zertifizierter Experte</span>
@@ -233,30 +233,31 @@ export default function Insurance() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 bg-ergo-red text-white">
+        <section className="py-12 sm:py-16 bg-ergo-red text-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-3xl font-bold mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
               Bereit für Ihren persönlichen Schutz?
             </h2>
-            <p className="text-xl text-red-100 mb-8">
+            <p className="text-base sm:text-xl text-red-100 mb-6 sm:mb-8">
               Fordern Sie jetzt Ihr kostenloses und unverbindliches Angebot an. 
               Wir melden uns innerhalb von 24 Stunden bei Ihnen.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="bg-white text-[#ff0000] hover:bg-gray-100 px-8 py-4 text-lg"
+                className="bg-white text-[#ff0000] hover:bg-gray-100 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg"
                 onClick={handleStartFunnel}
               >
                 Jetzt Angebot anfordern
               </Button>
               <Button 
                 size="lg" 
-                className="border-2 border-white hover:bg-white hover:text-ergo-red px-8 py-4 text-lg bg-transparent backdrop-blur-sm text-white"
+                className="border-2 border-white hover:bg-white hover:text-ergo-red px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg bg-transparent backdrop-blur-sm text-white"
                 onClick={() => window.location.href = 'tel:015566771019'}
               >
-                Sofort anrufen: 015566771019
+                <span className="hidden sm:inline">Sofort anrufen: 015566771019</span>
+                <span className="sm:hidden">Jetzt anrufen</span>
               </Button>
             </div>
           </div>

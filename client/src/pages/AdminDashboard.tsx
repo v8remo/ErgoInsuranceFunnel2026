@@ -444,11 +444,11 @@ export default function AdminDashboard() {
         </div>
 
         {/* Filters and Export */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-4">
+        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 sm:justify-between sm:items-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
               <Select value={filterInsurance} onValueChange={setFilterInsurance}>
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-full sm:w-48">
                   <SelectValue placeholder="Versicherung filtern" />
                 </SelectTrigger>
                 <SelectContent>
@@ -465,6 +465,7 @@ export default function AdminDashboard() {
                 onClick={() => exportMutation.mutate()}
                 disabled={exportMutation.isPending}
                 variant="outline"
+                className="w-full sm:w-auto"
               >
                 <Download className="w-4 h-4 mr-2" />
                 {exportMutation.isPending ? "Exportiere..." : "Export CSV"}
@@ -475,58 +476,58 @@ export default function AdminDashboard() {
 
         {/* Statistics Cards */}
         {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-4 sm:mb-6">
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center">
-                  <div className="p-3 bg-blue-100 rounded-lg">
-                    <Users className="w-6 h-6 text-blue-600" />
+                  <div className="p-2 sm:p-3 bg-blue-100 rounded-lg">
+                    <Users className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm text-gray-600">Gesamt Leads</p>
-                    <p className="text-2xl font-bold text-gray-900">{stats.totalLeads}</p>
+                  <div className="ml-3 sm:ml-4">
+                    <p className="text-xs sm:text-sm text-gray-600">Gesamt Leads</p>
+                    <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.totalLeads}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
             
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center">
-                  <div className="p-3 bg-green-100 rounded-lg">
-                    <TrendingUp className="w-6 h-6 text-green-600" />
+                  <div className="p-2 sm:p-3 bg-green-100 rounded-lg">
+                    <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm text-gray-600">Diese Woche</p>
-                    <p className="text-2xl font-bold text-gray-900">{stats.weeklyLeads}</p>
+                  <div className="ml-3 sm:ml-4">
+                    <p className="text-xs sm:text-sm text-gray-600">Diese Woche</p>
+                    <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.weeklyLeads}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
             
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center">
-                  <div className="p-3 bg-yellow-100 rounded-lg">
-                    <Percent className="w-6 h-6 text-yellow-600" />
+                  <div className="p-2 sm:p-3 bg-yellow-100 rounded-lg">
+                    <Percent className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600" />
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm text-gray-600">Conversion Rate</p>
-                    <p className="text-2xl font-bold text-gray-900">{stats.conversionRate}%</p>
+                  <div className="ml-3 sm:ml-4">
+                    <p className="text-xs sm:text-sm text-gray-600">Conversion Rate</p>
+                    <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.conversionRate}%</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
             
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center">
-                  <div className="p-3 bg-red-100 rounded-lg">
-                    <Clock className="w-6 h-6 text-red-600" />
+                  <div className="p-2 sm:p-3 bg-red-100 rounded-lg">
+                    <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm text-gray-600">Offen</p>
-                    <p className="text-2xl font-bold text-gray-900">{stats.openLeads}</p>
+                  <div className="ml-3 sm:ml-4">
+                    <p className="text-xs sm:text-sm text-gray-600">Offen</p>
+                    <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.openLeads}</p>
                   </div>
                 </div>
               </CardContent>
