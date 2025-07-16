@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="mb-6 sm:mb-0">
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Kontakt</h3>
             <div className="space-y-2 sm:space-y-3 text-gray-300 text-sm sm:text-base">
-              <p className="font-medium text-white">ERGO Ganderkesee</p>
+              <p className="font-medium text-white">ERGO Agentur Stübe</p>
               <p>Morino Stübe</p>
               
               <div className="flex items-start">

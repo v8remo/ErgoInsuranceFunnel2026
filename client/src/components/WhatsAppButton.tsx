@@ -31,10 +31,10 @@ export default function WhatsAppButton({
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleClick}
-        className={`fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110 ${className}`}
+        className={`fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-3 sm:p-4 shadow-lg transition-all duration-300 hover:scale-110 ${className}`}
         aria-label="WhatsApp Kundenservice"
       >
-        <MessageCircle className="h-6 w-6" fill="currentColor" />
+        <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" fill="currentColor" />
       </a>
     );
   }

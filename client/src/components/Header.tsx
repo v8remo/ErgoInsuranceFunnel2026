@@ -21,45 +21,37 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo and Brand */}
-          <Link href="/" className="flex items-center space-x-2 sm:space-x-4">
-            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-ergo-red rounded-lg flex items-center justify-center flex-shrink-0">
-              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-white rounded-sm" />
-            </div>
-            <div className="hidden sm:block">
-              <span className="text-lg sm:text-xl font-bold text-ergo-dark">ERGO Ganderkesee</span>
-              <p className="text-xs sm:text-sm text-gray-600">Deutschlandweite Beratung</p>
-            </div>
-            <div className="block sm:hidden">
-              <span className="text-lg font-bold text-ergo-dark">ERGO</span>
+          <Link href="/" className="flex items-center">
+            <div className="text-left">
+              <div className="text-xl sm:text-2xl font-bold text-ergo-red">ERGO</div>
+              <div className="text-xs sm:text-sm text-gray-600">Agentur Stübe</div>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-ergo-red transition-colors">
+          <nav className="hidden md:flex items-center space-x-4 lg:space-x-6">
+            <Link href="/" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
               Startseite
             </Link>
-            <Link href="/versicherung/hausrat" className="text-gray-700 hover:text-ergo-red transition-colors">
+            <Link href="/versicherung/hausrat" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
               Hausrat
             </Link>
-            <Link href="/versicherung/haftpflicht" className="text-gray-700 hover:text-ergo-red transition-colors">
+            <Link href="/versicherung/haftpflicht" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
               Haftpflicht
             </Link>
-            <Link href="/versicherung/wohngebaeude" className="text-gray-700 hover:text-ergo-red transition-colors">
+            <Link href="/versicherung/wohngebaeude" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
               Wohngebäude
             </Link>
-            <Link href="/versicherung/rechtsschutz" className="text-gray-700 hover:text-ergo-red transition-colors">
+            <Link href="/versicherung/rechtsschutz" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
               Rechtsschutz
             </Link>
-            <Link href="/versicherung/zahnzusatz" className="text-gray-700 hover:text-ergo-red transition-colors">
+            <Link href="/versicherung/zahnzusatz" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
               Zahnzusatz
             </Link>
           </nav>
 
           {/* Contact and Mobile Menu */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            <WhatsAppButton className="hidden sm:inline-flex" />
-            
             <a 
               href="tel:015566771019" 
               className="hidden lg:flex items-center text-ergo-red hover:text-red-700 transition-colors"

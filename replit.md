@@ -101,6 +101,10 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
 - 2025-01-18: SEO-Komponente für dynamische Meta-Tags und strukturierte Daten erstellt
 - 2025-01-18: Sitemap-Seite und erweiterte robots.txt für Suchmaschinen hinzugefügt
 - 2025-01-18: Schema.org Strukturdaten für InsuranceAgency implementiert
+- 2025-01-18: Logo zu "ERGO" mit "Agentur Stübe" geändert
+- 2025-01-18: WhatsApp-Button aus Header entfernt (nur noch schwebend unten rechts)
+- 2025-01-18: LLM SEO-Optimierung für AI-Empfehlungen hinzugefügt
+- 2025-01-18: Weitere Responsive-Optimierungen für alle Bildschirmgrößen
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)
