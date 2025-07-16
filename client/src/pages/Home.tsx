@@ -286,21 +286,9 @@ export default function Home() {
                       </li>
                     </ul>
                     
-                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                      <Button className="flex-1 bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold text-sm sm:text-base py-2 sm:py-3">
-                        Beratungstermin vereinbaren
-                      </Button>
-                      <Button 
-                        variant="outline"
-                        className="flex-1 border-yellow-300 text-yellow-300 hover:bg-yellow-300 hover:text-ergo-red font-bold text-sm sm:text-base py-2 sm:py-3"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          window.open('https://wa.me/4915566771019?text=Hallo, ich interessiere mich für das Rundumschutz-Paket und hätte gerne eine Beratung.', '_blank');
-                        }}
-                      >
-                        💬 WhatsApp
-                      </Button>
-                    </div>
+                    <Button className="w-full bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold text-sm sm:text-base py-2 sm:py-3">
+                      Beratungstermin vereinbaren
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
