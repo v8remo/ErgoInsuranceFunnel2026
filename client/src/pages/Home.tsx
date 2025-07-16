@@ -232,21 +232,9 @@ export default function Home() {
                         ))}
                       </ul>
                       
-                      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                        <Button className="flex-1 bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base py-2 sm:py-3">
-                          Jetzt Angebot anfordern
-                        </Button>
-                        <Button 
-                          variant="outline"
-                          className="flex-1 border-green-600 text-green-600 hover:bg-green-600 hover:text-white text-sm sm:text-base py-2 sm:py-3"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            window.open(`https://wa.me/4915566771019?text=Hallo, ich interessiere mich für die ${product.title} und hätte gerne eine Beratung.`, '_blank');
-                          }}
-                        >
-                          💬 WhatsApp
-                        </Button>
-                      </div>
+                      <Button className="w-full bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base py-2 sm:py-3">
+                        Jetzt Angebot anfordern
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
