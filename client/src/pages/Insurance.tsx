@@ -108,10 +108,10 @@ export default function Insurance() {
                   <Button 
                     size="lg" 
                     variant="outline"
-                    className="border-ergo-red text-ergo-red hover:bg-ergo-red hover:text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto"
-                    onClick={() => window.open('tel:+4915566771019', '_self')}
+                    className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto"
+                    onClick={() => window.open('https://wa.me/4915566771019?text=Hallo, ich interessiere mich für die ' + insurance.title + ' und hätte gerne eine Beratung.', '_blank')}
                   >
-                    📞 Jetzt anrufen
+                    💬 WhatsApp Chat
                   </Button>
                 </div>
               </div>
@@ -123,6 +123,8 @@ export default function Insurance() {
                     src={content?.imageUrl || "https://images.unsplash.com/photo-1556909045-f7de0ad5eab5?w=500&h=400&fit=crop&q=80"}
                     alt={insurance.title}
                     className="w-full h-60 sm:h-80 object-cover rounded-lg shadow-xl"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
@@ -211,6 +213,8 @@ export default function Insurance() {
                         src={morinoImage} 
                         alt="Morino Stübe - Ihr Versicherungsexperte" 
                         className="w-full h-full object-cover object-center"
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
                   </div>
@@ -276,11 +280,11 @@ export default function Insurance() {
               </Button>
               <Button 
                 size="lg" 
-                className="border-2 border-white hover:bg-white hover:text-ergo-red px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg bg-transparent backdrop-blur-sm text-white"
-                onClick={() => window.location.href = 'tel:015566771019'}
+                className="border-2 border-white hover:bg-white hover:text-green-600 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg bg-transparent backdrop-blur-sm text-white"
+                onClick={() => window.open('https://wa.me/4915566771019?text=Hallo, ich interessiere mich für die ' + insurance.title + ' und hätte gerne eine Beratung.', '_blank')}
               >
-                <span className="hidden sm:inline">Sofort anrufen: 015566771019</span>
-                <span className="sm:hidden">Jetzt anrufen</span>
+                <span className="hidden sm:inline">💬 WhatsApp Chat starten</span>
+                <span className="sm:hidden">💬 WhatsApp</span>
               </Button>
             </div>
           </div>

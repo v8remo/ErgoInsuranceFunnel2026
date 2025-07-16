@@ -243,6 +243,35 @@
     color: white;
   }
   
+  /* Optimized image loading for better performance */
+  img {
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Priority loading for above-the-fold images */
+  img[loading="eager"] {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+  }
+
+  /* Lazy loading optimizations */
+  img[loading="lazy"] {
+    transition: opacity 0.3s ease;
+  }
+
+  /* Preload critical images */
+  .hero-image {
+    priority: high;
+    fetchpriority: high;
+  }
+
+  /* Reduce layout shift */
+  .insurance-card img {
+    aspect-ratio: 400/250;
+  }
+  
   .text-ergo-dark {
     color: var(--ergo-dark);
   }

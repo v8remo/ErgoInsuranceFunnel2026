@@ -157,6 +157,8 @@ export default function Home() {
                 src={_089_Ti9r4yWZjrM} 
                 alt="ERGO Versicherungsexperte - Deutschlandweite Beratung" 
                 className="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-6 sm:mb-8 shadow-lg object-cover border-4 border-white"
+                loading="eager"
+                decoding="async"
               />
               
               <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-ergo-dark mb-4 sm:mb-6 px-2">
@@ -200,6 +202,8 @@ export default function Home() {
                       src={getInsuranceContent(product.id)?.imageUrl || product.image}
                       alt={product.title}
                       className="w-full h-40 sm:h-48 object-cover rounded-t-lg"
+                      loading="lazy"
+                      decoding="async"
                     />
                     
                     <div className="p-4 sm:p-6">
@@ -228,9 +232,21 @@ export default function Home() {
                         ))}
                       </ul>
                       
-                      <Button className="w-full bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base py-2 sm:py-3">
-                        Jetzt Angebot anfordern
-                      </Button>
+                      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                        <Button className="flex-1 bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base py-2 sm:py-3">
+                          Jetzt Angebot anfordern
+                        </Button>
+                        <Button 
+                          variant="outline"
+                          className="flex-1 border-green-600 text-green-600 hover:bg-green-600 hover:text-white text-sm sm:text-base py-2 sm:py-3"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(`https://wa.me/4915566771019?text=Hallo, ich interessiere mich für die ${product.title} und hätte gerne eine Beratung.`, '_blank');
+                          }}
+                        >
+                          💬 WhatsApp
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -246,6 +262,8 @@ export default function Home() {
                     src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=400&h=250&fit=crop"
                     alt="Familie unter einem Regenschirm als Symbol für Schutz"
                     className="w-full h-40 sm:h-48 object-cover rounded-t-lg"
+                    loading="lazy"
+                    decoding="async"
                   />
                   
                   <div className="p-4 sm:p-6 bg-ergo-red">
@@ -280,9 +298,21 @@ export default function Home() {
                       </li>
                     </ul>
                     
-                    <Button className="w-full bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold text-sm sm:text-base py-2 sm:py-3">
-                      Beratungstermin vereinbaren
-                    </Button>
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                      <Button className="flex-1 bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold text-sm sm:text-base py-2 sm:py-3">
+                        Beratungstermin vereinbaren
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        className="flex-1 border-yellow-300 text-yellow-300 hover:bg-yellow-300 hover:text-ergo-red font-bold text-sm sm:text-base py-2 sm:py-3"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open('https://wa.me/4915566771019?text=Hallo, ich interessiere mich für das Rundumschutz-Paket und hätte gerne eine Beratung.', '_blank');
+                        }}
+                      >
+                        💬 WhatsApp
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
