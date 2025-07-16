@@ -74,7 +74,7 @@ export default function Insurance() {
                 <div className="mb-6 sm:mb-8">
                   <insurance.icon className="w-12 h-12 sm:w-16 sm:h-16 text-ergo-red mx-auto lg:mx-0 mb-4 sm:mb-6" />
                   <Badge className="bg-ergo-red text-white mb-4">✓ Sofortiger Schutz</Badge>
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-ergo-dark mb-4 sm:mb-6 break-words hyphens-auto">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-ergo-dark mb-4 sm:mb-6 leading-tight">
                     {insurance.title}
                     <span className="block text-lg sm:text-xl text-ergo-red font-normal mt-2">
                       {insurance.price}
@@ -134,7 +134,7 @@ export default function Insurance() {
         <section className="py-12 sm:py-16 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 break-words">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 leading-tight text-center">
                 Ihre 3 wichtigsten Vorteile
               </h2>
               <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
@@ -166,7 +166,7 @@ export default function Insurance() {
         <section className="py-12 sm:py-16 bg-ergo-gray">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 break-words">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 leading-tight text-center">
                 Das ist enthalten
               </h2>
               <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
@@ -194,7 +194,7 @@ export default function Insurance() {
         <section className="py-12 sm:py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 break-words">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 leading-tight text-center">
                 Ihr Versicherungsexperte
               </h2>
               <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
@@ -258,7 +258,7 @@ export default function Insurance() {
         {/* CTA Section */}
         <section className="py-12 sm:py-16 bg-ergo-red text-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 break-words">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight text-center">
               Bereit für Ihren persönlichen Schutz?
             </h2>
             <p className="text-sm sm:text-base lg:text-xl text-red-100 mb-6 sm:mb-8 px-2">
