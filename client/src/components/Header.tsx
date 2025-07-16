@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Phone } from "lucide-react";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,6 +58,8 @@ export default function Header() {
 
           {/* Contact and Mobile Menu */}
           <div className="flex items-center space-x-2 sm:space-x-4">
+            <WhatsAppButton className="hidden sm:inline-flex" />
+            
             <a 
               href="tel:015566771019" 
               className="hidden lg:flex items-center text-ergo-red hover:text-red-700 transition-colors"

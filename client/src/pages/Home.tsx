@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import InsuranceFunnel from "@/components/InsuranceFunnel";
 import TrustSection from "@/components/TrustSection";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -140,6 +141,11 @@ export default function Home() {
 
   return (
     <>
+      <SEO 
+        title="ERGO Versicherung Ganderkesee - Ihre lokale Versicherungsagentur"
+        description="ERGO Versicherung Ganderkesee: Persönliche Beratung für Hausrat, Haftpflicht, Wohngebäude, Rechtsschutz & Zahnzusatz. Morino Stübe berät Sie kompetent und zuverlässig. ☎ 01556 6771019"
+        keywords="ERGO Versicherung, ERGO Ganderkesee, Morino Stübe, Versicherungsagentur, Versicherungsmakler Ganderkesee, Hausratversicherung, Haftpflichtversicherung, Wohngebäudeversicherung"
+      />
       <Header />
       <main className="min-h-screen">
         {/* Hero Section */}

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import InsuranceFunnel from "@/components/InsuranceFunnel";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -57,6 +58,11 @@ export default function Insurance() {
 
   return (
     <>
+      <SEO
+        title={`${insurance.title} - ERGO Versicherung Ganderkesee`}
+        description={`${insurance.description} Jetzt bei ERGO Ganderkesee beraten lassen und optimal absichern. ☎ 01556 6771019`}
+        keywords={`${insurance.title}, ERGO ${insurance.title}, ${insurance.title} Ganderkesee, Morino Stübe, ERGO Versicherung`}
+      />
       <Header />
       
       <main className="min-h-screen">

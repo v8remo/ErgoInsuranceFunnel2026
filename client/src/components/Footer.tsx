@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Footer() {
   return (
@@ -35,6 +36,10 @@ export default function Footer() {
                 <a href="mailto:morino.stuebe@ergo.de" className="hover:text-white transition-colors break-all">
                   morino.stuebe@ergo.de
                 </a>
+              </div>
+              
+              <div className="mt-4">
+                <WhatsAppButton text="WhatsApp Service" className="w-full sm:w-auto" />
               </div>
             </div>
           </div>
@@ -85,9 +90,11 @@ export default function Footer() {
                   Datenschutz
                 </Link>
               </li>
-              <li><a href="#" className="hover:text-white transition-colors">AGB</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Widerrufsrecht</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Beschwerdeweg</a></li>
+              <li>
+                <Link href="/sitemap" className="hover:text-white transition-colors">
+                  Sitemap
+                </Link>
+              </li>
             </ul>
           </div>
 

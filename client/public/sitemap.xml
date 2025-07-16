@@ -1,33 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://ergo-versicherung.replit.app/</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://ergo-ganderkesee.de/</loc>
+    <lastmod>2025-01-18</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://ergo-versicherung.replit.app/versicherung/hausrat</loc>
+    <loc>https://ergo-ganderkesee.de/versicherung/hausrat</loc>
+    <lastmod>2025-01-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ergo-versicherung.replit.app/versicherung/haftpflicht</loc>
+    <loc>https://ergo-ganderkesee.de/versicherung/haftpflicht</loc>
+    <lastmod>2025-01-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ergo-versicherung.replit.app/versicherung/wohngebaeude</loc>
+    <loc>https://ergo-ganderkesee.de/versicherung/wohngebaeude</loc>
+    <lastmod>2025-01-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ergo-versicherung.replit.app/versicherung/rechtsschutz</loc>
+    <loc>https://ergo-ganderkesee.de/versicherung/rechtsschutz</loc>
+    <lastmod>2025-01-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ergo-versicherung.replit.app/versicherung/zahnzusatz</loc>
+    <loc>https://ergo-ganderkesee.de/versicherung/zahnzusatz</loc>
+    <lastmod>2025-01-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ergo-ganderkesee.de/impressum</loc>
+    <lastmod>2025-01-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://ergo-ganderkesee.de/datenschutz</loc>
+    <lastmod>2025-01-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>

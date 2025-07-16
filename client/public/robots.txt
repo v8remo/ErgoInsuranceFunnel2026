@@ -1,4 +1,45 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
+Crawl-delay: 1
 
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+Sitemap: https://ergo-ganderkesee.de/sitemap.xml
 Sitemap: https://ergo-versicherung.replit.app/sitemap.xml

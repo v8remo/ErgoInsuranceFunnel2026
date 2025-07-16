@@ -1,61 +1,54 @@
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Link } from "wouter";
 
 export default function Sitemap() {
-  const insuranceTypes = [
-    { id: "hausrat", name: "Hausratversicherung" },
-    { id: "haftpflicht", name: "Haftpflichtversicherung" },
-    { id: "wohngebaeude", name: "Wohngebäudeversicherung" },
-    { id: "rechtsschutz", name: "Rechtsschutzversicherung" },
-    { id: "zahnzusatz", name: "Zahnzusatzversicherung" }
+  const pages = [
+    { path: "/", title: "Startseite" },
+    { path: "/versicherung/hausrat", title: "Hausratversicherung" },
+    { path: "/versicherung/haftpflicht", title: "Haftpflichtversicherung" },
+    { path: "/versicherung/wohngebaeude", title: "Wohngebäudeversicherung" },
+    { path: "/versicherung/rechtsschutz", title: "Rechtsschutzversicherung" },
+    { path: "/versicherung/zahnzusatz", title: "Zahnzusatzversicherung" },
+    { path: "/impressum", title: "Impressum" },
+    { path: "/datenschutz", title: "Datenschutz" },
   ];
 
   return (
-    <div className="min-h-screen bg-ergo-gray">
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold text-ergo-dark mb-8">Sitemap</h1>
-        
-        <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
-          <section>
-            <h2 className="text-xl font-semibold text-ergo-dark mb-4">Hauptseiten</h2>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/" className="text-blue-600 hover:underline">
-                  Startseite
-                </Link>
-              </li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-semibold text-ergo-dark mb-4">Versicherungen</h2>
-            <ul className="space-y-2">
-              {insuranceTypes.map(type => (
-                <li key={type.id}>
-                  <Link href={`/versicherung/${type.id}`} className="text-blue-600 hover:underline">
-                    {type.name}
+    <>
+      <SEO
+        title="Sitemap - ERGO Versicherung Ganderkesee"
+        description="Übersicht aller Seiten der ERGO Versicherung Ganderkesee. Finden Sie schnell die gewünschten Informationen zu unseren Versicherungsprodukten."
+        keywords="Sitemap, Seitenübersicht, ERGO Ganderkesee, Versicherungen"
+      />
+      <Header />
+      <main className="min-h-screen bg-gray-50 py-8 sm:py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-ergo-dark mb-8">Sitemap</h1>
+          
+          <div className="bg-white rounded-lg shadow-md p-6 sm:p-8">
+            <p className="text-gray-600 mb-6">
+              Hier finden Sie eine Übersicht aller Seiten unserer Website:
+            </p>
+            
+            <ul className="space-y-3">
+              {pages.map((page) => (
+                <li key={page.path}>
+                  <Link
+                    href={page.path}
+                    className="text-ergo-red hover:text-ergo-red-dark transition-colors flex items-center"
+                  >
+                    <span className="mr-2">→</span>
+                    <span className="underline">{page.title}</span>
                   </Link>
                 </li>
               ))}
             </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-semibold text-ergo-dark mb-4">Weitere Seiten</h2>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/impressum" className="text-blue-600 hover:underline">
-                  Impressum
-                </Link>
-              </li>
-              <li>
-                <Link href="/datenschutz" className="text-blue-600 hover:underline">
-                  Datenschutz
-                </Link>
-              </li>
-            </ul>
-          </section>
+          </div>
         </div>
-      </div>
-    </div>
+      </main>
+      <Footer />
+    </>
   );
 }

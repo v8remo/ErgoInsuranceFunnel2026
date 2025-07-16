@@ -2,9 +2,16 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+import SEO from "@/components/SEO";
+
 export default function Datenschutz() {
   return (
     <>
+      <SEO
+        title="Datenschutzerklärung - ERGO Versicherung Ganderkesee"
+        description="Datenschutzerklärung der ERGO Versicherung Ganderkesee. Informationen zum Umgang mit Ihren personenbezogenen Daten gemäß DSGVO."
+        keywords="Datenschutz, DSGVO, ERGO Ganderkesee, Datenschutzerklärung, Personenbezogene Daten"
+      />
       <Header />
       
       <main className="min-h-screen bg-white">

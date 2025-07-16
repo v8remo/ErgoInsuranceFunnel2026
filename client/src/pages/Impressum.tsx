@@ -3,9 +3,16 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 
+import SEO from "@/components/SEO";
+
 export default function Impressum() {
   return (
     <>
+      <SEO
+        title="Impressum - ERGO Versicherung Ganderkesee"
+        description="Impressum der ERGO Versicherung Ganderkesee. Verantwortlich: Morino Stübe, selbständige Agentur. Kontakt und rechtliche Informationen."
+        keywords="Impressum, ERGO Ganderkesee, Morino Stübe, Kontakt, rechtliche Hinweise"
+      />
       <Header />
       <main className="min-h-screen bg-ergo-gray py-8 sm:py-12 lg:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
