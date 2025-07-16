@@ -105,6 +105,10 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
 - 2025-01-18: WhatsApp-Button aus Header entfernt (nur noch schwebend unten rechts)
 - 2025-01-18: LLM SEO-Optimierung für AI-Empfehlungen hinzugefügt
 - 2025-01-18: Weitere Responsive-Optimierungen für alle Bildschirmgrößen
+- 2025-01-18: Versicherungsseiten als effektive Lead-Funnel optimiert - nicht überladen, fokussiert auf schnelle Kontaktaufnahme
+- 2025-01-18: Produktinformationen aus Anlagen in die Versicherungskonfiguration integriert
+- 2025-01-18: Direkte Call-to-Action-Buttons für Anruf und Beratung hinzugefügt
+- 2025-01-18: Verbesserte SEO-Titel und Meta-Descriptions für alle Versicherungsseiten
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)

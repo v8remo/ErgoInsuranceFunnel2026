@@ -9,35 +9,35 @@ import {
 export const insuranceConfig = {
   hausrat: {
     title: "Hausratversicherung",
-    description: "Schutz für Ihr Hab und Gut. Absicherung gegen Einbruch, Feuer, Wasser und Sturm.",
+    description: "ERGO Hausratversicherung Ganderkesee - Rundum-Schutz für Ihr Hab und Gut. Absicherung gegen Einbruch, Feuer, Wasser und Sturm. Persönliche Beratung durch Morino Stübe.",
     price: "ab 15€/Monat",
     icon: Home,
     features: [
       {
         title: "Rundumschutz",
-        description: "Schutz vor Feuer, Einbruch, Wasser und Sturm"
+        description: "Schutz vor Feuer, Einbruch, Wasser und Sturm - auch bei grober Fahrlässigkeit"
       },
       {
         title: "Elementarschäden",
-        description: "Absicherung gegen Naturkatastrophen inklusive"
+        description: "Absicherung gegen Naturkatastrophen wie Hochwasser, Erdbeben und Lawinen"
       },
       {
         title: "Weltweiter Schutz", 
-        description: "Ihr Hab und Gut ist auch im Urlaub versichert"
+        description: "Ihr Hab und Gut ist auch im Urlaub bis zu 6 Monate versichert"
       }
     ],
     benefits: [
       {
-        title: "Hausrat bis 50.000€",
-        description: "Vollständige Absicherung Ihres Eigentums"
+        title: "Hausrat bis zur Versicherungssumme",
+        description: "Vollständige Absicherung Ihres Eigentums - auch bei Wertsteigerung"
       },
       {
         title: "Fahrraddiebstahl",
-        description: "Auch außerhalb der Wohnung versichert"
+        description: "Auch außerhalb der Wohnung versichert - rund um die Uhr"
       },
       {
         title: "Glasbruchschäden",
-        description: "Fenster, Türen und Mobiliar abgedeckt"
+        description: "Fenster, Türen und Mobiliar abgedeckt - ohne Selbstbeteiligung"
       }
     ],
     questions: [
@@ -57,35 +57,35 @@ export const insuranceConfig = {
   },
   haftpflicht: {
     title: "Haftpflichtversicherung",
-    description: "Schutz vor existenzbedrohenden Schadenersatzforderungen. Ein Muss für jeden.",
+    description: "ERGO Haftpflichtversicherung Ganderkesee - Schutz vor existenzbedrohenden Schadenersatzforderungen. Ein Muss für jeden. Persönliche Beratung durch Morino Stübe.",
     price: "ab 8€/Monat",
     icon: Handshake,
     features: [
       {
         title: "Millionenschutz",
-        description: "Bis zu 50 Millionen Euro Deckungssumme"
+        description: "Bis zu 50 Millionen Euro Deckungssumme - auch bei schweren Unfällen"
       },
       {
         title: "Rechtsbeistand",
-        description: "Abwehr unberechtigter Ansprüche inklusive"
+        description: "Abwehr unberechtigter Ansprüche inklusive - kompetente Rechtsberatung"
       },
       {
         title: "Weltweiter Schutz",
-        description: "Versicherungsschutz auf allen Kontinenten"
+        description: "Versicherungsschutz auf allen Kontinenten - auch im Urlaub"
       }
     ],
     benefits: [
       {
         title: "50 Mio € Deckung",
-        description: "Maximaler finanzieller Schutz"
+        description: "Maximaler finanzieller Schutz für Personen-, Sach- und Vermögensschäden"
       },
       {
         title: "Mietsachschäden",
-        description: "Schäden an der Mietwohnung abgedeckt"
+        description: "Schäden an der Mietwohnung abgedeckt - bis 300.000 €"
       },
       {
         title: "Gefälligkeitsschäden",
-        description: "Auch bei Hilfeleistungen versichert"
+        description: "Auch bei Hilfeleistungen versichert - ohne Selbstbeteiligung"
       }
     ],
     questions: [
@@ -165,13 +165,13 @@ export const insuranceConfig = {
   },
   rechtsschutz: {
     title: "Rechtsschutzversicherung",
-    description: "Durchsetzen Ihres Rechts ohne finanzielle Sorgen. Anwalts- und Gerichtskosten abgedeckt.",
+    description: "ERGO Rechtsschutzversicherung Ganderkesee - Durchsetzen Ihres Rechts ohne finanzielle Sorgen. Anwalts- und Gerichtskosten abgedeckt. Persönliche Beratung durch Morino Stübe.",
     price: "ab 18€/Monat",
     icon: Scale,
     features: [
       {
         title: "Vollumfänglicher Schutz",
-        description: "Privat, Beruf und Verkehr abgedeckt"
+        description: "Privat, Beruf und Verkehr abgedeckt - ein Vertrag für alle Lebensbereiche"
       },
       {
         title: "Mediation inklusive",

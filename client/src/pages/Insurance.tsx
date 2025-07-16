@@ -59,9 +59,9 @@ export default function Insurance() {
   return (
     <>
       <SEO
-        title={`${insurance.title} - ERGO Versicherung Ganderkesee`}
-        description={`${insurance.description} Jetzt bei ERGO Ganderkesee beraten lassen und optimal absichern. ☎ 01556 6771019`}
-        keywords={`${insurance.title}, ERGO ${insurance.title}, ${insurance.title} Ganderkesee, Morino Stübe, ERGO Versicherung`}
+        title={`${insurance.title} - ERGO Versicherung Ganderkesee | Morino Stübe`}
+        description={`${insurance.description} Jetzt kostenlos beraten lassen und sparen! ☎ 01556 6771019`}
+        keywords={`${insurance.title}, ERGO ${insurance.title}, ${insurance.title} Ganderkesee, Morino Stübe, ERGO Versicherung, Versicherung abschließen`}
       />
       <Header />
       
@@ -73,33 +73,47 @@ export default function Insurance() {
               <div className="text-center lg:text-left">
                 <div className="mb-6 sm:mb-8">
                   <insurance.icon className="w-12 h-12 sm:w-16 sm:h-16 text-ergo-red mx-auto lg:mx-0 mb-4 sm:mb-6" />
+                  <Badge className="bg-ergo-red text-white mb-4">✓ Sofortiger Schutz</Badge>
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-ergo-dark mb-4 sm:mb-6 break-words hyphens-auto">
                     {insurance.title}
+                    <span className="block text-lg sm:text-xl text-ergo-red font-normal mt-2">
+                      {insurance.price}
+                    </span>
                   </h1>
                   <p className="text-base sm:text-xl text-ergo-dark-light mb-6 sm:mb-8">
-                    {insurance.description}
+                    {content?.description || insurance.description}
                   </p>
                 </div>
 
                 <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
-                  <Badge className="bg-ergo-red text-white px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base font-semibold">
-                    {insurance.price}
-                  </Badge>
                   <Badge className="bg-ergo-blue-light text-ergo-dark px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
                     Ohne Wartezeit
                   </Badge>
                   <Badge className="bg-green-100 text-green-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
                     Sofortige Deckung
                   </Badge>
+                  <Badge className="bg-blue-100 text-blue-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
+                    Kostenlos beraten
+                  </Badge>
                 </div>
 
-                <Button 
-                  size="lg" 
-                  className="bg-ergo-red hover:bg-ergo-red-hover text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto"
-                  onClick={handleStartFunnel}
-                >
-                  Kostenloses Angebot anfordern
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                  <Button 
+                    size="lg" 
+                    className="bg-ergo-red hover:bg-ergo-red-hover text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto"
+                    onClick={handleStartFunnel}
+                  >
+                    Jetzt kostenlos beraten lassen
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="border-ergo-red text-ergo-red hover:bg-ergo-red hover:text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto"
+                    onClick={() => window.open('tel:+4915566771019', '_self')}
+                  >
+                    📞 Jetzt anrufen
+                  </Button>
+                </div>
               </div>
 
               {/* Hero Image */}
@@ -118,17 +132,17 @@ export default function Insurance() {
 
         {/* Features Section */}
         <section className="py-12 sm:py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 break-words">
-                Ihre Vorteile auf einen Blick
+                Ihre 3 wichtigsten Vorteile
               </h2>
               <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
                 Warum sich über 1000 Kunden für unsere {insurance.title} entschieden haben
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {insurance.features.map((feature, index) => (
                 <Card key={index} className="text-center">
                   <CardContent className="p-4 sm:pt-6">
@@ -153,11 +167,14 @@ export default function Insurance() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 break-words">
-                Was ist in Ihrer {insurance.title} enthalten?
+                Das ist enthalten
               </h2>
+              <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
+                Ihre konkreten Leistungen bei der {insurance.title}
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {insurance.benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start">
                   <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full flex items-center justify-center mr-3 sm:mr-4 mt-0.5 sm:mt-1 flex-shrink-0">
@@ -178,10 +195,10 @@ export default function Insurance() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 break-words">
-                Ihr persönlicher Versicherungsexperte
+                Ihr Versicherungsexperte
               </h2>
               <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
-                Professionelle Beratung mit über 10 Jahren Erfahrung
+                Persönliche Beratung mit über 10 Jahren Erfahrung
               </p>
             </div>
 
