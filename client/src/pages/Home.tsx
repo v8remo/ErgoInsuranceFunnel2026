@@ -190,29 +190,29 @@ export default function Home() {
             </div>
 
             {/* Insurance Products Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 lg:mb-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 lg:mb-16 auto-rows-fr">
               {insuranceProducts.map((product) => (
                 <Card 
                   key={product.id}
-                  className="insurance-card cursor-pointer hover:shadow-xl transition-all duration-300 w-full"
+                  className="insurance-card cursor-pointer hover:shadow-xl transition-all duration-300 w-full h-full flex flex-col"
                   onClick={() => handleInsuranceSelection(product.id)}
                 >
-                  <CardContent className="p-0">
+                  <CardContent className="p-0 flex flex-col h-full">
                     <img 
                       src={getInsuranceContent(product.id)?.imageUrl || product.image}
                       alt={product.title}
-                      className="w-full h-40 sm:h-48 object-cover rounded-t-lg"
+                      className="w-full h-40 sm:h-48 object-cover rounded-t-lg flex-shrink-0"
                       loading="lazy"
                       decoding="async"
                     />
                     
-                    <div className="p-4 sm:p-6">
+                    <div className="p-4 sm:p-6 flex flex-col flex-grow">
                       <div className="flex items-start mb-3 sm:mb-4">
                         <product.icon className="w-5 h-5 sm:w-6 sm:h-6 text-ergo-red mr-2 sm:mr-3 mt-1 flex-shrink-0" />
                         <h3 className="text-base sm:text-lg lg:text-xl font-bold text-ergo-dark leading-tight break-words hyphens-auto">{product.title}</h3>
                       </div>
                       
-                      <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">
+                      <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed flex-grow">
                         {product.description}
                       </p>
                       
@@ -232,7 +232,7 @@ export default function Home() {
                         ))}
                       </ul>
                       
-                      <Button className="w-full bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base py-2 sm:py-3">
+                      <Button className="w-full bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base py-2 sm:py-3 mt-auto">
                         Jetzt Angebot anfordern
                       </Button>
                     </div>
@@ -242,25 +242,25 @@ export default function Home() {
 
               {/* Combination Package */}
               <Card 
-                className="insurance-card cursor-pointer bg-gradient-to-br from-ergo-red to-ergo-red-dark text-white hover:shadow-xl transition-all duration-300 w-full"
+                className="insurance-card cursor-pointer bg-gradient-to-br from-ergo-red to-ergo-red-dark text-white hover:shadow-xl transition-all duration-300 w-full h-full flex flex-col"
                 onClick={() => handleInsuranceSelection("kombi")}
               >
-                <CardContent className="p-0">
+                <CardContent className="p-0 flex flex-col h-full">
                   <img 
                     src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=400&h=250&fit=crop"
                     alt="Familie unter einem Regenschirm als Symbol für Schutz"
-                    className="w-full h-40 sm:h-48 object-cover rounded-t-lg"
+                    className="w-full h-40 sm:h-48 object-cover rounded-t-lg flex-shrink-0"
                     loading="lazy"
                     decoding="async"
                   />
                   
-                  <div className="p-4 sm:p-6 bg-ergo-red">
+                  <div className="p-4 sm:p-6 bg-ergo-red flex flex-col flex-grow">
                     <div className="flex items-start mb-3 sm:mb-4">
                       <Star className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-300 mr-2 sm:mr-3 mt-1 flex-shrink-0" />
                       <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white leading-tight break-words hyphens-auto">Rundumschutz-Paket</h3>
                     </div>
                     
-                    <p className="text-white mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">
+                    <p className="text-white mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed flex-grow">
                       Sparen Sie mit unseren Kombipaketen. Bis zu 20% Rabatt bei mehreren Versicherungen.
                     </p>
                     
@@ -286,7 +286,7 @@ export default function Home() {
                       </li>
                     </ul>
                     
-                    <Button className="w-full bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold text-sm sm:text-base py-2 sm:py-3">
+                    <Button className="w-full bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold text-sm sm:text-base py-2 sm:py-3 mt-auto">
                       Beratungstermin vereinbaren
                     </Button>
                   </div>

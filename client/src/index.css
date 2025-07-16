@@ -272,6 +272,18 @@
     aspect-ratio: 400/250;
   }
   
+  /* Ensure equal height insurance cards */
+  .insurance-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Auto-fit grid with equal heights */
+  .auto-rows-fr {
+    grid-auto-rows: 1fr;
+  }
+  
   .text-ergo-dark {
     color: var(--ergo-dark);
   }
