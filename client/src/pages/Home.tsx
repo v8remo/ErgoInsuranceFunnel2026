@@ -8,7 +8,7 @@ import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, trackConversion } from "@/lib/analytics";
 import { useQuery } from "@tanstack/react-query";
 import { 
   Home as HomeIcon, 
@@ -178,7 +178,7 @@ export default function Home() {
                   className="bg-ergo-red hover:bg-ergo-red-hover text-white px-8 py-4 text-lg font-bold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                   onClick={() => {
                     trackEvent('primary_cta_clicked', { source: 'hero_section', action: 'whatsapp_consultation' });
-                    window.open('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Versicherungsberatung!', '_blank');
+                    trackConversion('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Versicherungsberatung!');
                   }}
                 >
                   🚀 JETZT KOSTENLOS BERATEN LASSEN

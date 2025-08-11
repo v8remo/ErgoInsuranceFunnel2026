@@ -7,7 +7,7 @@ import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, trackConversion } from "@/lib/analytics";
 import { insuranceConfig } from "@/lib/insurance-config";
 import { useQuery } from "@tanstack/react-query";
 import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
@@ -120,7 +120,8 @@ export default function Insurance() {
                       className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full sm:w-auto"
                       onClick={() => {
                         trackEvent('insurance_whatsapp_clicked', { insurance_type: type, source: 'hero_section' });
-                        window.open('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Informationen zum 15% Bündelnachlass!', '_blank');
+                        const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Informationen zum 15% Bündelnachlass!';
+                        trackConversion(whatsappUrl);
                       }}
                     >
                       💬 WhatsApp Beratung
@@ -327,7 +328,8 @@ export default function Insurance() {
                   className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold"
                   onClick={() => {
                     trackEvent('final_whatsapp_clicked', { insurance_type: type, source: 'bottom_section' });
-                    window.open('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Infos zum 15% Bündelnachlass ab 3 Versicherungen!', '_blank');
+                    const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Infos zum 15% Bündelnachlass ab 3 Versicherungen!';
+                    trackConversion(whatsappUrl);
                   }}
                 >
                   💬 Sofortige WhatsApp Beratung

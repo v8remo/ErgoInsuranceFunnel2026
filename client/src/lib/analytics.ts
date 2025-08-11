@@ -3,6 +3,7 @@ declare global {
   interface Window {
     dataLayer: any[];
     gtag: (...args: any[]) => void;
+    gtag_report_conversion: (url?: string) => boolean;
     fbq: (...args: any[]) => void;
   }
 }
@@ -291,4 +292,14 @@ export const trackError = (error: string, location: string) => {
     event_label: error,
     error_location: location
   });
+};
+
+// Track Google Ads conversions with proper callback
+export const trackConversion = (url?: string) => {
+  if (typeof window === 'undefined' || !window.gtag_report_conversion) {
+    console.warn('Google Ads conversion tracking not available');
+    return false;
+  }
+  
+  return window.gtag_report_conversion(url);
 };

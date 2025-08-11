@@ -138,6 +138,11 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Optimierung und günstigere Alternativen für bestehende Verträge
   - Alle CTAs und Texte entsprechend angepasst
   - WhatsApp-Nachrichten auf neue Strategie ausgerichtet
+- 2025-01-18: Google Ads Conversion-Tracking korrekt implementiert:
+  - gtag_report_conversion Funktion in HTML eingebunden
+  - Conversion-Tracking für alle wichtigen CTAs aktiviert
+  - WhatsApp-Links mit ordnungsgemäßer Conversion-Weiterleitung
+  - Event-Callback für korrekte URL-Navigation implementiert
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)
