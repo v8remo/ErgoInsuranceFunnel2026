@@ -1,5 +1,5 @@
 import { MessageCircle } from "lucide-react";
-import { trackEvent, trackConversion } from "@/lib/analytics";
+import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
 
 interface WhatsAppButtonProps {
   text?: string;
@@ -23,7 +23,7 @@ export default function WhatsAppButton({
       contact_method: "whatsapp",
       value: 30
     });
-    trackConversion(whatsappUrl);
+    trackAppointmentConversion(whatsappUrl);
   };
 
   if (variant === "floating") {

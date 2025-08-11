@@ -4,6 +4,7 @@ declare global {
     dataLayer: any[];
     gtag: (...args: any[]) => void;
     gtag_report_conversion: (url?: string) => boolean;
+    gtag_report_appointment_conversion: (url?: string) => boolean;
     fbq: (...args: any[]) => void;
   }
 }
@@ -302,4 +303,14 @@ export const trackConversion = (url?: string) => {
   }
   
   return window.gtag_report_conversion(url);
+};
+
+// Track Google Ads appointment conversions with proper callback
+export const trackAppointmentConversion = (url?: string) => {
+  if (typeof window === 'undefined' || !window.gtag_report_appointment_conversion) {
+    console.warn('Google Ads appointment conversion tracking not available');
+    return false;
+  }
+  
+  return window.gtag_report_appointment_conversion(url);
 };

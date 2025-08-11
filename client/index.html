@@ -168,6 +168,24 @@
         return false;
       }
     </script>
+
+    <!-- Event snippet for Termin vereinbaren conversion page -->
+    <script>
+      function gtag_report_appointment_conversion(url) {
+        var callback = function () {
+          if (typeof(url) != 'undefined') {
+            window.location = url;
+          }
+        };
+        gtag('event', 'conversion', {
+            'send_to': 'AW-17132012984/d95zCOiNn4QbELiLl-k_',
+            'value': 1.0,
+            'currency': 'EUR',
+            'event_callback': callback
+        });
+        return false;
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

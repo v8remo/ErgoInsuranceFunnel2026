@@ -7,7 +7,7 @@ import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { trackEvent, trackConversion } from "@/lib/analytics";
+import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
 import { insuranceConfig } from "@/lib/insurance-config";
 import { useQuery } from "@tanstack/react-query";
 import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
@@ -121,7 +121,7 @@ export default function Insurance() {
                       onClick={() => {
                         trackEvent('insurance_whatsapp_clicked', { insurance_type: type, source: 'hero_section' });
                         const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Informationen zum 15% Bündelnachlass!';
-                        trackConversion(whatsappUrl);
+                        trackAppointmentConversion(whatsappUrl);
                       }}
                     >
                       💬 WhatsApp Beratung
@@ -329,7 +329,7 @@ export default function Insurance() {
                   onClick={() => {
                     trackEvent('final_whatsapp_clicked', { insurance_type: type, source: 'bottom_section' });
                     const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Infos zum 15% Bündelnachlass ab 3 Versicherungen!';
-                    trackConversion(whatsappUrl);
+                    trackAppointmentConversion(whatsappUrl);
                   }}
                 >
                   💬 Sofortige WhatsApp Beratung

@@ -143,6 +143,9 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Conversion-Tracking für alle wichtigen CTAs aktiviert
   - WhatsApp-Links mit ordnungsgemäßer Conversion-Weiterleitung
   - Event-Callback für korrekte URL-Navigation implementiert
+  - Zusätzliches "Termin vereinbaren" Conversion-Tracking (d95zCOiNn4QbELiLl-k_) hinzugefügt
+  - WhatsApp-Beratungsbuttons verwenden Termin-Conversion-Tracking
+  - Doppeltes Conversion-Tracking für verschiedene Aktionstypen aktiv
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)
