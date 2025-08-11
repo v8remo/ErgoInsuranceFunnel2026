@@ -75,44 +75,60 @@ export default function Insurance() {
                   <insurance.icon className="w-12 h-12 sm:w-16 sm:h-16 text-ergo-red mx-auto lg:mx-0 mb-4 sm:mb-6" />
                   <Badge className="bg-ergo-red text-white mb-4">✓ Sofortiger Schutz</Badge>
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-ergo-dark mb-4 sm:mb-6 leading-tight">
-                    {insurance.title}
-                    <span className="block text-lg sm:text-xl text-ergo-red font-normal mt-2">
-                      {insurance.price}
+                    <span className="text-ergo-red">Sofort abschließen:</span>
+                    <br />{insurance.title}
+                    <span className="block text-lg sm:text-xl text-ergo-red font-bold mt-2">
+                      {insurance.price} <span className="text-sm line-through text-gray-500">statt 35€/Monat</span>
                     </span>
                   </h1>
                   <p className="text-base sm:text-xl text-ergo-dark-light mb-6 sm:mb-8">
-                    {content?.description || insurance.description}
+                    <strong>Kostenlose Beratung in 2 Minuten!</strong> {content?.description || insurance.description}
+                    <span className="text-ergo-red font-bold"> Sparen Sie bis zu 30% gegenüber anderen Anbietern.</span>
                   </p>
                 </div>
 
                 <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
-                  <Badge className="bg-ergo-blue-light text-ergo-dark px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
-                    Ohne Wartezeit
+                  <Badge className="bg-green-100 text-green-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base animate-pulse">
+                    🚀 Ohne Wartezeit
                   </Badge>
-                  <Badge className="bg-green-100 text-green-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
-                    Sofortige Deckung
+                  <Badge className="bg-blue-100 text-blue-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base animate-pulse">
+                    ⚡ Sofortige Deckung
                   </Badge>
-                  <Badge className="bg-blue-100 text-blue-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
-                    Kostenlos beraten
+                  <Badge className="bg-yellow-100 text-yellow-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base animate-pulse">
+                    💰 30% günstiger
                   </Badge>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-                  <Button 
-                    size="lg" 
-                    className="bg-ergo-red hover:bg-ergo-red-hover text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto"
-                    onClick={handleStartFunnel}
-                  >
-                    Jetzt kostenlos beraten lassen
-                  </Button>
-                  <Button 
-                    size="lg" 
-                    variant="outline"
-                    className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto"
-                    onClick={() => window.open('https://wa.me/4915566771019?text=Hallo, ich interessiere mich für die ' + insurance.title + ' und hätte gerne eine Beratung.', '_blank')}
-                  >
-                    💬 WhatsApp Chat
-                  </Button>
+                {/* Primary CTA with urgency */}
+                <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-xl p-4 sm:p-6 mb-6 border-2 border-red-200">
+                  <p className="text-center text-sm sm:text-base text-gray-700 mb-4">
+                    <strong className="text-ergo-red">🔥 Nur heute:</strong> Kostenloses Beratungsgespräch + 30% Rabatt sichern!
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <Button 
+                      size="lg" 
+                      className="bg-ergo-red hover:bg-ergo-red-hover text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-xl font-bold w-full sm:flex-1 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                      onClick={() => {
+                        trackEvent('insurance_cta_clicked', { insurance_type: type, source: 'hero_section', value: 30 });
+                        handleStartFunnel();
+                      }}
+                    >
+                      🚀 SOFORT SPAREN - JETZT STARTEN
+                    </Button>
+                    <Button 
+                      size="lg" 
+                      className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full sm:w-auto"
+                      onClick={() => {
+                        trackEvent('insurance_whatsapp_clicked', { insurance_type: type, source: 'hero_section' });
+                        window.open('https://wa.me/4915566771019?text=Hallo, ich möchte SOFORT eine Beratung zur ' + insurance.title + ' und 30% sparen!', '_blank');
+                      }}
+                    >
+                      💬 WhatsApp Beratung
+                    </Button>
+                  </div>
+                  <p className="text-xs text-center text-gray-500 mt-3">
+                    ⏰ Angebot gültig bis heute 23:59 Uhr • Antwort binnen 2 Minuten
+                  </p>
                 </div>
               </div>
 
@@ -259,33 +275,78 @@ export default function Insurance() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-12 sm:py-16 bg-ergo-red text-white">
+        {/* Social Proof Section */}
+        <section className="py-8 sm:py-12 bg-gray-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight text-center">
-              Bereit für Ihren persönlichen Schutz?
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+              <div className="bg-white rounded-lg p-4 shadow-sm">
+                <div className="text-2xl sm:text-3xl font-bold text-ergo-red mb-1">1000+</div>
+                <div className="text-xs sm:text-sm text-gray-600">Zufriedene Kunden</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 shadow-sm">
+                <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-1">97%</div>
+                <div className="text-xs sm:text-sm text-gray-600">Weiterempfehlung</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 shadow-sm">
+                <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1">24h</div>
+                <div className="text-xs sm:text-sm text-gray-600">Schnelle Hilfe</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 shadow-sm">
+                <div className="text-2xl sm:text-3xl font-bold text-yellow-600 mb-1">30%</div>
+                <div className="text-xs sm:text-sm text-gray-600">Durchschn. Ersparnis</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA Section with Urgency */}
+        <section className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight">
+              🔥 Limitiertes Angebot: 30% Rabatt sichern!
             </h2>
             <p className="text-sm sm:text-base lg:text-xl text-red-100 mb-6 sm:mb-8 px-2">
-              Fordern Sie jetzt Ihr kostenloses und unverbindliches Angebot an. 
-              Wir melden uns innerhalb von 24 Stunden bei Ihnen.
+              <strong>Nur heute:</strong> Kostenlose Beratung + 30% Rabatt auf Ihre {insurance.title}.
+              Bereits <span className="text-yellow-300 font-bold">23 Kunden</span> haben heute gespart!
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-white text-[#ff0000] hover:bg-gray-100 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg"
-                onClick={handleStartFunnel}
-              >
-                Jetzt Angebot anfordern
-              </Button>
-              <Button 
-                size="lg" 
-                className="border-2 border-white hover:bg-white hover:text-green-600 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg bg-transparent backdrop-blur-sm text-white"
-                onClick={() => window.open('https://wa.me/4915566771019?text=Hallo, ich interessiere mich für die ' + insurance.title + ' und hätte gerne eine Beratung.', '_blank')}
-              >
-                <span className="hidden sm:inline">💬 WhatsApp Chat starten</span>
-                <span className="sm:hidden">💬 WhatsApp</span>
-              </Button>
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+                <Button 
+                  size="lg" 
+                  className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-xl font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                  onClick={() => {
+                    trackEvent('final_cta_clicked', { insurance_type: type, source: 'bottom_section', value: 30 });
+                    handleStartFunnel();
+                  }}
+                >
+                  🚀 JETZT 30% SPAREN
+                </Button>
+                <Button 
+                  size="lg" 
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold"
+                  onClick={() => {
+                    trackEvent('final_whatsapp_clicked', { insurance_type: type, source: 'bottom_section' });
+                    window.open('https://wa.me/4915566771019?text=Hallo, ich möchte HEUTE NOCH 30% Rabatt auf die ' + insurance.title + ' sichern!', '_blank');
+                  }}
+                >
+                  💬 Sofortige WhatsApp Beratung
+                </Button>
+              </div>
+              <p className="text-xs text-yellow-200 mt-3">
+                ⏰ Angebot läuft ab um 23:59 Uhr • Nur noch wenige Plätze verfügbar
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-red-100">
+              <div className="flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                <span>100% kostenlos & unverbindlich</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                <span>Antwort binnen 2 Minuten</span>
+              </div>
             </div>
           </div>
         </section>

@@ -8,19 +8,20 @@ interface WhatsAppButtonProps {
 }
 
 export default function WhatsAppButton({ 
-  text = "WhatsApp Kundenservice", 
+  text = "💬 Sofort-Beratung", 
   className = "",
   variant = "inline" 
 }: WhatsAppButtonProps) {
   const phoneNumber = "4915566771019";
-  const message = "Hallo, ich interessiere mich für eine ERGO Versicherung und hätte gerne weitere Informationen.";
+  const message = "Hallo, ich möchte eine SOFORTIGE kostenlose Versicherungsberatung und bis zu 30% sparen!";
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   const handleClick = () => {
     trackEvent("whatsapp_contact", {
       event_category: "Contact",
-      event_label: "WhatsApp Button Click",
-      contact_method: "whatsapp"
+      event_label: "WhatsApp Conversion Button",
+      contact_method: "whatsapp",
+      value: 30
     });
   };
 
@@ -31,8 +32,8 @@ export default function WhatsAppButton({
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleClick}
-        className={`fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-3 sm:p-4 shadow-lg transition-all duration-300 hover:scale-110 ${className}`}
-        aria-label="WhatsApp Kundenservice"
+        className={`fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-3 sm:p-4 shadow-xl transition-all duration-300 hover:scale-110 animate-pulse ${className}`}
+        aria-label="WhatsApp Sofort-Beratung"
       >
         <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" fill="currentColor" />
       </a>
@@ -45,7 +46,7 @@ export default function WhatsAppButton({
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
-      className={`inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors ${className}`}
+      className={`inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg font-bold ${className}`}
     >
       <MessageCircle className="h-5 w-5" fill="currentColor" />
       <span>{text}</span>
