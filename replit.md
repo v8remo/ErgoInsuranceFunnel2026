@@ -110,6 +110,13 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
 - 2025-01-18: Direkte Call-to-Action-Buttons für Anruf und Beratung hinzugefügt
 - 2025-01-18: Verbesserte SEO-Titel und Meta-Descriptions für alle Versicherungsseiten
 - 2025-01-18: Google Ads Conversion-Tracking für externe Links implementiert (BpTiCO7BmvEaELiLl-k_)
+- 2025-01-18: Startseite für maximale Conversion-Rate optimiert:
+  - Headline fokussiert auf Sofortigkeit ("in nur 3 Minuten")
+  - Primärer CTA-Button prominent platziert mit Dringlichkeit
+  - Trust-Indicators als farbige Badges für bessere Sichtbarkeit
+  - Preisvergleich mit Streichpreisen für Wertwahrnehmung
+  - Dringlichkeits-Sektion mit Social Proof und zeitlicher Begrenzung
+  - Tracking-Events für alle kritischen Conversion-Punkte
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)

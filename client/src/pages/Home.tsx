@@ -162,29 +162,43 @@ export default function Home() {
               />
               
               <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-ergo-dark mb-4 sm:mb-6 px-2">
-                Ihr <span className="text-ergo-red">ERGO Versicherungsexperte</span>
+                <span className="text-ergo-red">Sofortige Versicherungsberatung</span>
                 <br className="hidden sm:block" />
-                <span className="sm:hidden"> </span>deutschlandweit
+                <span className="sm:hidden"> </span>in nur 3 Minuten
               </h1>
               
               <p className="text-base sm:text-lg lg:text-xl text-ergo-dark-light mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
-                Persönliche Beratung für maßgeschneiderte Versicherungslösungen. 
-                Profitieren Sie von über 10 Jahren Erfahrung und modernster digitaler Beratung.
+                <strong>Kostenlose Beratung heute noch!</strong> Sparen Sie bis zu 40% bei Ihrer Versicherung. 
+                Über 1000 Kunden vertrauen bereits auf unsere Expertise.
               </p>
               
-              {/* Trust Indicators */}
+              {/* Primary CTA Button */}
+              <div className="mb-8 sm:mb-12">
+                <Button 
+                  className="bg-ergo-red hover:bg-ergo-red-hover text-white px-8 py-4 text-lg font-bold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                  onClick={() => {
+                    trackEvent('primary_cta_clicked', { source: 'hero_section', action: 'whatsapp_consultation' });
+                    window.open('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Versicherungsberatung!', '_blank');
+                  }}
+                >
+                  🚀 JETZT KOSTENLOS BERATEN LASSEN
+                </Button>
+                <p className="text-sm text-gray-600 mt-3">Antwort binnen 2 Minuten • Unverbindlich • Kostenlos</p>
+              </div>
+              
+              {/* Enhanced Trust Indicators */}
               <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 px-4">
-                <div className="flex items-center text-ergo-dark text-sm sm:text-base">
-                  <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-ergo-red mr-2 flex-shrink-0" />
-                  <span className="font-medium">Über 1000 zufriedene Kunden</span>
+                <div className="flex items-center text-ergo-dark text-sm sm:text-base bg-green-50 px-4 py-2 rounded-full">
+                  <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 mr-2 flex-shrink-0" />
+                  <span className="font-bold">1000+ zufriedene Kunden</span>
                 </div>
-                <div className="flex items-center text-ergo-dark text-sm sm:text-base">
-                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-ergo-red mr-2 flex-shrink-0" />
-                  <span className="font-medium">24h Schadenservice</span>
+                <div className="flex items-center text-ergo-dark text-sm sm:text-base bg-blue-50 px-4 py-2 rounded-full">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mr-2 flex-shrink-0" />
+                  <span className="font-bold">Antwort in 2 Min</span>
                 </div>
-                <div className="flex items-center text-ergo-dark text-sm sm:text-base">
-                  <Award className="w-4 h-4 sm:w-5 sm:h-5 text-ergo-red mr-2 flex-shrink-0" />
-                  <span className="font-medium">ERGO Qualitätspartner</span>
+                <div className="flex items-center text-ergo-dark text-sm sm:text-base bg-yellow-50 px-4 py-2 rounded-full">
+                  <Award className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 mr-2 flex-shrink-0" />
+                  <span className="font-bold">40% Ersparnis möglich</span>
                 </div>
               </div>
             </div>
@@ -217,8 +231,11 @@ export default function Home() {
                       </p>
                       
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-2 sm:gap-0">
-                        <span className="text-xl sm:text-2xl font-bold text-ergo-red">{product.price}</span>
-                        <Badge className={`${product.badgeColor} text-xs sm:text-sm w-fit`}>
+                        <div className="flex flex-col">
+                          <span className="text-xl sm:text-2xl font-bold text-ergo-red">{product.price}</span>
+                          <span className="text-xs text-gray-500">statt 25€/Monat</span>
+                        </div>
+                        <Badge className={`${product.badgeColor} text-xs sm:text-sm w-fit animate-pulse`}>
                           {product.badge}
                         </Badge>
                       </div>
@@ -232,8 +249,8 @@ export default function Home() {
                         ))}
                       </ul>
                       
-                      <Button className="w-full bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base py-2 sm:py-3 mt-auto">
-                        Jetzt Angebot anfordern
+                      <Button className="w-full bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base py-3 sm:py-4 mt-auto font-bold">
+                        ⚡ SOFORT-ANGEBOT ERHALTEN
                       </Button>
                     </div>
                   </CardContent>
@@ -286,12 +303,49 @@ export default function Home() {
                       </li>
                     </ul>
                     
-                    <Button className="w-full bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold text-sm sm:text-base py-2 sm:py-3 mt-auto">
-                      Beratungstermin vereinbaren
+                    <Button className="w-full bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold text-sm sm:text-base py-3 sm:py-4 mt-auto">
+                      💰 BIS ZU 20% SPAREN
                     </Button>
                   </div>
                 </CardContent>
               </Card>
+            </div>
+
+            {/* Urgency & Social Proof Section */}
+            <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-2xl p-6 sm:p-8 mb-8 sm:mb-12 border-2 border-red-100">
+              <div className="text-center">
+                <h2 className="text-xl sm:text-2xl font-bold text-ergo-red mb-4">
+                  🔥 Begrenzte Zeit: Kostenlose Erstberatung
+                </h2>
+                <p className="text-gray-700 mb-6 text-sm sm:text-base">
+                  <strong>Nur heute:</strong> Kostenlose Versicherungsanalyse im Wert von 150€. 
+                  Bereits <span className="text-ergo-red font-bold">47 Kunden</span> haben heute gespart!
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <Button 
+                    className="bg-ergo-red hover:bg-ergo-red-hover text-white px-6 py-3 font-bold rounded-lg"
+                    onClick={() => {
+                      trackEvent('urgency_call_clicked', { source: 'urgency_section', value: 150 });
+                      window.open('tel:015566771019');
+                    }}
+                  >
+                    📞 JETZT ANRUFEN: 01556 6771019
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    className="border-ergo-red text-ergo-red hover:bg-ergo-red hover:text-white px-6 py-3 font-bold rounded-lg"
+                    onClick={() => {
+                      trackEvent('urgency_whatsapp_clicked', { source: 'urgency_section', value: 150 });
+                      window.open('https://wa.me/4915566771019?text=Hallo, ich möchte die kostenlose Versicherungsanalyse per WhatsApp!', '_blank');
+                    }}
+                  >
+                    💬 WhatsApp Beratung
+                  </Button>
+                </div>
+                <p className="text-xs text-gray-500 mt-3">
+                  ⏰ Angebot gültig bis heute 23:59 Uhr
+                </p>
+              </div>
             </div>
           </div>
         </section>
