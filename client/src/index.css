@@ -24,16 +24,16 @@
   --ring: hsl(20, 14.3%, 4.1%);
   --radius: 0.5rem;
 
-  /* ERGO Brand Colors - Official ERGO Design System */
-  --ergo-red: hsl(355, 85%, 50%);
-  --ergo-red-hover: hsl(355, 85%, 45%);
+  /* ERGO Brand Colors - Optimized for Accessibility */
+  --ergo-red: hsl(355, 85%, 48%); /* Better contrast ratio */
+  --ergo-red-hover: hsl(355, 85%, 42%);
   --ergo-red-light: hsl(355, 100%, 98%);
-  --ergo-red-dark: hsl(355, 85%, 40%);
-  --ergo-dark: hsl(216, 30%, 15%);
-  --ergo-dark-light: hsl(216, 20%, 25%);
+  --ergo-red-dark: hsl(355, 85%, 35%); /* Darker for better contrast */
+  --ergo-dark: hsl(216, 30%, 12%); /* Darker for better readability */
+  --ergo-dark-light: hsl(216, 20%, 22%); /* Better contrast */
   --ergo-gray: hsl(220, 15%, 97%);
   --ergo-gray-light: hsl(220, 20%, 99%);
-  --ergo-blue: hsl(220, 90%, 50%);
+  --ergo-blue: hsl(220, 90%, 45%); /* Better contrast */
   --ergo-blue-light: hsl(220, 100%, 97%);
 }
 
@@ -282,6 +282,61 @@
   /* Auto-fit grid with equal heights */
   .auto-rows-fr {
     grid-auto-rows: 1fr;
+  }
+  
+  /* Accessibility improvements for better contrast and readability */
+  
+  /* High contrast text classes */
+  .text-high-contrast {
+    color: hsl(216, 30%, 8%) !important; /* Very dark for maximum contrast */
+  }
+  
+  .text-medium-contrast {
+    color: hsl(216, 25%, 20%) !important; /* Good contrast for secondary text */
+  }
+  
+  /* Enhanced button contrast */
+  .btn-primary {
+    background-color: var(--ergo-red);
+    color: white;
+    font-weight: 600;
+    border: 2px solid transparent;
+    min-height: 44px; /* Touch target size */
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--ergo-red-hover);
+    border-color: var(--ergo-red-dark);
+  }
+  
+  /* Better contrast for badges */
+  .badge-high-contrast {
+    background-color: hsl(216, 30%, 12%);
+    color: white;
+    font-weight: 600;
+  }
+  
+  /* Enhanced text readability */
+  .text-readable {
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    color: hsl(216, 30%, 12%);
+  }
+  
+  /* Focus states for accessibility */
+  .focus-ring:focus {
+    outline: 3px solid hsl(220, 90%, 60%);
+    outline-offset: 2px;
+  }
+  
+  /* Better contrast for light backgrounds */
+  .on-light-bg {
+    color: hsl(216, 30%, 8%);
+  }
+  
+  /* Better contrast for gray backgrounds */
+  .on-gray-bg {
+    color: hsl(216, 30%, 10%);
   }
   
   .text-ergo-dark {

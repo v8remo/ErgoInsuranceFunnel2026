@@ -167,7 +167,7 @@ export default function Home() {
                 <span className="sm:hidden"> </span>in nur 3 Minuten
               </h1>
               
-              <p className="text-base sm:text-lg lg:text-xl text-ergo-dark-light mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
+              <p className="text-base sm:text-lg lg:text-xl text-high-contrast text-readable mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
                 <strong>Kostenlose Beratung heute noch!</strong> Sparen Sie bis zu 40% bei Ihrer Versicherung. 
                 Über 1000 Kunden vertrauen bereits auf unsere Expertise.
               </p>
@@ -183,21 +183,21 @@ export default function Home() {
                 >
                   🚀 JETZT KOSTENLOS BERATEN LASSEN
                 </Button>
-                <p className="text-sm text-gray-600 mt-3">Antwort binnen 2 Minuten • Unverbindlich • Kostenlos</p>
+                <p className="text-sm text-medium-contrast mt-3">Antwort binnen 2 Minuten • Unverbindlich • Kostenlos</p>
               </div>
               
               {/* Enhanced Trust Indicators */}
               <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 px-4">
-                <div className="flex items-center text-ergo-dark text-sm sm:text-base bg-green-50 px-4 py-2 rounded-full">
-                  <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 mr-2 flex-shrink-0" />
+                <div className="flex items-center text-high-contrast text-sm sm:text-base bg-green-50 px-4 py-2 rounded-full">
+                  <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-700 mr-2 flex-shrink-0" />
                   <span className="font-bold">1000+ zufriedene Kunden</span>
                 </div>
-                <div className="flex items-center text-ergo-dark text-sm sm:text-base bg-blue-50 px-4 py-2 rounded-full">
-                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mr-2 flex-shrink-0" />
+                <div className="flex items-center text-high-contrast text-sm sm:text-base bg-blue-50 px-4 py-2 rounded-full">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-700 mr-2 flex-shrink-0" />
                   <span className="font-bold">Antwort in 2 Min</span>
                 </div>
-                <div className="flex items-center text-ergo-dark text-sm sm:text-base bg-yellow-50 px-4 py-2 rounded-full">
-                  <Award className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 mr-2 flex-shrink-0" />
+                <div className="flex items-center text-high-contrast text-sm sm:text-base bg-yellow-50 px-4 py-2 rounded-full">
+                  <Award className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-700 mr-2 flex-shrink-0" />
                   <span className="font-bold">40% Ersparnis möglich</span>
                 </div>
               </div>
@@ -223,10 +223,10 @@ export default function Home() {
                     <div className="p-4 sm:p-6 flex flex-col flex-grow">
                       <div className="flex items-start mb-3 sm:mb-4">
                         <product.icon className="w-5 h-5 sm:w-6 sm:h-6 text-ergo-red mr-2 sm:mr-3 mt-1 flex-shrink-0" />
-                        <h3 className="text-base sm:text-lg lg:text-xl font-bold text-ergo-dark leading-tight break-words hyphens-auto">{product.title}</h3>
+                        <h3 className="text-base sm:text-lg lg:text-xl font-bold text-high-contrast leading-tight break-words hyphens-auto">{product.title}</h3>
                       </div>
                       
-                      <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed flex-grow">
+                      <p className="text-medium-contrast text-readable mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed flex-grow">
                         {product.description}
                       </p>
                       
@@ -240,7 +240,7 @@ export default function Home() {
                         </Badge>
                       </div>
                       
-                      <ul className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6 space-y-1 sm:space-y-2">
+                      <ul className="text-xs sm:text-sm text-medium-contrast text-readable mb-4 sm:mb-6 space-y-1 sm:space-y-2">
                         {product.features.map((feature, index) => (
                           <li key={index} className="flex items-center">
                             <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full mr-2 flex-shrink-0" />
@@ -317,7 +317,7 @@ export default function Home() {
                 <h2 className="text-xl sm:text-2xl font-bold text-ergo-red mb-4">
                   🔥 Begrenzte Zeit: Kostenlose Erstberatung
                 </h2>
-                <p className="text-gray-700 mb-6 text-sm sm:text-base">
+                <p className="text-high-contrast text-readable mb-6 text-sm sm:text-base">
                   <strong>Nur heute:</strong> Kostenlose Versicherungsanalyse im Wert von 150€. 
                   Bereits <span className="text-ergo-red font-bold">47 Kunden</span> haben heute gespart!
                 </p>

@@ -126,6 +126,12 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Final CTA mit 30% Rabatt-Angebot und Knappheit
   - WhatsApp-Button optimiert mit Sofort-Beratung Text
   - Alle Buttons mit Hover-Effekten und Tracking-Events
+- 2025-01-18: Kontraste und Lesbarkeit auf allen Seiten optimiert:
+  - Neue CSS-Klassen für bessere Accessibility (text-high-contrast, text-medium-contrast)
+  - ERGO-Farben für bessere Kontrastverhältnisse angepasst
+  - Alle Texte mit optimierten Kontrastwerten für WCAG-Konformität
+  - Verbesserte Lesbarkeit durch erhöhte Zeilenhöhe und Buchstabenabstand
+  - Focus-States für Tastaturnavigation hinzugefügt
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)

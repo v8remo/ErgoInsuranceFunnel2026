@@ -81,9 +81,9 @@ export default function Insurance() {
                       {insurance.price} <span className="text-sm line-through text-gray-500">statt 35€/Monat</span>
                     </span>
                   </h1>
-                  <p className="text-base sm:text-xl text-ergo-dark-light mb-6 sm:mb-8">
+                  <p className="text-base sm:text-xl text-high-contrast text-readable mb-6 sm:mb-8">
                     <strong>Kostenlose Beratung in 2 Minuten!</strong> {content?.description || insurance.description}
-                    <span className="text-ergo-red font-bold"> Sparen Sie bis zu 30% gegenüber anderen Anbietern.</span>
+                    <span className="text-ergo-red-dark font-bold"> Sparen Sie bis zu 30% gegenüber anderen Anbietern.</span>
                   </p>
                 </div>
 
@@ -152,10 +152,10 @@ export default function Insurance() {
         <section className="py-12 sm:py-16 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 leading-tight text-center">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-high-contrast mb-3 sm:mb-4 px-2 leading-tight text-center">
                 Ihre 3 wichtigsten Vorteile
               </h2>
-              <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
+              <p className="text-sm sm:text-base lg:text-xl text-medium-contrast text-readable px-2">
                 Warum sich über 1000 Kunden für unsere {insurance.title} entschieden haben
               </p>
             </div>
@@ -167,10 +167,10 @@ export default function Insurance() {
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-ergo-red-light rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                       <div className="w-5 h-5 sm:w-6 sm:h-6 bg-ergo-red rounded-full" />
                     </div>
-                    <h3 className="text-base sm:text-lg font-semibold text-ergo-dark mb-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-high-contrast mb-2">
                       {feature.title}
                     </h3>
-                    <p className="text-sm sm:text-base text-gray-600">
+                    <p className="text-sm sm:text-base text-medium-contrast text-readable">
                       {feature.description}
                     </p>
                   </CardContent>
@@ -184,10 +184,10 @@ export default function Insurance() {
         <section className="py-12 sm:py-16 bg-ergo-gray">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 leading-tight text-center">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-high-contrast mb-3 sm:mb-4 px-2 leading-tight text-center">
                 Das ist enthalten
               </h2>
-              <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
+              <p className="text-sm sm:text-base lg:text-xl text-medium-contrast text-readable px-2">
                 Ihre konkreten Leistungen bei der {insurance.title}
               </p>
             </div>
@@ -199,8 +199,8 @@ export default function Insurance() {
                     <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-white rounded-full" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-ergo-dark mb-1 text-sm sm:text-base">{benefit.title}</h4>
-                    <p className="text-gray-600 text-sm sm:text-base">{benefit.description}</p>
+                    <h4 className="font-semibold text-high-contrast mb-1 text-sm sm:text-base">{benefit.title}</h4>
+                    <p className="text-medium-contrast text-readable text-sm sm:text-base">{benefit.description}</p>
                   </div>
                 </div>
               ))}
@@ -212,10 +212,10 @@ export default function Insurance() {
         <section className="py-12 sm:py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 leading-tight text-center">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-high-contrast mb-3 sm:mb-4 px-2 leading-tight text-center">
                 Ihr Versicherungsexperte
               </h2>
-              <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
+              <p className="text-sm sm:text-base lg:text-xl text-medium-contrast text-readable px-2">
                 Persönliche Beratung mit über 10 Jahren Erfahrung
               </p>
             </div>
