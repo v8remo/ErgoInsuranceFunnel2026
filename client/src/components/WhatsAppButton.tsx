@@ -13,7 +13,7 @@ export default function WhatsAppButton({
   variant = "inline" 
 }: WhatsAppButtonProps) {
   const phoneNumber = "4915566771019";
-  const message = "Hallo, ich möchte eine SOFORTIGE kostenlose Versicherungsberatung und bis zu 30% sparen!";
+  const message = "Hallo, ich möchte eine kostenlose Analyse meiner bestehenden Versicherungen und Informationen zum 15% Bündelnachlass ab 3 Versicherungen!";
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   const handleClick = () => {

@@ -168,8 +168,8 @@ export default function Home() {
               </h1>
               
               <p className="text-base sm:text-lg lg:text-xl text-high-contrast text-readable mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
-                <strong>Kostenlose Beratung heute noch!</strong> Sparen Sie bis zu 40% bei Ihrer Versicherung. 
-                Über 1000 Kunden vertrauen bereits auf unsere Expertise.
+                <strong>Kostenlose Analyse Ihrer bestehenden Versicherungen!</strong> Wir optimieren Ihre Verträge und bieten günstigere Alternativen. 
+                <span className="text-ergo-red font-bold">15% Bündelnachlass ab 3 Versicherungen!</span> Über 1000 Kunden vertrauen bereits auf unsere Expertise.
               </p>
               
               {/* Primary CTA Button */}
@@ -198,7 +198,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center text-high-contrast text-sm sm:text-base bg-yellow-50 px-4 py-2 rounded-full">
                   <Award className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-700 mr-2 flex-shrink-0" />
-                  <span className="font-bold">40% Ersparnis möglich</span>
+                  <span className="font-bold">15% Bündelnachlass ab 3</span>
                 </div>
               </div>
             </div>
@@ -278,11 +278,11 @@ export default function Home() {
                     </div>
                     
                     <p className="text-white mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed flex-grow">
-                      Sparen Sie mit unseren Kombipaketen. Bis zu 20% Rabatt bei mehreren Versicherungen.
+                      Sparen Sie mit unseren Kombipaketen. 15% Bündelnachlass ab 3 Versicherungen plus Optimierung Ihrer bestehenden Verträge.
                     </p>
                     
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-2 sm:gap-0">
-                      <span className="text-xl sm:text-2xl font-bold text-white">Bis zu 20% sparen</span>
+                      <span className="text-xl sm:text-2xl font-bold text-white">15% Bündelnachlass</span>
                       <Badge className="bg-yellow-300 text-ergo-red font-bold text-xs sm:text-sm w-fit">
                         TOP DEAL
                       </Badge>
@@ -291,20 +291,20 @@ export default function Home() {
                     <ul className="text-xs sm:text-sm text-white mb-4 sm:mb-6 space-y-1 sm:space-y-2">
                       <li className="flex items-center">
                         <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-300 rounded-full mr-2 flex-shrink-0" />
-                        <span>Individuelle Beratung</span>
+                        <span>Kostenlose Analyse bestehender Verträge</span>
                       </li>
                       <li className="flex items-center">
                         <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-300 rounded-full mr-2 flex-shrink-0" />
-                        <span>Ein Ansprechpartner</span>
+                        <span>15% Bündelnachlass ab 3 Versicherungen</span>
                       </li>
                       <li className="flex items-center">
                         <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-300 rounded-full mr-2 flex-shrink-0" />
-                        <span>Mengenrabatt</span>
+                        <span>Optimierung & günstigere Alternativen</span>
                       </li>
                     </ul>
                     
                     <Button className="w-full bg-yellow-300 text-ergo-red hover:bg-yellow-400 font-bold text-sm sm:text-base py-3 sm:py-4 mt-auto">
-                      💰 BIS ZU 20% SPAREN
+                      💰 15% BÜNDELNACHLASS SICHERN
                     </Button>
                   </div>
                 </CardContent>
@@ -315,10 +315,12 @@ export default function Home() {
             <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-2xl p-6 sm:p-8 mb-8 sm:mb-12 border-2 border-red-100">
               <div className="text-center">
                 <h2 className="text-xl sm:text-2xl font-bold text-ergo-red mb-4">
-                  🔥 Begrenzte Zeit: Kostenlose Erstberatung
+                  🔥 Kostenlose Analyse & Optimierung
                 </h2>
                 <p className="text-high-contrast text-readable mb-6 text-sm sm:text-base">
-                  <strong>Nur heute:</strong> Kostenlose Versicherungsanalyse im Wert von 150€. 
+                  <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer bestehenden Versicherungen. 
+                  Wir optimieren Ihre Verträge und finden günstigere Alternativen. 
+                  <span className="text-ergo-red font-bold">15% Rabatt ab 3 Versicherungen!</span> 
                   Bereits <span className="text-ergo-red font-bold">47 Kunden</span> haben heute gespart!
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

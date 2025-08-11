@@ -82,8 +82,8 @@ export default function Insurance() {
                     </span>
                   </h1>
                   <p className="text-base sm:text-xl text-high-contrast text-readable mb-6 sm:mb-8">
-                    <strong>Kostenlose Beratung in 2 Minuten!</strong> {content?.description || insurance.description}
-                    <span className="text-ergo-red-dark font-bold"> Sparen Sie bis zu 30% gegenüber anderen Anbietern.</span>
+                    <strong>Kostenlose Analyse Ihrer bestehenden Verträge!</strong> {content?.description || insurance.description}
+                    <span className="text-ergo-red-dark font-bold"> Wir optimieren Ihre Versicherungen und bieten 15% Bündelnachlass ab 3 Versicherungen.</span>
                   </p>
                 </div>
 
@@ -102,32 +102,32 @@ export default function Insurance() {
                 {/* Primary CTA with urgency */}
                 <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-xl p-4 sm:p-6 mb-6 border-2 border-red-200">
                   <p className="text-center text-sm sm:text-base text-gray-700 mb-4">
-                    <strong className="text-ergo-red">🔥 Nur heute:</strong> Kostenloses Beratungsgespräch + 30% Rabatt sichern!
+                    <strong className="text-ergo-red">🔥 Immer kostenlos:</strong> Vollständige Analyse + Optimierung Ihrer bestehenden Verträge + 15% Bündelnachlass ab 3 Versicherungen!
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <Button 
                       size="lg" 
                       className="bg-ergo-red hover:bg-ergo-red-hover text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-xl font-bold w-full sm:flex-1 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                       onClick={() => {
-                        trackEvent('insurance_cta_clicked', { insurance_type: type, source: 'hero_section', value: 30 });
+                        trackEvent('insurance_cta_clicked', { insurance_type: type, source: 'hero_section', value: 15 });
                         handleStartFunnel();
                       }}
                     >
-                      🚀 SOFORT SPAREN - JETZT STARTEN
+                      🚀 KOSTENLOSE ANALYSE STARTEN
                     </Button>
                     <Button 
                       size="lg" 
                       className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full sm:w-auto"
                       onClick={() => {
                         trackEvent('insurance_whatsapp_clicked', { insurance_type: type, source: 'hero_section' });
-                        window.open('https://wa.me/4915566771019?text=Hallo, ich möchte SOFORT eine Beratung zur ' + insurance.title + ' und 30% sparen!', '_blank');
+                        window.open('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Informationen zum 15% Bündelnachlass!', '_blank');
                       }}
                     >
                       💬 WhatsApp Beratung
                     </Button>
                   </div>
                   <p className="text-xs text-center text-gray-500 mt-3">
-                    ⏰ Angebot gültig bis heute 23:59 Uhr • Antwort binnen 2 Minuten
+                    ✅ Immer kostenlos • Analyse bestehender Verträge • 15% Bündelnachlass ab 3 Versicherungen
                   </p>
                 </div>
               </div>
@@ -303,11 +303,11 @@ export default function Insurance() {
         <section className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight">
-              🔥 Limitiertes Angebot: 30% Rabatt sichern!
+              🔥 Kostenlose Analyse & 15% Bündelnachlass!
             </h2>
             <p className="text-sm sm:text-base lg:text-xl text-red-100 mb-6 sm:mb-8 px-2">
-              <strong>Nur heute:</strong> Kostenlose Beratung + 30% Rabatt auf Ihre {insurance.title}.
-              Bereits <span className="text-yellow-300 font-bold">23 Kunden</span> haben heute gespart!
+              <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer bestehenden {insurance.title} plus Optimierung und günstigere Alternativen.
+              <strong>15% Bündelnachlass ab 3 Versicherungen!</strong> Bereits <span className="text-yellow-300 font-bold">23 Kunden</span> haben heute gespart!
             </p>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
@@ -316,25 +316,25 @@ export default function Insurance() {
                   size="lg" 
                   className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-xl font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                   onClick={() => {
-                    trackEvent('final_cta_clicked', { insurance_type: type, source: 'bottom_section', value: 30 });
+                    trackEvent('final_cta_clicked', { insurance_type: type, source: 'bottom_section', value: 15 });
                     handleStartFunnel();
                   }}
                 >
-                  🚀 JETZT 30% SPAREN
+                  🚀 KOSTENLOSE ANALYSE + 15% NACHLASS
                 </Button>
                 <Button 
                   size="lg" 
                   className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold"
                   onClick={() => {
                     trackEvent('final_whatsapp_clicked', { insurance_type: type, source: 'bottom_section' });
-                    window.open('https://wa.me/4915566771019?text=Hallo, ich möchte HEUTE NOCH 30% Rabatt auf die ' + insurance.title + ' sichern!', '_blank');
+                    window.open('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Infos zum 15% Bündelnachlass ab 3 Versicherungen!', '_blank');
                   }}
                 >
                   💬 Sofortige WhatsApp Beratung
                 </Button>
               </div>
               <p className="text-xs text-yellow-200 mt-3">
-                ⏰ Angebot läuft ab um 23:59 Uhr • Nur noch wenige Plätze verfügbar
+                ✅ Kostenlose Analyse • Optimierung bestehender Verträge • 15% Bündelnachlass ab 3 Versicherungen
               </p>
             </div>
 

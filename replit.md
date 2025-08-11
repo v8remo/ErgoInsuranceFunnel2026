@@ -132,6 +132,12 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Alle Texte mit optimierten Kontrastwerten für WCAG-Konformität
   - Verbesserte Lesbarkeit durch erhöhte Zeilenhöhe und Buchstabenabstand
   - Focus-States für Tastaturnavigation hinzugefügt
+- 2025-01-18: Neue Geschäftsstrategie implementiert:
+  - Kostenlose Analysen bestehender Versicherungen als Hauptfokus
+  - 15% Bündelnachlass ab 3 Versicherungen statt allgemeine Rabatte
+  - Optimierung und günstigere Alternativen für bestehende Verträge
+  - Alle CTAs und Texte entsprechend angepasst
+  - WhatsApp-Nachrichten auf neue Strategie ausgerichtet
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)
