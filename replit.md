@@ -109,6 +109,7 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
 - 2025-01-18: Produktinformationen aus Anlagen in die Versicherungskonfiguration integriert
 - 2025-01-18: Direkte Call-to-Action-Buttons für Anruf und Beratung hinzugefügt
 - 2025-01-18: Verbesserte SEO-Titel und Meta-Descriptions für alle Versicherungsseiten
+- 2025-01-18: Google Ads Conversion-Tracking für externe Links implementiert (BpTiCO7BmvEaELiLl-k_)
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)
