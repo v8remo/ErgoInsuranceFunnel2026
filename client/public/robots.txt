@@ -1,45 +1,33 @@
 User-agent: *
 Allow: /
-Disallow: /admin
-Disallow: /api/
-Crawl-delay: 1
 
-User-agent: Googlebot
-Allow: /
-Disallow: /admin
-Disallow: /api/
-
-User-agent: Bingbot
-Allow: /
-Disallow: /admin
-Disallow: /api/
-Crawl-delay: 1
-
-User-agent: Slurp
-Allow: /
-Disallow: /admin
-Disallow: /api/
-Crawl-delay: 1
-
-User-agent: DuckDuckBot
-Allow: /
-Disallow: /admin
-Disallow: /api/
-
-User-agent: facebookexternalhit
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: LinkedInBot
-Allow: /
-
-User-agent: WhatsApp
-Allow: /
-
+# Google Ads Bot
 User-agent: AdsBot-Google
 Allow: /
+Crawl-delay: 1
 
-Sitemap: https://ergo-ganderkesee.de/sitemap.xml
-Sitemap: https://ergo-versicherung.replit.app/sitemap.xml
+# Google Bot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Bing Bot
+User-agent: bingbot
+Allow: /
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://ergo-ganderkesee.replit.app/sitemap.xml
+
+# Important pages for crawling
+Allow: /versicherung/
+Allow: /impressum
+Allow: /datenschutz
+
+# Clean URLs
+Disallow: /admin
+Disallow: /*.json$
+Disallow: /api/
+
+# Cache friendly
+Host: ergo-ganderkesee.replit.app

@@ -1,0 +1,8 @@
+# Google AdSense
+google.com, pub-xxxxxxxxxxxxxxxx, DIRECT, f08c47fec0942fa0
+
+# Google Ad Manager
+google.com, xxxxxxxxxxxxxxxx, DIRECT, f08c47fec0942fa0
+
+# This file is for Google Ads verification
+# Replace with actual publisher IDs when known

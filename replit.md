@@ -146,6 +146,14 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Zusätzliches "Termin vereinbaren" Conversion-Tracking (d95zCOiNn4QbELiLl-k_) hinzugefügt
   - WhatsApp-Beratungsbuttons verwenden Termin-Conversion-Tracking
   - Doppeltes Conversion-Tracking für verschiedene Aktionstypen aktiv
+- 2025-01-18: Umfassende SEO-Optimierung wie ein Experte implementiert:
+  - LLM-freundliche Meta-Tags für ChatGPT/AI-Empfehlungen hinzugefügt
+  - Erweiterte robots.txt für Google Ads Bot und besseres Crawling
+  - Vollständige sitemap.xml mit Bildoptimierung erstellt
+  - Schema.org Strukturdaten für alle Seiten implementiert
+  - Google Ads-optimierte Titel und Descriptions mit Emojis
+  - Performance-Hints für bessere Google-Bewertung
+  - ads.txt für Google Ads Verifizierung vorbereitet
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)

@@ -1,52 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  
+  <!-- Homepage -->
   <url>
-    <loc>https://ergo-ganderkesee.de/</loc>
+    <loc>https://ergo-ganderkesee.replit.app/</loc>
     <lastmod>2025-01-18</lastmod>
-    <changefreq>daily</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://ergo-ganderkesee.replit.app/hero-image.jpg</image:loc>
+      <image:title>ERGO Versicherung Ganderkesee</image:title>
+      <image:caption>Professionelle Versicherungsberatung von Morino Stübe</image:caption>
+    </image:image>
   </url>
+
+  <!-- Insurance Landing Pages -->
   <url>
-    <loc>https://ergo-ganderkesee.de/versicherung/hausrat</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://ergo-ganderkesee.de/versicherung/haftpflicht</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://ergo-ganderkesee.de/versicherung/wohngebaeude</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://ergo-ganderkesee.de/versicherung/rechtsschutz</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://ergo-ganderkesee.de/versicherung/zahnzusatz</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://ergo-ganderkesee.de/impressum</loc>
+    <loc>https://ergo-ganderkesee.replit.app/versicherung/hausrat</loc>
     <lastmod>2025-01-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.9</priority>
   </url>
+  
   <url>
-    <loc>https://ergo-ganderkesee.de/datenschutz</loc>
+    <loc>https://ergo-ganderkesee.replit.app/versicherung/haftpflicht</loc>
     <lastmod>2025-01-18</lastmod>
     <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/versicherung/wohngebaeude</loc>
+    <lastmod>2025-01-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/versicherung/rechtsschutz</loc>
+    <lastmod>2025-01-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/versicherung/zahnzusatz</loc>
+    <lastmod>2025-01-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Legal Pages -->
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/impressum</loc>
+    <lastmod>2025-01-17</lastmod>
+    <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+  
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/datenschutz</loc>
+    <lastmod>2025-01-17</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Sitemap Page -->
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/sitemap</loc>
+    <lastmod>2025-01-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.2</priority>
+  </url>
+
 </urlset>

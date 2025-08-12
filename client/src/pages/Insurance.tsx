@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import InsuranceFunnel from "@/components/InsuranceFunnel";
 import SEO from "@/components/SEO";
+import Breadcrumb from "@/components/Breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -59,11 +60,39 @@ export default function Insurance() {
   return (
     <>
       <SEO
-        title={`${insurance.title} - ERGO Versicherung Ganderkesee | Morino Stübe`}
-        description={`${insurance.description} Jetzt kostenlos beraten lassen und sparen! ☎ 01556 6771019`}
-        keywords={`${insurance.title}, ERGO ${insurance.title}, ${insurance.title} Ganderkesee, Morino Stübe, ERGO Versicherung, Versicherung abschließen`}
+        title={`${insurance.title} sofort abschließen - ERGO Ganderkesee | 15% Bündelnachlass`}
+        description={`⭐ ${insurance.title} ⭐ Kostenlose Analyse bestehender Verträge ⭐ 15% Rabatt ab 3 Versicherungen ⭐ WhatsApp: 01556 6771019`}
+        keywords={`${insurance.title}, ERGO ${insurance.title}, ${insurance.title} Ganderkesee, Bündelnachlass, kostenlose Analyse, Morino Stübe, ERGO Versicherung online`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": insurance.title,
+          "description": insurance.description,
+          "provider": {
+            "@type": "InsuranceAgency",
+            "name": "ERGO Versicherung Ganderkesee",
+            "telephone": "+4915566771019",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Friedensstraße 91 A",
+              "addressLocality": "Ganderkesee",
+              "postalCode": "27777",
+              "addressCountry": "DE"
+            }
+          },
+          "offers": {
+            "@type": "Offer",
+            "description": "15% Bündelnachlass ab 3 Versicherungen + kostenlose Analyse",
+            "availability": "https://schema.org/InStock"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "Deutschland"
+          }
+        }}
       />
       <Header />
+      <Breadcrumb />
       
       <main className="min-h-screen">
         {/* Hero Section */}
