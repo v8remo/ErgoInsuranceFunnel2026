@@ -96,21 +96,21 @@ export default function Insurance() {
       
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="py-12 sm:py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <section className="py-6 sm:py-8 lg:py-12 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white overflow-hidden">
+          <div className="w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
             <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
               <div className="text-center lg:text-left">
                 <div className="mb-6 sm:mb-8">
                   <insurance.icon className="w-12 h-12 sm:w-16 sm:h-16 text-ergo-red mx-auto lg:mx-0 mb-4 sm:mb-6" />
                   <Badge className="bg-ergo-red text-white mb-4">✓ Sofortiger Schutz</Badge>
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-ergo-dark mb-4 sm:mb-6 leading-tight">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-ergo-dark mb-3 sm:mb-4 leading-tight break-words">
                     <span className="text-ergo-red">Sofort abschließen:</span>
                     <br />{insurance.title}
                     <span className="block text-lg sm:text-xl text-ergo-red font-bold mt-2">
                       {insurance.price} <span className="text-sm line-through text-gray-500">statt 35€/Monat</span>
                     </span>
                   </h1>
-                  <p className="text-base sm:text-xl text-high-contrast text-readable mb-6 sm:mb-8">
+                  <p className="text-sm sm:text-base lg:text-lg text-high-contrast text-readable mb-4 sm:mb-6">
                     <strong>Kostenlose Analyse Ihrer bestehenden Verträge!</strong> {content?.description || insurance.description}
                     <span className="text-ergo-red-dark font-bold"> Wir optimieren Ihre Versicherungen und bieten 15% Bündelnachlass ab 3 Versicherungen.</span>
                   </p>
@@ -129,14 +129,14 @@ export default function Insurance() {
                 </div>
 
                 {/* Primary CTA with urgency */}
-                <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-xl p-4 sm:p-6 mb-6 border-2 border-red-200">
+                <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-xl p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 border-2 border-red-200">
                   <p className="text-center text-sm sm:text-base text-gray-700 mb-4">
                     <strong className="text-ergo-red">🔥 Immer kostenlos:</strong> Vollständige Analyse + Optimierung Ihrer bestehenden Verträge + 15% Bündelnachlass ab 3 Versicherungen!
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <Button 
                       size="lg" 
-                      className="bg-ergo-red hover:bg-ergo-red-hover text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-xl font-bold w-full sm:flex-1 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                      className="bg-ergo-red hover:bg-ergo-red-hover text-white px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base lg:text-lg font-bold w-full sm:flex-1 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                       onClick={() => {
                         trackEvent('insurance_cta_clicked', { insurance_type: type, source: 'hero_section', value: 15 });
                         handleStartFunnel();

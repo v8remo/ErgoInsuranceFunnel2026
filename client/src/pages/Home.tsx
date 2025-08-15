@@ -171,8 +171,8 @@ export default function Home() {
       <Header />
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-6 sm:py-8 lg:py-12 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white overflow-hidden">
+          <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
             <div className="text-center mb-8 sm:mb-12 lg:mb-16">
               {/* Professional advisor image */}
               <img 
@@ -183,21 +183,21 @@ export default function Home() {
                 decoding="async"
               />
               
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-ergo-dark mb-4 sm:mb-6 px-2">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 break-words">
                 <span className="text-ergo-red">Sofortige Versicherungsberatung</span>
                 <br className="hidden sm:block" />
                 <span className="sm:hidden"> </span>in nur 3 Minuten
               </h1>
               
-              <p className="text-base sm:text-lg lg:text-xl text-high-contrast text-readable mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
+              <p className="text-sm sm:text-base lg:text-lg text-high-contrast text-readable mb-4 sm:mb-6 max-w-3xl mx-auto px-2">
                 <strong>Kostenlose Analyse Ihrer bestehenden Versicherungen!</strong> Wir optimieren Ihre Verträge und bieten günstigere Alternativen. 
                 <span className="text-ergo-red font-bold">15% Bündelnachlass ab 3 Versicherungen!</span> Über 1000 Kunden vertrauen bereits auf unsere Expertise.
               </p>
               
               {/* Primary CTA Button */}
-              <div className="mb-8 sm:mb-12">
+              <div className="mb-6 sm:mb-8">
                 <Button 
-                  className="bg-ergo-red hover:bg-ergo-red-hover text-white px-8 py-4 text-lg font-bold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                  className="bg-ergo-red hover:bg-ergo-red-hover text-white px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg font-bold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-auto"
                   onClick={() => {
                     trackEvent('primary_cta_clicked', { source: 'hero_section', action: 'whatsapp_consultation' });
                     trackAppointmentConversion('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Versicherungsberatung!');
@@ -209,7 +209,7 @@ export default function Home() {
               </div>
               
               {/* Enhanced Trust Indicators */}
-              <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 px-4">
+              <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 px-2">
                 <div className="flex items-center text-high-contrast text-sm sm:text-base bg-green-50 px-4 py-2 rounded-full">
                   <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-700 mr-2 flex-shrink-0" />
                   <span className="font-bold">1000+ zufriedene Kunden</span>
