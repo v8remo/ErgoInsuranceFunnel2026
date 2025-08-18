@@ -391,7 +391,7 @@ export default function Insurance() {
                   💬 Sofortige WhatsApp Beratung
                 </Button>
               </div>
-              <p className="text-sm text-white font-medium mt-3">
+              <p className="text-sm font-medium mt-3 text-[#000000]">
                 ✅ Kostenlose Analyse • Optimierung bestehender Verträge • 15% Bündelnachlass ab 5 Versicherungen
               </p>
             </div>
