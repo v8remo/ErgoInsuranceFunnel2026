@@ -194,7 +194,7 @@ export default function Insurance() {
               <div className="flex justify-center lg:justify-end mt-8 lg:mt-0">
                 <div className="w-full max-w-md">
                   <img 
-                    src={content?.imageUrl || "https://images.unsplash.com/photo-1556909045-f7de0ad5eab5?w=500&h=400&fit=crop&q=80"}
+                    src={insurance.image}
                     alt={insurance.title}
                     className="w-full h-60 sm:h-80 object-cover rounded-lg shadow-xl"
                     loading="lazy"

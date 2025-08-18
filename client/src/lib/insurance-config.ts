@@ -6,12 +6,19 @@ import {
   Smile 
 } from "lucide-react";
 
+import hausratImage from '@assets/generated_images/Hausratversicherung_Bild_c3ff70bd.png';
+import haftpflichtImage from '@assets/generated_images/Haftpflichtversicherung_Bild_5ed28150.png';
+import wohngebaeudeImage from '@assets/generated_images/Wohngebäudeversicherung_Bild_f01c7305.png';
+import rechtsschutzImage from '@assets/generated_images/Rechtsschutzversicherung_Bild_50cb007d.png';
+import zahnzusatzImage from '@assets/generated_images/Zahnzusatzversicherung_Bild_0c576ecb.png';
+
 export const insuranceConfig = {
   hausrat: {
     title: "Hausratversicherung",
     description: "ERGO Hausratversicherung Ganderkesee - Rundum-Schutz für Ihr Hab und Gut. Absicherung gegen Einbruch, Feuer, Wasser und Sturm. Persönliche Beratung durch Morino Stübe.",
     price: "ab 15€/Monat",
     icon: Home,
+    image: hausratImage,
     features: [
       {
         title: "Rundumschutz",
@@ -60,6 +67,7 @@ export const insuranceConfig = {
     description: "ERGO Haftpflichtversicherung Ganderkesee - Schutz vor existenzbedrohenden Schadenersatzforderungen. Ein Muss für jeden. Persönliche Beratung durch Morino Stübe.",
     price: "ab 8€/Monat",
     icon: Handshake,
+    image: haftpflichtImage,
     features: [
       {
         title: "Millionenschutz",
@@ -108,6 +116,7 @@ export const insuranceConfig = {
     description: "Für den wichtigsten Ort der Welt: Ihr Zuhause. Mit der \"Haus-zurück-Garantie\" bekommen Sie die Kosten für die Wiederherstellung in einen neuwertigen Zustand zu aktuellen Preisen erstattet.",
     price: "z.B. 28,99€/Monat",
     icon: Building,
+    image: wohngebaeudeImage,
     features: [
       {
         title: "Finanziell gut abgesichert",
@@ -168,6 +177,7 @@ export const insuranceConfig = {
     description: "ERGO Rechtsschutzversicherung Ganderkesee - Durchsetzen Ihres Rechts ohne finanzielle Sorgen. Anwalts- und Gerichtskosten abgedeckt. Persönliche Beratung durch Morino Stübe.",
     price: "ab 18€/Monat",
     icon: Scale,
+    image: rechtsschutzImage,
     features: [
       {
         title: "Vollumfänglicher Schutz",
@@ -214,6 +224,7 @@ export const insuranceConfig = {
     title: "Zahnzusatzversicherung",
     description: "Für schöne und gesunde Zähne. Ohne Wartezeit und mit Sofortleistung.",
     price: "ab 10€/Monat",
+    image: zahnzusatzImage,
     icon: Smile,
     features: [
       {
