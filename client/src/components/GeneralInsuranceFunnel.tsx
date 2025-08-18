@@ -20,6 +20,7 @@ interface FormData {
   lastName: string;
   email: string;
   phone: string;
+  location: string;
 }
 
 const insuranceCategories = {
@@ -70,7 +71,8 @@ export default function GeneralInsuranceFunnel({ onClose }: GeneralInsuranceFunn
     firstName: '',
     lastName: '',
     email: '',
-    phone: ''
+    phone: '',
+    location: ''
   });
 
   const queryClient = useQueryClient();
@@ -87,10 +89,13 @@ export default function GeneralInsuranceFunnel({ onClose }: GeneralInsuranceFunn
           lastName: data.lastName,
           email: data.email,
           phone: data.phone,
+          location: data.location,
           insuranceType: 'general_consultation',
           age: data.age,
-          interests: data.interests,
-          existingInsurances: data.existingInsurances,
+          specificData: {
+            interests: data.interests,
+            existingInsurances: data.existingInsurances
+          },
           source: 'general_funnel'
         })
       });
@@ -133,7 +138,7 @@ export default function GeneralInsuranceFunnel({ onClose }: GeneralInsuranceFunn
       case 2:
         return formData.interests.length > 0;
       case 3:
-        return formData.firstName && formData.lastName && formData.email && formData.phone;
+        return formData.firstName && formData.lastName && formData.email && formData.phone && formData.location;
       default:
         return true;
     }
@@ -337,6 +342,17 @@ export default function GeneralInsuranceFunnel({ onClose }: GeneralInsuranceFunn
                     value={formData.phone}
                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                     placeholder="01234 567890"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="location">Wohnort *</Label>
+                  <Input
+                    id="location"
+                    value={formData.location}
+                    onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+                    placeholder="z.B. Ganderkesee"
                     className="mt-1"
                   />
                 </div>
