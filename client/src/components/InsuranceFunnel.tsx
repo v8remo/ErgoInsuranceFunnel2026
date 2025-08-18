@@ -534,27 +534,28 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
 
         {/* Navigation */}
         {currentStep < 4 && (
-          <div className="flex justify-between items-center p-4 sm:p-6 border-t bg-gray-50 rounded-b-lg sm:rounded-b-xl gap-4">
-            <Button
-              variant="ghost"
-              onClick={prevStep}
-              disabled={currentStep === 1}
-              className={`text-base p-4 ${currentStep === 1 ? "invisible" : ""}`}
-            >
-              Zurück
-            </Button>
+          <div className="flex flex-col sm:flex-row sm:justify-between items-stretch sm:items-center p-4 sm:p-6 border-t bg-gray-50 rounded-b-lg sm:rounded-b-xl gap-3 sm:gap-4">
+            {currentStep > 1 && (
+              <Button
+                variant="ghost"
+                onClick={prevStep}
+                className="order-2 sm:order-1 text-sm sm:text-base px-4 py-3 sm:px-6 sm:py-4"
+              >
+                ← Zurück
+              </Button>
+            )}
             
             <Button
               onClick={nextStep}
               disabled={!validateCurrentStep() || submitMutation.isPending}
-              className="bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base px-4 sm:px-6 py-3 sm:py-4 flex-1 sm:flex-initial font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+              className="order-1 sm:order-2 bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base px-4 py-3 sm:px-6 sm:py-4 font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto"
             >
               {submitMutation.isPending ? (
-                "⏳ Wird berechnet..."
+                "⏳ Berechnung..."
               ) : currentStep === 3 ? (
-                <span className="block sm:inline">💰 ANGEBOT SICHERN</span>
+                "💰 ANGEBOT ANFORDERN"
               ) : (
-                `➤ Weiter zu Schritt ${currentStep + 1}`
+                `Weiter (${currentStep + 1}/4)`
               )}
             </Button>
           </div>
