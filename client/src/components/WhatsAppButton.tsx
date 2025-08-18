@@ -33,13 +33,13 @@ export default function WhatsAppButton({
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleClick}
-        className={`fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-[9999] bg-green-500 hover:bg-green-600 text-white rounded-full p-3 sm:p-4 shadow-xl transition-all duration-300 hover:scale-110 animate-pulse ${className}`}
+        className={`fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-40 bg-green-500 hover:bg-green-600 text-white rounded-full p-3 sm:p-4 shadow-xl transition-all duration-300 hover:scale-110 animate-pulse ${className}`}
         aria-label="WhatsApp Sofort-Beratung"
         style={{ 
           position: 'fixed',
           bottom: '1.5rem',
           right: '1.5rem',
-          zIndex: 9999,
+          zIndex: 40,
           pointerEvents: 'auto'
         }}
       >
