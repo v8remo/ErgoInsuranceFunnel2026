@@ -160,10 +160,10 @@ export default function Insurance() {
                       <span>Unverbindlich & kostenlos - Ihr ERGO-Versprechen!</span>
                     </div>
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                  <div className="flex flex-col gap-3">
                     <Button 
                       size="lg" 
-                      className="bg-ergo-red hover:bg-ergo-red-hover text-white px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base lg:text-lg font-bold w-full sm:flex-1 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                      className="bg-ergo-red hover:bg-ergo-red-hover text-white px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base lg:text-lg font-bold w-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                       onClick={() => {
                         trackEvent('insurance_cta_clicked', { insurance_type: type, source: 'hero_section', value: 15 });
                         handleStartFunnel();
@@ -173,7 +173,7 @@ export default function Insurance() {
                     </Button>
                     <Button 
                       size="lg" 
-                      className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full sm:w-auto"
+                      className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full"
                       onClick={() => {
                         trackEvent('insurance_whatsapp_clicked', { insurance_type: type, source: 'hero_section' });
                         const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Informationen zum 15% Bündelnachlass ab 5 Versicherungen!';
