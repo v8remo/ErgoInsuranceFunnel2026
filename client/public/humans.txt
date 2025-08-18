@@ -1,0 +1,15 @@
+/* TEAM */
+Agent: Morino Stübe
+Contact: morino.stuebe@ergo.de
+WhatsApp: +49 1556 6771019
+Location: Ganderkesee, Deutschland
+
+/* THANKS */
+Company: ERGO Versicherung
+Website: https://www.ergo.de
+
+/* SITE */
+Last update: 2025/01/18
+Standards: HTML5, CSS3
+Components: React, TypeScript, Tailwind CSS
+Software: Node.js, Vite

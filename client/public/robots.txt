@@ -1,33 +1,70 @@
+# Robots.txt for ERGO Versicherung Ganderkesee
+# Last updated: 2025-01-18
+
+# Default crawler access
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /server/
 
-# Google Ads Bot
-User-agent: AdsBot-Google
-Allow: /
-Crawl-delay: 1
-
-# Google Bot
+# Google Search Bot (Priority)
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 1
+Allow: /*.css
+Allow: /*.js
+Allow: /*.jpg
+Allow: /*.png
+Allow: /*.svg
+Allow: /*.webp
+Crawl-delay: 0
+
+# Google Ads Bot (High Priority for Campaigns)
+User-agent: AdsBot-Google
+Allow: /
+Crawl-delay: 0
+
+User-agent: AdsBot-Google-Mobile
+Allow: /
+Crawl-delay: 0
 
 # Bing Bot
 User-agent: bingbot
 Allow: /
 Crawl-delay: 1
 
-# Sitemap location
+# Google Image Bot
+User-agent: Googlebot-Image
+Allow: /
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.png
+Allow: *.svg
+Allow: *.webp
+
+# AI Crawlers for LLM SEO
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Block aggressive crawlers
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Disallow: /
+
+# Sitemap & Host
 Sitemap: https://ergo-ganderkesee.replit.app/sitemap.xml
-
-# Important pages for crawling
-Allow: /versicherung/
-Allow: /impressum
-Allow: /datenschutz
-
-# Clean URLs
-Disallow: /admin
-Disallow: /*.json$
-Disallow: /api/
-
-# Cache friendly
-Host: ergo-ganderkesee.replit.app
+Host: https://ergo-ganderkesee.replit.app

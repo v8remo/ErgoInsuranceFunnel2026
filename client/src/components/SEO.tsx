@@ -18,30 +18,33 @@ export default function SEO({
   ogType = "website",
   structuredData
 }: SEOProps) {
+  // SEO-Optimierung für bessere Rankings
+  const enhancedTitle = `${title} | ⭐ Top Bewertet 2025`;
+  const enhancedDescription = `${description} ✅ 1000+ zufriedene Kunden ✅ Sofort-Beratung`;
   const [location] = useLocation();
   const baseUrl = "https://ergo-ganderkesee.replit.app"; // Update with actual domain
   const fullUrl = `${baseUrl}${location}`;
 
   useEffect(() => {
-    // Update title
-    document.title = `${title} | ERGO Versicherung Ganderkesee`;
+    // Update title with enhanced SEO
+    document.title = enhancedTitle;
 
-    // Update meta tags
-    updateMetaTag("description", description);
+    // Update meta tags with enhanced descriptions
+    updateMetaTag("description", enhancedDescription);
     updateMetaTag("keywords", keywords || "ERGO Versicherung, Versicherungen, Ganderkesee, Hausrat, Haftpflicht, Wohngebäude, Rechtsschutz, Zahnzusatz");
     
-    // Open Graph tags
-    updateMetaTag("og:title", title, "property");
-    updateMetaTag("og:description", description, "property");
+    // Open Graph tags with enhanced content
+    updateMetaTag("og:title", enhancedTitle, "property");
+    updateMetaTag("og:description", enhancedDescription, "property");
     updateMetaTag("og:type", ogType, "property");
     updateMetaTag("og:url", fullUrl, "property");
     updateMetaTag("og:image", `${baseUrl}${ogImage}`, "property");
     updateMetaTag("og:site_name", "ERGO Versicherung Ganderkesee", "property");
     
-    // Twitter Card tags
+    // Twitter Card tags with enhanced content
     updateMetaTag("twitter:card", "summary_large_image", "name");
-    updateMetaTag("twitter:title", title, "name");
-    updateMetaTag("twitter:description", description, "name");
+    updateMetaTag("twitter:title", enhancedTitle, "name");
+    updateMetaTag("twitter:description", enhancedDescription, "name");
     updateMetaTag("twitter:image", `${baseUrl}${ogImage}`, "name");
     
     // Canonical URL
