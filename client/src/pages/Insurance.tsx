@@ -362,7 +362,7 @@ export default function Insurance() {
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight text-[#ff0000]">
               🔥 Kostenlose Analyse & 15% Bündelnachlass!
             </h2>
-            <p className="text-sm sm:text-base lg:text-xl text-white mb-6 sm:mb-8 px-2">
+            <p className="text-sm sm:text-base lg:text-xl mb-6 sm:mb-8 px-2 text-[#000000]">
               <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer bestehenden {insurance.title} plus Optimierung und günstigere Alternativen.
               <strong>15% Bündelnachlass ab 5 Versicherungen!</strong> Bereits <span className="text-yellow-200 font-bold">23 Kunden</span> haben heute gespart!
             </p>
