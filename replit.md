@@ -171,6 +171,12 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Viewport-Optimierung für perfekte Handy-Darstellung
   - Horizontaler Scroll komplett eliminiert
 - 2025-01-18: 15% Bündelnachlass korrigiert auf ab 5 Versicherungen (vorher 3)
+- 2025-01-18: Versicherungs-Funnels vollständig mobil optimiert:
+  - Radio-Buttons durch große Touch-freundliche Buttons ersetzt
+  - Select-Dropdowns durch mobile Button-Listen ersetzt
+  - Checkbox-Auswahl mit visuellen Indikatoren verbessert
+  - Eingabefelder für Mobile vergrößert und Touch-optimiert
+  - Navigation-Buttons für bessere Handy-Bedienung angepasst
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)

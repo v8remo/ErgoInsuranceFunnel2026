@@ -241,23 +241,22 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
                 </p>
               </div>
               
-              <RadioGroup
-                value={formData.age}
-                onValueChange={(value) => updateFormData({ age: value })}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
-              >
+              <div className="space-y-3">
                 {["18-30 Jahre", "31-45 Jahre", "46-60 Jahre", "Über 60 Jahre"].map((age) => (
-                  <div key={age} className="flex items-center space-x-3">
-                    <RadioGroupItem value={age} id={age} className="flex-shrink-0" />
-                    <Label 
-                      htmlFor={age}
-                      className="flex-1 cursor-pointer border-2 border-gray-200 rounded-lg p-3 sm:p-4 text-center text-sm sm:text-base hover:border-ergo-red transition-colors"
-                    >
-                      {age}
-                    </Label>
-                  </div>
+                  <button
+                    key={age}
+                    type="button"
+                    onClick={() => updateFormData({ age: age })}
+                    className={`w-full p-4 rounded-lg border-2 text-center font-medium text-base transition-all duration-200 ${
+                      formData.age === age
+                        ? 'border-ergo-red bg-ergo-red text-white shadow-lg'
+                        : 'border-gray-200 bg-white text-gray-700 hover:border-ergo-red hover:bg-ergo-red-light'
+                    }`}
+                  >
+                    {age}
+                  </button>
                 ))}
-              </RadioGroup>
+              </div>
             </div>
           )}
 
@@ -282,60 +281,73 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
                     </h4>
                     
                     {question.type === "radio" && (
-                      <RadioGroup
-                        value={formData.specificData[question.name] || ""}
-                        onValueChange={(value) => updateSpecificData(question.name, value)}
-                        className="space-y-2"
-                      >
+                      <div className="space-y-3">
                         {question.options.map((option) => (
-                          <div key={option} className="flex items-center space-x-3">
-                            <RadioGroupItem value={option} id={option} className="flex-shrink-0" />
-                            <Label htmlFor={option} className="cursor-pointer flex-1 p-3 border border-gray-200 rounded-lg text-sm sm:text-base hover:border-ergo-red transition-colors">
-                              {option}
-                            </Label>
-                          </div>
+                          <button
+                            key={option}
+                            type="button"
+                            onClick={() => updateSpecificData(question.name, option)}
+                            className={`w-full p-4 rounded-lg border-2 text-left font-medium text-base transition-all duration-200 ${
+                              formData.specificData[question.name] === option
+                                ? 'border-ergo-red bg-ergo-red text-white shadow-lg'
+                                : 'border-gray-200 bg-white text-gray-700 hover:border-ergo-red hover:bg-ergo-red-light'
+                            }`}
+                          >
+                            {option}
+                          </button>
                         ))}
-                      </RadioGroup>
+                      </div>
                     )}
                     
                     {question.type === "select" && (
-                      <Select
-                        value={formData.specificData[question.name] || ""}
-                        onValueChange={(value) => updateSpecificData(question.name, value)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Bitte wählen..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {question.options.map((option) => (
-                            <SelectItem key={option} value={option}>
-                              {option}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <div className="space-y-3">
+                        {question.options.map((option) => (
+                          <button
+                            key={option}
+                            type="button"
+                            onClick={() => updateSpecificData(question.name, option)}
+                            className={`w-full p-4 rounded-lg border-2 text-left font-medium text-base transition-all duration-200 ${
+                              formData.specificData[question.name] === option
+                                ? 'border-ergo-red bg-ergo-red text-white shadow-lg'
+                                : 'border-gray-200 bg-white text-gray-700 hover:border-ergo-red hover:bg-ergo-red-light'
+                            }`}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
                     )}
                     
                     {question.type === "checkbox" && (
-                      <div className="space-y-2">
-                        {question.options.map((option) => (
-                          <div key={option} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={option}
-                              checked={(formData.specificData[question.name] || []).includes(option)}
-                              onCheckedChange={(checked) => {
+                      <div className="space-y-3">
+                        {question.options.map((option) => {
+                          const isSelected = (formData.specificData[question.name] || []).includes(option);
+                          return (
+                            <button
+                              key={option}
+                              type="button"
+                              onClick={() => {
                                 const current = formData.specificData[question.name] || [];
-                                const updated = checked
-                                  ? [...current, option]
-                                  : current.filter((item: string) => item !== option);
+                                const updated = isSelected
+                                  ? current.filter((item: string) => item !== option)
+                                  : [...current, option];
                                 updateSpecificData(question.name, updated);
                               }}
-                            />
-                            <Label htmlFor={option} className="cursor-pointer flex-1 p-3 border border-gray-200 rounded-lg hover:border-ergo-red transition-colors">
+                              className={`w-full p-4 rounded-lg border-2 text-left font-medium text-base transition-all duration-200 flex items-center ${
+                                isSelected
+                                  ? 'border-ergo-red bg-ergo-red text-white shadow-lg'
+                                  : 'border-gray-200 bg-white text-gray-700 hover:border-ergo-red hover:bg-ergo-red-light'
+                              }`}
+                            >
+                              <span className={`mr-3 w-5 h-5 border-2 rounded flex items-center justify-center ${
+                                isSelected ? 'border-white bg-white' : 'border-gray-400'
+                              }`}>
+                                {isSelected && <span className="text-ergo-red font-bold">✓</span>}
+                              </span>
                               {option}
-                            </Label>
-                          </div>
-                        ))}
+                            </button>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -359,66 +371,66 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
                 </p>
               </div>
               
-              <div className="grid grid-cols-1 gap-4 sm:gap-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <Label htmlFor="firstName" className="text-sm font-medium">Vorname*</Label>
+                    <Label htmlFor="firstName" className="text-sm font-medium text-gray-700 mb-2 block">Vorname*</Label>
                     <Input
                       id="firstName"
                       value={formData.firstName}
                       onChange={(e) => updateFormData({ firstName: e.target.value })}
                       placeholder="Ihr Vorname"
-                      className="mt-1 text-base"
+                      className="text-base p-4 border-2 border-gray-200 rounded-lg focus:border-ergo-red focus:ring-0"
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="lastName" className="text-sm font-medium">Nachname*</Label>
+                    <Label htmlFor="lastName" className="text-sm font-medium text-gray-700 mb-2 block">Nachname*</Label>
                     <Input
                       id="lastName"
                       value={formData.lastName}
                       onChange={(e) => updateFormData({ lastName: e.target.value })}
                       placeholder="Ihr Nachname"
-                      className="mt-1 text-base"
+                      className="text-base p-4 border-2 border-gray-200 rounded-lg focus:border-ergo-red focus:ring-0"
                       required
                     />
                   </div>
                 </div>
                 
                 <div>
-                  <Label htmlFor="email" className="text-sm font-medium">E-Mail*</Label>
+                  <Label htmlFor="email" className="text-sm font-medium text-gray-700 mb-2 block">E-Mail*</Label>
                   <Input
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => updateFormData({ email: e.target.value })}
                     placeholder="ihre@email.de"
-                    className="mt-1 text-base"
+                    className="text-base p-4 border-2 border-gray-200 rounded-lg focus:border-ergo-red focus:ring-0"
                     required
                   />
                 </div>
                 
                 <div>
-                  <Label htmlFor="phone" className="text-sm font-medium">Telefon*</Label>
+                  <Label htmlFor="phone" className="text-sm font-medium text-gray-700 mb-2 block">Telefon*</Label>
                   <Input
                     id="phone"
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => updateFormData({ phone: e.target.value })}
                     placeholder="0171 1234567"
-                    className="mt-1 text-base"
+                    className="text-base p-4 border-2 border-gray-200 rounded-lg focus:border-ergo-red focus:ring-0"
                     required
                   />
                 </div>
                 
                 <div>
-                  <Label htmlFor="location" className="text-sm font-medium">PLZ & Ort*</Label>
+                  <Label htmlFor="location" className="text-sm font-medium text-gray-700 mb-2 block">PLZ & Ort*</Label>
                   <Input
                     id="location"
                     value={formData.location}
                     onChange={(e) => updateFormData({ location: e.target.value })}
                     placeholder="z.B. 10115 Berlin"
-                    className="mt-1 text-base"
+                    className="text-base p-4 border-2 border-gray-200 rounded-lg focus:border-ergo-red focus:ring-0"
                     required
                   />
                 </div>
@@ -506,7 +518,7 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
               variant="ghost"
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`text-sm sm:text-base ${currentStep === 1 ? "invisible" : ""}`}
+              className={`text-base p-4 ${currentStep === 1 ? "invisible" : ""}`}
             >
               Zurück
             </Button>
@@ -514,7 +526,7 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
             <Button
               onClick={nextStep}
               disabled={!validateCurrentStep() || submitMutation.isPending}
-              className="bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3 flex-shrink-0"
+              className="bg-ergo-red hover:bg-ergo-red-hover text-white text-base px-6 py-4 flex-1 sm:flex-initial font-medium"
             >
               {submitMutation.isPending ? (
                 "Wird gesendet..."
