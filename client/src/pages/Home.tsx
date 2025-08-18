@@ -406,7 +406,7 @@ export default function Home() {
                 <h2 className="text-xl sm:text-2xl font-bold text-ergo-red mb-4">
                   🔥 Kostenlose Analyse & Optimierung
                 </h2>
-                <p className="text-high-contrast text-readable mb-6 text-sm sm:text-base">
+                <p className="text-gray-800 mb-6 text-sm sm:text-base font-medium">
                   <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer bestehenden Versicherungen. 
                   Wir optimieren Ihre Verträge und finden günstigere Alternativen. 
                   <span className="text-ergo-red font-bold">15% Rabatt ab 5 Versicherungen!</span> 
