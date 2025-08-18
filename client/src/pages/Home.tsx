@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import InsuranceFunnel from "@/components/InsuranceFunnel";
+import GeneralInsuranceFunnel from "@/components/GeneralInsuranceFunnel";
 import TrustSection from "@/components/TrustSection";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -111,6 +112,7 @@ const insuranceProducts = [
 export default function Home() {
   const [selectedInsurance, setSelectedInsurance] = useState<string | null>(null);
   const [funnelOpen, setFunnelOpen] = useState(false);
+  const [generalFunnelOpen, setGeneralFunnelOpen] = useState(false);
 
   // Load content from database
   const { data: content = [] } = useQuery<Content[]>({
@@ -128,8 +130,8 @@ export default function Home() {
 
   const handleInsuranceSelection = (insuranceId: string) => {
     if (insuranceId === "kombi") {
-      // Handle combination package - redirect to contact
-      window.location.href = "tel:015566771019";
+      // Handle combination package - open general funnel for all products
+      openGeneralFunnel();
       trackEvent("combo_package_selected");
       return;
     }
@@ -142,6 +144,15 @@ export default function Home() {
   const closeFunnel = () => {
     setFunnelOpen(false);
     setSelectedInsurance(null);
+  };
+
+  const openGeneralFunnel = () => {
+    setGeneralFunnelOpen(true);
+    trackEvent('general_funnel_opened', { source: 'hero_section' });
+  };
+
+  const closeGeneralFunnel = () => {
+    setGeneralFunnelOpen(false);
   };
 
   return (
@@ -258,10 +269,7 @@ export default function Home() {
                 
                 <Button 
                   className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 sm:px-8 py-4 sm:py-6 text-lg sm:text-xl font-bold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-auto animate-pulse"
-                  onClick={() => {
-                    trackEvent('primary_cta_clicked', { source: 'hero_section', action: 'whatsapp_consultation' });
-                    trackAppointmentConversion('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Beratung zu meinen Versicherungen!');
-                  }}
+                  onClick={openGeneralFunnel}
                 >
                   🚨 LETZTE CHANCE: AKTUELLE PREISE SICHERN!
                 </Button>
@@ -448,6 +456,13 @@ export default function Home() {
           <InsuranceFunnel 
             insuranceType={selectedInsurance}
             onClose={closeFunnel}
+          />
+        )}
+
+        {/* General Insurance Funnel Modal */}
+        {generalFunnelOpen && (
+          <GeneralInsuranceFunnel 
+            onClose={closeGeneralFunnel}
           />
         )}
       </main>
