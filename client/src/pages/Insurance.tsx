@@ -93,7 +93,6 @@ export default function Insurance() {
       />
       <Header />
       <Breadcrumb />
-      
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="py-6 sm:py-8 lg:py-12 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white overflow-hidden">
@@ -360,7 +359,7 @@ export default function Insurance() {
         {/* Final CTA Section with Urgency */}
         <section className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-3 sm:mb-4 px-2 leading-tight">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight text-[#ff0000]">
               🔥 Kostenlose Analyse & 15% Bündelnachlass!
             </h2>
             <p className="text-sm sm:text-base lg:text-xl text-white mb-6 sm:mb-8 px-2">
@@ -418,7 +417,6 @@ export default function Insurance() {
           />
         )}
       </main>
-
       <Footer />
     </>
   );
