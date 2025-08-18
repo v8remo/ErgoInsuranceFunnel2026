@@ -396,7 +396,7 @@ export default function Insurance() {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-white font-medium">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm font-medium text-[#000000]">
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4" />
                 <span>100% kostenlos & unverbindlich</span>
