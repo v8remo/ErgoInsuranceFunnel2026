@@ -363,9 +363,9 @@ export default function Insurance() {
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight">
               🔥 Kostenlose Analyse & 15% Bündelnachlass!
             </h2>
-            <p className="text-sm sm:text-base lg:text-xl text-red-100 mb-6 sm:mb-8 px-2">
+            <p className="text-sm sm:text-base lg:text-xl text-white mb-6 sm:mb-8 px-2">
               <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer bestehenden {insurance.title} plus Optimierung und günstigere Alternativen.
-              <strong>15% Bündelnachlass ab 5 Versicherungen!</strong> Bereits <span className="text-yellow-300 font-bold">23 Kunden</span> haben heute gespart!
+              <strong>15% Bündelnachlass ab 5 Versicherungen!</strong> Bereits <span className="text-yellow-200 font-bold">23 Kunden</span> haben heute gespart!
             </p>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
@@ -392,12 +392,12 @@ export default function Insurance() {
                   💬 Sofortige WhatsApp Beratung
                 </Button>
               </div>
-              <p className="text-xs text-yellow-200 mt-3">
+              <p className="text-sm text-white font-medium mt-3">
                 ✅ Kostenlose Analyse • Optimierung bestehender Verträge • 15% Bündelnachlass ab 5 Versicherungen
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-red-100">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-white font-medium">
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4" />
                 <span>100% kostenlos & unverbindlich</span>
