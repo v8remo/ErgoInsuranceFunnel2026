@@ -23,6 +23,11 @@ import {
 } from "lucide-react";
 
 import _089_Ti9r4yWZjrM from "@assets/089-Ti9r4yWZjrM.jpeg";
+import hausratImage from '@assets/generated_images/Hausratversicherung_Bild_c3ff70bd.png';
+import haftpflichtImage from '@assets/generated_images/Haftpflichtversicherung_Bild_5ed28150.png';
+import wohngebaeudeImage from '@assets/generated_images/Wohngebäudeversicherung_Bild_f01c7305.png';
+import rechtsschutzImage from '@assets/generated_images/Rechtsschutzversicherung_Bild_50cb007d.png';
+import zahnzusatzImage from '@assets/generated_images/Zahnzusatzversicherung_Bild_0c576ecb.png';
 import type { Content } from "@shared/schema";
 
 const insuranceProducts = [
@@ -34,7 +39,7 @@ const insuranceProducts = [
     badge: "Bestseller",
     badgeColor: "bg-green-100 text-green-800",
     icon: HomeIcon,
-    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=250&fit=crop",
+    image: hausratImage,
     features: [
       "Hausrat bis 50.000€",
       "Elementarschäden inklusive", 
@@ -49,7 +54,7 @@ const insuranceProducts = [
     badge: "Pflicht",
     badgeColor: "bg-red-100 text-red-800",
     icon: Handshake,
-    image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=400&h=250&fit=crop",
+    image: haftpflichtImage,
     features: [
       "50 Mio € Deckung",
       "Mietsachschäden",
@@ -64,7 +69,7 @@ const insuranceProducts = [
     badge: "Premium",
     badgeColor: "bg-blue-100 text-blue-800",
     icon: Building,
-    image: "@assets/wohngebaeudeversicherung.dam_1749718195826.jpg",
+    image: wohngebaeudeImage,
     features: [
       "Elementarschutz",
       "Photovoltaik inklusive",
@@ -79,7 +84,7 @@ const insuranceProducts = [
     badge: "Empfohlen", 
     badgeColor: "bg-purple-100 text-purple-800",
     icon: Scale,
-    image: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&h=250&fit=crop",
+    image: rechtsschutzImage,
     features: [
       "Privat & Beruf",
       "Verkehrsrechtsschutz", 
@@ -94,7 +99,7 @@ const insuranceProducts = [
     badge: "Beliebt",
     badgeColor: "bg-yellow-100 text-yellow-800", 
     icon: Smile,
-    image: "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=400&h=250&fit=crop",
+    image: zahnzusatzImage,
     features: [
       "100% Zahnreinigung",
       "90% Zahnersatz",

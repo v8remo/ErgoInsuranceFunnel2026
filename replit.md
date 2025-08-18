@@ -75,6 +75,7 @@ Eine professionelle Lead-Generierungs-Plattform für ERGO Versicherungen mit opt
 Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
 
 ## Letzte Änderungen
+- 2025-01-18: Professionelle Versicherungsbilder für alle Produkte generiert und integriert
 - 2025-01-17: Mobile Responsiveness vollständig implementiert
 - 2025-01-17: JSON-Parsing-Fehler im Admin Dashboard behoben
 - 2025-01-17: SEO-Optimierungen hinzugefügt (Sitemap, robots.txt)
