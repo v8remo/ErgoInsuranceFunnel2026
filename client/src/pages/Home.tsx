@@ -179,6 +179,12 @@ export default function Home() {
         <section className="py-6 sm:py-8 lg:py-12 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white overflow-hidden">
           <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
             <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+              
+              {/* Urgency Banner */}
+              <div className="bg-red-600 text-white px-4 py-3 rounded-lg font-bold text-sm sm:text-base animate-pulse shadow-xl mb-6">
+                🚨 WICHTIG: Versicherungstarife steigen ab 1. September 2025 um bis zu 30%!
+              </div>
+              
               {/* Professional advisor image */}
               <img 
                 src={_089_Ti9r4yWZjrM} 
@@ -190,13 +196,16 @@ export default function Home() {
               
               {/* Service Banner */}
               <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold text-sm sm:text-base mb-4">
-                ✅ Ihr ERGO-Experte vor Ort - Persönliche Beratung garantiert
+                ✅ Sichern Sie sich JETZT die niedrigen Preise - Ihr ERGO-Berater hilft!
               </div>
               
               <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 break-words">
-                <span className="text-ergo-red">Optimieren Sie Ihre Versicherungen</span>
+                <span className="text-ergo-red">LETZTE CHANCE:</span>
                 <br className="hidden sm:block" />
-                <span className="sm:hidden"> </span>mit ERGO Ganderkesee
+                <span className="sm:hidden"> </span>
+                <span className="text-gray-700">Aktuelle Tarife sichern!</span>
+                <br />
+                <span className="text-lg sm:text-xl text-ergo-red">Bevor die Preise steigen</span>
               </h1>
               
               <p className="text-sm sm:text-base lg:text-lg text-high-contrast text-readable mb-4 sm:mb-6 max-w-3xl mx-auto px-2">
@@ -240,19 +249,26 @@ export default function Home() {
 
               {/* Primary CTA Button */}
               <div className="mb-6 sm:mb-8">
+                {/* Social Proof Counter */}
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4 max-w-md mx-auto">
+                  <p className="text-yellow-800 text-sm font-bold">
+                    🔥 Bereits 1.247 Kunden haben heute ihre Tarife gesichert!
+                  </p>
+                </div>
+                
                 <Button 
-                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 sm:px-8 py-4 sm:py-6 text-lg sm:text-xl font-bold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-auto animate-pulse"
+                  className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 sm:px-8 py-4 sm:py-6 text-lg sm:text-xl font-bold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-auto animate-pulse"
                   onClick={() => {
                     trackEvent('primary_cta_clicked', { source: 'hero_section', action: 'whatsapp_consultation' });
                     trackAppointmentConversion('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Beratung zu meinen Versicherungen!');
                   }}
                 >
-                  📞 JETZT KOSTENLOSE BERATUNG SICHERN
+                  🚨 LETZTE CHANCE: AKTUELLE PREISE SICHERN!
                 </Button>
                 <p className="text-sm text-medium-contrast mt-3">
-                  <span className="text-ergo-red font-bold">⏰ Schnelle Terminvergabe möglich</span>
+                  <span className="text-red-600 font-bold">⚠️ Ab 1. September steigen die Tarife um bis zu 30%!</span>
                   <br />
-                  Antwort binnen weniger Minuten • Unverbindlich & kostenlos
+                  <span className="text-green-600 font-bold">✅ Jetzt sichern = Geld sparen</span> • Unverbindlich & kostenlos
                 </p>
               </div>
               

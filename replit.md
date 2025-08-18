@@ -177,6 +177,13 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Checkbox-Auswahl mit visuellen Indikatoren verbessert
   - Eingabefelder für Mobile vergrößert und Touch-optimiert
   - Navigation-Buttons für bessere Handy-Bedienung angepasst
+- 2025-01-18: Alex Hormozi Conversion-Psychologie implementiert:
+  - Urgency: "Preise steigen ab 1. September um 30%"
+  - Social Proof: "1.247 Kunden haben heute Tarife gesichert"
+  - Loss Aversion: "LETZTE CHANCE" Headlines
+  - Scarcity: "Nur 12 Beratungsplätze diese Woche"
+  - Authority: Zertifizierter ERGO-Fachberater Badges
+  - Reciprocity: Kostenlose Analyse als Geschenk positioniert
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)

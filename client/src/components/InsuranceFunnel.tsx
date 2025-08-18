@@ -234,11 +234,18 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
               <div className="text-center mb-6 sm:mb-8">
                 <insurance.icon className="w-8 h-8 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-3 sm:mb-4" />
                 <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2">
-                  Wie alt sind Sie ungefähr?
+                  Wie alt sind Sie? (Bestimmt Ihren Sofort-Rabatt)
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600">
-                  Für eine genaue Beitragsberechnung geben Sie bitte Ihr Alter an
+                  🎯 <strong>Jüngere zahlen weniger!</strong> Ihr Alter bestimmt den Startpreis Ihrer Versicherung
                 </p>
+                
+                {/* Social Proof Ticker */}
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 mt-4 animate-pulse">
+                  <p className="text-green-700 text-sm font-medium">
+                    ⚡ 127 Personen haben heute bereits ihren Beitrag berechnet!
+                  </p>
+                </div>
               </div>
               
               <div className="space-y-3">
@@ -266,11 +273,18 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
               <div className="text-center mb-6 sm:mb-8">
                 <insurance.icon className="w-8 h-8 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-3 sm:mb-4" />
                 <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2">
-                  Weitere Angaben
+                  Personalisierung für maximale Ersparnis
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600">
-                  Damit wir Ihnen das passende Angebot erstellen können
+                  💰 <strong>Ihre Antworten bestimmen Ihren individuellen Preis!</strong> Ehrliche Angaben = niedrigere Beiträge
                 </p>
+                
+                {/* Urgency Element */}
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-4">
+                  <p className="text-yellow-800 text-sm font-bold">
+                    ⏰ Angebot nur 48h gültig - Preise steigen ab 01.09.2025!
+                  </p>
+                </div>
               </div>
               
               <div className="space-y-4 sm:space-y-6">
@@ -364,11 +378,18 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
                   <Phone className="w-4 h-4 sm:w-6 sm:h-6 text-ergo-red" />
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2">
-                  Ihre Kontaktdaten
+                  Sichern Sie sich Ihr Angebot (Kostenlos & Unverbindlich)
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600">
-                  Wir melden uns innerhalb von 24 Stunden bei Ihnen
+                  🏆 <strong>Garantiert:</strong> Rückmeldung binnen 4 Stunden - auch samstags!
                 </p>
+                
+                {/* Scarcity Element */}
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mt-4">
+                  <p className="text-red-700 text-sm font-bold">
+                    🔥 Nur noch 12 Beratungsplätze diese Woche verfügbar!
+                  </p>
+                </div>
               </div>
               
               <div className="space-y-4">
@@ -526,14 +547,14 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
             <Button
               onClick={nextStep}
               disabled={!validateCurrentStep() || submitMutation.isPending}
-              className="bg-ergo-red hover:bg-ergo-red-hover text-white text-base px-6 py-4 flex-1 sm:flex-initial font-medium"
+              className="bg-ergo-red hover:bg-ergo-red-hover text-white text-base px-6 py-4 flex-1 sm:flex-initial font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
             >
               {submitMutation.isPending ? (
-                "Wird gesendet..."
+                "⏳ Wird berechnet..."
               ) : currentStep === 3 ? (
-                "Angebot anfordern"
+                "💰 KOSTENLOSES ANGEBOT SICHERN"
               ) : (
-                "Weiter"
+                `➤ Weiter zu Schritt ${currentStep + 1}`
               )}
             </Button>
           </div>
