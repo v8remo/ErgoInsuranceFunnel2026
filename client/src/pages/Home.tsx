@@ -300,7 +300,7 @@ export default function Home() {
                     </div>
                     
                     <p className="text-white mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed flex-grow">
-                      Sparen Sie mit unseren Kombipaketen. 15% Bündelnachlass ab 3 Versicherungen plus Optimierung Ihrer bestehenden Verträge.
+                      Sparen Sie mit unseren Kombipaketen. 15% Bündelnachlass ab 5 Versicherungen plus Optimierung Ihrer bestehenden Verträge.
                     </p>
                     
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-2 sm:gap-0">

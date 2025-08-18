@@ -149,7 +149,7 @@ export default function Insurance() {
                       className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full sm:w-auto"
                       onClick={() => {
                         trackEvent('insurance_whatsapp_clicked', { insurance_type: type, source: 'hero_section' });
-                        const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Informationen zum 15% Bündelnachlass!';
+                        const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Informationen zum 15% Bündelnachlass ab 5 Versicherungen!';
                         trackAppointmentConversion(whatsappUrl);
                       }}
                     >
@@ -157,7 +157,7 @@ export default function Insurance() {
                     </Button>
                   </div>
                   <p className="text-xs text-center text-gray-500 mt-3">
-                    ✅ Immer kostenlos • Analyse bestehender Verträge • 15% Bündelnachlass ab 3 Versicherungen
+                    ✅ Immer kostenlos • Analyse bestehender Verträge • 15% Bündelnachlass ab 5 Versicherungen
                   </p>
                 </div>
               </div>
