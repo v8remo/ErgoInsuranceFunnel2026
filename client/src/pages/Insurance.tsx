@@ -103,16 +103,21 @@ export default function Insurance() {
                 <div className="mb-6 sm:mb-8">
                   <insurance.icon className="w-12 h-12 sm:w-16 sm:h-16 text-ergo-red mx-auto lg:mx-0 mb-4 sm:mb-6" />
                   <Badge className="bg-ergo-red text-white mb-4">✓ Sofortiger Schutz</Badge>
+                  {/* Service Banner */}
+                  <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold text-sm sm:text-base mb-4">
+                    ✅ Ihr persönlicher ERGO-Berater - Kostenlose Analyse
+                  </div>
+                  
                   <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-ergo-dark mb-3 sm:mb-4 leading-tight break-words">
-                    <span className="text-ergo-red">Sofort abschließen:</span>
-                    <br />{insurance.title}
+                    <span className="text-ergo-red">{insurance.title}</span>
+                    <br /><span className="text-gray-700">Optimal versichert mit ERGO</span>
                     <span className="block text-lg sm:text-xl text-ergo-red font-bold mt-2">
-                      {insurance.price} <span className="text-sm line-through text-gray-500">statt 35€/Monat</span>
+                      Persönliche Beratung vom Experten
                     </span>
                   </h1>
                   <p className="text-sm sm:text-base lg:text-lg text-high-contrast text-readable mb-4 sm:mb-6">
-                    <strong>Kostenlose Analyse Ihrer bestehenden Verträge!</strong> {content?.description || insurance.description}
-                    <span className="text-ergo-red-dark font-bold"> Wir optimieren Ihre Versicherungen und bieten 15% Bündelnachlass ab 5 Versicherungen.</span>
+                    <strong>Kostenloser Service:</strong> Als Ihr ERGO-Berater analysiere ich Ihre bestehende {insurance.title} und zeige Ihnen Optimierungsmöglichkeiten.
+                    <span className="block mt-2 text-ergo-red-dark font-bold">Profitieren Sie vom 15% Bündelnachlass ab 5 ERGO-Versicherungen!</span>
                   </p>
                 </div>
 
@@ -128,11 +133,34 @@ export default function Insurance() {
                   </Badge>
                 </div>
 
-                {/* Primary CTA with urgency */}
-                <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-xl p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 border-2 border-red-200">
-                  <p className="text-center text-sm sm:text-base text-gray-700 mb-4">
-                    <strong className="text-ergo-red">🔥 Immer kostenlos:</strong> Vollständige Analyse + Optimierung Ihrer bestehenden Verträge + 15% Bündelnachlass ab 5 Versicherungen!
-                  </p>
+                {/* ERGO Service Benefits */}
+                <div className="bg-white rounded-xl p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 border-2 border-blue-200 shadow-xl">
+                  <h3 className="text-center text-base sm:text-lg font-bold text-ergo-red mb-3">Ihr kostenloser ERGO-Service umfasst:</h3>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center text-sm">
+                      <span className="text-green-500 mr-2">✅</span>
+                      <span>Vollständige Analyse Ihrer {insurance.title}</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <span className="text-green-500 mr-2">✅</span>
+                      <span>Persönliche Beratung zu ERGO-Produkten</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <span className="text-green-500 mr-2">✅</span>
+                      <span>Optimierung Ihrer Versicherungsverträge</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <span className="text-green-500 mr-2">✅</span>
+                      <span>15% Bündelnachlass ab 5 ERGO-Versicherungen</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <span className="text-green-500 mr-2">✅</span>
+                      <span>Lebenslange Betreuung durch Ihre ERGO-Agentur</span>
+                    </div>
+                    <div className="border-t pt-2 text-center font-bold text-ergo-red">
+                      <span>Unverbindlich & kostenlos - Ihr ERGO-Versprechen!</span>
+                    </div>
+                  </div>
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <Button 
                       size="lg" 
@@ -142,7 +170,7 @@ export default function Insurance() {
                         handleStartFunnel();
                       }}
                     >
-                      🚀 KOSTENLOSE ANALYSE STARTEN
+                      🚀 KOSTENLOSE BERATUNG STARTEN
                     </Button>
                     <Button 
                       size="lg" 

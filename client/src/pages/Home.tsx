@@ -183,44 +183,90 @@ export default function Home() {
                 decoding="async"
               />
               
+              {/* Service Banner */}
+              <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold text-sm sm:text-base mb-4">
+                ✅ Ihr ERGO-Experte vor Ort - Persönliche Beratung garantiert
+              </div>
+              
               <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2 break-words">
-                <span className="text-ergo-red">Sofortige Versicherungsberatung</span>
+                <span className="text-ergo-red">Optimieren Sie Ihre Versicherungen</span>
                 <br className="hidden sm:block" />
-                <span className="sm:hidden"> </span>in nur 3 Minuten
+                <span className="sm:hidden"> </span>mit ERGO Ganderkesee
               </h1>
               
               <p className="text-sm sm:text-base lg:text-lg text-high-contrast text-readable mb-4 sm:mb-6 max-w-3xl mx-auto px-2">
-                <strong>Kostenlose Analyse Ihrer bestehenden Versicherungen!</strong> Wir optimieren Ihre Verträge und bieten günstigere Alternativen. 
-                <span className="text-ergo-red font-bold">15% Bündelnachlass ab 5 Versicherungen!</span> Über 1000 Kunden vertrauen bereits auf unsere Expertise.
+                <strong>Kostenloser Service:</strong> Als Ihr ERGO-Berater analysiere ich Ihre bestehenden Versicherungen und zeige Ihnen Optimierungsmöglichkeiten.
+                <span className="block mt-2 text-ergo-red font-bold">15% Bündelnachlass ab 5 ERGO-Versicherungen möglich!</span>
               </p>
               
+              {/* ERGO Service Benefits */}
+              <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 sm:p-6 max-w-2xl mx-auto mb-6 shadow-xl">
+                <h3 className="text-base sm:text-lg font-bold text-ergo-red mb-3">Ihre Vorteile als ERGO-Kunde:</h3>
+                <div className="space-y-2 text-left">
+                  <div className="flex items-center">
+                    <span className="text-green-500 mr-2">✅</span>
+                    <span>Kostenlose Bestandsanalyse Ihrer Versicherungen</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-500 mr-2">✅</span>
+                    <span>Persönliche Beratung durch zertifizierten ERGO-Experten</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-500 mr-2">✅</span>
+                    <span>Optimierung Ihrer bestehenden Verträge</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-500 mr-2">✅</span>
+                    <span>15% Bündelnachlass ab 5 ERGO-Versicherungen</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-500 mr-2">✅</span>
+                    <span>Lebenslange Betreuung durch Ihre ERGO-Agentur</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-500 mr-2">✅</span>
+                    <span>24/7 Schadenservice der ERGO</span>
+                  </div>
+                  <div className="border-t-2 pt-2 mt-2 flex items-center font-bold text-ergo-red">
+                    <span>Dieser Service ist für Sie kostenlos - das ist unser ERGO-Versprechen!</span>
+                  </div>
+                </div>
+              </div>
+
               {/* Primary CTA Button */}
               <div className="mb-6 sm:mb-8">
                 <Button 
-                  className="bg-ergo-red hover:bg-ergo-red-hover text-white px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg font-bold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-auto"
+                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 sm:px-8 py-4 sm:py-6 text-lg sm:text-xl font-bold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-auto animate-pulse"
                   onClick={() => {
                     trackEvent('primary_cta_clicked', { source: 'hero_section', action: 'whatsapp_consultation' });
-                    trackAppointmentConversion('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Versicherungsberatung!');
+                    trackAppointmentConversion('https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Beratung zu meinen Versicherungen!');
                   }}
                 >
-                  🚀 JETZT KOSTENLOS BERATEN LASSEN
+                  📞 JETZT KOSTENLOSE BERATUNG SICHERN
                 </Button>
-                <p className="text-sm text-medium-contrast mt-3">Antwort binnen 2 Minuten • Unverbindlich • Kostenlos</p>
+                <p className="text-sm text-medium-contrast mt-3">
+                  <span className="text-ergo-red font-bold">⏰ Schnelle Terminvergabe möglich</span>
+                  <br />
+                  Antwort binnen weniger Minuten • Unverbindlich & kostenlos
+                </p>
               </div>
               
-              {/* Enhanced Trust Indicators */}
-              <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 px-2">
-                <div className="flex items-center text-high-contrast text-sm sm:text-base bg-green-50 px-4 py-2 rounded-full">
-                  <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-700 mr-2 flex-shrink-0" />
-                  <span className="font-bold">1000+ zufriedene Kunden</span>
-                </div>
-                <div className="flex items-center text-high-contrast text-sm sm:text-base bg-blue-50 px-4 py-2 rounded-full">
-                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-700 mr-2 flex-shrink-0" />
-                  <span className="font-bold">Antwort in 2 Min</span>
-                </div>
-                <div className="flex items-center text-high-contrast text-sm sm:text-base bg-yellow-50 px-4 py-2 rounded-full">
-                  <Award className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-700 mr-2 flex-shrink-0" />
-                  <span className="font-bold">15% Bündelnachlass ab 5</span>
+              {/* ERGO Trust Indicators */}
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6 max-w-3xl mx-auto">
+                <p className="text-sm font-bold text-gray-800 mb-2">Ihre Vorteile mit ERGO Ganderkesee:</p>
+                <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:gap-6">
+                  <Badge className="bg-white text-ergo-red border-ergo-red px-3 py-1.5 text-xs sm:text-sm">
+                    ⭐ Über 1000 zufriedene Kunden
+                  </Badge>
+                  <Badge className="bg-white text-ergo-red border-ergo-red px-3 py-1.5 text-xs sm:text-sm">
+                    ✅ Zertifizierter ERGO-Fachberater
+                  </Badge>
+                  <Badge className="bg-white text-ergo-red border-ergo-red px-3 py-1.5 text-xs sm:text-sm">
+                    🏆 ERGO Qualitätspartner
+                  </Badge>
+                  <Badge className="bg-white text-ergo-red border-ergo-red px-3 py-1.5 text-xs sm:text-sm">
+                    💯 Persönliche Betreuung vor Ort
+                  </Badge>
                 </div>
               </div>
             </div>
@@ -300,7 +346,7 @@ export default function Home() {
                     </div>
                     
                     <p className="text-white mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed flex-grow">
-                      Sparen Sie mit unseren Kombipaketen. 15% Bündelnachlass ab 5 Versicherungen plus Optimierung Ihrer bestehenden Verträge.
+                      Profitieren Sie von unseren ERGO-Kombipaketen. 15% Bündelnachlass ab 5 ERGO-Versicherungen plus kostenlose Beratung.
                     </p>
                     
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-2 sm:gap-0">
