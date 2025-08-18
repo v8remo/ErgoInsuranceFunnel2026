@@ -61,7 +61,7 @@ export default function Insurance() {
     <>
       <SEO
         title={`${insurance.title} sofort abschließen - ERGO Ganderkesee | 15% Bündelnachlass`}
-        description={`⭐ ${insurance.title} ⭐ Kostenlose Analyse bestehender Verträge ⭐ 15% Rabatt ab 3 Versicherungen ⭐ WhatsApp: 01556 6771019`}
+        description={`⭐ ${insurance.title} ⭐ Kostenlose Analyse bestehender Verträge ⭐ 15% Rabatt ab 5 Versicherungen ⭐ WhatsApp: 01556 6771019`}
         keywords={`${insurance.title}, ERGO ${insurance.title}, ${insurance.title} Ganderkesee, Bündelnachlass, kostenlose Analyse, Morino Stübe, ERGO Versicherung online`}
         structuredData={{
           "@context": "https://schema.org",
@@ -82,7 +82,7 @@ export default function Insurance() {
           },
           "offers": {
             "@type": "Offer",
-            "description": "15% Bündelnachlass ab 3 Versicherungen + kostenlose Analyse",
+            "description": "15% Bündelnachlass ab 5 Versicherungen + kostenlose Analyse",
             "availability": "https://schema.org/InStock"
           },
           "areaServed": {
@@ -112,7 +112,7 @@ export default function Insurance() {
                   </h1>
                   <p className="text-sm sm:text-base lg:text-lg text-high-contrast text-readable mb-4 sm:mb-6">
                     <strong>Kostenlose Analyse Ihrer bestehenden Verträge!</strong> {content?.description || insurance.description}
-                    <span className="text-ergo-red-dark font-bold"> Wir optimieren Ihre Versicherungen und bieten 15% Bündelnachlass ab 3 Versicherungen.</span>
+                    <span className="text-ergo-red-dark font-bold"> Wir optimieren Ihre Versicherungen und bieten 15% Bündelnachlass ab 5 Versicherungen.</span>
                   </p>
                 </div>
 
@@ -131,7 +131,7 @@ export default function Insurance() {
                 {/* Primary CTA with urgency */}
                 <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-xl p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 border-2 border-red-200">
                   <p className="text-center text-sm sm:text-base text-gray-700 mb-4">
-                    <strong className="text-ergo-red">🔥 Immer kostenlos:</strong> Vollständige Analyse + Optimierung Ihrer bestehenden Verträge + 15% Bündelnachlass ab 3 Versicherungen!
+                    <strong className="text-ergo-red">🔥 Immer kostenlos:</strong> Vollständige Analyse + Optimierung Ihrer bestehenden Verträge + 15% Bündelnachlass ab 5 Versicherungen!
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <Button 
@@ -337,7 +337,7 @@ export default function Insurance() {
             </h2>
             <p className="text-sm sm:text-base lg:text-xl text-red-100 mb-6 sm:mb-8 px-2">
               <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer bestehenden {insurance.title} plus Optimierung und günstigere Alternativen.
-              <strong>15% Bündelnachlass ab 3 Versicherungen!</strong> Bereits <span className="text-yellow-300 font-bold">23 Kunden</span> haben heute gespart!
+              <strong>15% Bündelnachlass ab 5 Versicherungen!</strong> Bereits <span className="text-yellow-300 font-bold">23 Kunden</span> haben heute gespart!
             </p>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
@@ -357,7 +357,7 @@ export default function Insurance() {
                   className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold"
                   onClick={() => {
                     trackEvent('final_whatsapp_clicked', { insurance_type: type, source: 'bottom_section' });
-                    const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Infos zum 15% Bündelnachlass ab 3 Versicherungen!';
+                    const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Infos zum 15% Bündelnachlass ab 5 Versicherungen!';
                     trackAppointmentConversion(whatsappUrl);
                   }}
                 >
@@ -365,7 +365,7 @@ export default function Insurance() {
                 </Button>
               </div>
               <p className="text-xs text-yellow-200 mt-3">
-                ✅ Kostenlose Analyse • Optimierung bestehender Verträge • 15% Bündelnachlass ab 3 Versicherungen
+                ✅ Kostenlose Analyse • Optimierung bestehender Verträge • 15% Bündelnachlass ab 5 Versicherungen
               </p>
             </div>
 

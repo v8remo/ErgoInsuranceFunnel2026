@@ -143,7 +143,7 @@ export default function Home() {
     <>
       <SEO 
         title="ERGO Versicherung Ganderkesee - Kostenlose Analyse & 15% Bündelnachlass"
-        description="⭐ Kostenlose Versicherungsanalyse ⭐ 15% Bündelnachlass ab 3 Verträgen ⭐ Optimierung bestehender Policen ⭐ WhatsApp Beratung: 01556 6771019"
+        description="⭐ Kostenlose Versicherungsanalyse ⭐ 15% Bündelnachlass ab 5 Verträgen ⭐ Optimierung bestehender Policen ⭐ WhatsApp Beratung: 01556 6771019"
         keywords="ERGO Versicherung Ganderkesee, kostenlose Versicherungsanalyse, Bündelnachlass, Morino Stübe, Hausratversicherung, Haftpflichtversicherung, Wohngebäudeversicherung, Rechtsschutz, Zahnzusatz"
         structuredData={{
           "@context": "https://schema.org",
@@ -158,7 +158,7 @@ export default function Home() {
           },
           "offers": {
             "@type": "Offer",
-            "description": "15% Bündelnachlass ab 3 Versicherungen",
+            "description": "15% Bündelnachlass ab 5 Versicherungen",
             "price": "0",
             "priceCurrency": "EUR"
           },
@@ -191,7 +191,7 @@ export default function Home() {
               
               <p className="text-sm sm:text-base lg:text-lg text-high-contrast text-readable mb-4 sm:mb-6 max-w-3xl mx-auto px-2">
                 <strong>Kostenlose Analyse Ihrer bestehenden Versicherungen!</strong> Wir optimieren Ihre Verträge und bieten günstigere Alternativen. 
-                <span className="text-ergo-red font-bold">15% Bündelnachlass ab 3 Versicherungen!</span> Über 1000 Kunden vertrauen bereits auf unsere Expertise.
+                <span className="text-ergo-red font-bold">15% Bündelnachlass ab 5 Versicherungen!</span> Über 1000 Kunden vertrauen bereits auf unsere Expertise.
               </p>
               
               {/* Primary CTA Button */}
@@ -220,7 +220,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center text-high-contrast text-sm sm:text-base bg-yellow-50 px-4 py-2 rounded-full">
                   <Award className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-700 mr-2 flex-shrink-0" />
-                  <span className="font-bold">15% Bündelnachlass ab 3</span>
+                  <span className="font-bold">15% Bündelnachlass ab 5</span>
                 </div>
               </div>
             </div>
@@ -317,7 +317,7 @@ export default function Home() {
                       </li>
                       <li className="flex items-center">
                         <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-300 rounded-full mr-2 flex-shrink-0" />
-                        <span>15% Bündelnachlass ab 3 Versicherungen</span>
+                        <span>15% Bündelnachlass ab 5 Versicherungen</span>
                       </li>
                       <li className="flex items-center">
                         <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-300 rounded-full mr-2 flex-shrink-0" />
@@ -342,7 +342,7 @@ export default function Home() {
                 <p className="text-high-contrast text-readable mb-6 text-sm sm:text-base">
                   <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer bestehenden Versicherungen. 
                   Wir optimieren Ihre Verträge und finden günstigere Alternativen. 
-                  <span className="text-ergo-red font-bold">15% Rabatt ab 3 Versicherungen!</span> 
+                  <span className="text-ergo-red font-bold">15% Rabatt ab 5 Versicherungen!</span> 
                   Bereits <span className="text-ergo-red font-bold">47 Kunden</span> haben heute gespart!
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

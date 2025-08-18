@@ -134,7 +134,7 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Focus-States für Tastaturnavigation hinzugefügt
 - 2025-01-18: Neue Geschäftsstrategie implementiert:
   - Kostenlose Analysen bestehender Versicherungen als Hauptfokus
-  - 15% Bündelnachlass ab 3 Versicherungen statt allgemeine Rabatte
+  - 15% Bündelnachlass ab 5 Versicherungen statt allgemeine Rabatte
   - Optimierung und günstigere Alternativen für bestehende Verträge
   - Alle CTAs und Texte entsprechend angepasst
   - WhatsApp-Nachrichten auf neue Strategie ausgerichtet
@@ -154,6 +154,12 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Google Ads-optimierte Titel und Descriptions mit Emojis
   - Performance-Hints für bessere Google-Bewertung
   - ads.txt für Google Ads Verifizierung vorbereitet
+- 2025-01-18: Vollständige mobile Optimierung implementiert:
+  - Mobile-first CSS für alle Container und Elemente
+  - Responsive Schriftgrößen und Touch-optimierte Buttons
+  - Viewport-Optimierung für perfekte Handy-Darstellung
+  - Horizontaler Scroll komplett eliminiert
+- 2025-01-18: 15% Bündelnachlass korrigiert auf ab 5 Versicherungen (vorher 3)
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)
