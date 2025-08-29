@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Phone, Mail, Shield, Home, Car, Heart, Clock, Star, TrendingUp, Zap } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, trackConversion } from '@/lib/analytics';
 
 interface FormData {
   age: string;
@@ -129,6 +129,11 @@ export default function HormoziDirectFunnel() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/leads'] });
       setCurrentStep(4);
+      
+      // Google Ads Conversion Tracking - Lead generiert
+      trackConversion();
+      
+      // Analytics Event
       trackEvent('hormozi_lead_generated', {
         interests: formData.interests,
         existing_insurances: formData.existingInsurances,
