@@ -21,39 +21,41 @@ interface FormData {
 export default function HormoziDirectFunnel() {
   // SEO Tags direkt eingebettet
   useEffect(() => {
-    document.title = "🚨 LETZTE CHANCE: ERGO Versicherung 30% günstiger - Nur heute!";
+    document.title = "ERGO Versicherungsberatung - Kostenlose Analyse | Morino Stübe";
     
-    // Meta Description
+    // Meta Description - rechtlich korrekt
     const metaDescription = document.querySelector('meta[name="description"]') || document.createElement('meta');
     metaDescription.setAttribute('name', 'description');
-    metaDescription.setAttribute('content', '🚨 WARNUNG: Versicherungspreise steigen ab 1. September um 30%! Sichern Sie sich JETZT die niedrigen Tarife. Bis zu 2.400€ sparen + 15% Bündelnachlass. Kostenlose Analyse!');
+    metaDescription.setAttribute('content', 'Kostenlose Versicherungsberatung & unverbindliche Analyse Ihrer bestehenden Verträge. ERGO-Berater Morino Stübe - Ganderkesee. Jetzt Beratungstermin anfragen.');
     if (!document.querySelector('meta[name="description"]')) {
       document.head.appendChild(metaDescription);
     }
 
-    // Keywords
+    // Keywords - rechtlich unbedenklich
     const metaKeywords = document.querySelector('meta[name="keywords"]') || document.createElement('meta');
     metaKeywords.setAttribute('name', 'keywords');
-    metaKeywords.setAttribute('content', 'ERGO Versicherung günstig, Versicherung sparen, 30% günstiger, Bündelnachlass, kostenlose Analyse, Morino Stübe, Ganderkesee');
+    metaKeywords.setAttribute('content', 'ERGO Versicherungsberatung, kostenlose Analyse, Morino Stübe, Ganderkesee, Versicherungsmakler, unverbindlich');
     if (!document.querySelector('meta[name="keywords"]')) {
       document.head.appendChild(metaKeywords);
     }
 
-    // Open Graph
+    // Open Graph - seriös
     const ogTitle = document.querySelector('meta[property="og:title"]') || document.createElement('meta');
     ogTitle.setAttribute('property', 'og:title');
-    ogTitle.setAttribute('content', '🚨 VERSICHERUNG 30% GÜNSTIGER - Nur heute!');
+    ogTitle.setAttribute('content', 'ERGO Versicherungsberatung - Kostenlose Analyse');
     if (!document.querySelector('meta[property="og:title"]')) {
       document.head.appendChild(ogTitle);
     }
 
     const ogDescription = document.querySelector('meta[property="og:description"]') || document.createElement('meta');
     ogDescription.setAttribute('property', 'og:description');
-    ogDescription.setAttribute('content', 'Sichern Sie sich JETZT die niedrigen Tarife bevor die Preise am 1. September um 30% steigen!');
+    ogDescription.setAttribute('content', 'Kostenlose und unverbindliche Versicherungsberatung von Ihrem ERGO-Berater in Ganderkesee.');
     if (!document.querySelector('meta[property="og:description"]')) {
       document.head.appendChild(ogDescription);
     }
   }, []);
+  
+  // FORMULAR ALS ERSTES - Rechtskonforme Lead-Erfassung
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     age: '',
@@ -165,106 +167,81 @@ export default function HormoziDirectFunnel() {
   const totalSavings = currentSavings + bundleBonus;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-600 via-red-500 to-orange-500">
-      {/* URGENCY HEADER - Always visible */}
-      <div className="bg-black text-white text-center py-3 px-4 text-sm font-bold animate-pulse sticky top-0 z-50">
-        🚨 WARNUNG: Versicherungspreise steigen ab 1. September um 30%! HEUTE NOCH SICHERN! 🚨
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
       
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* ALEX HORMOZI HERO SECTION */}
+        {/* RECHTSKONFORME HERO SECTION */}
         <div className="text-center mb-8">
-          <div className="bg-yellow-400 text-black px-6 py-3 rounded-full inline-block font-black mb-6 text-lg animate-bounce shadow-xl">
-            ⚡ BEGRENZTE ZEIT: Nur noch 23 Stunden!
+          <div className="bg-ergo-red text-white px-6 py-3 rounded-lg inline-block font-bold mb-6 text-lg">
+            ERGO Versicherungsberatung - Morino Stübe, Ganderkesee
           </div>
           
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
-            SICHERN Sie sich <span className="text-yellow-400">JETZT</span> die niedrigen Tarife,<br/>
-            <span className="text-red-200">bevor die Preise explodieren!</span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-6 leading-tight">
+            Kostenlose Versicherungsberatung<br/>
+            <span className="text-ergo-red">& unverbindliche Analyse</span>
           </h1>
           
-          {/* VALUE STACK */}
-          <div className="bg-white/10 backdrop-blur rounded-2xl p-8 mb-8 border border-white/20">
-            <div className="text-2xl text-white font-bold mb-6">
-              ❌ <span className="line-through text-red-200">Bis zu 847€ mehr pro Jahr zahlen</span><br/>
-              ✅ <span className="text-green-300">ODER: Jetzt bis zu 2.400€ pro Jahr sparen!</span>
+          {/* SERIÖSE VALUE PROPOSITION */}
+          <div className="bg-white rounded-2xl p-8 mb-8 border-2 border-gray-200 shadow-lg">
+            <div className="text-xl text-gray-800 font-bold mb-6">
+              ✓ Kostenlose Beratung und Analyse Ihrer bestehenden Verträge<br/>
+              ✓ Unverbindliches Angebot für ERGO-Versicherungen<br/>
+              ✓ Kompetente Beratung von Ihrem zertifizierten ERGO-Berater
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-              <div className="bg-white/20 rounded-xl p-6 hover:bg-white/30 transition-all">
-                <TrendingUp className="w-12 h-12 text-yellow-400 mx-auto mb-3" />
-                <div className="text-3xl font-black text-yellow-400">2.847</div>
-                <div className="text-white font-bold">Kunden haben heute gespart</div>
+              <div className="bg-gray-50 rounded-xl p-6">
+                <Shield className="w-12 h-12 text-ergo-red mx-auto mb-3" />
+                <div className="text-lg font-bold text-gray-800">Kostenlos</div>
+                <div className="text-gray-600">Beratung & Analyse</div>
               </div>
-              <div className="bg-white/20 rounded-xl p-6 hover:bg-white/30 transition-all">
-                <Star className="w-12 h-12 text-green-300 mx-auto mb-3" />
-                <div className="text-3xl font-black text-green-300">15%</div>
-                <div className="text-white font-bold">Garantierter Bündelnachlass</div>
+              <div className="bg-gray-50 rounded-xl p-6">
+                <Star className="w-12 h-12 text-ergo-red mx-auto mb-3" />
+                <div className="text-lg font-bold text-gray-800">Unverbindlich</div>
+                <div className="text-gray-600">Keine Verpflichtungen</div>
               </div>
-              <div className="bg-white/20 rounded-xl p-6 hover:bg-white/30 transition-all animate-pulse">
-                <Clock className="w-12 h-12 text-red-300 mx-auto mb-3" />
-                <div className="text-3xl font-black text-red-300">23h</div>
-                <div className="text-white font-bold">Verbleibende Zeit</div>
-              </div>
-            </div>
-            
-            {/* SOCIAL PROOF */}
-            <div className="mt-6 text-center">
-              <div className="text-white text-lg font-bold">
-                👥 In den letzten 24h haben sich 1.847 Personen angemeldet
-              </div>
-              <div className="text-red-200 text-sm mt-2">
-                📍 47 Personen aus Ihrer Region haben heute bereits gespart
+              <div className="bg-gray-50 rounded-xl p-6">
+                <Phone className="w-12 h-12 text-ergo-red mx-auto mb-3" />
+                <div className="text-lg font-bold text-gray-800">Persönlich</div>
+                <div className="text-gray-600">Vor Ort Beratung</div>
               </div>
             </div>
           </div>
         </div>
         
-        {/* MAIN FUNNEL CONTAINER */}
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-          {/* HEADER MIT LIVE SAVINGS */}
-          <div className="bg-gradient-to-r from-red-600 to-red-700 text-white p-8 text-center">
-            <h2 className="text-3xl font-black mb-4">
-              🏆 KOSTENLOSE Analyse + SOFORT-RABATT sichern
+        {/* RECHTSKONFORME FORMULAR-SEKTION */}
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+          {/* SERIÖSER HEADER */}
+          <div className="bg-ergo-red text-white p-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">
+              Kostenlose Versicherungsberatung anfragen
             </h2>
-            <p className="text-red-100 text-lg mb-6">
-              Füllen Sie das Formular aus und sichern Sie sich die niedrigen Preise
+            <p className="text-red-100 text-lg mb-4">
+              Füllen Sie das Formular aus für Ihre unverbindliche Beratung
             </p>
             
-            {/* LIVE SAVINGS COUNTER */}
-            <div className="bg-black/30 rounded-2xl p-6 mb-6">
-              <div className="text-yellow-300 font-black text-xl mb-3">💰 IHRE AKTUELLE ERSPARNIS:</div>
-              <div className="text-5xl font-black text-white mb-2">
-                {totalSavings}€/Jahr
+            {/* RECHTLICHER HINWEIS */}
+            <div className="bg-white/10 backdrop-blur rounded-xl p-4 text-sm">
+              <div className="text-white font-bold mb-2">📋 Rechtliche Hinweise:</div>
+              <div className="text-red-100 text-left">
+                • Kostenlose und unverbindliche Beratung<br/>
+                • Keine automatischen Vertragsabschlüsse<br/>
+                • Widerrufsrecht gemäß § 8 VVG<br/>
+                • Vermittlung erfolgt als gebundener Versicherungsvertreter der ERGO
               </div>
-              <div className="text-lg text-green-300 font-bold">
-                {currentSavings}€ Grundersparnis {bundleBonus > 0 && `+ ${bundleBonus}€ Bündelbonus`}
-              </div>
-              {formData.interests.length >= 5 && (
-                <div className="bg-green-500 text-white px-4 py-2 rounded-full font-bold mt-3 animate-pulse">
-                  🎉 15% BÜNDELNACHLASS AKTIVIERT!
-                </div>
-              )}
-            </div>
-            
-            {/* URGENCY TIMER */}
-            <div className="bg-black/20 rounded-xl p-4">
-              <div className="text-yellow-300 font-bold text-lg mb-2">⏰ AKTION ENDET IN:</div>
-              <div className="text-4xl font-black text-white">23:47:12</div>
-              <div className="text-xs text-red-200 mt-1">Stunden : Minuten : Sekunden</div>
             </div>
           </div>
 
-          {/* PROGRESS BAR */}
+          {/* FORMULAR FORTSCHRITT */}
           <div className="px-8 py-6 bg-gray-50">
             <div className="flex justify-between text-lg font-bold text-gray-800 mb-3">
-              <span>🎯 Schritt {currentStep} von 4</span>
-              <span className="text-red-600">{Math.round(progress)}% zu Ihren Ersparnissen</span>
+              <span>📋 Schritt {currentStep} von 4</span>
+              <span className="text-ergo-red">{Math.round(progress)}% abgeschlossen</span>
             </div>
             <div className="relative">
-              <Progress value={progress} className="h-4 bg-gray-200" />
+              <Progress value={progress} className="h-3 bg-gray-200" />
               <div 
-                className="absolute top-0 left-0 h-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded transition-all duration-500" 
+                className="absolute top-0 left-0 h-3 bg-ergo-red rounded transition-all duration-500" 
                 style={{width: `${progress}%`}}
               />
             </div>
