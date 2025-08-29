@@ -382,14 +382,14 @@ export default function HormoziDirectFunnel() {
                 {/* Vereinfachte Produktauswahl für bessere Conversion */}
                 <div className="space-y-4">
                   {[
-                    { id: "haftpflicht", name: "Haftpflichtversicherung", price: "5,26€", oldPrice: "12€", savings: "81€", urgent: "PFLICHT - Ohne riskieren Sie Ihr Vermögen!", color: "border-red-500" },
-                    { id: "hausrat", name: "Hausratversicherung", price: "12,58€", oldPrice: "25€", savings: "149€", urgent: "Preiserhöhung um 40% ab September!", color: "border-blue-500" },
-                    { id: "wohngebaeude", name: "Wohngebäudeversicherung", price: "28,99€", oldPrice: "45€", savings: "192€", urgent: "Elementarschäden +127% gestiegen!", color: "border-green-500" },
-                    { id: "rechtsschutz", name: "Rechtsschutzversicherung", price: "11,60€", oldPrice: "25€", savings: "161€", urgent: "Gerichtskosten steigen 2025 um 25%!", color: "border-purple-500" },
-                    { id: "zahnzusatz", name: "Zahnzusatzversicherung", price: "21,95€", oldPrice: "35€", savings: "157€", urgent: "Kassenzuschuss wird 2025 gekürzt!", color: "border-pink-500" },
-                    { id: "berufsunfaehigkeit", name: "Berufsunfähigkeitsversicherung", price: "45€", oldPrice: "89€", savings: "528€", urgent: "Jeder 4. wird berufsunfähig!", color: "border-orange-500" },
-                    { id: "kfz_haftpflicht", name: "Kfz-Haftpflichtversicherung", price: "35€", oldPrice: "67€", savings: "384€", urgent: "PFLICHT für jedes Fahrzeug!", color: "border-gray-500" },
-                    { id: "lebensversicherung", name: "Lebensversicherung", price: "35€", oldPrice: "67€", savings: "384€", urgent: "Garantiezins sinkt 2025 weiter!", color: "border-indigo-500" }
+                    { id: "haftpflicht", name: "Haftpflichtversicherung", price: "ab 5,26€", oldPrice: "12€", savings: "bis zu 81€", urgent: "PFLICHT - Ohne riskieren Sie Ihr Vermögen!", color: "border-red-500" },
+                    { id: "hausrat", name: "Hausratversicherung", price: "ab 12,58€", oldPrice: "25€", savings: "bis zu 149€", urgent: "Preiserhöhung um 40% ab September!", color: "border-blue-500" },
+                    { id: "wohngebaeude", name: "Wohngebäudeversicherung", price: "ab 28,99€", oldPrice: "45€", savings: "bis zu 192€", urgent: "Elementarschäden +127% gestiegen!", color: "border-green-500" },
+                    { id: "rechtsschutz", name: "Rechtsschutzversicherung", price: "ab 11,60€", oldPrice: "25€", savings: "bis zu 161€", urgent: "Gerichtskosten steigen 2025 um 25%!", color: "border-purple-500" },
+                    { id: "zahnzusatz", name: "Zahnzusatzversicherung", price: "ab 21,95€", oldPrice: "35€", savings: "bis zu 157€", urgent: "Kassenzuschuss wird 2025 gekürzt!", color: "border-pink-500" },
+                    { id: "berufsunfaehigkeit", name: "Berufsunfähigkeitsversicherung", price: "ab 45€", oldPrice: "89€", savings: "bis zu 528€", urgent: "Jeder 4. wird berufsunfähig!", color: "border-orange-500" },
+                    { id: "kfz_haftpflicht", name: "Kfz-Haftpflichtversicherung", price: "ab 35€", oldPrice: "67€", savings: "bis zu 384€", urgent: "PFLICHT für jedes Fahrzeug!", color: "border-gray-500" },
+                    { id: "lebensversicherung", name: "Lebensversicherung", price: "ab 35€", oldPrice: "67€", savings: "bis zu 384€", urgent: "Garantiezins sinkt 2025 weiter!", color: "border-indigo-500" }
                   ].map((product) => (
                     <Button
                       key={product.id}
@@ -440,7 +440,7 @@ export default function HormoziDirectFunnel() {
                   <div className="text-center">
                     <h4 className="text-2xl font-black text-gray-800 mb-4">🎯 Ihr aktueller Sparfortschritt</h4>
                     <div className="text-5xl font-black text-green-600 mb-4">
-                      {totalSavings}€ pro Jahr gespart!
+                      bis zu {totalSavings}€ pro Jahr gespart!
                     </div>
                     
                     {formData.interests.length >= 5 ? (
@@ -471,7 +471,7 @@ export default function HormoziDirectFunnel() {
                   </div>
                   
                   <h3 className="text-3xl font-black text-gray-800 mb-4">
-                    Sichern Sie sich JETZT Ihre {totalSavings}€ Ersparnis!
+                    Sichern Sie sich JETZT Ihre bis zu {totalSavings}€ Ersparnis!
                   </h3>
                   <p className="text-gray-600 text-lg mb-6">
                     Für Ihr kostenloses Angebot und die persönliche Beratung
@@ -480,10 +480,10 @@ export default function HormoziDirectFunnel() {
                   {/* FINAL VALUE REMINDER */}
                   <div className="bg-gradient-to-r from-green-100 to-yellow-100 p-6 rounded-2xl mb-8 border-2 border-green-300">
                     <div className="text-2xl font-black text-gray-800 mb-2">
-                      🎯 Sie sparen: {totalSavings}€ pro Jahr
+                      🎯 Sie sparen: bis zu {totalSavings}€ pro Jahr
                     </div>
                     <div className="text-lg text-gray-700">
-                      Das sind {Math.round(totalSavings / 12)}€ weniger pro Monat!
+                      Das sind bis zu {Math.round(totalSavings / 12)}€ weniger pro Monat!
                     </div>
                     {bundleBonus > 0 && (
                       <div className="text-green-700 font-bold mt-2">
@@ -575,7 +575,7 @@ export default function HormoziDirectFunnel() {
                   🎉 GLÜCKWUNSCH!
                 </h3>
                 <div className="text-2xl font-bold text-green-600 mb-4">
-                  Sie haben {totalSavings}€ pro Jahr gesichert!
+                  Sie haben bis zu {totalSavings}€ pro Jahr gesichert!
                 </div>
                 <p className="text-gray-600 text-lg mb-8">
                   Morino Stübe wird sich binnen 24 Stunden bei Ihnen melden und Ihre Ersparnisse finalisieren.
@@ -594,7 +594,7 @@ export default function HormoziDirectFunnel() {
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center text-lg font-black">3</div>
-                      <span className="text-lg font-bold">Angebot mit {totalSavings}€ Ersparnis pro Jahr</span>
+                      <span className="text-lg font-bold">Angebot mit bis zu {totalSavings}€ Ersparnis pro Jahr</span>
                     </div>
                   </div>
                 </div>
@@ -645,11 +645,11 @@ export default function HormoziDirectFunnel() {
                   {submitMutation.isPending ? (
                     "⏳ SICHERE IHRE ERSPARNISSE..."
                   ) : currentStep === 3 ? (
-                    `💰 JETZT ${totalSavings}€ SPAREN & ANGEBOT SICHERN!`
+                    `💰 JETZT bis zu ${totalSavings}€ SPAREN & ANGEBOT SICHERN!`
                   ) : currentStep === 1 ? (
                     `🚀 ZU DEN VERSICHERUNGEN (${formData.age ? '✅' : '❌'} Alter gewählt)`
                   ) : (
-                    `🎯 KONTAKTDATEN EINGEBEN (${totalSavings}€ Ersparnis!)`
+                    `🎯 KONTAKTDATEN EINGEBEN (bis zu ${totalSavings}€ Ersparnis!)`
                   )}
                 </Button>
               </div>
