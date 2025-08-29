@@ -205,72 +205,72 @@ export default function HormoziDirectFunnel() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
       
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 max-w-full sm:max-w-4xl">
         {/* RECHTSKONFORME HERO SECTION */}
         <div className="text-center mb-8">
           <div className="bg-ergo-red text-white px-6 py-3 rounded-lg inline-block font-bold mb-6 text-lg">
             ERGO Versicherungsberatung - Morino Stübe, Ganderkesee
           </div>
           
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-6 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 sm:mb-6 leading-tight px-2">
             Kostenlose Versicherungsberatung<br/>
             <span className="text-ergo-red">& unverbindliche Analyse</span>
           </h1>
           
           {/* SERIÖSE VALUE PROPOSITION */}
-          <div className="bg-white rounded-2xl p-8 mb-8 border-2 border-gray-200 shadow-lg">
-            <div className="text-xl text-gray-800 font-bold mb-6">
+          <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-8 mb-6 sm:mb-8 border-2 border-gray-200 shadow-lg mx-2 sm:mx-0">
+            <div className="text-base sm:text-lg md:text-xl text-gray-800 font-bold mb-4 sm:mb-6 leading-relaxed">
               ✓ Kostenlose Beratung und Analyse Ihrer bestehenden Verträge<br/>
               ✓ Unverbindliches Angebot für ERGO-Versicherungen<br/>
               ✓ Kompetente Beratung von Ihrem zertifizierten ERGO-Berater
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-              <div className="bg-gray-50 rounded-xl p-6">
-                <Shield className="w-12 h-12 text-ergo-red mx-auto mb-3" />
-                <div className="text-lg font-bold text-gray-800">Kostenlos</div>
-                <div className="text-gray-600">Beratung & Analyse</div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-center">
+              <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                <Shield className="w-10 h-10 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-2 sm:mb-3" />
+                <div className="text-base sm:text-lg font-bold text-gray-800">Kostenlos</div>
+                <div className="text-sm sm:text-base text-gray-600">Beratung & Analyse</div>
               </div>
-              <div className="bg-gray-50 rounded-xl p-6">
-                <Star className="w-12 h-12 text-ergo-red mx-auto mb-3" />
-                <div className="text-lg font-bold text-gray-800">Unverbindlich</div>
-                <div className="text-gray-600">Keine Verpflichtungen</div>
+              <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                <Star className="w-10 h-10 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-2 sm:mb-3" />
+                <div className="text-base sm:text-lg font-bold text-gray-800">Unverbindlich</div>
+                <div className="text-sm sm:text-base text-gray-600">Keine Verpflichtungen</div>
               </div>
-              <div className="bg-gray-50 rounded-xl p-6">
-                <Phone className="w-12 h-12 text-ergo-red mx-auto mb-3" />
-                <div className="text-lg font-bold text-gray-800">Persönlich</div>
-                <div className="text-gray-600">Vor Ort Beratung</div>
+              <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                <Phone className="w-10 h-10 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-2 sm:mb-3" />
+                <div className="text-base sm:text-lg font-bold text-gray-800">Persönlich</div>
+                <div className="text-sm sm:text-base text-gray-600">Vor Ort Beratung</div>
               </div>
             </div>
           </div>
         </div>
         
         {/* RECHTSKONFORME FORMULAR-SEKTION */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
-          {/* SERIÖSER HEADER */}
-          <div className="bg-ergo-red text-white p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-gray-200 mx-2 sm:mx-0">
+          {/* SERIÖSER HEADER - MOBILE OPTIMIERT */}
+          <div className="bg-ergo-red text-white p-4 sm:p-8 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 leading-tight">
               Kostenlose Versicherungsberatung anfragen
             </h2>
-            <p className="text-red-100 text-lg mb-4">
+            <p className="text-red-100 text-base sm:text-lg mb-3 sm:mb-4">
               Füllen Sie das Formular aus für Ihre unverbindliche Beratung
             </p>
             
             {/* RECHTLICHER HINWEIS */}
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4 text-sm">
+            <div className="bg-white/10 backdrop-blur rounded-lg sm:rounded-xl p-3 sm:p-4 text-xs sm:text-sm">
               <div className="text-white font-bold mb-2">📋 Rechtliche Hinweise:</div>
-              <div className="text-red-100 text-left">
-                • Kostenlose und unverbindliche Beratung<br/>
-                • Keine automatischen Vertragsabschlüsse<br/>
-                • Widerrufsrecht gemäß § 8 VVG<br/>
-                • Vermittlung erfolgt als gebundener Versicherungsvertreter der ERGO
+              <div className="text-red-100 text-left space-y-1">
+                <div>• Kostenlose und unverbindliche Beratung</div>
+                <div>• Keine automatischen Vertragsabschlüsse</div>
+                <div>• Widerrufsrecht gemäß § 8 VVG</div>
+                <div>• Vermittlung erfolgt als gebundener Versicherungsvertreter der ERGO</div>
               </div>
             </div>
           </div>
 
           {/* FORMULAR FORTSCHRITT */}
-          <div className="px-8 py-6 bg-gray-50">
-            <div className="flex justify-between text-lg font-bold text-gray-800 mb-3">
+          <div className="px-4 sm:px-8 py-4 sm:py-6 bg-gray-50">
+            <div className="flex flex-col sm:flex-row sm:justify-between text-base sm:text-lg font-bold text-gray-800 mb-3 gap-2 sm:gap-0">
               <span>📋 Schritt {currentStep} von 4</span>
               <span className="text-ergo-red">{Math.round(progress)}% abgeschlossen</span>
             </div>
@@ -284,7 +284,7 @@ export default function HormoziDirectFunnel() {
           </div>
 
           {/* STEP CONTENT */}
-          <div className="p-8">
+          <div className="p-4 sm:p-8">
             
             {/* STEP 1: AGE SELECTION - HORMOZI STYLE */}
             {currentStep === 1 && (
@@ -676,18 +676,18 @@ export default function HormoziDirectFunnel() {
 
                 <div className="bg-red-50 p-6 rounded-2xl">
                   <p className="text-gray-700 text-lg mb-4 font-bold">Fragen? Kontaktieren Sie uns:</p>
-                  <div className="flex flex-col gap-4 justify-center">
+                  <div className="flex flex-col gap-3 sm:gap-4 justify-center">
                     <a 
                       href="tel:015566771019" 
-                      className="inline-flex items-center justify-center text-red-600 font-black text-xl hover:text-red-700 bg-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                      className="inline-flex items-center justify-center text-red-600 font-bold text-lg sm:text-xl hover:text-red-700 bg-white px-6 py-4 h-12 sm:h-14 rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-95"
                     >
-                      <Phone className="w-6 h-6 mr-3" />
-                      015566771019
+                      <Phone className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" />
+                      <span className="truncate">015566771019</span>
                     </a>
                     <a 
                       href="https://wa.me/4915566771019?text=Hallo! Ich habe mich für die ERGO-Versicherungsanalyse angemeldet und möchte meine Ersparnisse besprechen."
                       target="_blank"
-                      className="inline-flex items-center justify-center text-green-600 font-black text-xl hover:text-green-700 bg-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                      className="inline-flex items-center justify-center text-green-600 font-bold text-lg sm:text-xl hover:text-green-700 bg-white px-6 py-4 h-12 sm:h-14 rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-95"
                     >
                       💬 WhatsApp Beratung
                     </a>
@@ -698,19 +698,10 @@ export default function HormoziDirectFunnel() {
 
           </div>
 
-          {/* ALEX HORMOZI NAVIGATION */}
+          {/* MOBILE-OPTIMIERTE NAVIGATION */}
           {currentStep < 4 && (
-            <div className="bg-gray-50 px-8 py-8 border-t-4 border-red-500">
-              <div className="flex flex-col lg:flex-row gap-6 items-center justify-center">
-                {currentStep > 1 && (
-                  <Button
-                    variant="outline"
-                    onClick={prevStep}
-                    className="text-gray-600 border-gray-400 hover:bg-gray-100 px-8 py-4 text-lg font-bold"
-                  >
-                    ← Zurück
-                  </Button>
-                )}
+            <div className="bg-gray-50 px-4 sm:px-8 py-6 sm:py-8 border-t-4 border-red-500">
+              <div className="flex flex-col gap-4 sm:gap-6 items-stretch sm:items-center justify-center max-w-md mx-auto">
                 
                 <Button
                   onClick={(e) => {
@@ -719,7 +710,7 @@ export default function HormoziDirectFunnel() {
                     if (navigator.vibrate) navigator.vibrate(100);
                   }}
                   disabled={!validateCurrentStep() || submitMutation.isPending}
-                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-8 py-6 h-16 text-lg sm:text-xl font-black rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 active:scale-95 transition-all duration-300 w-full animate-pulse ring-4 ring-red-300"
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 sm:px-8 py-4 sm:py-6 h-14 sm:h-16 text-base sm:text-lg md:text-xl font-bold rounded-xl sm:rounded-2xl shadow-lg sm:shadow-2xl hover:shadow-xl sm:hover:shadow-3xl transform hover:scale-105 active:scale-95 transition-all duration-300 w-full ring-2 sm:ring-4 ring-red-300"
                 >
                   {submitMutation.isPending ? (
                     "⏳ SICHERE IHRE ERSPARNISSE..."
@@ -731,18 +722,32 @@ export default function HormoziDirectFunnel() {
                     `🎯 KONTAKTDATEN EINGEBEN (bis zu ${totalSavings}€ Ersparnis!)`
                   )}
                 </Button>
+                
+                {currentStep > 1 && (
+                  <Button
+                    variant="outline"
+                    onClick={prevStep}
+                    className="text-gray-600 border-2 border-gray-400 hover:bg-gray-100 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg sm:rounded-xl w-full order-last sm:order-first"
+                  >
+                    ← Zurück
+                  </Button>
+                )}
               </div>
               
-              {/* FINAL URGENCY REMINDER */}
-              <div className="text-center mt-6">
-                <div className="text-red-600 font-black text-lg animate-pulse">
-                  ⏰ Bearbeitungszeit: {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
+              {/* MOBILE-OPTIMIERTE URGENCY REMINDER */}
+              <div className="text-center mt-4 sm:mt-6">
+                <div className="text-red-600 font-bold text-base sm:text-lg">
+                  ⏰ {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
                 </div>
-                <div className="text-sm text-gray-600 mt-2 font-bold">
+                <div className="text-xs sm:text-sm text-gray-600 mt-1 sm:mt-2 font-medium">
                   Durchschnittliche Bearbeitungszeit für Beratungsanfragen
                 </div>
-                <div className="text-xs text-gray-500 mt-1">
-                  🔒 SSL-verschlüsselt • 📋 DSGVO-konform • 📞 Kostenlose Beratung
+                <div className="text-xs text-gray-500 mt-1 space-x-2">
+                  <span>🔒 SSL-verschlüsselt</span>
+                  <span>•</span>
+                  <span>📋 DSGVO-konform</span>
+                  <span>•</span>
+                  <span>📞 Kostenlose Beratung</span>
                 </div>
               </div>
             </div>
