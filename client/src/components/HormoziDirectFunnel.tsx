@@ -205,7 +205,7 @@ export default function HormoziDirectFunnel() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
       
-      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 max-w-full sm:max-w-4xl">
+      <div className="container mx-auto px-2 sm:px-4 py-3 sm:py-8 max-w-full sm:max-w-4xl">
         {/* RECHTSKONFORME HERO SECTION */}
         <div className="text-center mb-8">
           <div className="bg-ergo-red text-white px-6 py-3 rounded-lg inline-block font-bold mb-6 text-lg">
@@ -218,7 +218,7 @@ export default function HormoziDirectFunnel() {
           </h1>
           
           {/* SERIÖSE VALUE PROPOSITION */}
-          <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-8 mb-6 sm:mb-8 border-2 border-gray-200 shadow-lg mx-2 sm:mx-0">
+          <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-8 mb-4 sm:mb-8 border-2 border-gray-200 shadow-lg mx-1 sm:mx-0">
             <div className="text-base sm:text-lg md:text-xl text-gray-800 font-bold mb-4 sm:mb-6 leading-relaxed">
               ✓ Kostenlose Beratung und Analyse Ihrer bestehenden Verträge<br/>
               ✓ Unverbindliches Angebot für ERGO-Versicherungen<br/>
@@ -246,7 +246,7 @@ export default function HormoziDirectFunnel() {
         </div>
         
         {/* RECHTSKONFORME FORMULAR-SEKTION */}
-        <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-gray-200 mx-2 sm:mx-0">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-gray-200 mx-1 sm:mx-0">
           {/* SERIÖSER HEADER - MOBILE OPTIMIERT */}
           <div className="bg-ergo-red text-white p-4 sm:p-8 text-center">
             <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 leading-tight">
@@ -284,7 +284,7 @@ export default function HormoziDirectFunnel() {
           </div>
 
           {/* STEP CONTENT */}
-          <div className="p-4 sm:p-8">
+          <div className="p-3 sm:p-8">
             
             {/* STEP 1: AGE SELECTION - HORMOZI STYLE */}
             {currentStep === 1 && (
@@ -310,28 +310,28 @@ export default function HormoziDirectFunnel() {
                     💡 Schritt 1: Sparen Sie bis zu 847€ pro Jahr!
                   </div>
                   
-                  <h3 className="text-3xl font-black text-gray-800 mb-4">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-3 sm:mb-4 leading-tight">
                     In welcher Altersgruppe befinden Sie sich?
                   </h3>
-                  <p className="text-gray-600 text-lg mb-6">
+                  <p className="text-gray-600 text-sm sm:text-base md:text-lg mb-4 sm:mb-6 leading-relaxed">
                     Ihre Altersgruppe bestimmt Ihre <span className="font-bold text-red-600">maximalen Sparpotentiale</span>
                   </p>
                   
                   {/* VALUE PROPOSITION BY AGE */}
-                  <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-2xl mb-8 border-2 border-green-200">
-                    <div className="text-green-800 font-black text-xl mb-4">🎯 Je nach Alter sparen Sie unterschiedlich viel:</div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                      <div className="bg-white p-3 rounded-lg shadow">18-29: Bis zu <span className="font-black text-green-600">423€/Jahr</span></div>
-                      <div className="bg-white p-3 rounded-lg shadow">30-39: Bis zu <span className="font-black text-green-600">687€/Jahr</span></div>
-                      <div className="bg-white p-3 rounded-lg shadow border-2 border-red-500">40-49: Bis zu <span className="font-black text-red-600">847€/Jahr ⭐</span></div>
-                      <div className="bg-white p-3 rounded-lg shadow">50-59: Bis zu <span className="font-black text-green-600">734€/Jahr</span></div>
-                      <div className="bg-white p-3 rounded-lg shadow">60+: Bis zu <span className="font-black text-green-600">567€/Jahr</span></div>
+                  <div className="bg-gradient-to-r from-green-50 to-blue-50 p-3 sm:p-6 rounded-xl sm:rounded-2xl mb-6 sm:mb-8 border-2 border-green-200">
+                    <div className="text-green-800 font-bold text-base sm:text-lg md:text-xl mb-3 sm:mb-4">🎯 Je nach Alter sparen Sie unterschiedlich viel:</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
+                      <div className="bg-white p-2 sm:p-3 rounded-lg shadow">18-29: Bis zu <span className="font-bold text-green-600">423€/Jahr</span></div>
+                      <div className="bg-white p-2 sm:p-3 rounded-lg shadow">30-39: Bis zu <span className="font-bold text-green-600">687€/Jahr</span></div>
+                      <div className="bg-white p-2 sm:p-3 rounded-lg shadow border-2 border-red-500">40-49: Bis zu <span className="font-bold text-red-600">847€/Jahr ⭐</span></div>
+                      <div className="bg-white p-2 sm:p-3 rounded-lg shadow">50-59: Bis zu <span className="font-bold text-green-600">734€/Jahr</span></div>
+                      <div className="bg-white p-2 sm:p-3 rounded-lg shadow">60+: Bis zu <span className="font-bold text-green-600">567€/Jahr</span></div>
                     </div>
                   </div>
                 </div>
 
                 {/* MOBILE-OPTIMIERTE ALTERSGRUPPEN-AUSWAHL */}
-                <div className="space-y-4">
+                <div className="space-y-2 sm:space-y-4">
                   {[
                     {age: '18-29 Jahre', savings: '423€', desc: 'Günstige Einstiegstarife', emoji: '👨‍🎓', highlight: false},
                     {age: '30-39 Jahre', savings: '687€', desc: 'Familie & Beruf absichern', emoji: '👩‍💼', highlight: false},
@@ -342,7 +342,7 @@ export default function HormoziDirectFunnel() {
                     <Button
                       key={item.age}
                       variant="outline"
-                      className={`w-full p-6 h-auto text-left border-4 transition-all duration-300 transform active:scale-95 ${
+                      className={`w-full p-3 sm:p-6 h-auto text-left border-2 sm:border-4 transition-all duration-300 transform active:scale-95 ${
                         formData.age === item.age 
                           ? "bg-gradient-to-r from-red-600 to-red-700 text-white border-red-600 shadow-2xl ring-4 ring-red-300" 
                           : item.highlight 
@@ -359,8 +359,8 @@ export default function HormoziDirectFunnel() {
                         <div className="flex items-center gap-4">
                           <div className="text-4xl">{item.emoji}</div>
                           <div>
-                            <div className="font-black text-xl sm:text-2xl mb-1">{item.age}</div>
-                            <div className={`text-sm sm:text-base font-bold ${
+                            <div className="font-bold text-base sm:text-xl md:text-2xl mb-1">{item.age}</div>
+                            <div className={`text-xs sm:text-sm md:text-base font-medium ${
                               formData.age === item.age ? 'text-yellow-200' : 'text-gray-600'
                             }`}>
                               {item.desc}
@@ -368,10 +368,10 @@ export default function HormoziDirectFunnel() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className={`font-black text-xl sm:text-2xl ${
+                          <div className={`font-bold text-base sm:text-xl md:text-2xl ${
                             formData.age === item.age ? 'text-yellow-300' : 'text-green-600'
                           }`}>-{item.savings}</div>
-                          <div className="text-xs sm:text-sm text-gray-500">pro Jahr</div>
+                          <div className="text-xs text-gray-500">pro Jahr</div>
                         </div>
                       </div>
                       {formData.age === item.age && (
@@ -417,7 +417,7 @@ export default function HormoziDirectFunnel() {
                 </div>
 
                 {/* MOBILE-OPTIMIERTE VERSICHERUNGSAUSWAHL */}
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   {[
                     { id: "haftpflicht", name: "Haftpflicht", price: "ab 5,26€", oldPrice: "12€", savings: "bis zu 81€", urgent: "PFLICHT!", emoji: "🛡️", priority: "MUST-HAVE" },
                     { id: "hausrat", name: "Hausrat", price: "ab 12,58€", oldPrice: "25€", savings: "bis zu 149€", urgent: "Preise steigen!", emoji: "🏠", priority: "POPULAR" },
@@ -431,7 +431,7 @@ export default function HormoziDirectFunnel() {
                     <Button
                       key={product.id}
                       variant="outline"
-                      className={`w-full text-left h-auto p-5 border-3 transition-all duration-300 transform active:scale-95 ${
+                      className={`w-full text-left h-auto p-3 sm:p-5 border-2 sm:border-3 transition-all duration-300 transform active:scale-95 ${
                         formData.interests.includes(product.id)
                           ? "bg-gradient-to-r from-green-600 to-green-700 text-white border-green-600 shadow-2xl ring-4 ring-green-300"
                           : "border-gray-300 bg-white hover:border-green-500 hover:bg-green-50 shadow-lg hover:shadow-xl hover:ring-2 hover:ring-green-200"
@@ -442,10 +442,10 @@ export default function HormoziDirectFunnel() {
                         if (navigator.vibrate) navigator.vibrate(50);
                       }}
                     >
-                      <div className="flex items-start gap-4">
+                      <div className="flex items-start gap-2 sm:gap-4">
                         {/* Emoji & Checkbox */}
                         <div className="flex flex-col items-center gap-2 flex-shrink-0">
-                          <div className="text-2xl">{product.emoji}</div>
+                          <div className="text-xl sm:text-2xl">{product.emoji}</div>
                           <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                             formData.interests.includes(product.id)
                               ? "bg-green-500 border-green-600"
@@ -461,7 +461,7 @@ export default function HormoziDirectFunnel() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-semibold text-base sm:text-lg text-gray-800 truncate">{product.name}</h4>
+                              <h4 className="font-semibold text-sm sm:text-base md:text-lg text-gray-800 truncate">{product.name}</h4>
                               <div className={`text-sm mt-1 ${
                                 formData.interests.includes(product.id) ? 'text-yellow-200' : 'text-gray-600'
                               }`}>
@@ -469,11 +469,11 @@ export default function HormoziDirectFunnel() {
                               </div>
                             </div>
                             <div className="text-right ml-3 flex-shrink-0">
-                              <div className={`font-bold text-base sm:text-lg ${
+                              <div className={`font-bold text-xs sm:text-base md:text-lg ${
                                 formData.interests.includes(product.id) ? 'text-yellow-300' : 'text-green-600'
                               }`}>{product.price}</div>
                               <div className="text-xs text-gray-500 line-through">{product.oldPrice}</div>
-                              <div className={`text-sm font-medium ${
+                              <div className={`text-xs sm:text-sm font-medium ${
                                 formData.interests.includes(product.id) ? 'text-white' : 'text-green-700'
                               }`}>
                                 {product.savings}/Jahr
@@ -484,7 +484,7 @@ export default function HormoziDirectFunnel() {
                       </div>
                       
                       {formData.interests.includes(product.id) && (
-                        <div className="mt-3 bg-green-100 text-green-800 px-4 py-2 rounded-lg text-sm font-medium text-center">
+                        <div className="mt-2 sm:mt-3 bg-green-100 text-green-800 px-3 sm:px-4 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium text-center">
                           ✅ Ausgewählt - {product.savings}/Jahr gespart
                         </div>
                       )}
@@ -493,10 +493,10 @@ export default function HormoziDirectFunnel() {
                 </div>
 
                 {/* LIVE BUNDLE CALCULATOR */}
-                <div className="mt-8 p-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl border-3 border-green-300">
+                <div className="mt-6 sm:mt-8 p-4 sm:p-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl sm:rounded-2xl border-2 sm:border-3 border-green-300">
                   <div className="text-center">
-                    <h4 className="text-xl font-bold text-gray-800 mb-4">🎯 Ihr Sparfortschritt</h4>
-                    <div className="text-3xl sm:text-4xl font-bold text-green-600 mb-4">
+                    <h4 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">🎯 Ihr Sparfortschritt</h4>
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-600 mb-3 sm:mb-4">
                       bis zu {totalSavings}€ pro Jahr
                     </div>
                     
