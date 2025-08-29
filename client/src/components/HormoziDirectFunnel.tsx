@@ -330,44 +330,60 @@ export default function HormoziDirectFunnel() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* MOBILE-OPTIMIERTE ALTERSGRUPPEN-AUSWAHL */}
+                <div className="space-y-4">
                   {[
-                    {age: '18-29 Jahre', savings: '423€', desc: 'Günstige Einstiegstarife + Zukunftsschutz', highlight: false},
-                    {age: '30-39 Jahre', savings: '687€', desc: 'Familie & Beruf optimal absichern', highlight: false},
-                    {age: '40-49 Jahre', savings: '847€', desc: '🏆 MAXIMALER SCHUTZ + HÖCHSTE ERSPARNISSE', highlight: true},
-                    {age: '50-59 Jahre', savings: '734€', desc: 'Altersvorsorge + Schutz perfekt kombiniert', highlight: false},
-                    {age: '60+ Jahre', savings: '567€', desc: 'Spezielle Senioren-Vorteile + Rabatte', highlight: false}
+                    {age: '18-29 Jahre', savings: '423€', desc: 'Günstige Einstiegstarife', emoji: '👨‍🎓', highlight: false},
+                    {age: '30-39 Jahre', savings: '687€', desc: 'Familie & Beruf absichern', emoji: '👩‍💼', highlight: false},
+                    {age: '40-49 Jahre', savings: '847€', desc: '🏆 MAXIMALE ERSPARNISSE', emoji: '⭐', highlight: true},
+                    {age: '50-59 Jahre', savings: '734€', desc: 'Altersvorsorge optimieren', emoji: '🏠', highlight: false},
+                    {age: '60+ Jahre', savings: '567€', desc: 'Senioren-Vorteile nutzen', emoji: '👴', highlight: false}
                   ].map((item) => (
                     <Button
                       key={item.age}
                       variant="outline"
-                      className={`p-8 h-auto text-left border-3 transition-all transform hover:scale-105 ${
+                      className={`w-full p-6 h-auto text-left border-4 transition-all duration-300 transform active:scale-95 ${
                         formData.age === item.age 
-                          ? "bg-red-600 text-white border-red-600 scale-105 shadow-2xl" 
+                          ? "bg-gradient-to-r from-red-600 to-red-700 text-white border-red-600 shadow-2xl ring-4 ring-red-300" 
                           : item.highlight 
-                            ? "border-red-500 hover:bg-red-50 shadow-xl ring-2 ring-red-200" 
-                            : "border-gray-300 hover:border-red-400 hover:bg-red-50 shadow-lg"
+                            ? "border-red-500 bg-gradient-to-r from-red-50 to-orange-50 hover:bg-red-100 shadow-xl ring-2 ring-red-200 hover:ring-4" 
+                            : "border-gray-300 bg-white hover:border-red-400 hover:bg-red-50 shadow-lg hover:shadow-xl"
                       }`}
-                      onClick={() => setFormData(prev => ({ ...prev, age: item.age }))}
+                      onClick={() => {
+                        setFormData(prev => ({ ...prev, age: item.age }));
+                        // Haptisches Feedback für mobile
+                        if (navigator.vibrate) navigator.vibrate(50);
+                      }}
                     >
-                      <div className="w-full">
-                        <div className="flex justify-between items-start mb-3">
-                          <div className="font-black text-2xl">{item.age}</div>
-                          <div className={`font-black text-2xl ${
+                      <div className="flex items-center justify-between w-full">
+                        <div className="flex items-center gap-4">
+                          <div className="text-4xl">{item.emoji}</div>
+                          <div>
+                            <div className="font-black text-xl sm:text-2xl mb-1">{item.age}</div>
+                            <div className={`text-sm sm:text-base font-bold ${
+                              formData.age === item.age ? 'text-yellow-200' : 'text-gray-600'
+                            }`}>
+                              {item.desc}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className={`font-black text-xl sm:text-2xl ${
                             formData.age === item.age ? 'text-yellow-300' : 'text-green-600'
                           }`}>-{item.savings}</div>
+                          <div className="text-xs sm:text-sm text-gray-500">pro Jahr</div>
                         </div>
-                        <div className={`text-lg font-bold ${
-                          formData.age === item.age ? 'text-white' : 'text-gray-700'
-                        }`}>
-                          {item.desc}
-                        </div>
-                        {item.highlight && formData.age !== item.age && (
-                          <div className="mt-3 bg-yellow-400 text-black px-3 py-2 rounded-lg text-sm font-black animate-pulse">
-                            🏆 MEISTGEWÄHLT - BESTE ERSPARNISSE
-                          </div>
-                        )}
                       </div>
+                      {formData.age === item.age && (
+                        <div className="mt-4 bg-yellow-400 text-black px-4 py-2 rounded-lg text-sm font-black flex items-center justify-center animate-pulse">
+                          ✅ AUSGEWÄHLT - WEITER ZU DEN VERSICHERUNGEN
+                        </div>
+                      )}
+                      {item.highlight && formData.age !== item.age && (
+                        <div className="mt-3 bg-gradient-to-r from-yellow-400 to-orange-400 text-black px-4 py-2 rounded-lg text-sm font-black text-center animate-pulse">
+                          🏆 MEISTGEWÄHLT - BESTE ERSPARNISSE
+                        </div>
+                      )}
                     </Button>
                   ))}
                 </div>
@@ -400,58 +416,89 @@ export default function HormoziDirectFunnel() {
                   </p>
                 </div>
 
-                {/* Vereinfachte Produktauswahl für bessere Conversion */}
-                <div className="space-y-4">
+                {/* MOBILE-OPTIMIERTE VERSICHERUNGSAUSWAHL */}
+                <div className="space-y-3">
                   {[
-                    { id: "haftpflicht", name: "Haftpflichtversicherung", price: "ab 5,26€", oldPrice: "12€", savings: "bis zu 81€", urgent: "PFLICHT - Ohne riskieren Sie Ihr Vermögen!", color: "border-red-500" },
-                    { id: "hausrat", name: "Hausratversicherung", price: "ab 12,58€", oldPrice: "25€", savings: "bis zu 149€", urgent: "Preiserhöhung um 40% ab September!", color: "border-blue-500" },
-                    { id: "wohngebaeude", name: "Wohngebäudeversicherung", price: "ab 28,99€", oldPrice: "45€", savings: "bis zu 192€", urgent: "Elementarschäden +127% gestiegen!", color: "border-green-500" },
-                    { id: "rechtsschutz", name: "Rechtsschutzversicherung", price: "ab 11,60€", oldPrice: "25€", savings: "bis zu 161€", urgent: "Gerichtskosten steigen 2025 um 25%!", color: "border-purple-500" },
-                    { id: "zahnzusatz", name: "Zahnzusatzversicherung", price: "ab 21,95€", oldPrice: "35€", savings: "bis zu 157€", urgent: "Kassenzuschuss wird 2025 gekürzt!", color: "border-pink-500" },
-                    { id: "berufsunfaehigkeit", name: "Berufsunfähigkeitsversicherung", price: "ab 45€", oldPrice: "89€", savings: "bis zu 528€", urgent: "Jeder 4. wird berufsunfähig!", color: "border-orange-500" },
-                    { id: "kfz_haftpflicht", name: "Kfz-Haftpflichtversicherung", price: "ab 35€", oldPrice: "67€", savings: "bis zu 384€", urgent: "PFLICHT für jedes Fahrzeug!", color: "border-gray-500" },
-                    { id: "lebensversicherung", name: "Lebensversicherung", price: "ab 35€", oldPrice: "67€", savings: "bis zu 384€", urgent: "Garantiezins sinkt 2025 weiter!", color: "border-indigo-500" }
+                    { id: "haftpflicht", name: "Haftpflicht", price: "ab 5,26€", oldPrice: "12€", savings: "bis zu 81€", urgent: "PFLICHT!", emoji: "🛡️", priority: "MUST-HAVE" },
+                    { id: "hausrat", name: "Hausrat", price: "ab 12,58€", oldPrice: "25€", savings: "bis zu 149€", urgent: "Preise steigen!", emoji: "🏠", priority: "POPULAR" },
+                    { id: "wohngebaeude", name: "Wohngebäude", price: "ab 28,99€", oldPrice: "45€", savings: "bis zu 192€", urgent: "Elementarschäden!", emoji: "🏘️", priority: "RECOMMENDED" },
+                    { id: "rechtsschutz", name: "Rechtsschutz", price: "ab 11,60€", oldPrice: "25€", savings: "bis zu 161€", urgent: "Kosten steigen!", emoji: "⚖️", priority: "SMART" },
+                    { id: "zahnzusatz", name: "Zahnzusatz", price: "ab 21,95€", oldPrice: "35€", savings: "bis zu 157€", urgent: "Zuschuss sinkt!", emoji: "🦷", priority: "HEALTH" },
+                    { id: "berufsunfaehigkeit", name: "Berufsunfähigkeit", price: "ab 45€", oldPrice: "89€", savings: "bis zu 528€", urgent: "Jeder 4. betroffen!", emoji: "💼", priority: "CRITICAL" },
+                    { id: "kfz_haftpflicht", name: "Kfz-Haftpflicht", price: "ab 35€", oldPrice: "67€", savings: "bis zu 384€", urgent: "PFLICHT!", emoji: "🚗", priority: "MUST-HAVE" },
+                    { id: "lebensversicherung", name: "Lebensversicherung", price: "ab 35€", oldPrice: "67€", savings: "bis zu 384€", urgent: "Zins sinkt!", emoji: "👨‍👩‍👧‍👦", priority: "FAMILY" }
                   ].map((product) => (
                     <Button
                       key={product.id}
                       variant="outline"
-                      className={`w-full text-left h-auto p-6 border-2 transition-all transform hover:scale-105 ${
+                      className={`w-full text-left h-auto p-5 border-3 transition-all duration-300 transform active:scale-95 ${
                         formData.interests.includes(product.id)
-                          ? "bg-red-600 text-white border-red-600 scale-105 shadow-2xl"
-                          : `${product.color} hover:bg-red-50 shadow-lg`
+                          ? "bg-gradient-to-r from-green-600 to-green-700 text-white border-green-600 shadow-2xl ring-4 ring-green-300"
+                          : "border-gray-300 bg-white hover:border-green-500 hover:bg-green-50 shadow-lg hover:shadow-xl hover:ring-2 hover:ring-green-200"
                       }`}
-                      onClick={() => toggleInterest(product.id)}
+                      onClick={() => {
+                        toggleInterest(product.id);
+                        // Haptisches Feedback für mobile
+                        if (navigator.vibrate) navigator.vibrate(50);
+                      }}
                     >
-                      <div className="flex justify-between items-center w-full">
-                        <div className="flex-1">
-                          <div className="flex items-center mb-2">
-                            <div className="font-black text-xl">{product.name}</div>
+                      <div className="flex items-center gap-4">
+                        {/* Emoji & Checkbox */}
+                        <div className="flex flex-col items-center gap-2">
+                          <div className="text-3xl">{product.emoji}</div>
+                          <div className={`w-6 h-6 rounded-full border-3 flex items-center justify-center ${
+                            formData.interests.includes(product.id)
+                              ? "bg-yellow-400 border-yellow-500"
+                              : "border-gray-400 bg-white"
+                          }`}>
                             {formData.interests.includes(product.id) && (
-                              <div className="ml-3 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-black">
-                                ✅ AUSGEWÄHLT
-                              </div>
+                              <div className="text-black font-black text-sm">✓</div>
                             )}
                           </div>
-                          <div className={`text-sm font-bold ${
-                            formData.interests.includes(product.id) ? 'text-yellow-300' : 'text-red-600'
-                          }`}>
-                            ⚠️ {product.urgent}
-                          </div>
                         </div>
-                        <div className="text-right ml-4">
-                          <div className={`text-2xl font-black ${
-                            formData.interests.includes(product.id) ? 'text-yellow-300' : 'text-green-600'
-                          }`}>
-                            {product.price}/Monat
+                        
+                        {/* Content */}
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="font-black text-lg sm:text-xl">{product.name}</div>
+                            <div className={`text-right ${
+                              formData.interests.includes(product.id) ? 'text-yellow-300' : 'text-green-600'
+                            }`}>
+                              <div className="font-black text-lg sm:text-xl">{product.price}</div>
+                              <div className="text-xs line-through opacity-75">{product.oldPrice}</div>
+                            </div>
                           </div>
-                          <div className="text-sm line-through opacity-75">{product.oldPrice}/Monat</div>
-                          <div className={`text-lg font-bold ${
-                            formData.interests.includes(product.id) ? 'text-white' : 'text-green-600'
+                          
+                          <div className="flex items-center justify-between">
+                            <div className={`text-sm font-bold ${
+                              formData.interests.includes(product.id) ? 'text-yellow-200' : 'text-red-600'
+                            }`}>
+                              ⚠️ {product.urgent}
+                            </div>
+                            <div className={`text-sm font-bold ${
+                              formData.interests.includes(product.id) ? 'text-white' : 'text-green-700'
+                            }`}>
+                              {product.savings}/Jahr
+                            </div>
+                          </div>
+                          
+                          {/* Priority Badge */}
+                          <div className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold ${
+                            product.priority === 'MUST-HAVE' ? 'bg-red-100 text-red-800' :
+                            product.priority === 'CRITICAL' ? 'bg-orange-100 text-orange-800' :
+                            product.priority === 'POPULAR' ? 'bg-blue-100 text-blue-800' :
+                            'bg-gray-100 text-gray-800'
                           }`}>
-                            -{product.savings}/Jahr
+                            {product.priority}
                           </div>
                         </div>
                       </div>
+                      
+                      {formData.interests.includes(product.id) && (
+                        <div className="mt-3 bg-yellow-400 text-black px-4 py-2 rounded-lg text-sm font-black text-center">
+                          ✅ AUSGEWÄHLT - {product.savings}/Jahr gespart!
+                        </div>
+                      )}
                     </Button>
                   ))}
                 </div>
@@ -640,7 +687,7 @@ export default function HormoziDirectFunnel() {
 
                 <div className="bg-red-50 p-6 rounded-2xl">
                   <p className="text-gray-700 text-lg mb-4 font-bold">Fragen? Kontaktieren Sie uns:</p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <div className="flex flex-col gap-4 justify-center">
                     <a 
                       href="tel:015566771019" 
                       className="inline-flex items-center justify-center text-red-600 font-black text-xl hover:text-red-700 bg-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all"
@@ -677,9 +724,13 @@ export default function HormoziDirectFunnel() {
                 )}
                 
                 <Button
-                  onClick={nextStep}
+                  onClick={(e) => {
+                    nextStep();
+                    // Haptisches Feedback für mobile
+                    if (navigator.vibrate) navigator.vibrate(100);
+                  }}
                   disabled={!validateCurrentStep() || submitMutation.isPending}
-                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-12 py-6 text-xl font-black rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 min-w-[400px] animate-pulse"
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-8 py-6 h-16 text-lg sm:text-xl font-black rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 active:scale-95 transition-all duration-300 w-full animate-pulse ring-4 ring-red-300"
                 >
                   {submitMutation.isPending ? (
                     "⏳ SICHERE IHRE ERSPARNISSE..."
