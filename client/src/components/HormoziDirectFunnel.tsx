@@ -404,15 +404,15 @@ export default function HormoziDirectFunnel() {
             {currentStep === 2 && (
               <div>
                 <div className="text-center mb-8">
-                  <div className="bg-green-100 text-green-800 px-6 py-3 rounded-full inline-block font-black mb-6 text-lg">
+                  <div className="bg-green-100 text-green-800 px-6 py-3 rounded-full inline-block font-bold mb-6 text-lg">
                     💰 Schritt 2: Wählen Sie Ihre Ersparnisse aus!
                   </div>
                   
-                  <h3 className="text-3xl font-black text-gray-800 mb-4">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 leading-tight">
                     Bei welchen Versicherungen wollen Sie sparen?
                   </h3>
-                  <p className="text-gray-600 text-lg mb-6">
-                    Jede Versicherung = Mehr Ersparnis. <span className="font-black text-green-600">5+ Versicherungen = 15% EXTRA Rabatt!</span>
+                  <p className="text-gray-600 text-base sm:text-lg mb-6 leading-relaxed">
+                    Jede Versicherung = Mehr Ersparnis. <span className="font-semibold text-green-600">5+ Versicherungen = 15% EXTRA Rabatt!</span>
                   </p>
                 </div>
 
@@ -442,61 +442,50 @@ export default function HormoziDirectFunnel() {
                         if (navigator.vibrate) navigator.vibrate(50);
                       }}
                     >
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-start gap-4">
                         {/* Emoji & Checkbox */}
-                        <div className="flex flex-col items-center gap-2">
-                          <div className="text-3xl">{product.emoji}</div>
-                          <div className={`w-6 h-6 rounded-full border-3 flex items-center justify-center ${
+                        <div className="flex flex-col items-center gap-2 flex-shrink-0">
+                          <div className="text-2xl">{product.emoji}</div>
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                             formData.interests.includes(product.id)
-                              ? "bg-yellow-400 border-yellow-500"
-                              : "border-gray-400 bg-white"
+                              ? "bg-green-500 border-green-600"
+                              : "border-gray-300 bg-white"
                           }`}>
                             {formData.interests.includes(product.id) && (
-                              <div className="text-black font-black text-sm">✓</div>
+                              <div className="text-white font-bold text-xs">✓</div>
                             )}
                           </div>
                         </div>
                         
                         {/* Content */}
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="font-black text-lg sm:text-xl">{product.name}</div>
-                            <div className={`text-right ${
-                              formData.interests.includes(product.id) ? 'text-yellow-300' : 'text-green-600'
-                            }`}>
-                              <div className="font-black text-lg sm:text-xl">{product.price}</div>
-                              <div className="text-xs line-through opacity-75">{product.oldPrice}</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold text-base sm:text-lg text-gray-800 truncate">{product.name}</h4>
+                              <div className={`text-sm mt-1 ${
+                                formData.interests.includes(product.id) ? 'text-yellow-200' : 'text-gray-600'
+                              }`}>
+                                {product.urgent}
+                              </div>
                             </div>
-                          </div>
-                          
-                          <div className="flex items-center justify-between">
-                            <div className={`text-sm font-bold ${
-                              formData.interests.includes(product.id) ? 'text-yellow-200' : 'text-red-600'
-                            }`}>
-                              ⚠️ {product.urgent}
+                            <div className="text-right ml-3 flex-shrink-0">
+                              <div className={`font-bold text-base sm:text-lg ${
+                                formData.interests.includes(product.id) ? 'text-yellow-300' : 'text-green-600'
+                              }`}>{product.price}</div>
+                              <div className="text-xs text-gray-500 line-through">{product.oldPrice}</div>
+                              <div className={`text-sm font-medium ${
+                                formData.interests.includes(product.id) ? 'text-white' : 'text-green-700'
+                              }`}>
+                                {product.savings}/Jahr
+                              </div>
                             </div>
-                            <div className={`text-sm font-bold ${
-                              formData.interests.includes(product.id) ? 'text-white' : 'text-green-700'
-                            }`}>
-                              {product.savings}/Jahr
-                            </div>
-                          </div>
-                          
-                          {/* Priority Badge */}
-                          <div className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold ${
-                            product.priority === 'MUST-HAVE' ? 'bg-red-100 text-red-800' :
-                            product.priority === 'CRITICAL' ? 'bg-orange-100 text-orange-800' :
-                            product.priority === 'POPULAR' ? 'bg-blue-100 text-blue-800' :
-                            'bg-gray-100 text-gray-800'
-                          }`}>
-                            {product.priority}
                           </div>
                         </div>
                       </div>
                       
                       {formData.interests.includes(product.id) && (
-                        <div className="mt-3 bg-yellow-400 text-black px-4 py-2 rounded-lg text-sm font-black text-center">
-                          ✅ AUSGEWÄHLT - {product.savings}/Jahr gespart!
+                        <div className="mt-3 bg-green-100 text-green-800 px-4 py-2 rounded-lg text-sm font-medium text-center">
+                          ✅ Ausgewählt - {product.savings}/Jahr gespart
                         </div>
                       )}
                     </Button>
@@ -506,24 +495,24 @@ export default function HormoziDirectFunnel() {
                 {/* LIVE BUNDLE CALCULATOR */}
                 <div className="mt-8 p-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl border-3 border-green-300">
                   <div className="text-center">
-                    <h4 className="text-2xl font-black text-gray-800 mb-4">🎯 Ihr aktueller Sparfortschritt</h4>
-                    <div className="text-5xl font-black text-green-600 mb-4">
-                      bis zu {totalSavings}€ pro Jahr gespart!
+                    <h4 className="text-xl font-bold text-gray-800 mb-4">🎯 Ihr Sparfortschritt</h4>
+                    <div className="text-3xl sm:text-4xl font-bold text-green-600 mb-4">
+                      bis zu {totalSavings}€ pro Jahr
                     </div>
                     
                     {formData.interests.length >= 5 ? (
-                      <div className="bg-green-600 text-white px-8 py-4 rounded-full font-black text-xl mb-6 animate-pulse">
-                        🎉 15% BÜNDELNACHLASS AKTIVIERT! Zusätzliche {bundleBonus}€ Bonus!
+                      <div className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold text-lg mb-6">
+                        🎉 15% Bündelnachlass aktiviert! +{bundleBonus}€ Bonus
                       </div>
                     ) : (
-                      <div className="bg-orange-100 text-orange-800 px-8 py-4 rounded-full font-black text-xl mb-6">
-                        Noch {5 - formData.interests.length} Versicherung(en) für 15% EXTRA-BONUS!
+                      <div className="bg-orange-100 text-orange-800 px-6 py-3 rounded-lg font-medium text-base mb-6">
+                        Noch {5 - formData.interests.length} Versicherung(en) für 15% Extra-Bonus
                       </div>
                     )}
                     
-                    <div className="text-lg text-gray-700 font-bold">
-                      ✅ {formData.interests.length} von 8 TOP-Versicherungen ausgewählt<br/>
-                      💡 Echte ERGO-Preise = Authentische Ersparnisse
+                    <div className="text-base text-gray-700 font-medium space-y-1">
+                      <div>✅ {formData.interests.length} von 8 Versicherungen ausgewählt</div>
+                      <div className="text-sm text-gray-600">💡 Echte ERGO-Preise mit authentischen Ersparnissen</div>
                     </div>
                   </div>
                 </div>
