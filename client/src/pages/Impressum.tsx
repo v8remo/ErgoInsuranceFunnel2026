@@ -29,7 +29,7 @@ export default function Impressum() {
             <section>
               <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
                 <Mail className="w-6 h-6 text-ergo-red mr-3" />
-                Angaben gemäß § 5 TMG
+                Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz)
               </h2>
               <div className="bg-blue-50 p-6 rounded-lg">
                 <div className="space-y-2 text-gray-700">
@@ -92,20 +92,21 @@ export default function Impressum() {
               </div>
             </section>
 
-            {/* EU-Streitschlichtung */}
+            {/* IHK-Registrierung für Versicherungsberater */}
             <section>
-              <h2 className="text-xl font-bold text-gray-800 mb-4">EU-Streitschlichtung</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Registrierung nach § 34d GewO</h2>
               <div className="bg-green-50 p-6 rounded-lg">
-                <p className="text-gray-700">
-                  Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
-                  <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" 
-                     className="text-ergo-red hover:text-red-700 ml-1 underline">
-                    https://ec.europa.eu/consumers/odr/
-                  </a>
-                </p>
-                <p className="text-gray-700 mt-3">
-                  Unsere E-Mail-Adresse finden Sie oben im Impressum.
-                </p>
+                <div className="space-y-3 text-gray-700">
+                  <div>
+                    <span className="font-semibold">Aufsichtsbehörde:</span> IHK Oldenburg (zuständig für Ganderkesee)
+                  </div>
+                  <div>
+                    <span className="font-semibold">Vermittlerregister:</span> <a href="https://www.vermittlerregister.info" target="_blank" rel="noopener noreferrer" className="text-ergo-red hover:text-red-700 underline">www.vermittlerregister.info</a>
+                  </div>
+                  <div>
+                    <span className="font-semibold">Berufsrechtliche Regelungen:</span> § 34d Gewerbeordnung (GewO)
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -125,11 +126,23 @@ export default function Impressum() {
               <h2 className="text-xl font-bold text-gray-800 mb-4">Haftung für Inhalte</h2>
               <div className="bg-red-50 p-6 rounded-lg">
                 <p className="text-gray-700">
-                  Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den 
-                  allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht 
+                  Als Diensteanbieter sind wir gemäß § 7 Abs.1 DDG für eigene Inhalte auf diesen Seiten nach den 
+                  allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG sind wir als Diensteanbieter jedoch nicht 
                   unter der Verpflichtung, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach 
                   Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
                 </p>
+              </div>
+            </section>
+
+            {/* Berufshaftpflicht */}
+            <section>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Berufshaftpflichtversicherung</h2>
+              <div className="bg-blue-50 p-6 rounded-lg">
+                <div className="space-y-2 text-gray-700">
+                  <div><span className="font-semibold">Versicherer:</span> ERGO Versicherung AG</div>
+                  <div><span className="font-semibold">Geltungsraum:</span> Deutschland</div>
+                  <div><span className="font-semibold">Deckungssumme:</span> 1.300.000 € je Versicherungsfall</div>
+                </div>
               </div>
             </section>
           </div>

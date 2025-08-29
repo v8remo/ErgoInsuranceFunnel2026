@@ -86,20 +86,37 @@ export default function Datenschutz() {
               
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-bold mb-3">Kontaktformular</h3>
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <h3 className="font-bold mb-3">Cookies & Tracking</h3>
+                  <div className="bg-yellow-50 p-4 rounded-lg">
                     <p className="text-gray-700 mb-3">
-                      <strong>Zweck der Verarbeitung:</strong> Bearbeitung Ihrer Versicherungsanfrage
+                      <strong>Google Analytics & Google Ads:</strong> Diese Website verwendet Google Analytics und Google Ads Conversion-Tracking zur Analyse des Nutzerverhaltens.
                     </p>
                     <p className="text-gray-700 mb-3">
-                      <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)
-                    </p>
-                    <p className="text-gray-700 mb-3">
-                      <strong>Verarbeitete Daten:</strong> Name, E-Mail-Adresse, Telefonnummer, Wohnort, Versicherungsinteressen
+                      <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Ihre Einwilligung bei Nutzung)
                     </p>
                     <p className="text-gray-700">
-                      <strong>Speicherdauer:</strong> Bis zur vollständigen Bearbeitung Ihrer Anfrage, 
-                      danach Löschung nach gesetzlichen Aufbewahrungsfristen
+                      <strong>Widerspruch:</strong> Sie können die Datenverarbeitung durch Google Analytics verhindern, indem Sie die Cookies in Ihrem Browser deaktivieren.
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-bold mb-3">Kontaktformular & Versicherungsberatung</h3>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <p className="text-gray-700 mb-3">
+                      <strong>Zweck der Verarbeitung:</strong> Versicherungsberatung, Angebotserstellung und Vertragsabwicklung
+                    </p>
+                    <p className="text-gray-700 mb-3">
+                      <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung) und lit. b DSGVO (Vertragsanbahnung)
+                    </p>
+                    <p className="text-gray-700 mb-3">
+                      <strong>Verarbeitete Daten:</strong> Name, E-Mail, Telefon, Anschrift, Geburtsdatum, Versicherungswünsche, bestehende Verträge
+                    </p>
+                    <p className="text-gray-700 mb-3">
+                      <strong>Empfänger:</strong> ERGO Versicherungsgruppe AG (bei Antragsstellung)
+                    </p>
+                    <p className="text-gray-700">
+                      <strong>Speicherdauer:</strong> Bis zu 10 Jahre nach gesetzlichen Aufbewahrungspflichten für Versicherungsberater
                     </p>
                   </div>
                 </div>
@@ -132,19 +149,46 @@ export default function Datenschutz() {
 
             {/* Widerruf */}
             <section>
-              <h2 className="text-xl font-bold text-gray-800 mb-4">5. Widerruf Ihrer Einwilligung</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">5. Widerruf & Löschung</h2>
               <div className="bg-yellow-50 p-6 rounded-lg">
-                <p className="text-gray-700">
-                  Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. 
-                  Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der 
-                  bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.
-                </p>
+                <div className="space-y-3 text-gray-700">
+                  <p>
+                    <strong>Widerruf der Einwilligung:</strong> Sie können Ihre Einwilligung zur Datenverarbeitung jederzeit widerrufen.
+                  </p>
+                  <p>
+                    <strong>Löschung auf Verlangen:</strong> Ihre Daten werden umgehend gelöscht, soweit keine gesetzlichen Aufbewahrungspflichten bestehen.
+                  </p>
+                  <p>
+                    <strong>Widerspruch gegen Marketing:</strong> Der Nutzung Ihrer Daten für Werbezwecke können Sie jederzeit widersprechen.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Cookie-Banner Hinweise */}
+            <section>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">6. Cookies & Tracking</h2>
+              <div className="bg-orange-50 p-6 rounded-lg">
+                <div className="space-y-3 text-gray-700">
+                  <p>
+                    <strong>Notwendige Cookies:</strong> Diese Website verwendet technisch notwendige Cookies für den Betrieb der Seite.
+                  </p>
+                  <p>
+                    <strong>Marketing-Cookies:</strong> Für Google Analytics und Google Ads Conversion-Tracking verwenden wir Marketing-Cookies, die Ihre Einwilligung erfordern.
+                  </p>
+                  <p>
+                    <strong>Ihre Kontrolle:</strong> Sie können Cookies jederzeit in Ihren Browser-Einstellungen deaktivieren oder löschen.
+                  </p>
+                  <p>
+                    <strong>Dauer:</strong> Marketing-Cookies werden maximal 24 Monate gespeichert.
+                  </p>
+                </div>
               </div>
             </section>
 
             {/* Kontakt bei Datenschutzfragen */}
             <section>
-              <h2 className="text-xl font-bold text-gray-800 mb-4">6. Kontakt bei Datenschutzfragen</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">7. Kontakt bei Datenschutzfragen</h2>
               <div className="bg-blue-50 p-6 rounded-lg">
                 <p className="text-gray-700">
                   Bei Fragen zum Datenschutz wenden Sie sich bitte an:<br />

@@ -295,7 +295,7 @@ export default function HormoziDirectFunnel() {
                     <div className="text-center sm:text-left">
                       <h3 className="text-xl font-bold text-gray-800 mb-1">Morino Stübe</h3>
                       <p className="text-ergo-red font-semibold mb-2">🏆 Ihr persönlicher ERGO-Berater</p>
-                      <p className="text-sm text-gray-600">✅ Zertifiziert • ✅ 15+ Jahre Erfahrung • ✅ Über 2.000 zufriedene Kunden</p>
+                      <p className="text-sm text-gray-600">✅ Zertifiziert • ✅ 3 Jahre Erfahrung • ✅ Über 500 zufriedene Kunden</p>
                     </div>
                   </div>
                 </div>
