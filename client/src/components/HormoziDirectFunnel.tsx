@@ -19,6 +19,37 @@ interface FormData {
 }
 
 export default function HormoziDirectFunnel() {
+  // ECHTER COUNTDOWN TIMER
+  const [timeLeft, setTimeLeft] = useState({ hours: 23, minutes: 47, seconds: 12 });
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        let { hours, minutes, seconds } = prev;
+        
+        if (seconds > 0) {
+          seconds--;
+        } else if (minutes > 0) {
+          minutes--;
+          seconds = 59;
+        } else if (hours > 0) {
+          hours--;
+          minutes = 59;
+          seconds = 59;
+        } else {
+          // Reset after 24 hours
+          hours = 23;
+          minutes = 59;
+          seconds = 59;
+        }
+        
+        return { hours, minutes, seconds };
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   // SEO Tags direkt eingebettet
   useEffect(() => {
     document.title = "ERGO Versicherungsberatung - Kostenlose Analyse | Morino Stübe";
@@ -626,13 +657,13 @@ export default function HormoziDirectFunnel() {
               {/* FINAL URGENCY REMINDER */}
               <div className="text-center mt-6">
                 <div className="text-red-600 font-black text-lg animate-pulse">
-                  ⏰ Nur noch 23 Stunden für diese Preise!
+                  ⏰ Bearbeitungszeit: {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
                 </div>
                 <div className="text-sm text-gray-600 mt-2 font-bold">
-                  Nach dem 1. September steigen die Preise um bis zu 30%
+                  Durchschnittliche Bearbeitungszeit für Beratungsanfragen
                 </div>
                 <div className="text-xs text-gray-500 mt-1">
-                  🔒 SSL-verschlüsselt • 📱 100% mobil optimiert • ⚡ Sofortige Bearbeitung
+                  🔒 SSL-verschlüsselt • 📋 DSGVO-konform • 📞 Kostenlose Beratung
                 </div>
               </div>
             </div>

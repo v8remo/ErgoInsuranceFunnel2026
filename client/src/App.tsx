@@ -7,6 +7,8 @@ import { useAnalytics } from "@/hooks/use-analytics";
 import { useScrollTop } from "@/hooks/use-scroll-top";
 import Home from "@/pages/Home";
 import AdminDashboard from "@/pages/AdminDashboard";
+import Impressum from "@/pages/Impressum";
+import Datenschutz from "@/pages/Datenschutz";
 import NotFound from "@/pages/not-found";
 
 function AppContent() {
@@ -17,6 +19,8 @@ function AppContent() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/admin" component={AdminDashboard} />
+      <Route path="/impressum" component={Impressum} />
+      <Route path="/datenschutz" component={Datenschutz} />
       <Route component={NotFound} />
     </Switch>
   );
