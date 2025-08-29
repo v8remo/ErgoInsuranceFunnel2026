@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,6 +19,41 @@ interface FormData {
 }
 
 export default function HormoziDirectFunnel() {
+  // SEO Tags direkt eingebettet
+  useEffect(() => {
+    document.title = "🚨 LETZTE CHANCE: ERGO Versicherung 30% günstiger - Nur heute!";
+    
+    // Meta Description
+    const metaDescription = document.querySelector('meta[name="description"]') || document.createElement('meta');
+    metaDescription.setAttribute('name', 'description');
+    metaDescription.setAttribute('content', '🚨 WARNUNG: Versicherungspreise steigen ab 1. September um 30%! Sichern Sie sich JETZT die niedrigen Tarife. Bis zu 2.400€ sparen + 15% Bündelnachlass. Kostenlose Analyse!');
+    if (!document.querySelector('meta[name="description"]')) {
+      document.head.appendChild(metaDescription);
+    }
+
+    // Keywords
+    const metaKeywords = document.querySelector('meta[name="keywords"]') || document.createElement('meta');
+    metaKeywords.setAttribute('name', 'keywords');
+    metaKeywords.setAttribute('content', 'ERGO Versicherung günstig, Versicherung sparen, 30% günstiger, Bündelnachlass, kostenlose Analyse, Morino Stübe, Ganderkesee');
+    if (!document.querySelector('meta[name="keywords"]')) {
+      document.head.appendChild(metaKeywords);
+    }
+
+    // Open Graph
+    const ogTitle = document.querySelector('meta[property="og:title"]') || document.createElement('meta');
+    ogTitle.setAttribute('property', 'og:title');
+    ogTitle.setAttribute('content', '🚨 VERSICHERUNG 30% GÜNSTIGER - Nur heute!');
+    if (!document.querySelector('meta[property="og:title"]')) {
+      document.head.appendChild(ogTitle);
+    }
+
+    const ogDescription = document.querySelector('meta[property="og:description"]') || document.createElement('meta');
+    ogDescription.setAttribute('property', 'og:description');
+    ogDescription.setAttribute('content', 'Sichern Sie sich JETZT die niedrigen Tarife bevor die Preise am 1. September um 30% steigen!');
+    if (!document.querySelector('meta[property="og:description"]')) {
+      document.head.appendChild(ogDescription);
+    }
+  }, []);
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     age: '',
@@ -542,14 +577,23 @@ export default function HormoziDirectFunnel() {
                 </div>
 
                 <div className="bg-red-50 p-6 rounded-2xl">
-                  <p className="text-gray-700 text-lg mb-4 font-bold">Fragen? Rufen Sie uns gerne an:</p>
-                  <a 
-                    href="tel:015566771019" 
-                    className="inline-flex items-center text-red-600 font-black text-2xl hover:text-red-700"
-                  >
-                    <Phone className="w-6 h-6 mr-3" />
-                    015566771019
-                  </a>
+                  <p className="text-gray-700 text-lg mb-4 font-bold">Fragen? Kontaktieren Sie uns:</p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a 
+                      href="tel:015566771019" 
+                      className="inline-flex items-center justify-center text-red-600 font-black text-xl hover:text-red-700 bg-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                    >
+                      <Phone className="w-6 h-6 mr-3" />
+                      015566771019
+                    </a>
+                    <a 
+                      href="https://wa.me/4915566771019?text=Hallo! Ich habe mich für die ERGO-Versicherungsanalyse angemeldet und möchte meine Ersparnisse besprechen."
+                      target="_blank"
+                      className="inline-flex items-center justify-center text-green-600 font-black text-xl hover:text-green-700 bg-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                    >
+                      💬 WhatsApp Beratung
+                    </a>
+                  </div>
                 </div>
               </div>
             )}
