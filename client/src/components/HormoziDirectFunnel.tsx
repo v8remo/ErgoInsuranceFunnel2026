@@ -284,6 +284,22 @@ export default function HormoziDirectFunnel() {
             {/* STEP 1: AGE SELECTION - HORMOZI STYLE */}
             {currentStep === 1 && (
               <div>
+                {/* Persönlicher Berater */}
+                <div className="bg-white p-6 rounded-xl shadow-lg border-2 border-blue-200 mb-8">
+                  <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <img 
+                      src="/attached_assets/089-Ti9r4yWZjrM_1756458595368.jpeg"
+                      alt="Morino Stübe - Ihr ERGO Berater"
+                      className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-ergo-red shadow-lg"
+                    />
+                    <div className="text-center sm:text-left">
+                      <h3 className="text-xl font-bold text-gray-800 mb-1">Morino Stübe</h3>
+                      <p className="text-ergo-red font-semibold mb-2">🏆 Ihr persönlicher ERGO-Berater</p>
+                      <p className="text-sm text-gray-600">✅ Zertifiziert • ✅ 15+ Jahre Erfahrung • ✅ Über 2.000 zufriedene Kunden</p>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="text-center mb-8">
                   <div className="bg-red-100 text-red-800 px-6 py-3 rounded-full inline-block font-black mb-6 text-lg">
                     💡 Schritt 1: Sparen Sie bis zu 847€ pro Jahr!
@@ -476,6 +492,24 @@ export default function HormoziDirectFunnel() {
                   <p className="text-gray-600 text-lg mb-6">
                     Für Ihr kostenloses Angebot und die persönliche Beratung
                   </p>
+                  
+                  {/* Persönlicher Berater für Vertrauen */}
+                  <div className="bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-xl shadow-lg border-2 border-blue-300 mb-8">
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                      <img 
+                        src="/attached_assets/089-Ti9r4yWZjrM_1756458595368.jpeg"
+                        alt="Morino Stübe - Ihr ERGO Berater"
+                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-ergo-red shadow-lg"
+                      />
+                      <div className="text-center sm:text-left">
+                        <h4 className="text-lg font-bold text-gray-800 mb-1">👋 Ich bin Morino Stübe</h4>
+                        <p className="text-ergo-red font-semibold mb-2">Ihr persönlicher Berater bei ERGO</p>
+                        <p className="text-sm text-gray-700">
+                          📞 Ich rufe Sie heute noch zurück für Ihre kostenlose Versicherungsanalyse!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                   
                   {/* FINAL VALUE REMINDER */}
                   <div className="bg-gradient-to-r from-green-100 to-yellow-100 p-6 rounded-2xl mb-8 border-2 border-green-300">
