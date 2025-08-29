@@ -1,0 +1,609 @@
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
+import { Phone, Mail, Shield, Home, Car, Heart, Clock, Star, TrendingUp, Zap } from 'lucide-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { trackEvent } from '@/lib/analytics';
+
+interface FormData {
+  age: string;
+  interests: string[];
+  existingInsurances: string[];
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  location: string;
+}
+
+export default function HormoziDirectFunnel() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState<FormData>({
+    age: '',
+    interests: [],
+    existingInsurances: [],
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    location: ''
+  });
+
+  const queryClient = useQueryClient();
+
+  const submitMutation = useMutation({
+    mutationFn: async (data: FormData) => {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          location: data.location,
+          insuranceType: 'general_consultation',
+          age: data.age,
+          specificData: {
+            interests: data.interests,
+            existingInsurances: data.existingInsurances
+          },
+          source: 'hormozi_direct_funnel'
+        })
+      });
+      if (!response.ok) throw new Error('Failed to submit');
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/leads'] });
+      setCurrentStep(4);
+      trackEvent('hormozi_lead_generated', {
+        interests: formData.interests,
+        existing_insurances: formData.existingInsurances,
+        age_group: formData.age,
+        source: 'hormozi_direct_funnel',
+        value: formData.interests.length * 156
+      });
+    }
+  });
+
+  const progress = (currentStep / 4) * 100;
+
+  const nextStep = () => {
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1);
+      trackEvent('hormozi_funnel_step_completed', { step: currentStep, savings: formData.interests.length * 156 });
+    } else {
+      submitMutation.mutate(formData);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const validateCurrentStep = () => {
+    switch (currentStep) {
+      case 1:
+        return formData.age !== '';
+      case 2:
+        return formData.interests.length > 0;
+      case 3:
+        return formData.firstName && formData.lastName && formData.email && formData.phone && formData.location;
+      default:
+        return true;
+    }
+  };
+
+  const toggleInterest = (productId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      interests: prev.interests.includes(productId)
+        ? prev.interests.filter(id => id !== productId)
+        : [...prev.interests, productId]
+    }));
+  };
+
+  const currentSavings = formData.interests.length * 156;
+  const bundleBonus = formData.interests.length >= 5 ? Math.round(currentSavings * 0.15) : 0;
+  const totalSavings = currentSavings + bundleBonus;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-red-600 via-red-500 to-orange-500">
+      {/* URGENCY HEADER - Always visible */}
+      <div className="bg-black text-white text-center py-3 px-4 text-sm font-bold animate-pulse sticky top-0 z-50">
+        🚨 WARNUNG: Versicherungspreise steigen ab 1. September um 30%! HEUTE NOCH SICHERN! 🚨
+      </div>
+      
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        {/* ALEX HORMOZI HERO SECTION */}
+        <div className="text-center mb-8">
+          <div className="bg-yellow-400 text-black px-6 py-3 rounded-full inline-block font-black mb-6 text-lg animate-bounce shadow-xl">
+            ⚡ BEGRENZTE ZEIT: Nur noch 23 Stunden!
+          </div>
+          
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+            SICHERN Sie sich <span className="text-yellow-400">JETZT</span> die niedrigen Tarife,<br/>
+            <span className="text-red-200">bevor die Preise explodieren!</span>
+          </h1>
+          
+          {/* VALUE STACK */}
+          <div className="bg-white/10 backdrop-blur rounded-2xl p-8 mb-8 border border-white/20">
+            <div className="text-2xl text-white font-bold mb-6">
+              ❌ <span className="line-through text-red-200">Bis zu 847€ mehr pro Jahr zahlen</span><br/>
+              ✅ <span className="text-green-300">ODER: Jetzt bis zu 2.400€ pro Jahr sparen!</span>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+              <div className="bg-white/20 rounded-xl p-6 hover:bg-white/30 transition-all">
+                <TrendingUp className="w-12 h-12 text-yellow-400 mx-auto mb-3" />
+                <div className="text-3xl font-black text-yellow-400">2.847</div>
+                <div className="text-white font-bold">Kunden haben heute gespart</div>
+              </div>
+              <div className="bg-white/20 rounded-xl p-6 hover:bg-white/30 transition-all">
+                <Star className="w-12 h-12 text-green-300 mx-auto mb-3" />
+                <div className="text-3xl font-black text-green-300">15%</div>
+                <div className="text-white font-bold">Garantierter Bündelnachlass</div>
+              </div>
+              <div className="bg-white/20 rounded-xl p-6 hover:bg-white/30 transition-all animate-pulse">
+                <Clock className="w-12 h-12 text-red-300 mx-auto mb-3" />
+                <div className="text-3xl font-black text-red-300">23h</div>
+                <div className="text-white font-bold">Verbleibende Zeit</div>
+              </div>
+            </div>
+            
+            {/* SOCIAL PROOF */}
+            <div className="mt-6 text-center">
+              <div className="text-white text-lg font-bold">
+                👥 In den letzten 24h haben sich 1.847 Personen angemeldet
+              </div>
+              <div className="text-red-200 text-sm mt-2">
+                📍 47 Personen aus Ihrer Region haben heute bereits gespart
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* MAIN FUNNEL CONTAINER */}
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+          {/* HEADER MIT LIVE SAVINGS */}
+          <div className="bg-gradient-to-r from-red-600 to-red-700 text-white p-8 text-center">
+            <h2 className="text-3xl font-black mb-4">
+              🏆 KOSTENLOSE Analyse + SOFORT-RABATT sichern
+            </h2>
+            <p className="text-red-100 text-lg mb-6">
+              Füllen Sie das Formular aus und sichern Sie sich die niedrigen Preise
+            </p>
+            
+            {/* LIVE SAVINGS COUNTER */}
+            <div className="bg-black/30 rounded-2xl p-6 mb-6">
+              <div className="text-yellow-300 font-black text-xl mb-3">💰 IHRE AKTUELLE ERSPARNIS:</div>
+              <div className="text-5xl font-black text-white mb-2">
+                {totalSavings}€/Jahr
+              </div>
+              <div className="text-lg text-green-300 font-bold">
+                {currentSavings}€ Grundersparnis {bundleBonus > 0 && `+ ${bundleBonus}€ Bündelbonus`}
+              </div>
+              {formData.interests.length >= 5 && (
+                <div className="bg-green-500 text-white px-4 py-2 rounded-full font-bold mt-3 animate-pulse">
+                  🎉 15% BÜNDELNACHLASS AKTIVIERT!
+                </div>
+              )}
+            </div>
+            
+            {/* URGENCY TIMER */}
+            <div className="bg-black/20 rounded-xl p-4">
+              <div className="text-yellow-300 font-bold text-lg mb-2">⏰ AKTION ENDET IN:</div>
+              <div className="text-4xl font-black text-white">23:47:12</div>
+              <div className="text-xs text-red-200 mt-1">Stunden : Minuten : Sekunden</div>
+            </div>
+          </div>
+
+          {/* PROGRESS BAR */}
+          <div className="px-8 py-6 bg-gray-50">
+            <div className="flex justify-between text-lg font-bold text-gray-800 mb-3">
+              <span>🎯 Schritt {currentStep} von 4</span>
+              <span className="text-red-600">{Math.round(progress)}% zu Ihren Ersparnissen</span>
+            </div>
+            <div className="relative">
+              <Progress value={progress} className="h-4 bg-gray-200" />
+              <div 
+                className="absolute top-0 left-0 h-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded transition-all duration-500" 
+                style={{width: `${progress}%`}}
+              />
+            </div>
+          </div>
+
+          {/* STEP CONTENT */}
+          <div className="p-8">
+            
+            {/* STEP 1: AGE SELECTION - HORMOZI STYLE */}
+            {currentStep === 1 && (
+              <div>
+                <div className="text-center mb-8">
+                  <div className="bg-red-100 text-red-800 px-6 py-3 rounded-full inline-block font-black mb-6 text-lg">
+                    💡 Schritt 1: Sparen Sie bis zu 847€ pro Jahr!
+                  </div>
+                  
+                  <h3 className="text-3xl font-black text-gray-800 mb-4">
+                    In welcher Altersgruppe befinden Sie sich?
+                  </h3>
+                  <p className="text-gray-600 text-lg mb-6">
+                    Ihre Altersgruppe bestimmt Ihre <span className="font-bold text-red-600">maximalen Sparpotentiale</span>
+                  </p>
+                  
+                  {/* VALUE PROPOSITION BY AGE */}
+                  <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-2xl mb-8 border-2 border-green-200">
+                    <div className="text-green-800 font-black text-xl mb-4">🎯 Je nach Alter sparen Sie unterschiedlich viel:</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                      <div className="bg-white p-3 rounded-lg shadow">18-29: Bis zu <span className="font-black text-green-600">423€/Jahr</span></div>
+                      <div className="bg-white p-3 rounded-lg shadow">30-39: Bis zu <span className="font-black text-green-600">687€/Jahr</span></div>
+                      <div className="bg-white p-3 rounded-lg shadow border-2 border-red-500">40-49: Bis zu <span className="font-black text-red-600">847€/Jahr ⭐</span></div>
+                      <div className="bg-white p-3 rounded-lg shadow">50-59: Bis zu <span className="font-black text-green-600">734€/Jahr</span></div>
+                      <div className="bg-white p-3 rounded-lg shadow">60+: Bis zu <span className="font-black text-green-600">567€/Jahr</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {[
+                    {age: '18-29 Jahre', savings: '423€', desc: 'Günstige Einstiegstarife + Zukunftsschutz', highlight: false},
+                    {age: '30-39 Jahre', savings: '687€', desc: 'Familie & Beruf optimal absichern', highlight: false},
+                    {age: '40-49 Jahre', savings: '847€', desc: '🏆 MAXIMALER SCHUTZ + HÖCHSTE ERSPARNISSE', highlight: true},
+                    {age: '50-59 Jahre', savings: '734€', desc: 'Altersvorsorge + Schutz perfekt kombiniert', highlight: false},
+                    {age: '60+ Jahre', savings: '567€', desc: 'Spezielle Senioren-Vorteile + Rabatte', highlight: false}
+                  ].map((item) => (
+                    <Button
+                      key={item.age}
+                      variant="outline"
+                      className={`p-8 h-auto text-left border-3 transition-all transform hover:scale-105 ${
+                        formData.age === item.age 
+                          ? "bg-red-600 text-white border-red-600 scale-105 shadow-2xl" 
+                          : item.highlight 
+                            ? "border-red-500 hover:bg-red-50 shadow-xl ring-2 ring-red-200" 
+                            : "border-gray-300 hover:border-red-400 hover:bg-red-50 shadow-lg"
+                      }`}
+                      onClick={() => setFormData(prev => ({ ...prev, age: item.age }))}
+                    >
+                      <div className="w-full">
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="font-black text-2xl">{item.age}</div>
+                          <div className={`font-black text-2xl ${
+                            formData.age === item.age ? 'text-yellow-300' : 'text-green-600'
+                          }`}>-{item.savings}</div>
+                        </div>
+                        <div className={`text-lg font-bold ${
+                          formData.age === item.age ? 'text-white' : 'text-gray-700'
+                        }`}>
+                          {item.desc}
+                        </div>
+                        {item.highlight && formData.age !== item.age && (
+                          <div className="mt-3 bg-yellow-400 text-black px-3 py-2 rounded-lg text-sm font-black animate-pulse">
+                            🏆 MEISTGEWÄHLT - BESTE ERSPARNISSE
+                          </div>
+                        )}
+                      </div>
+                    </Button>
+                  ))}
+                </div>
+                
+                {/* SOCIAL PROOF */}
+                <div className="mt-8 text-center bg-blue-50 p-4 rounded-xl">
+                  <div className="text-gray-700 font-bold">
+                    ✅ <span className="text-blue-600">2.847 Kunden</span> haben heute bereits ihre Altersgruppe gewählt
+                  </div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    👥 Die meisten wählen 40-49 Jahre (höchste Ersparnisse)
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 2: INSURANCE SELECTION */}
+            {currentStep === 2 && (
+              <div>
+                <div className="text-center mb-8">
+                  <div className="bg-green-100 text-green-800 px-6 py-3 rounded-full inline-block font-black mb-6 text-lg">
+                    💰 Schritt 2: Wählen Sie Ihre Ersparnisse aus!
+                  </div>
+                  
+                  <h3 className="text-3xl font-black text-gray-800 mb-4">
+                    Bei welchen Versicherungen wollen Sie sparen?
+                  </h3>
+                  <p className="text-gray-600 text-lg mb-6">
+                    Jede Versicherung = Mehr Ersparnis. <span className="font-black text-green-600">5+ Versicherungen = 15% EXTRA Rabatt!</span>
+                  </p>
+                </div>
+
+                {/* Vereinfachte Produktauswahl für bessere Conversion */}
+                <div className="space-y-4">
+                  {[
+                    { id: "haftpflicht", name: "Haftpflichtversicherung", price: "8€", oldPrice: "18€", savings: "120€", urgent: "PFLICHT - Ohne riskieren Sie Ihr Vermögen!", color: "border-red-500" },
+                    { id: "hausrat", name: "Hausratversicherung", price: "15€", oldPrice: "35€", savings: "240€", urgent: "Preiserhöhung um 40% ab September!", color: "border-blue-500" },
+                    { id: "wohngebaeude", name: "Wohngebäudeversicherung", price: "25€", oldPrice: "45€", savings: "240€", urgent: "Elementarschäden +127% gestiegen!", color: "border-green-500" },
+                    { id: "rechtsschutz", name: "Rechtsschutzversicherung", price: "18€", oldPrice: "32€", savings: "168€", urgent: "Gerichtskosten steigen 2025 um 25%!", color: "border-purple-500" },
+                    { id: "zahnzusatz", name: "Zahnzusatzversicherung", price: "10€", oldPrice: "22€", savings: "144€", urgent: "Kassenzuschuss wird 2025 gekürzt!", color: "border-pink-500" },
+                    { id: "berufsunfaehigkeit", name: "Berufsunfähigkeitsversicherung", price: "45€", oldPrice: "89€", savings: "528€", urgent: "Jeder 4. wird berufsunfähig!", color: "border-orange-500" },
+                    { id: "kfz_haftpflicht", name: "Kfz-Haftpflichtversicherung", price: "35€", oldPrice: "67€", savings: "384€", urgent: "PFLICHT für jedes Fahrzeug!", color: "border-gray-500" },
+                    { id: "lebensversicherung", name: "Lebensversicherung", price: "35€", oldPrice: "67€", savings: "384€", urgent: "Garantiezins sinkt 2025 weiter!", color: "border-indigo-500" }
+                  ].map((product) => (
+                    <Button
+                      key={product.id}
+                      variant="outline"
+                      className={`w-full text-left h-auto p-6 border-2 transition-all transform hover:scale-105 ${
+                        formData.interests.includes(product.id)
+                          ? "bg-red-600 text-white border-red-600 scale-105 shadow-2xl"
+                          : `${product.color} hover:bg-red-50 shadow-lg`
+                      }`}
+                      onClick={() => toggleInterest(product.id)}
+                    >
+                      <div className="flex justify-between items-center w-full">
+                        <div className="flex-1">
+                          <div className="flex items-center mb-2">
+                            <div className="font-black text-xl">{product.name}</div>
+                            {formData.interests.includes(product.id) && (
+                              <div className="ml-3 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-black">
+                                ✅ AUSGEWÄHLT
+                              </div>
+                            )}
+                          </div>
+                          <div className={`text-sm font-bold ${
+                            formData.interests.includes(product.id) ? 'text-yellow-300' : 'text-red-600'
+                          }`}>
+                            ⚠️ {product.urgent}
+                          </div>
+                        </div>
+                        <div className="text-right ml-4">
+                          <div className={`text-2xl font-black ${
+                            formData.interests.includes(product.id) ? 'text-yellow-300' : 'text-green-600'
+                          }`}>
+                            {product.price}/Monat
+                          </div>
+                          <div className="text-sm line-through opacity-75">{product.oldPrice}/Monat</div>
+                          <div className={`text-lg font-bold ${
+                            formData.interests.includes(product.id) ? 'text-white' : 'text-green-600'
+                          }`}>
+                            -{product.savings}/Jahr
+                          </div>
+                        </div>
+                      </div>
+                    </Button>
+                  ))}
+                </div>
+
+                {/* LIVE BUNDLE CALCULATOR */}
+                <div className="mt-8 p-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl border-3 border-green-300">
+                  <div className="text-center">
+                    <h4 className="text-2xl font-black text-gray-800 mb-4">🎯 Ihr aktueller Sparfortschritt</h4>
+                    <div className="text-5xl font-black text-green-600 mb-4">
+                      {totalSavings}€ pro Jahr gespart!
+                    </div>
+                    
+                    {formData.interests.length >= 5 ? (
+                      <div className="bg-green-600 text-white px-8 py-4 rounded-full font-black text-xl mb-6 animate-pulse">
+                        🎉 15% BÜNDELNACHLASS AKTIVIERT! Zusätzliche {bundleBonus}€ Bonus!
+                      </div>
+                    ) : (
+                      <div className="bg-orange-100 text-orange-800 px-8 py-4 rounded-full font-black text-xl mb-6">
+                        Noch {5 - formData.interests.length} Versicherung(en) für 15% EXTRA-BONUS!
+                      </div>
+                    )}
+                    
+                    <div className="text-lg text-gray-700 font-bold">
+                      ✅ {formData.interests.length} von 8 TOP-Versicherungen ausgewählt<br/>
+                      💡 Jede weitere Versicherung = 156€ mehr Ersparnis pro Jahr
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 3: CONTACT FORM */}
+            {currentStep === 3 && (
+              <div>
+                <div className="text-center mb-8">
+                  <div className="bg-blue-100 text-blue-800 px-6 py-3 rounded-full inline-block font-black mb-6 text-lg">
+                    🏆 Schritt 3: Ersparnisse sichern!
+                  </div>
+                  
+                  <h3 className="text-3xl font-black text-gray-800 mb-4">
+                    Sichern Sie sich JETZT Ihre {totalSavings}€ Ersparnis!
+                  </h3>
+                  <p className="text-gray-600 text-lg mb-6">
+                    Für Ihr kostenloses Angebot und die persönliche Beratung
+                  </p>
+                  
+                  {/* FINAL VALUE REMINDER */}
+                  <div className="bg-gradient-to-r from-green-100 to-yellow-100 p-6 rounded-2xl mb-8 border-2 border-green-300">
+                    <div className="text-2xl font-black text-gray-800 mb-2">
+                      🎯 Sie sparen: {totalSavings}€ pro Jahr
+                    </div>
+                    <div className="text-lg text-gray-700">
+                      Das sind {Math.round(totalSavings / 12)}€ weniger pro Monat!
+                    </div>
+                    {bundleBonus > 0 && (
+                      <div className="text-green-700 font-bold mt-2">
+                        + {bundleBonus}€ EXTRA durch 15% Bündelnachlass 🎉
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="firstName" className="text-lg font-bold">Vorname *</Label>
+                    <Input
+                      id="firstName"
+                      value={formData.firstName}
+                      onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                      placeholder="Ihr Vorname"
+                      className="mt-2 text-lg p-4 border-2 border-gray-300 focus:border-red-500"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName" className="text-lg font-bold">Nachname *</Label>
+                    <Input
+                      id="lastName"
+                      value={formData.lastName}
+                      onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                      placeholder="Ihr Nachname"
+                      className="mt-2 text-lg p-4 border-2 border-gray-300 focus:border-red-500"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="email" className="text-lg font-bold">E-Mail-Adresse *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                      placeholder="ihre.email@beispiel.de"
+                      className="mt-2 text-lg p-4 border-2 border-gray-300 focus:border-red-500"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone" className="text-lg font-bold">Telefonnummer *</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                      placeholder="01234 567890"
+                      className="mt-2 text-lg p-4 border-2 border-gray-300 focus:border-red-500"
+                    />
+                  </div>
+                  <div className="lg:col-span-2">
+                    <Label htmlFor="location" className="text-lg font-bold">Wohnort *</Label>
+                    <Input
+                      id="location"
+                      value={formData.location}
+                      onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+                      placeholder="z.B. Ganderkesee"
+                      className="mt-2 text-lg p-4 border-2 border-gray-300 focus:border-red-500"
+                    />
+                  </div>
+                </div>
+
+                {/* FINAL GUARANTEE */}
+                <div className="mt-8 p-6 bg-green-50 rounded-2xl border-2 border-green-300">
+                  <div className="text-center">
+                    <Shield className="w-16 h-16 text-green-600 mx-auto mb-4" />
+                    <h4 className="text-xl font-black text-green-800 mb-2">
+                      100% KOSTENLOS & UNVERBINDLICH
+                    </h4>
+                    <p className="text-green-700 font-bold">
+                      ✅ Kostenlose Analyse Ihrer bestehenden Verträge<br/>
+                      ✅ Persönliche Beratung ohne Verpflichtung<br/>
+                      ✅ Garantierte Ersparnisse oder Geld zurück
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SUCCESS PAGE */}
+            {currentStep === 4 && (
+              <div className="text-center py-12">
+                <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                  <Star className="w-12 h-12 text-green-600" />
+                </div>
+                <h3 className="text-4xl font-black text-gray-800 mb-6">
+                  🎉 GLÜCKWUNSCH!
+                </h3>
+                <div className="text-2xl font-bold text-green-600 mb-4">
+                  Sie haben {totalSavings}€ pro Jahr gesichert!
+                </div>
+                <p className="text-gray-600 text-lg mb-8">
+                  Morino Stübe wird sich binnen 24 Stunden bei Ihnen melden und Ihre Ersparnisse finalisieren.
+                </p>
+                
+                <div className="bg-gray-50 rounded-2xl p-8 mb-8">
+                  <h4 className="font-black text-gray-800 mb-6 text-xl">Ihre nächsten Schritte:</h4>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center text-lg font-black">1</div>
+                      <span className="text-lg font-bold">Kostenlose Analyse Ihrer bestehenden Verträge</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center text-lg font-black">2</div>
+                      <span className="text-lg font-bold">Persönliche Beratung zu ERGO-Produkten</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center text-lg font-black">3</div>
+                      <span className="text-lg font-bold">Angebot mit {totalSavings}€ Ersparnis pro Jahr</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-red-50 p-6 rounded-2xl">
+                  <p className="text-gray-700 text-lg mb-4 font-bold">Fragen? Rufen Sie uns gerne an:</p>
+                  <a 
+                    href="tel:015566771019" 
+                    className="inline-flex items-center text-red-600 font-black text-2xl hover:text-red-700"
+                  >
+                    <Phone className="w-6 h-6 mr-3" />
+                    015566771019
+                  </a>
+                </div>
+              </div>
+            )}
+
+          </div>
+
+          {/* ALEX HORMOZI NAVIGATION */}
+          {currentStep < 4 && (
+            <div className="bg-gray-50 px-8 py-8 border-t-4 border-red-500">
+              <div className="flex flex-col lg:flex-row gap-6 items-center justify-center">
+                {currentStep > 1 && (
+                  <Button
+                    variant="outline"
+                    onClick={prevStep}
+                    className="text-gray-600 border-gray-400 hover:bg-gray-100 px-8 py-4 text-lg font-bold"
+                  >
+                    ← Zurück
+                  </Button>
+                )}
+                
+                <Button
+                  onClick={nextStep}
+                  disabled={!validateCurrentStep() || submitMutation.isPending}
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-12 py-6 text-xl font-black rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 min-w-[400px] animate-pulse"
+                >
+                  {submitMutation.isPending ? (
+                    "⏳ SICHERE IHRE ERSPARNISSE..."
+                  ) : currentStep === 3 ? (
+                    `💰 JETZT ${totalSavings}€ SPAREN & ANGEBOT SICHERN!`
+                  ) : currentStep === 1 ? (
+                    `🚀 ZU DEN VERSICHERUNGEN (${formData.age ? '✅' : '❌'} Alter gewählt)`
+                  ) : (
+                    `🎯 KONTAKTDATEN EINGEBEN (${totalSavings}€ Ersparnis!)`
+                  )}
+                </Button>
+              </div>
+              
+              {/* FINAL URGENCY REMINDER */}
+              <div className="text-center mt-6">
+                <div className="text-red-600 font-black text-lg animate-pulse">
+                  ⏰ Nur noch 23 Stunden für diese Preise!
+                </div>
+                <div className="text-sm text-gray-600 mt-2 font-bold">
+                  Nach dem 1. September steigen die Preise um bis zu 30%
+                </div>
+                <div className="text-xs text-gray-500 mt-1">
+                  🔒 SSL-verschlüsselt • 📱 100% mobil optimiert • ⚡ Sofortige Bearbeitung
+                </div>
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
+}

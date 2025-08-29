@@ -10,6 +10,7 @@ import { trackEvent } from '@/lib/analytics';
 
 interface GeneralInsuranceFunnelProps {
   onClose: () => void;
+  directAccess?: boolean;
 }
 
 interface FormData {
@@ -62,7 +63,7 @@ const insuranceCategories = {
   }
 };
 
-export default function GeneralInsuranceFunnel({ onClose }: GeneralInsuranceFunnelProps) {
+export default function GeneralInsuranceFunnel({ onClose, directAccess = false }: GeneralInsuranceFunnelProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     age: '',
