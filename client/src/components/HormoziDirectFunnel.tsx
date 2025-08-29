@@ -522,15 +522,15 @@ export default function HormoziDirectFunnel() {
             {/* STEP 3: CONTACT FORM */}
             {currentStep === 3 && (
               <div>
-                <div className="text-center mb-8">
-                  <div className="bg-blue-100 text-blue-800 px-6 py-3 rounded-full inline-block font-black mb-6 text-lg">
+                <div className="text-center mb-6 sm:mb-8">
+                  <div className="bg-blue-100 text-blue-800 px-4 sm:px-6 py-2 sm:py-3 rounded-full inline-block font-bold mb-4 sm:mb-6 text-base sm:text-lg">
                     🏆 Schritt 3: Ersparnisse sichern!
                   </div>
                   
-                  <h3 className="text-3xl font-black text-gray-800 mb-4">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-3 sm:mb-4 leading-tight">
                     Sichern Sie sich JETZT Ihre bis zu {totalSavings}€ Ersparnis!
                   </h3>
-                  <p className="text-gray-600 text-lg mb-6">
+                  <p className="text-gray-600 text-sm sm:text-base md:text-lg mb-4 sm:mb-6">
                     Für Ihr kostenloses Angebot und die persönliche Beratung
                   </p>
                   
@@ -553,11 +553,11 @@ export default function HormoziDirectFunnel() {
                   </div>
                   
                   {/* FINAL VALUE REMINDER */}
-                  <div className="bg-gradient-to-r from-green-100 to-yellow-100 p-6 rounded-2xl mb-8 border-2 border-green-300">
-                    <div className="text-2xl font-black text-gray-800 mb-2">
+                  <div className="bg-gradient-to-r from-green-100 to-yellow-100 p-4 sm:p-6 rounded-xl sm:rounded-2xl mb-6 sm:mb-8 border-2 border-green-300">
+                    <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2">
                       🎯 Sie sparen: bis zu {totalSavings}€ pro Jahr
                     </div>
-                    <div className="text-lg text-gray-700">
+                    <div className="text-sm sm:text-base md:text-lg text-gray-700">
                       Das sind bis zu {Math.round(totalSavings / 12)}€ weniger pro Monat!
                     </div>
                     {bundleBonus > 0 && (
@@ -568,72 +568,78 @@ export default function HormoziDirectFunnel() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="firstName" className="text-lg font-bold">Vorname *</Label>
-                    <Input
-                      id="firstName"
-                      value={formData.firstName}
-                      onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                      placeholder="Ihr Vorname"
-                      className="mt-2 text-lg p-4 border-2 border-gray-300 focus:border-red-500"
-                    />
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div>
+                      <Label htmlFor="firstName" className="text-sm sm:text-base font-semibold">Vorname *</Label>
+                      <Input
+                        id="firstName"
+                        value={formData.firstName}
+                        onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                        placeholder="Ihr Vorname"
+                        className="mt-1 sm:mt-2 text-base sm:text-lg p-3 sm:p-4 border-2 border-gray-300 focus:border-red-500 h-11 sm:h-auto"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="lastName" className="text-sm sm:text-base font-semibold">Nachname *</Label>
+                      <Input
+                        id="lastName"
+                        value={formData.lastName}
+                        onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                        placeholder="Ihr Nachname"
+                        className="mt-1 sm:mt-2 text-base sm:text-lg p-3 sm:p-4 border-2 border-gray-300 focus:border-red-500 h-11 sm:h-auto"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="lastName" className="text-lg font-bold">Nachname *</Label>
-                    <Input
-                      id="lastName"
-                      value={formData.lastName}
-                      onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
-                      placeholder="Ihr Nachname"
-                      className="mt-2 text-lg p-4 border-2 border-gray-300 focus:border-red-500"
-                    />
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div>
+                      <Label htmlFor="email" className="text-sm sm:text-base font-semibold">E-Mail-Adresse *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                        placeholder="ihre.email@beispiel.de"
+                        className="mt-1 sm:mt-2 text-base sm:text-lg p-3 sm:p-4 border-2 border-gray-300 focus:border-red-500 h-11 sm:h-auto"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="phone" className="text-sm sm:text-base font-semibold">Telefonnummer *</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                        placeholder="01234 567890"
+                        className="mt-1 sm:mt-2 text-base sm:text-lg p-3 sm:p-4 border-2 border-gray-300 focus:border-red-500 h-11 sm:h-auto"
+                      />
+                    </div>
                   </div>
+                  
                   <div>
-                    <Label htmlFor="email" className="text-lg font-bold">E-Mail-Adresse *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                      placeholder="ihre.email@beispiel.de"
-                      className="mt-2 text-lg p-4 border-2 border-gray-300 focus:border-red-500"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone" className="text-lg font-bold">Telefonnummer *</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                      placeholder="01234 567890"
-                      className="mt-2 text-lg p-4 border-2 border-gray-300 focus:border-red-500"
-                    />
-                  </div>
-                  <div className="lg:col-span-2">
-                    <Label htmlFor="location" className="text-lg font-bold">Wohnort *</Label>
+                    <Label htmlFor="location" className="text-sm sm:text-base font-semibold">Wohnort *</Label>
                     <Input
                       id="location"
                       value={formData.location}
                       onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
                       placeholder="z.B. Ganderkesee"
-                      className="mt-2 text-lg p-4 border-2 border-gray-300 focus:border-red-500"
+                      className="mt-1 sm:mt-2 text-base sm:text-lg p-3 sm:p-4 border-2 border-gray-300 focus:border-red-500 h-11 sm:h-auto w-full"
                     />
                   </div>
                 </div>
 
                 {/* FINAL GUARANTEE */}
-                <div className="mt-8 p-6 bg-green-50 rounded-2xl border-2 border-green-300">
+                <div className="mt-6 sm:mt-8 p-4 sm:p-6 bg-green-50 rounded-xl sm:rounded-2xl border-2 border-green-300">
                   <div className="text-center">
-                    <Shield className="w-16 h-16 text-green-600 mx-auto mb-4" />
-                    <h4 className="text-xl font-black text-green-800 mb-2">
+                    <Shield className="w-12 h-12 sm:w-16 sm:h-16 text-green-600 mx-auto mb-3 sm:mb-4" />
+                    <h4 className="text-lg sm:text-xl font-bold text-green-800 mb-2">
                       100% KOSTENLOS & UNVERBINDLICH
                     </h4>
-                    <p className="text-green-700 font-bold">
-                      ✅ Kostenlose Analyse Ihrer bestehenden Verträge<br/>
-                      ✅ Persönliche Beratung ohne Verpflichtung<br/>
-                      ✅ Garantierte Ersparnisse oder Geld zurück
+                    <p className="text-sm sm:text-base text-green-700 font-medium space-y-1">
+                      <div>✅ Kostenlose Analyse Ihrer bestehenden Verträge</div>
+                      <div>✅ Persönliche Beratung ohne Verpflichtung</div>
+                      <div>✅ Garantierte Ersparnisse oder Geld zurück</div>
                     </p>
                   </div>
                 </div>
@@ -701,7 +707,7 @@ export default function HormoziDirectFunnel() {
           {/* MOBILE-OPTIMIERTE NAVIGATION */}
           {currentStep < 4 && (
             <div className="bg-gray-50 px-4 sm:px-8 py-6 sm:py-8 border-t-4 border-red-500">
-              <div className="flex flex-col gap-4 sm:gap-6 items-stretch sm:items-center justify-center max-w-md mx-auto">
+              <div className="flex flex-col gap-3 sm:gap-4 items-stretch sm:items-center justify-center max-w-xs sm:max-w-md mx-auto px-2">
                 
                 <Button
                   onClick={(e) => {
@@ -710,16 +716,25 @@ export default function HormoziDirectFunnel() {
                     if (navigator.vibrate) navigator.vibrate(100);
                   }}
                   disabled={!validateCurrentStep() || submitMutation.isPending}
-                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 sm:px-8 py-4 sm:py-6 h-14 sm:h-16 text-base sm:text-lg md:text-xl font-bold rounded-xl sm:rounded-2xl shadow-lg sm:shadow-2xl hover:shadow-xl sm:hover:shadow-3xl transform hover:scale-105 active:scale-95 transition-all duration-300 w-full ring-2 sm:ring-4 ring-red-300"
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-3 sm:px-6 py-3 sm:py-4 h-12 sm:h-14 text-sm sm:text-base md:text-lg font-bold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 transition-all duration-300 w-full"
                 >
                   {submitMutation.isPending ? (
-                    "⏳ SICHERE IHRE ERSPARNISSE..."
+                    "⏳ WIRD GESICHERT..."
                   ) : currentStep === 3 ? (
-                    `💰 JETZT bis zu ${totalSavings}€ SPAREN & ANGEBOT SICHERN!`
+                    <span className="block">
+                      <span className="hidden sm:inline">💰 JETZT bis zu {totalSavings}€ SPAREN & ANGEBOT SICHERN!</span>
+                      <span className="sm:hidden">💰 {totalSavings}€ SPAREN!</span>
+                    </span>
                   ) : currentStep === 1 ? (
-                    `🚀 ZU DEN VERSICHERUNGEN (${formData.age ? '✅' : '❌'} Alter gewählt)`
+                    <span className="block">
+                      <span className="hidden sm:inline">🚀 ZU DEN VERSICHERUNGEN {formData.age ? '✅' : '❌'}</span>
+                      <span className="sm:hidden">🚀 WEITER {formData.age ? '✅' : '❌'}</span>
+                    </span>
                   ) : (
-                    `🎯 KONTAKTDATEN EINGEBEN (bis zu ${totalSavings}€ Ersparnis!)`
+                    <span className="block">
+                      <span className="hidden sm:inline">🎯 KONTAKTDATEN EINGEBEN ({totalSavings}€ Ersparnis!)</span>
+                      <span className="sm:hidden">🎯 KONTAKT EINGEBEN</span>
+                    </span>
                   )}
                 </Button>
                 
@@ -727,7 +742,7 @@ export default function HormoziDirectFunnel() {
                   <Button
                     variant="outline"
                     onClick={prevStep}
-                    className="text-gray-600 border-2 border-gray-400 hover:bg-gray-100 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg sm:rounded-xl w-full order-last sm:order-first"
+                    className="text-gray-600 border-2 border-gray-400 hover:bg-gray-100 px-3 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-semibold rounded-lg w-full order-last sm:order-first"
                   >
                     ← Zurück
                   </Button>
