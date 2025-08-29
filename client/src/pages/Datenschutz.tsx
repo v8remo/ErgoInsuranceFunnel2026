@@ -1,90 +1,177 @@
-
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-
-import SEO from "@/components/SEO";
+import { useEffect } from 'react';
+import { Link } from 'wouter';
+import { ArrowLeft, Shield, Lock } from 'lucide-react';
 
 export default function Datenschutz() {
+  useEffect(() => {
+    document.title = "Datenschutz - ERGO Agentur Stübe, Ganderkesee";
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
-    <>
-      <SEO
-        title="Datenschutzerklärung - ERGO Versicherung Ganderkesee"
-        description="Datenschutzerklärung der ERGO Versicherung Ganderkesee. Informationen zum Umgang mit Ihren personenbezogenen Daten gemäß DSGVO."
-        keywords="Datenschutz, DSGVO, ERGO Ganderkesee, Datenschutzerklärung, Personenbezogene Daten"
-      />
-      <Header />
-      
-      <main className="min-h-screen bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-ergo-dark mb-6 sm:mb-8 break-words">Datenschutzerklärung</h1>
-          
-          <div className="prose prose-sm sm:prose-base lg:prose-lg max-w-none">
-            <h2 className="text-xl sm:text-2xl font-semibold text-ergo-dark mb-3 sm:mb-4 break-words">1. Datenschutz auf einen Blick</h2>
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        {/* Einfacher Header */}
+        <div className="mb-8">
+          <Link href="/">
+            <button className="inline-flex items-center text-ergo-red hover:text-red-700 font-bold mb-4 bg-white px-4 py-2 rounded-lg shadow">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Zurück
+            </button>
+          </Link>
+          <h1 className="text-2xl font-bold text-gray-800">Datenschutzerklärung</h1>
+        </div>
+
+        {/* Datenschutz Content */}
+        <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
+          <div className="space-y-8">
             
-            <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2 sm:mb-3 break-words">Allgemeine Hinweise</h3>
-            <p className="mb-4 sm:mb-6 text-sm sm:text-base">
-              Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.
-            </p>
+            {/* Allgemeine Hinweise */}
+            <section>
+              <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <Shield className="w-6 h-6 text-ergo-red mr-3" />
+                1. Datenschutz auf einen Blick
+              </h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-bold mb-2">Allgemeine Hinweise</h3>
+                  <p className="text-gray-700">
+                    Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten 
+                    passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie 
+                    persönlich identifiziert werden können.
+                  </p>
+                </div>
 
-            <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2 sm:mb-3 break-words">Datenerfassung auf dieser Website</h3>
-            <p className="mb-4 sm:mb-6 text-sm sm:text-base">
-              <strong>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong><br />
-              Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum dieser Website entnehmen.
-            </p>
+                <div>
+                  <h3 className="font-bold mb-2">Datenerfassung auf dieser Website</h3>
+                  <p className="text-gray-700">
+                    <strong>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong><br />
+                    Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. 
+                    Dessen Kontaktdaten können Sie dem Impressum dieser Website entnehmen.
+                  </p>
+                </div>
 
-            <h2 className="text-xl sm:text-2xl font-semibold text-ergo-dark mb-3 sm:mb-4 break-words">2. Hosting</h2>
-            <p className="mb-4 sm:mb-6 text-sm sm:text-base">
-              Wir hosten die Inhalte unserer Website bei einem externen Dienstleister. Personenbezogene Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert.
-            </p>
+                <div>
+                  <h3 className="font-bold mb-2">Wie erfassen wir Ihre Daten?</h3>
+                  <p className="text-gray-700">
+                    Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich 
+                    z.B. um Daten handeln, die Sie in ein Kontaktformular eingeben.
+                  </p>
+                </div>
+              </div>
+            </section>
 
-            <h2 className="text-xl sm:text-2xl font-semibold text-ergo-dark mb-3 sm:mb-4 break-words">3. Allgemeine Hinweise und Pflichtinformationen</h2>
-            
-            <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2 sm:mb-3 break-words">Datenschutz</h3>
-            <p className="mb-4 sm:mb-6 text-sm sm:text-base">
-              Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.
-            </p>
+            {/* Verantwortliche Stelle */}
+            <section>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">2. Verantwortliche Stelle</h2>
+              <div className="bg-blue-50 p-6 rounded-lg">
+                <p className="text-gray-700">
+                  <strong>ERGO Agentur Stübe</strong><br />
+                  Morino Stübe<br />
+                  Friedensstraße 91 A<br />
+                  27777 Ganderkesee<br />
+                  Telefon: +49 15566 771019<br />
+                  E-Mail: morino.stuebe@ergo.de
+                </p>
+              </div>
+            </section>
 
-            <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2 sm:mb-3 break-words">Hinweis zur verantwortlichen Stelle</h3>
-            <p className="mb-4 sm:mb-6 text-sm sm:text-base">
-              Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:<br />
-              <strong>ERGO Ganderkesee</strong><br />
-              Morino Stübe<br />
-              Friedensstraße 91 A<br />
-              27777 Ganderkesee<br />
-              Telefon: 01556 6771019<br />
-              E-Mail: morino.stuebe@ergo.de
-            </p>
+            {/* Datenverarbeitung */}
+            <section>
+              <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <Lock className="w-6 h-6 text-ergo-red mr-3" />
+                3. Datenverarbeitung
+              </h2>
+              
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-bold mb-3">Kontaktformular</h3>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <p className="text-gray-700 mb-3">
+                      <strong>Zweck der Verarbeitung:</strong> Bearbeitung Ihrer Versicherungsanfrage
+                    </p>
+                    <p className="text-gray-700 mb-3">
+                      <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)
+                    </p>
+                    <p className="text-gray-700 mb-3">
+                      <strong>Verarbeitete Daten:</strong> Name, E-Mail-Adresse, Telefonnummer, Wohnort, Versicherungsinteressen
+                    </p>
+                    <p className="text-gray-700">
+                      <strong>Speicherdauer:</strong> Bis zur vollständigen Bearbeitung Ihrer Anfrage, 
+                      danach Löschung nach gesetzlichen Aufbewahrungsfristen
+                    </p>
+                  </div>
+                </div>
 
-            <h2 className="text-xl sm:text-2xl font-semibold text-ergo-dark mb-3 sm:mb-4 break-words">4. Datenerfassung auf dieser Website</h2>
-            
-            <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2 sm:mb-3 break-words">Cookies</h3>
-            <p className="mb-4 sm:mb-6 text-sm sm:text-base">
-              Unsere Internetseiten verwenden so genannte „Cookies". Cookies sind kleine Textdateien und richten auf Ihrem Endgerät keinen Schaden an. Sie werden entweder vorübergehend für die Dauer einer Sitzung (Session-Cookies) oder dauerhaft (permanente Cookies) auf Ihrem Endgerät gespeichert.
-            </p>
+                <div>
+                  <h3 className="font-bold mb-3">SSL-Verschlüsselung</h3>
+                  <p className="text-gray-700">
+                    Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte 
+                    eine SSL-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile 
+                    des Browsers von "http://" auf "https://" wechselt.
+                  </p>
+                </div>
+              </div>
+            </section>
 
-            <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2 sm:mb-3 break-words">Anfrage per E-Mail, Telefon oder Telefax</h3>
-            <p className="mb-4 sm:mb-6 text-sm sm:text-base">
-              Wenn Sie uns per E-Mail, Telefon oder Telefax kontaktieren, wird Ihre Anfrage inklusive aller daraus hervorgehenden personenbezogenen Daten (Name, Anfrage) zum Zwecke der Bearbeitung Ihres Anliegens bei uns gespeichert und verarbeitet.
-            </p>
+            {/* Ihre Rechte */}
+            <section>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">4. Ihre Rechte</h2>
+              <div className="bg-green-50 p-6 rounded-lg">
+                <div className="space-y-3 text-gray-700">
+                  <div><strong>Auskunftsrecht:</strong> Sie haben das Recht auf Auskunft über Ihre gespeicherten Daten</div>
+                  <div><strong>Berichtigungsrecht:</strong> Sie haben das Recht auf Berichtigung unrichtiger Daten</div>
+                  <div><strong>Löschungsrecht:</strong> Sie haben das Recht auf Löschung Ihrer Daten</div>
+                  <div><strong>Einschränkungsrecht:</strong> Sie haben das Recht auf Einschränkung der Verarbeitung</div>
+                  <div><strong>Widerspruchsrecht:</strong> Sie haben das Recht auf Widerspruch gegen die Verarbeitung</div>
+                  <div><strong>Datenübertragbarkeit:</strong> Sie haben das Recht auf Datenübertragbarkeit</div>
+                </div>
+              </div>
+            </section>
 
-            <h2 className="text-xl sm:text-2xl font-semibold text-ergo-dark mb-3 sm:mb-4 break-words">5. Ihre Rechte</h2>
-            <p className="mb-4 sm:mb-6 text-sm sm:text-base">
-              Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung oder Löschung dieser Daten.
-            </p>
+            {/* Widerruf */}
+            <section>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">5. Widerruf Ihrer Einwilligung</h2>
+              <div className="bg-yellow-50 p-6 rounded-lg">
+                <p className="text-gray-700">
+                  Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. 
+                  Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der 
+                  bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.
+                </p>
+              </div>
+            </section>
 
-            <h2 className="text-xl sm:text-2xl font-semibold text-ergo-dark mb-3 sm:mb-4 break-words">6. Widerruf Ihrer Einwilligung zur Datenverarbeitung</h2>
-            <p className="mb-4 sm:mb-6 text-sm sm:text-base">
-              Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.
-            </p>
-
-            <p className="text-sm text-gray-600 mt-8">
-              Stand: Januar 2025
-            </p>
+            {/* Kontakt bei Datenschutzfragen */}
+            <section>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">6. Kontakt bei Datenschutzfragen</h2>
+              <div className="bg-blue-50 p-6 rounded-lg">
+                <p className="text-gray-700">
+                  Bei Fragen zum Datenschutz wenden Sie sich bitte an:<br />
+                  <strong>Morino Stübe</strong><br />
+                  E-Mail: morino.stuebe@ergo.de<br />
+                  Telefon: +49 15566 771019
+                </p>
+              </div>
+            </section>
           </div>
         </div>
-      </main>
 
-      <Footer />
-    </>
+        {/* Footer Links */}
+        <div className="mt-8 text-center">
+          <div className="space-x-6">
+            <Link href="/" className="text-ergo-red hover:text-red-700 font-bold">
+              Startseite
+            </Link>
+            <Link href="/impressum" className="text-ergo-red hover:text-red-700 font-bold">
+              Impressum
+            </Link>
+          </div>
+          <div className="text-xs text-gray-500 mt-4">
+            Stand: Januar 2025
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
