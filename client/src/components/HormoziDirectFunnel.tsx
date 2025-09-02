@@ -206,46 +206,7 @@ export default function HormoziDirectFunnel() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
       
       <div className="container mx-auto px-2 sm:px-4 py-3 sm:py-8 max-w-full sm:max-w-4xl">
-        {/* RECHTSKONFORME HERO SECTION */}
-        <div className="text-center mb-8">
-          <div className="bg-ergo-red text-white px-6 py-3 rounded-lg inline-block font-bold mb-6 text-lg">
-            ERGO Versicherungsberatung - Morino Stübe, Ganderkesee
-          </div>
-          
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 sm:mb-6 leading-tight px-2">
-            Kostenlose Versicherungsberatung<br/>
-            <span className="text-ergo-red">& unverbindliche Analyse</span>
-          </h1>
-          
-          {/* SERIÖSE VALUE PROPOSITION */}
-          <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-8 mb-4 sm:mb-8 border-2 border-gray-200 shadow-lg mx-1 sm:mx-0">
-            <div className="text-base sm:text-lg md:text-xl text-gray-800 font-bold mb-4 sm:mb-6 leading-relaxed">
-              ✓ Kostenlose Beratung und Analyse Ihrer bestehenden Verträge<br/>
-              ✓ Unverbindliches Angebot für ERGO-Versicherungen<br/>
-              ✓ Kompetente Beratung von Ihrem zertifizierten ERGO-Berater
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-center">
-              <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
-                <Shield className="w-10 h-10 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-2 sm:mb-3" />
-                <div className="text-base sm:text-lg font-bold text-gray-800">Kostenlos</div>
-                <div className="text-sm sm:text-base text-gray-600">Beratung & Analyse</div>
-              </div>
-              <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
-                <Star className="w-10 h-10 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-2 sm:mb-3" />
-                <div className="text-base sm:text-lg font-bold text-gray-800">Unverbindlich</div>
-                <div className="text-sm sm:text-base text-gray-600">Keine Verpflichtungen</div>
-              </div>
-              <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
-                <Phone className="w-10 h-10 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-2 sm:mb-3" />
-                <div className="text-base sm:text-lg font-bold text-gray-800">Persönlich</div>
-                <div className="text-sm sm:text-base text-gray-600">Vor Ort Beratung</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* RECHTSKONFORME FORMULAR-SEKTION */}
+        {/* DIREKTER FUNNEL - GLEICH GANZ OBEN */}
         <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-gray-200 mx-1 sm:mx-0">
           {/* SERIÖSER HEADER - MOBILE OPTIMIERT */}
           <div className="bg-ergo-red text-white p-4 sm:p-8 text-center">
@@ -768,6 +729,45 @@ export default function HormoziDirectFunnel() {
             </div>
           )}
 
+        </div>
+        
+        {/* INFORMATIONEN UNTER DEM FUNNEL */}
+        <div className="text-center mt-8 mb-8">
+          <div className="bg-ergo-red text-white px-6 py-3 rounded-lg inline-block font-bold mb-6 text-lg">
+            ERGO Versicherungsberatung - Morino Stübe, Ganderkesee
+          </div>
+          
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 sm:mb-6 leading-tight px-2">
+            Kostenlose Versicherungsberatung<br/>
+            <span className="text-ergo-red">& unverbindliche Analyse</span>
+          </h1>
+          
+          {/* SERIÖSE VALUE PROPOSITION */}
+          <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-8 mb-4 sm:mb-8 border-2 border-gray-200 shadow-lg mx-1 sm:mx-0">
+            <div className="text-base sm:text-lg md:text-xl text-gray-800 font-bold mb-4 sm:mb-6 leading-relaxed">
+              ✓ Kostenlose Beratung und Analyse Ihrer bestehenden Verträge<br/>
+              ✓ Unverbindliches Angebot für ERGO-Versicherungen<br/>
+              ✓ Kompetente Beratung von Ihrem zertifizierten ERGO-Berater
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-center">
+              <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                <Shield className="w-10 h-10 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-2 sm:mb-3" />
+                <div className="text-base sm:text-lg font-bold text-gray-800">Kostenlos</div>
+                <div className="text-sm sm:text-base text-gray-600">Beratung & Analyse</div>
+              </div>
+              <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                <Star className="w-10 h-10 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-2 sm:mb-3" />
+                <div className="text-base sm:text-lg font-bold text-gray-800">Unverbindlich</div>
+                <div className="text-sm sm:text-base text-gray-600">Keine Verpflichtungen</div>
+              </div>
+              <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                <Phone className="w-10 h-10 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-2 sm:mb-3" />
+                <div className="text-base sm:text-lg font-bold text-gray-800">Persönlich</div>
+                <div className="text-sm sm:text-base text-gray-600">Vor Ort Beratung</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
