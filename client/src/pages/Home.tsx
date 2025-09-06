@@ -16,7 +16,7 @@ export default function Home() {
               <span className="text-gray-500">Tel: 015566771019</span>
             </div>
             <div className="text-xs text-gray-500">
-              Gebundener Versicherungsvertreter der ERGO • Vermittlerregister-Nr.: D-W0MK-P4H7T-35
+              Gebundener Versicherungsvertreter der ERGO • Vermittlerregister-Nr.: D-5H7J-7DUI1-10
             </div>
           </div>
         </div>

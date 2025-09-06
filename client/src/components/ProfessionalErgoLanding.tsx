@@ -156,7 +156,7 @@ export default function ProfessionalErgoLanding() {
                 <div className="flex flex-col sm:flex-row gap-4 text-sm text-gray-600">
                   <div className="flex items-center">
                     <Shield className="w-4 h-4 mr-2 text-ergo-red" />
-                    Registriert im Vermittlerregister unter der Nr. D-W0MK-P4H7T-35
+                    Registriert im Vermittlerregister unter der Nr. D-5H7J-7DUI1-10
                   </div>
                   <div className="flex items-center">
                     <Star className="w-4 h-4 mr-2 text-yellow-500" />
