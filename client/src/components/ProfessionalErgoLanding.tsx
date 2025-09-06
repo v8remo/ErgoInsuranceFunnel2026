@@ -167,8 +167,8 @@ export default function ProfessionalErgoLanding() {
               
               <div className="flex-shrink-0">
                 <img 
-                  src="https://www.ergo.de/o/ergo-theme/images/logos/ergo-logo.svg" 
-                  alt="ERGO Logo"
+                  src="/attached_assets/ergo-logo-hq.svg" 
+                  alt="ERGO Versicherungsgruppe Logo"
                   className="h-16 w-auto"
                 />
               </div>
