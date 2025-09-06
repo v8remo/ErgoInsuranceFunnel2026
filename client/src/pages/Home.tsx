@@ -1,9 +1,9 @@
-import HormoziDirectFunnel from "@/components/HormoziDirectFunnel";
+import ProfessionalErgoLanding from "@/components/ProfessionalErgoLanding";
 
 export default function Home() {
   return (
     <div>
-      <HormoziDirectFunnel />
+      <ProfessionalErgoLanding />
       
       {/* RECHTLICHER FOOTER */}
       <footer className="bg-gray-50 border-t border-gray-200 py-6">
@@ -16,7 +16,7 @@ export default function Home() {
               <span className="text-gray-500">Tel: 015566771019</span>
             </div>
             <div className="text-xs text-gray-500">
-              Gebundener Versicherungsvertreter der ERGO • Vermittlerregister-Nr.: D-5H7J-7DUI1-10
+              Gebundener Versicherungsvertreter der ERGO • Vermittlerregister-Nr.: D-W0MK-P4H7T-35
             </div>
           </div>
         </div>
