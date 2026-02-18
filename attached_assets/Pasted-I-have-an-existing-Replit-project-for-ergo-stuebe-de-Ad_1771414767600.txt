@@ -1,0 +1,333 @@
+I have an existing Replit project for ergo-stuebe.de. 
+Add a new subpage /dokumente (dokumente.html) to the existing project.
+This page must use the SAME EmailJS configuration already present in the 
+existing project (same Service ID, Template ID, Public Key as used in the 
+contact form / lead form on index.html – copy these values from the existing 
+code, do NOT create new ones).
+
+Also add a visible link to /dokumente on the existing index.html:
+- In the hero section: add a new button below the two existing buttons
+  "📄 Dokument einreichen" (blue/outlined style like the WhatsApp button)
+- In the footer: add a text link "Dokumente einreichen"
+
+---
+
+## PAGE: dokumente.html
+
+Standalone page with same header style (ERGO logo + "Agentur Stübe" branding, 
+same colors #003781 blue, #E2001A red). Mobile-first.
+
+Libraries to load via CDN (add to <head>):
+- pdf-lib: https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js
+- signature_pad: https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js
+- EmailJS: https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js
+- Inter font: Google Fonts
+
+---
+
+## DESIGN
+- Same color scheme as index.html: #003781, #E2001A, white
+- Progress bar top: "Schritt X von 3"
+- Back button top left on all steps except step 1
+- Mobile-first, max-width 600px centered, padding 20px
+- Smooth fade transition between steps (CSS opacity transition)
+- All buttons min-height 48px, border-radius 10px
+
+---
+
+## STEP 1 – Dokument auswählen
+
+Page headline: "📄 Dokument auswählen"
+Subtext: "Wählen Sie das Dokument, das Sie benötigen. Wir führen Sie Schritt für Schritt durch."
+
+4 large clickable cards (full-width, stacked on mobile):
+
+┌─────────────────────────────────────┐
+│ 📄  Kündigungsschreiben             │
+│     Kündigung bei einem anderen     │
+│     Versicherer einreichen          │
+└─────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ 🔄  Beraterwechsel-Antrag           │
+│     Von Morino Stübe bei ERGO       │
+│     betreut werden                  │
+└─────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ ✏️  Änderungsantrag                 │
+│     Adresse, IBAN oder andere       │
+│     Vertragsdaten ändern            │
+└─────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ 📋  Vollmacht & SEPA                │
+│     Betreuungsvollmacht &           │
+│     Lastschriftmandat erteilen      │
+└─────────────────────────────────────┘
+
+Card style: white, border 2px solid #e0e0e0, rounded 12px, 
+hover → border-color: #E2001A, slight shadow.
+Click → store document type → go to Step 2.
+
+URL param support: if URL contains ?type=kuendigung|beraterwechsel|aenderung|vollmacht
+→ auto-select that document and skip to Step 2.
+
+---
+
+## STEP 2 – Formular ausfüllen
+
+Show form based on selected document type.
+
+### SHARED FIELDS (all document types):
+- Vorname* (text)
+- Nachname* (text)
+- Straße + Hausnummer* (text)
+- PLZ* (text, 5 digits)
+- Ort* (text)
+- E-Mail* (email)
+- Telefon* (tel)
+
+### A) Kündigungsschreiben – Additional fields:
+- Versicherungsgesellschaft* (text, placeholder: "z.B. Allianz, HUK-Coburg, AXA...")
+- Versicherungsnummer* (text)
+- Versicherungsart* (select):
+  Kfz | Hausrat | Haftpflicht | Rechtsschutz | Lebensversicherung | Kranken | Sonstiges
+- Kündigungsgrund* (select):
+  "Ordentliche Kündigung zum nächstmöglichen Termin" |
+  "Sonderkündigung nach Beitragserhöhung" |
+  "Sonderkündigung nach Schadenfall" |
+  "Zum Vertragsende"
+- Gewünschtes Kündigungsdatum (date)
+- Hinweise (textarea, optional)
+
+### B) Beraterwechsel-Antrag – Additional fields:
+- Geburtsdatum* (date)
+- ERGO Kundennummer (text, optional)
+- Welche Verträge übertragen? (checkboxes, min 1 required):
+  ☐ Kfz | ☐ Hausrat | ☐ Haftpflicht | ☐ Rechtsschutz | 
+  ☐ Leben/Rente | ☐ Kranken | ☐ Alle ERGO-Verträge
+
+### C) Änderungsantrag – Additional fields:
+- Versicherungsnummer* (text)
+- Was soll geändert werden? (checkboxes, min 1 required):
+  ☐ Adresse → zeige: neue Straße, neue PLZ, neuer Ort
+  ☐ IBAN/Bankverbindung → zeige: Kontoinhaber, neue IBAN, BIC, Bank
+  ☐ E-Mail-Adresse → zeige: neue E-Mail
+  ☐ Telefonnummer → zeige: neue Telefonnummer
+  ☐ Fahrzeugdaten → zeige: Kennzeichen, Fahrzeugtyp, Erstzulassung
+  ☐ Sonstiges → zeige: Freitextfeld
+  (Conditional sub-fields appear/disappear dynamically based on checkbox state)
+
+### D) Vollmacht & SEPA – Additional fields:
+- Geburtsdatum* (date)
+- IBAN* (text, validate: starts with DE, 22 chars total)
+- Kontoinhaber* (text)
+- BIC* (text)
+- Kreditinstitut* (text)
+
+### Form footer (all types):
+- "Weiter zur Unterschrift →" button (red, full-width)
+- Validate all required fields on click, show red border + error message if empty/invalid
+
+---
+
+## STEP 3 – Unterschreiben & Absenden
+
+Section 1 – Unterschrift:
+- Heading: "✍️ Bitte hier unterschreiben"
+- Instruction: "Unterschreiben Sie mit dem Finger (Handy) oder der Maus (PC)"
+- White canvas, border 2px dashed #003781, border-radius 8px
+  Width: 100% of container, Height: 180px
+- Initialize signature_pad on this canvas
+- Link below: "🗑️ Unterschrift löschen" (clears canvas)
+- On mobile: canvas should feel natural and responsive to touch
+
+Section 2 – Bestätigung:
+- Auto-display today's date: "Datum: [DD.MM.YYYY]"
+- Checkbox 1 (required): "Ich bestätige, dass alle Angaben korrekt und vollständig sind."
+- Checkbox 2 (required): "Ich bin einverstanden, dass dieses Dokument elektronisch verarbeitet und weitergeleitet wird."
+- DSGVO note: "Ihre Daten werden ausschließlich zur Bearbeitung Ihres Anliegens verwendet."
+
+Submit button (red, full-width, large):
+"📨 Dokument jetzt absenden"
+
+On click:
+1. Validate: signature not empty (show error: "Bitte unterschreiben Sie das Dokument")
+2. Validate: both checkboxes checked
+3. Show loading state on button: spinner + "Wird verarbeitet..."
+4. Generate PDF → send email → show Step 4
+
+---
+
+## PDF GENERATION (pdf-lib)
+
+Generate a clean A4 PDF with these sections:
+
+HEADER:
+- Top right: "ERGO" in bold red (#E2001A), font size 28
+- Below: "Agentur Stübe – Morino Stübe" in blue (#003781), font size 12
+- Horizontal line (red, 2px) spanning full width
+
+DOCUMENT TITLE (centered, bold, font size 18):
+Based on type:
+- "Kündigungsschreiben"
+- "Antrag auf Betreuerwechsel"  
+- "Änderungsantrag"
+- "Maklervollmacht & SEPA-Lastschriftmandat"
+
+For Kündigung + Beraterwechsel → format as proper letter:
+
+KÜNDIGUNG LETTER:
+[Ort], [heutiges Datum]
+
+[Vorname Nachname]
+[Straße Hausnummer]
+[PLZ Ort]
+
+[Versicherungsgesellschaft]
+Versicherungsnummer: [Nummer]
+
+Betreff: Kündigung meiner [Versicherungsart]-Versicherung
+
+Sehr geehrte Damen und Herren,
+
+hiermit kündige ich oben genannte Versicherung
+[Kündigungsgrund] zum [Datum], hilfsweise zum
+nächstmöglichen Termin.
+
+Ich bitte um schriftliche Eingangsbestätigung.
+
+Mit freundlichen Grüßen
+
+[Signature image embedded here]
+_______________________________
+[Vorname Nachname]
+
+BERATERWECHSEL LETTER:
+[Ort], [Datum]
+
+[Vorname Nachname], geb. [Geburtsdatum]
+[Straße Hausnummer], [PLZ Ort]
+
+An: ERGO Versicherung AG
+
+Betreff: Antrag auf Betreuerwechsel
+
+Sehr geehrte Damen und Herren,
+
+ich bitte um Übertragung der Betreuung meiner
+ERGO-Verträge ([gewählte Vertragsarten]) auf:
+
+Morino Stübe
+ERGO Versicherungsfachmann
+Vermittlerregister-Nr.: D-5H7J-7DUI1-10
+Tel: 015566771019
+
+Mit freundlichen Grüßen
+
+[Signature image embedded here]
+_______________________________
+[Vorname Nachname]
+
+For Änderung + Vollmacht → structured data table layout:
+Label | Value pairs for each field, clean table style.
+
+SIGNATURE SECTION:
+- Label: "Unterschrift"
+- Embed signature canvas as PNG image
+- Date below: "Datum: [DD.MM.YYYY]"
+
+FOOTER (small text, bottom of page):
+"Erstellt über ergo-stuebe.de | ERGO Agentur Stübe – Morino Stübe | 
+Tel: 015566771019 | Vermittlerregister-Nr.: D-5H7J-7DUI1-10"
+
+---
+
+## EMAIL SENDING (EmailJS)
+
+IMPORTANT: Use the EXACT SAME EmailJS Service ID, Template ID, and 
+Public Key that is already configured in the existing index.html / 
+main JS file of this project. Find them in the existing code and 
+reuse them. Do NOT create new EmailJS credentials.
+
+Send email with emailjs.send():
+- To: morino.stuebe@ergo.de (already configured in existing template)
+- Subject variable: "Neues Dokument: [Typ] – [Vorname Nachname] – [Datum]"
+- Template variables to pass:
+  {
+    document_type: "Kündigungsschreiben" / "Beraterwechsel" / etc.,
+    customer_name: "[Vorname] [Nachname]",
+    customer_email: "[E-Mail]",
+    customer_phone: "[Telefon]",
+    submitted_at: "[DD.MM.YYYY HH:MM]",
+    summary: "[All form fields as formatted text for email body]",
+    pdf_attachment: "[base64 PDF string]"
+  }
+
+If the existing EmailJS template doesn't support PDF attachments,
+add a comment in the code explaining how to add it in EmailJS dashboard,
+AND as fallback: automatically trigger a browser download of the PDF
+so Morino can at minimum receive it manually.
+
+---
+
+## ERROR HANDLING
+- EmailJS send fails → show red box:
+  "⚠️ Fehler beim Senden. Das PDF wurde trotzdem heruntergeladen. 
+   Bitte senden Sie es manuell an morino.stuebe@ergo.de"
+- Always trigger PDF download as backup regardless of email success/fail
+- WhatsApp fallback button shown on error:
+  "💬 Morino per WhatsApp informieren" → https://wa.me/4915566771019
+
+---
+
+## STEP 4 – Erfolgsmeldung
+
+- Animated green checkmark (CSS only, no library)
+- Headline: "✅ Dokument erfolgreich übermittelt!"
+- Text: "Morino Stübe hat Ihre Unterlagen erhalten und meldet sich bei Bedarf bei Ihnen."
+- Summary box (light blue background):
+  Dokumenttyp: [Typ]
+  Name: [Vorname Nachname]
+  Eingereicht am: [Datum + Uhrzeit]
+- Button 1 (blue, full-width): "📥 PDF erneut herunterladen"
+- Button 2 (green, full-width): "💬 WhatsApp schreiben" 
+  → https://wa.me/4915566771019?text=Hallo%20Morino%2C%20ich%20habe%20gerade%20ein%20Dokument%20über%20ergo-stuebe.de%20eingereicht.
+- Button 3 (outline, full-width): "← Zurück zur Startseite" → /
+
+---
+
+## INTEGRATION IN index.html
+
+Modify the existing index.html to add:
+
+1. In hero section, BELOW the existing two buttons, add:
+   <a href="/dokumente" class="btn-secondary">
+     📄 Dokument einreichen
+   </a>
+   (Style: outlined, blue border, blue text – matching the WhatsApp button style)
+
+2. In the "Persönlicher Bedarfs-Check" section, add below the existing button:
+   <a href="/dokumente" style="font-size:14px; color:#003781;">
+     Oder: Dokument einreichen & unterschreiben →
+   </a>
+
+3. In the footer, add:
+   <a href="/dokumente">Dokumente einreichen</a>
+
+---
+
+## FILES TO CREATE / MODIFY
+1. CREATE: dokumente.html (complete self-contained page)
+2. CREATE: dokumente.css (all styles for the dokumente page)
+3. CREATE: dokumente.js (all JS: step logic, PDF generation, email sending)
+4. MODIFY: index.html (add 3 links as described above)
+5. DO NOT modify any other existing files
+
+---
+
+## QUICK SHARE LINKS (document in code comments)
+// Direktlinks für WhatsApp:
+// Kündigung:       https://ergo-stuebe.de/dokumente?type=kuendigung
+// Beraterwechsel:  https://ergo-stuebe.de/dokumente?type=beraterwechsel  
+// Änderung:        https://ergo-stuebe.de/dokumente?type=aenderung
+// Vollmacht/SEPA:  https://ergo-stuebe.de/dokumente?type=vollmacht
+// Alle Dokumente:  https://ergo-stuebe.de/dokumente
