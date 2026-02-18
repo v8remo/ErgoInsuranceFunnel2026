@@ -407,9 +407,22 @@ export default function DokumentePage() {
     const today = todayFormatted();
 
     if (selectedType === 'kuendigung') {
+      let sigImg: any = null;
+      let sigDims: any = null;
+      const sigSrc = sigDataUrl || signatureDataUrl;
+      if (sigSrc) {
+        try {
+          const sigBuf = await fetch(sigSrc).then(r => r.arrayBuffer());
+          sigImg = await pdfDoc.embedPng(new Uint8Array(sigBuf));
+          sigDims = sigImg.scale(0.4);
+        } catch { /* signature embed failed */ }
+      }
+      const footerStr = 'Erstellt über ergo-stuebe.de | ERGO Agentur Stübe | Tel: 015566771019 | Vermittlerregister-Nr.: D-5H7J-7DUI1-10';
+      const footerW = helvetica.widthOfTextAtSize(footerStr, 8);
+
       for (let ki = 0; ki < kuendigungen.length; ki++) {
         const k = kuendigungen[ki];
-        let currentPage = ki === 0 ? page : pdfDoc.addPage([595.28, 841.89]);
+        const currentPage = ki === 0 ? page : pdfDoc.addPage([595.28, 841.89]);
         if (ki > 0) {
           y = height - 50;
           currentPage.drawText('ERGO', { x: width - margin - 80, y, font: helveticaBold, size: 28, color: ergoRed });
@@ -418,77 +431,68 @@ export default function DokumentePage() {
           y -= 20;
           currentPage.drawLine({ start: { x: margin, y }, end: { x: width - margin, y }, thickness: 2, color: ergoRed });
           y -= 30;
-          const pageTitle = `Kündigungsschreiben (${ki + 1}/${kuendigungen.length})`;
+          const pageTitle = kuendigungen.length > 1 ? `Kündigungsschreiben (${ki + 1}/${kuendigungen.length})` : 'Kündigungsschreiben';
           const pageTitleWidth = helveticaBold.widthOfTextAtSize(pageTitle, 18);
           currentPage.drawText(pageTitle, { x: (width - pageTitleWidth) / 2, y, font: helveticaBold, size: 18, color: ergoBlue });
           y -= 35;
         }
-        const drawTextOnPage = (text: string, opts?: { bold?: boolean; size?: number; color?: typeof black }) => {
-          const font = opts?.bold ? helveticaBold : helvetica;
-          const size = opts?.size || 11;
-          const color = opts?.color || black;
-          const maxWidth = width - 2 * margin;
+        const drawOnPage = (text: string, opts?: { bold?: boolean; size?: number; color?: typeof black }) => {
+          const f = opts?.bold ? helveticaBold : helvetica;
+          const s = opts?.size || 11;
+          const c = opts?.color || black;
+          const maxW = width - 2 * margin;
           const words = text.split(' ');
-          let line = '';
-          for (const word of words) {
-            const test = line ? `${line} ${word}` : word;
-            if (font.widthOfTextAtSize(test, size) > maxWidth && line) {
-              currentPage.drawText(line, { x: margin, y, font, size, color });
-              y -= size + 4;
-              line = word;
+          let ln = '';
+          for (const w of words) {
+            const test = ln ? `${ln} ${w}` : w;
+            if (f.widthOfTextAtSize(test, s) > maxW && ln) {
+              currentPage.drawText(ln, { x: margin, y, font: f, size: s, color: c });
+              y -= s + 4;
+              ln = w;
             } else {
-              line = test;
+              ln = test;
             }
           }
-          if (line) {
-            currentPage.drawText(line, { x: margin, y, font, size, color });
-            y -= size + 4;
+          if (ln) {
+            currentPage.drawText(ln, { x: margin, y, font: f, size: s, color: c });
+            y -= s + 4;
           }
         };
 
         if (kuendigungen.length > 1) {
-          drawTextOnPage(`Kündigung ${ki + 1} von ${kuendigungen.length}`, { bold: true, size: 12, color: ergoBlue });
+          drawOnPage(`Kündigung ${ki + 1} von ${kuendigungen.length}`, { bold: true, size: 12, color: ergoBlue });
           y -= 5;
         }
-        drawTextOnPage(`${formData.ort}, ${today}`);
+        drawOnPage(`${formData.ort}, ${today}`);
         y -= 10;
-        drawTextOnPage(`${formData.vorname} ${formData.nachname}`);
-        drawTextOnPage(`${formData.strasse}`);
-        drawTextOnPage(`${formData.plz} ${formData.ort}`);
+        drawOnPage(`${formData.vorname} ${formData.nachname}`);
+        drawOnPage(`${formData.strasse}`);
+        drawOnPage(`${formData.plz} ${formData.ort}`);
         y -= 15;
-        drawTextOnPage(k.versicherungsgesellschaft);
-        drawTextOnPage(`Versicherungsnummer: ${k.versicherungsnummer}`);
+        drawOnPage(k.versicherungsgesellschaft);
+        drawOnPage(`Versicherungsnummer: ${k.versicherungsnummer}`);
         y -= 15;
-        drawTextOnPage(`Betreff: Kündigung meiner ${k.versicherungsart}-Versicherung`, { bold: true, size: 12 });
+        drawOnPage(`Betreff: Kündigung meiner ${k.versicherungsart}-Versicherung`, { bold: true, size: 12 });
         y -= 15;
-        drawTextOnPage('Sehr geehrte Damen und Herren,');
+        drawOnPage('Sehr geehrte Damen und Herren,');
         y -= 8;
         const datumText = k.kuendigungsdatum ? `zum ${formatDateDE(k.kuendigungsdatum)}` : 'zum nächstmöglichen Termin';
-        drawTextOnPage(`hiermit kündige ich die oben genannte Versicherung (${k.kuendigungsgrund}) ${datumText}, hilfsweise zum nächstmöglichen Termin.`);
+        drawOnPage(`hiermit kündige ich die oben genannte Versicherung (${k.kuendigungsgrund}) ${datumText}, hilfsweise zum nächstmöglichen Termin.`);
         y -= 8;
-        drawTextOnPage('Ich bitte um eine schriftliche Eingangsbestätigung.');
-        if (k.hinweise.trim()) { y -= 8; drawTextOnPage(`Hinweise: ${k.hinweise}`); }
+        drawOnPage('Ich bitte um eine schriftliche Eingangsbestätigung.');
+        if (k.hinweise.trim()) { y -= 8; drawOnPage(`Hinweise: ${k.hinweise}`); }
         y -= 15;
-        drawTextOnPage('Mit freundlichen Grüßen');
+        drawOnPage('Mit freundlichen Grüßen');
 
         y -= 10;
-        const sigToEmbed2 = sigDataUrl || signatureDataUrl;
-        if (sigToEmbed2) {
-          try {
-            const sigBytes2 = await fetch(sigToEmbed2).then(r => r.arrayBuffer());
-            const sigImg2 = await pdfDoc.embedPng(new Uint8Array(sigBytes2));
-            const sigDims2 = sigImg2.scale(0.4);
-            currentPage.drawImage(sigImg2, { x: margin, y: y - sigDims2.height, width: sigDims2.width, height: sigDims2.height });
-            y -= sigDims2.height + 5;
-          } catch { /* signature embed failed */ }
+        if (sigImg && sigDims) {
+          currentPage.drawImage(sigImg, { x: margin, y: y - sigDims.height, width: sigDims.width, height: sigDims.height });
+          y -= sigDims.height + 5;
         }
         currentPage.drawText('_______________________________', { x: margin, y, font: helvetica, size: 10, color: black });
         y -= 14;
         currentPage.drawText(`${formData.vorname} ${formData.nachname}`, { x: margin, y, font: helvetica, size: 10, color: black });
-        const footerY2 = 30;
-        const footerText2 = 'Erstellt über ergo-stuebe.de | ERGO Agentur Stübe | Tel: 015566771019 | Vermittlerregister-Nr.: D-5H7J-7DUI1-10';
-        const footerWidth2 = helvetica.widthOfTextAtSize(footerText2, 8);
-        currentPage.drawText(footerText2, { x: (width - footerWidth2) / 2, y: footerY2, font: helvetica, size: 8, color: rgb(0.5, 0.5, 0.5) });
+        currentPage.drawText(footerStr, { x: (width - footerW) / 2, y: 30, font: helvetica, size: 8, color: rgb(0.5, 0.5, 0.5) });
       }
     } else if (selectedType === 'beraterwechsel') {
       drawText(`${formData.ort}, ${today}`);
@@ -631,6 +635,7 @@ export default function DokumentePage() {
       }
     } catch (err: any) {
       setSubmitError('Fehler bei der PDF-Erstellung: ' + (err.message || 'Unbekannter Fehler'));
+      goToStep(4);
     } finally {
       setIsSubmitting(false);
     }
