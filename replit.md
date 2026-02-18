@@ -187,6 +187,17 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Authority: Zertifizierter ERGO-Fachberater Badges
   - Reciprocity: Kostenlose Analyse als Geschenk positioniert
 
+- 2026-02-18: Kennzeichen-Seite (/kennzeichen) implementiert:
+  - eVB-Nummer (Kfz) und Versicherungskennzeichen (Kleinkraftrad) anfordern
+  - 4-Schritt-Flow: Auswahl → Formular → Zusammenfassung → Erfolg
+  - Backend-Endpoint: /api/kennzeichen/submit mit E-Mail-Benachrichtigung
+  - URL-Parameter-Support: ?type=evb oder ?type=kennzeichen
+- 2026-02-18: Rechtlicher Compliance-Check nach deutschem Recht 2026:
+  - Impressum: IHK-Registrierungsnummer D-5H7J-7DUI1-10, Vermittlerstatus § 34d Abs. 7 GewO, EU-OS-Plattform, Haftung für Links, Urheberrecht
+  - Datenschutzerklärung: Art. 77 Beschwerderecht (LfD Niedersachsen), Server-Logfiles, WhatsApp-Datenschutz, Resend als Auftragsverarbeiter, Datei-Uploads, Datenweitergabe an Dritte, TDDDG-Referenzen
+  - Cookie-Consent-Banner: TDDDG-konform, Opt-in für Google Analytics/Ads, Marketing-Cookies erst nach Einwilligung
+  - Erstinformation nach § 15 VersVermV: /erstinformation Seite mit allen Pflichtangaben
+  - Google Analytics wird erst nach Cookie-Einwilligung geladen (consent-gated)
 - 2026-02-18: Rechnung/Beleg-Upload auf Dokumente-Seite implementiert:
   - Neuer Dokumenttyp "Rechnung / Beleg einreichen" als erste Option
   - Vereinfachter 2-Schritt-Flow (Formular → Erfolg, ohne Unterschrift)

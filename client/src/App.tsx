@@ -12,8 +12,10 @@ import Datenschutz from "@/pages/Datenschutz";
 import DokumentePage from "@/pages/DokumentePage";
 import SchadenPage from "@/pages/SchadenPage";
 import KennzeichenPage from "@/pages/KennzeichenPage";
+import Erstinformation from "@/pages/Erstinformation";
 import NotFound from "@/pages/not-found";
 import CallbackWidget from "@/components/CallbackWidget";
+import CookieConsent from "@/components/CookieConsent";
 
 function AppContent() {
   useAnalytics();
@@ -28,6 +30,7 @@ function AppContent() {
       <Route path="/datenschutz" component={Datenschutz} />
       <Route path="/schaden" component={SchadenPage} />
       <Route path="/kennzeichen" component={KennzeichenPage} />
+      <Route path="/erstinformation" component={Erstinformation} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -40,6 +43,7 @@ function App() {
         <Toaster />
         <AppContent />
         <CallbackWidget />
+        <CookieConsent />
       </TooltipProvider>
     </QueryClientProvider>
   );

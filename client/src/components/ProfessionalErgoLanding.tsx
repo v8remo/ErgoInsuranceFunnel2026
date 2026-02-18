@@ -199,9 +199,11 @@ export default function ProfessionalErgoLanding() {
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
             <Link href="/impressum" className="hover:text-gray-600">Impressum</Link>
             <Link href="/datenschutz" className="hover:text-gray-600">Datenschutz</Link>
+            <Link href="/erstinformation" className="hover:text-gray-600">Erstinformation</Link>
             <Link href="/dokumente" className="hover:text-gray-600">Dokumente einreichen</Link>
             <Link href="/schaden" className="hover:text-gray-600">Schaden melden</Link>
             <Link href="/kennzeichen" className="hover:text-gray-600">EVB & Kennzeichen</Link>
+            <button onClick={() => { import('@/lib/analytics').then(m => { m.revokeMarketingConsent(); localStorage.removeItem(m.CONSENT_KEY); window.location.reload(); }); }} className="hover:text-gray-600 cursor-pointer">Cookie-Einstellungen</button>
           </div>
           <span>© {new Date().getFullYear()} ERGO Agentur Stübe</span>
         </div>

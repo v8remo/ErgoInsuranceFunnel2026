@@ -1,29 +1,75 @@
-// Define the gtag function globally
 declare global {
   interface Window {
     dataLayer: any[];
     gtag: (...args: any[]) => void;
     gtag_report_conversion: (url?: string) => boolean;
     gtag_report_appointment_conversion: (url?: string) => boolean;
+    loadGoogleAds: () => void;
     fbq: (...args: any[]) => void;
   }
 }
 
-// Initialize Google Analytics with Google Ads ID
-export const initGA = () => {
-  const measurementId = 'AW-17132012984'; // Google Ads ID
-  
-  // Note: The Google tag is already loaded in index.html
-  // This function ensures gtag is available for tracking
-  if (typeof window !== 'undefined' && window.gtag) {
-    console.log('Google Analytics (Google Ads) initialized with ID:', measurementId);
-  } else {
-    console.warn('Google Analytics not loaded. Check if gtag script is properly included.');
+export const CONSENT_KEY = 'ergo_cookie_consent';
+
+export type ConsentChoice = 'all' | 'necessary' | null;
+
+export const getConsent = (): ConsentChoice => {
+  try {
+    const val = localStorage.getItem(CONSENT_KEY);
+    if (val === 'all' || val === 'necessary') return val;
+    return null;
+  } catch {
+    return null;
   }
 };
 
-// Initialize Meta Pixel
+export const setConsent = (choice: ConsentChoice) => {
+  try {
+    if (choice) localStorage.setItem(CONSENT_KEY, choice);
+  } catch {}
+};
+
+export const hasMarketingConsent = (): boolean => getConsent() === 'all';
+
+export const loadTrackingScripts = () => {
+  if (typeof window === 'undefined') return;
+  if (!hasMarketingConsent()) return;
+
+  if (window.loadGoogleAds) {
+    window.loadGoogleAds();
+  }
+
+  initMetaPixel();
+};
+
+export const revokeMarketingConsent = () => {
+  setConsent('necessary');
+
+  try {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const name = cookie.split('=')[0].trim();
+      if (name.startsWith('_ga') || name.startsWith('_gid') || name.startsWith('_gat') || name.startsWith('_fbp') || name.startsWith('_fbc')) {
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${window.location.hostname}`;
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+      }
+    }
+  } catch {}
+};
+
+export const initGA = () => {
+  if (!hasMarketingConsent()) return;
+
+  const measurementId = 'AW-17132012984';
+
+  if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    console.log('Google Analytics (Google Ads) initialized with ID:', measurementId);
+  }
+};
+
 export const initMetaPixel = () => {
+  if (!hasMarketingConsent()) return;
+
   const pixelId = import.meta.env.VITE_META_PIXEL_ID;
 
   if (!pixelId) {
@@ -31,7 +77,8 @@ export const initMetaPixel = () => {
     return;
   }
 
-  // Meta Pixel initialization
+  if (typeof window.fbq === 'function') return;
+
   const script = document.createElement('script');
   script.innerHTML = `
     !function(f,b,e,v,n,t,s)
@@ -47,7 +94,6 @@ export const initMetaPixel = () => {
   `;
   document.head.appendChild(script);
 
-  // Add noscript pixel for users with JavaScript disabled
   const noscript = document.createElement('noscript');
   const img = document.createElement('img');
   img.height = 1;
@@ -58,13 +104,12 @@ export const initMetaPixel = () => {
   document.head.appendChild(noscript);
 };
 
-// Track page views - useful for single-page applications
 export const trackPageView = (url: string) => {
   if (typeof window === 'undefined') return;
-  
-  // Google Analytics tracking with Google Ads ID
+  if (!hasMarketingConsent()) return;
+
   if (window.gtag) {
-    const measurementId = 'AW-17132012984'; // Google Ads ID
+    const measurementId = 'AW-17132012984';
     window.gtag('config', measurementId, {
       page_path: url,
       page_title: document.title,
@@ -72,15 +117,13 @@ export const trackPageView = (url: string) => {
     });
   }
 
-  // Meta Pixel page view tracking
   if (window.fbq) {
     window.fbq('track', 'PageView');
   }
 };
 
-// Track events for conversions and user interactions
 export const trackEvent = (
-  action: string, 
+  action: string,
   parameters?: {
     event_category?: string;
     event_label?: string;
@@ -92,8 +135,8 @@ export const trackEvent = (
   }
 ) => {
   if (typeof window === 'undefined') return;
-  
-  // Google Analytics event tracking
+  if (!hasMarketingConsent()) return;
+
   if (window.gtag) {
     window.gtag('event', action, {
       event_category: parameters?.event_category || 'engagement',
@@ -107,9 +150,7 @@ export const trackEvent = (
     });
   }
 
-  // Meta Pixel event tracking
   if (window.fbq) {
-    // Map common events to Meta Pixel standard events
     const eventMap: Record<string, string> = {
       'insurance_selected': 'InitiateCheckout',
       'funnel_started': 'BeginCheckout',
@@ -121,7 +162,7 @@ export const trackEvent = (
     };
 
     const metaEvent = eventMap[action] || 'CustomEvent';
-    
+
     if (metaEvent === 'Lead' && parameters?.lead_value) {
       window.fbq('track', 'Lead', {
         value: parameters.lead_value,
@@ -138,13 +179,11 @@ export const trackEvent = (
     }
   }
 
-  // Console logging for development
   if (import.meta.env.DEV) {
     console.log('Event tracked:', { action, parameters });
   }
 };
 
-// Track specific insurance-related events
 export const trackInsuranceEvent = (
   insuranceType: string,
   eventType: 'view' | 'interest' | 'funnel_start' | 'funnel_complete' | 'lead_generated',
@@ -165,7 +204,6 @@ export const trackInsuranceEvent = (
   });
 };
 
-// Track conversion funnel steps
 export const trackFunnelStep = (
   insuranceType: string,
   step: number,
@@ -181,34 +219,30 @@ export const trackFunnelStep = (
   });
 };
 
-// Initialize all analytics on app start
 export const initAnalytics = () => {
   if (typeof window === 'undefined') return;
 
-  // Initialize Google Analytics
-  initGA();
-  
-  // Initialize Meta Pixel
-  initMetaPixel();
-
-  // Track initial page view
-  trackPageView(window.location.pathname);
+  if (hasMarketingConsent()) {
+    loadTrackingScripts();
+    initGA();
+    trackPageView(window.location.pathname);
+  }
 
   if (import.meta.env.DEV) {
-    console.log('Analytics initialized');
+    console.log('Analytics initialized', hasMarketingConsent() ? '(with marketing consent)' : '(necessary only)');
   }
 };
 
-// Enhanced conversion tracking for lead generation
 export const trackLeadGeneration = (leadData: {
   insuranceType: string;
   age: string;
   location: string;
   leadValue?: number;
 }) => {
+  if (!hasMarketingConsent()) return;
+
   const value = leadData.leadValue || getLeadValue(leadData.insuranceType);
-  
-  // Google Ads Conversion tracking
+
   if (window.gtag) {
     window.gtag('event', 'conversion', {
       'send_to': 'AW-17132012984/lead_generated',
@@ -221,7 +255,7 @@ export const trackLeadGeneration = (leadData: {
       }
     });
   }
-  
+
   trackEvent('lead_generated', {
     event_category: 'Conversion',
     insurance_type: leadData.insuranceType,
@@ -231,7 +265,6 @@ export const trackLeadGeneration = (leadData: {
     value: value
   });
 
-  // Track Meta Pixel Lead event with enhanced data
   if (window.fbq) {
     window.fbq('track', 'Lead', {
       value: value,
@@ -247,7 +280,6 @@ export const trackLeadGeneration = (leadData: {
   }
 };
 
-// Get estimated lead value based on insurance type
 const getLeadValue = (insuranceType: string): number => {
   const leadValues: Record<string, number> = {
     hausrat: 50,
@@ -257,11 +289,10 @@ const getLeadValue = (insuranceType: string): number => {
     zahnzusatz: 45,
     kombi: 150
   };
-  
+
   return leadValues[insuranceType] || 50;
 };
 
-// Track user engagement metrics
 export const trackEngagement = (
   action: string,
   element: string,
@@ -275,9 +306,8 @@ export const trackEngagement = (
   });
 };
 
-// Track scroll depth for content optimization
 export const trackScrollDepth = (percentage: number) => {
-  if (percentage % 25 === 0) { // Track at 25%, 50%, 75%, 100%
+  if (percentage % 25 === 0) {
     trackEvent('scroll_depth', {
       event_category: 'Engagement',
       event_label: `${percentage}%`,
@@ -286,7 +316,6 @@ export const trackScrollDepth = (percentage: number) => {
   }
 };
 
-// Error tracking for debugging
 export const trackError = (error: string, location: string) => {
   trackEvent('error_occurred', {
     event_category: 'Error',
@@ -295,22 +324,14 @@ export const trackError = (error: string, location: string) => {
   });
 };
 
-// Track Google Ads conversions with proper callback
 export const trackConversion = (url?: string) => {
-  if (typeof window === 'undefined' || !window.gtag_report_conversion) {
-    console.warn('Google Ads conversion tracking not available');
-    return false;
-  }
-  
+  if (typeof window === 'undefined' || !window.gtag_report_conversion) return false;
+  if (!hasMarketingConsent()) return false;
   return window.gtag_report_conversion(url);
 };
 
-// Track Google Ads appointment conversions with proper callback
 export const trackAppointmentConversion = (url?: string) => {
-  if (typeof window === 'undefined' || !window.gtag_report_appointment_conversion) {
-    console.warn('Google Ads appointment conversion tracking not available');
-    return false;
-  }
-  
+  if (typeof window === 'undefined' || !window.gtag_report_appointment_conversion) return false;
+  if (!hasMarketingConsent()) return false;
   return window.gtag_report_appointment_conversion(url);
 };
