@@ -451,8 +451,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       beschreibung = beschreibung ? String(beschreibung).trim().slice(0, 2000) : '';
 
       if (fileAttachments && Array.isArray(fileAttachments)) {
-        if (fileAttachments.length > 5) {
-          return res.status(400).json({ message: "Maximal 5 Dateien erlaubt" });
+        if (fileAttachments.length > 10) {
+          return res.status(400).json({ message: "Maximal 10 Dateien erlaubt" });
         }
         const totalSize = fileAttachments.reduce((sum: number, f: any) => sum + (f.content?.length || 0), 0);
         if (totalSize > 25 * 1024 * 1024) {

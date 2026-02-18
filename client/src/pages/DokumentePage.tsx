@@ -178,7 +178,7 @@ export default function DokumentePage() {
     const newFiles: UploadFile[] = [];
     for (let i = 0; i < files.length; i++) {
       const f = files[i];
-      if (uploadFiles.length + newFiles.length >= 5) break;
+      if (uploadFiles.length + newFiles.length >= 10) break;
       if (!f.type.startsWith('image/') && f.type !== 'application/pdf') continue;
       if (f.size > 10 * 1024 * 1024) continue;
       const uf: UploadFile = { file: f };
@@ -187,7 +187,7 @@ export default function DokumentePage() {
       }
       newFiles.push(uf);
     }
-    setUploadFiles(prev => [...prev, ...newFiles].slice(0, 5));
+    setUploadFiles(prev => [...prev, ...newFiles].slice(0, 10));
     if (errors.files) setErrors(prev => { const n = { ...prev }; delete n.files; return n; });
     e.target.value = '';
   };
@@ -842,7 +842,7 @@ export default function DokumentePage() {
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        disabled={uploadFiles.length >= 5}
+                        disabled={uploadFiles.length >= 10}
                         className="w-full border-2 border-dashed border-[#003781] text-[#003781] rounded-xl p-6 flex flex-col items-center gap-2 active:bg-blue-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -851,8 +851,23 @@ export default function DokumentePage() {
                           <line x1="12" y1="3" x2="12" y2="15" />
                         </svg>
                         <span className="font-semibold text-sm">Fotos oder PDFs auswählen</span>
-                        <span className="text-xs text-gray-400">Max. 5 Dateien, je max. 10 MB</span>
+                        <span className="text-xs text-gray-400">Max. 10 Dateien, je max. 10 MB</span>
                       </button>
+
+                      <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-start gap-2">
+                        <span className="text-base shrink-0 mt-0.5">💡</span>
+                        <p className="text-xs text-gray-600">
+                          Mehr als 10 Dateien? Senden Sie diese bitte direkt per{' '}
+                          <a
+                            href={`https://wa.me/4915566771019?text=${encodeURIComponent('Hallo Herr Stübe, ich möchte Ihnen mehrere Rechnungen/Belege zusenden.')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[#25d366] font-semibold underline"
+                          >
+                            WhatsApp
+                          </a>.
+                        </p>
+                      </div>
 
                       {uploadFiles.length > 0 && (
                         <div className="flex flex-col gap-2">
