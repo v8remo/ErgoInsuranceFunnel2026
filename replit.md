@@ -205,6 +205,19 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Versicherungsnummer (Pflicht) und Schadennummer (optional)
   - E-Mail-Versand mit Anhängen über Resend an stuebe@shopgrow.de
   - Backend-Endpoint: /api/documents/upload
+- 2026-02-18: Local SEO-Optimierung implementiert:
+  - SEO-Komponente professionalisiert: Emoji-Spam entfernt, locality-Prop, mehrere JSON-LD Schemas
+  - LocalBusiness Schema mit ServiceArea (Ganderkesee, Delmenhorst, Oldenburg), Geo-Koordinaten, Öffnungszeiten
+  - FAQPage Schema auf allen Versicherungsseiten mit 3 FAQ pro Produkt
+  - 3 Stadt-Landingpages: /versicherung-ganderkesee, /versicherung-delmenhorst, /versicherung-oldenburg
+  - SEO-Tags auf alle Seiten hinzugefügt (DokumentePage, SchadenPage, KennzeichenPage)
+  - Footer mit Regionen-Links erweitert
+  - Sitemap mit allen neuen Seiten aktualisiert
+  - Fehlende /versicherung/:type Route in App.tsx ergänzt
+- 2026-02-18: E-Mail-Konfiguration auf Produktionsdomain umgestellt:
+  - Sender: anfrage.ergo-stuebe.de (dokumente@, schaden@, kennzeichen@, rueckruf@)
+  - Empfänger: morino.stuebe@ergo.de
+  - Alle 5 Endpunkte erfolgreich getestet
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)
