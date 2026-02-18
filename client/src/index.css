@@ -86,6 +86,19 @@
     font-size: 16px;
   }
 
+  input[type="date"] {
+    color-scheme: light;
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 48px;
+    background-color: white;
+    color: #111827;
+  }
+
+  input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+  }
+
   button:focus-visible,
   input:focus-visible,
   select:focus-visible,

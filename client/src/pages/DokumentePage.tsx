@@ -820,7 +820,14 @@ export default function DokumentePage() {
                         </div>
                         <div className="flex flex-col gap-1">
                           <label className="text-sm font-semibold text-gray-700">Gewünschtes Kündigungsdatum</label>
-                          <input type="date" value={k.kuendigungsdatum} onChange={e => updateKuendigung(i, 'kuendigungsdatum', e.target.value)} className={inputCls(`k_${i}_kuendigungsdatum`)} />
+                          <input
+                            type="date"
+                            value={k.kuendigungsdatum}
+                            onChange={e => updateKuendigung(i, 'kuendigungsdatum', e.target.value)}
+                            className={`${inputCls(`k_${i}_kuendigungsdatum`)} appearance-none`}
+                            style={{ colorScheme: 'light', color: k.kuendigungsdatum ? '#111827' : '#6b7280', minHeight: '48px' }}
+                          />
+                          <span className="text-xs text-gray-400">Optional – ohne Angabe wird zum nächstmöglichen Termin gekündigt</span>
                         </div>
                         <div className="flex flex-col gap-1">
                           <label className="text-sm font-semibold text-gray-700">Hinweise (optional)</label>
