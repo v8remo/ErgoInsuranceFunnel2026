@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'wouter';
 import { apiRequest } from '@/lib/queryClient';
 
-type DamageType = 'kfz' | 'hausrat' | 'gebaeude' | 'rechtsschutz' | 'bu' | 'sonstiges';
+type DamageType = 'kfz' | 'glasschaden' | 'hausrat' | 'gebaeude' | 'rechtsschutz' | 'bu' | 'sonstiges';
 
 interface FormData {
   vorname: string;
@@ -30,6 +30,11 @@ interface FormData {
   arbeitsunfaehigSeit: string;
   arztAufgesucht: string;
   weitereDetails: string;
+  fin: string;
+  glasScheibe: string;
+  glasSchadensart: string;
+  glasBereich: string;
+  glasGroesse: string;
 }
 
 const initialFormData: FormData = {
@@ -58,10 +63,16 @@ const initialFormData: FormData = {
   arbeitsunfaehigSeit: '',
   arztAufgesucht: 'nein',
   weitereDetails: '',
+  fin: '',
+  glasScheibe: '',
+  glasSchadensart: '',
+  glasBereich: '',
+  glasGroesse: '',
 };
 
-const damageTypes: { type: DamageType; icon: string; title: string }[] = [
+const damageTypes: { type: DamageType; icon: string; title: string; subtitle?: string }[] = [
   { type: 'kfz', icon: '🚗', title: 'Kfz-Schaden' },
+  { type: 'glasschaden', icon: '🔲', title: 'Kfz-Glasschaden', subtitle: 'In Kooperation mit Carglass' },
   { type: 'hausrat', icon: '🏠', title: 'Hausrat-Schaden' },
   { type: 'gebaeude', icon: '🏚️', title: 'Gebäudeschaden' },
   { type: 'rechtsschutz', icon: '⚖️', title: 'Rechtsschutz-Fall' },
@@ -71,6 +82,7 @@ const damageTypes: { type: DamageType; icon: string; title: string }[] = [
 
 const damageTypeLabels: Record<DamageType, { icon: string; title: string }> = {
   kfz: { icon: '🚗', title: 'Kfz-Schaden' },
+  glasschaden: { icon: '🔲', title: 'Kfz-Glasschaden' },
   hausrat: { icon: '🏠', title: 'Hausrat-Schaden' },
   gebaeude: { icon: '🏚️', title: 'Gebäudeschaden' },
   rechtsschutz: { icon: '⚖️', title: 'Rechtsschutz-Fall' },
@@ -96,7 +108,7 @@ export default function SchadenPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const typeParam = params.get('type') as DamageType | null;
-    if (typeParam && ['kfz', 'hausrat', 'gebaeude', 'rechtsschutz', 'bu', 'sonstiges'].includes(typeParam)) {
+    if (typeParam && ['kfz', 'glasschaden', 'hausrat', 'gebaeude', 'rechtsschutz', 'bu', 'sonstiges'].includes(typeParam)) {
       setSelectedType(typeParam);
       setStep(2);
     }
@@ -146,32 +158,43 @@ export default function SchadenPage() {
     if (!formData.nachname.trim()) e.nachname = 'Pflichtfeld';
     if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) e.email = 'Gültige E-Mail eingeben';
     if (!formData.telefon.trim()) e.telefon = 'Pflichtfeld';
-    if (!formData.versicherungsnummer.trim()) e.versicherungsnummer = 'Pflichtfeld';
-    if (!formData.schadendatum) e.schadendatum = 'Pflichtfeld';
-    if (!formData.schadenort.trim()) e.schadenort = 'Pflichtfeld';
-    if (!formData.beschreibung.trim() || formData.beschreibung.trim().length < 20) e.beschreibung = 'Mindestens 20 Zeichen erforderlich';
 
-    if (selectedType === 'kfz') {
-      if (!formData.kennzeichen.trim()) e.kennzeichen = 'Pflichtfeld';
-      if (formData.unfallgegner === 'ja') {
-        if (!formData.gegnerName.trim()) e.gegnerName = 'Pflichtfeld';
-        if (!formData.gegnerKennzeichen.trim()) e.gegnerKennzeichen = 'Pflichtfeld';
+    if (selectedType === 'glasschaden') {
+      if (!formData.fin.trim()) e.fin = 'Pflichtfeld';
+      if (!formData.glasScheibe) e.glasScheibe = 'Pflichtfeld';
+      if (!formData.glasSchadensart) e.glasSchadensart = 'Pflichtfeld';
+      const needsBereich = ['steinschlag', 'mehrere_steinschlaege', 'riss'].includes(formData.glasSchadensart);
+      if (needsBereich && !formData.glasBereich) e.glasBereich = 'Pflichtfeld';
+      const needsGroesse = formData.glasSchadensart === 'steinschlag';
+      if (needsGroesse && !formData.glasGroesse) e.glasGroesse = 'Pflichtfeld';
+    } else {
+      if (!formData.versicherungsnummer.trim()) e.versicherungsnummer = 'Pflichtfeld';
+      if (!formData.schadendatum) e.schadendatum = 'Pflichtfeld';
+      if (!formData.schadenort.trim()) e.schadenort = 'Pflichtfeld';
+      if (!formData.beschreibung.trim() || formData.beschreibung.trim().length < 20) e.beschreibung = 'Mindestens 20 Zeichen erforderlich';
+
+      if (selectedType === 'kfz') {
+        if (!formData.kennzeichen.trim()) e.kennzeichen = 'Pflichtfeld';
+        if (formData.unfallgegner === 'ja') {
+          if (!formData.gegnerName.trim()) e.gegnerName = 'Pflichtfeld';
+          if (!formData.gegnerKennzeichen.trim()) e.gegnerKennzeichen = 'Pflichtfeld';
+        }
       }
-    }
-    if (selectedType === 'hausrat' || selectedType === 'gebaeude') {
-      if (!formData.betroffeneRaeume.trim()) e.betroffeneRaeume = 'Pflichtfeld';
-      if (!formData.ursache) e.ursache = 'Pflichtfeld';
-    }
-    if (selectedType === 'rechtsschutz') {
-      if (!formData.gegenseite.trim()) e.gegenseite = 'Pflichtfeld';
-      if (!formData.rechtsstreitArt) e.rechtsstreitArt = 'Pflichtfeld';
-    }
-    if (selectedType === 'bu') {
-      if (!formData.erkrankung.trim()) e.erkrankung = 'Pflichtfeld';
-      if (!formData.arbeitsunfaehigSeit) e.arbeitsunfaehigSeit = 'Pflichtfeld';
-    }
-    if (selectedType === 'sonstiges') {
-      if (!formData.weitereDetails.trim() || formData.weitereDetails.trim().length < 10) e.weitereDetails = 'Mindestens 10 Zeichen erforderlich';
+      if (selectedType === 'hausrat' || selectedType === 'gebaeude') {
+        if (!formData.betroffeneRaeume.trim()) e.betroffeneRaeume = 'Pflichtfeld';
+        if (!formData.ursache) e.ursache = 'Pflichtfeld';
+      }
+      if (selectedType === 'rechtsschutz') {
+        if (!formData.gegenseite.trim()) e.gegenseite = 'Pflichtfeld';
+        if (!formData.rechtsstreitArt) e.rechtsstreitArt = 'Pflichtfeld';
+      }
+      if (selectedType === 'bu') {
+        if (!formData.erkrankung.trim()) e.erkrankung = 'Pflichtfeld';
+        if (!formData.arbeitsunfaehigSeit) e.arbeitsunfaehigSeit = 'Pflichtfeld';
+      }
+      if (selectedType === 'sonstiges') {
+        if (!formData.weitereDetails.trim() || formData.weitereDetails.trim().length < 10) e.weitereDetails = 'Mindestens 10 Zeichen erforderlich';
+      }
     }
 
     setErrors(e);
@@ -184,8 +207,55 @@ export default function SchadenPage() {
     }
   };
 
+  const glasScheibeLabel = (val: string) => {
+    const labels: Record<string, string> = {
+      frontscheibe: 'Frontscheibe',
+      heckscheibe: 'Heckscheibe',
+      seitenscheibe_lv: 'Seitenscheibe links vorne',
+      seitenscheibe_lh: 'Seitenscheibe links hinten',
+      seitenscheibe_rv: 'Seitenscheibe rechts vorne',
+      seitenscheibe_rh: 'Seitenscheibe rechts hinten',
+      dachscheibe: 'Dachscheibe / Panoramadach',
+    };
+    return labels[val] || val;
+  };
+
+  const glasSchadensartLabel = (val: string) => {
+    const labels: Record<string, string> = {
+      steinschlag: 'Steinschlag (einzeln)',
+      mehrere_steinschlaege: 'Mehrere Steinschläge',
+      riss: 'Riss',
+      eingeschlagen: 'Eingeschlagen / zerstört',
+    };
+    return labels[val] || val;
+  };
+
+  const glasBereichLabel = (val: string) => {
+    const labels: Record<string, string> = {
+      rand: 'Weniger als 10 cm vom Rand',
+      fahrsichtfeld: 'Fahrsichtfeld über dem Lenkrad',
+      anderer: 'Anderer Bereich',
+    };
+    return labels[val] || val;
+  };
+
+  const glasGroesseLabel = (val: string) => {
+    const labels: Record<string, string> = {
+      kleiner: 'Kleiner als eine 2-€-Münze',
+      groesser: 'Größer als eine 2-€-Münze',
+    };
+    return labels[val] || val;
+  };
+
   const buildExtraFields = (): string => {
     const lines: string[] = [];
+    if (selectedType === 'glasschaden') {
+      lines.push(`Fahrzeugidentifikationsnummer (FIN): ${formData.fin}`);
+      lines.push(`Beschädigte Scheibe: ${glasScheibeLabel(formData.glasScheibe)}`);
+      lines.push(`Art des Schadens: ${glasSchadensartLabel(formData.glasSchadensart)}`);
+      if (formData.glasBereich) lines.push(`Bereich des Schadens: ${glasBereichLabel(formData.glasBereich)}`);
+      if (formData.glasGroesse) lines.push(`Größe des Schlags: ${glasGroesseLabel(formData.glasGroesse)}`);
+    }
     if (selectedType === 'kfz') {
       lines.push(`Kennzeichen: ${formData.kennzeichen}`);
       lines.push(`Unfallgegner: ${formData.unfallgegner}`);
@@ -222,14 +292,22 @@ export default function SchadenPage() {
     lines.push(`Name: ${formData.vorname} ${formData.nachname}`);
     lines.push(`E-Mail: ${formData.email}`);
     lines.push(`Telefon: ${formData.telefon}`);
-    lines.push(`Versicherungsnummer: ${formData.versicherungsnummer}`);
-    lines.push(`Schadendatum: ${formData.schadendatum}`);
-    lines.push(`Schadenort: ${formData.schadenort}`);
-    lines.push(`Beschreibung: ${formData.beschreibung}`);
-    lines.push(`Polizeilich gemeldet: ${formData.polizeiGemeldet}`);
-    if (formData.geschaetzterSchaden) lines.push(`Geschätzter Schaden: ${formData.geschaetzterSchaden} €`);
-    const extra = buildExtraFields();
-    if (extra) lines.push(extra);
+    if (selectedType === 'glasschaden') {
+      lines.push(`FIN: ${formData.fin}`);
+      lines.push(`Scheibe: ${glasScheibeLabel(formData.glasScheibe)}`);
+      lines.push(`Schadensart: ${glasSchadensartLabel(formData.glasSchadensart)}`);
+      if (formData.glasBereich) lines.push(`Bereich: ${glasBereichLabel(formData.glasBereich)}`);
+      if (formData.glasGroesse) lines.push(`Größe: ${glasGroesseLabel(formData.glasGroesse)}`);
+    } else {
+      lines.push(`Versicherungsnummer: ${formData.versicherungsnummer}`);
+      lines.push(`Schadendatum: ${formData.schadendatum}`);
+      lines.push(`Schadenort: ${formData.schadenort}`);
+      lines.push(`Beschreibung: ${formData.beschreibung}`);
+      lines.push(`Polizeilich gemeldet: ${formData.polizeiGemeldet}`);
+      if (formData.geschaetzterSchaden) lines.push(`Geschätzter Schaden: ${formData.geschaetzterSchaden} €`);
+      const extra = buildExtraFields();
+      if (extra) lines.push(extra);
+    }
     lines.push(`Anzahl Dateien: ${files.length}`);
     return lines.join('\n');
   };
@@ -257,22 +335,30 @@ export default function SchadenPage() {
         fileAttachments.push({ filename: file.name, content: btoa(binary) });
       }
 
-      await apiRequest('POST', '/api/schaden/submit', {
+      const payload: Record<string, any> = {
         damageType: damageTypeLabels[selectedType!].title,
         customerName: `${formData.vorname} ${formData.nachname}`,
         customerEmail: formData.email,
         customerPhone: formData.telefon,
-        insuranceNumber: formData.versicherungsnummer,
-        damageDate: formData.schadendatum,
-        damageLocation: formData.schadenort,
-        damageDescription: formData.beschreibung,
-        policeReport: formData.polizeiGemeldet,
-        estimatedDamage: formData.geschaetzterSchaden || null,
         extraFields: buildExtraFields(),
         attachmentsCount: files.length,
         summary: buildSummary(),
         fileAttachments,
-      });
+      };
+
+      if (selectedType === 'glasschaden') {
+        payload.isGlasschaden = true;
+        payload.glasScheibe = glasScheibeLabel(formData.glasScheibe);
+      } else {
+        payload.insuranceNumber = formData.versicherungsnummer;
+        payload.damageDate = formData.schadendatum;
+        payload.damageLocation = formData.schadenort;
+        payload.damageDescription = formData.beschreibung;
+        payload.policeReport = formData.polizeiGemeldet;
+        payload.estimatedDamage = formData.geschaetzterSchaden || null;
+      }
+
+      await apiRequest('POST', '/api/schaden/submit', payload);
       goToStep(4);
     } catch (err: any) {
       setSubmitError(err.message || 'Fehler beim Senden. Bitte versuchen Sie es erneut.');
@@ -352,6 +438,7 @@ export default function SchadenPage() {
                   >
                     <span className="text-3xl">{card.icon}</span>
                     <span className="font-bold text-gray-900 text-sm">{card.title}</span>
+                    {card.subtitle && <span className="text-xs text-gray-500 -mt-1">{card.subtitle}</span>}
                   </button>
                 ))}
               </div>
@@ -364,6 +451,7 @@ export default function SchadenPage() {
           {step === 2 && selectedType && (
             <div>
               <h2 className="text-xl font-bold text-gray-900 mb-1">{damageTypeLabels[selectedType].icon} {damageTypeLabels[selectedType].title}</h2>
+              {selectedType === 'glasschaden' && <p className="text-xs text-gray-500 mb-1">In Kooperation mit Carglass</p>}
               <p className="text-sm text-gray-500 mb-5">Bitte füllen Sie alle Pflichtfelder (*) aus.</p>
               <div className="flex flex-col gap-4">
 
@@ -381,54 +469,194 @@ export default function SchadenPage() {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-gray-700">E-Mail *</label>
-                  <input type="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} />
-                  {errors.email && <span className="text-xs text-red-500">{errors.email}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold text-gray-700">Telefon *</label>
                   <input type="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} />
                   {errors.telefon && <span className="text-xs text-red-500">{errors.telefon}</span>}
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-gray-700">Versicherungsnummer *</label>
-                  <input type="text" value={formData.versicherungsnummer} onChange={e => updateField('versicherungsnummer', e.target.value)} className={inputCls('versicherungsnummer')} />
-                  {errors.versicherungsnummer && <span className="text-xs text-red-500">{errors.versicherungsnummer}</span>}
+                  <label className="text-sm font-semibold text-gray-700">E-Mail *</label>
+                  <input type="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} />
+                  {errors.email && <span className="text-xs text-red-500">{errors.email}</span>}
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-gray-700">Schadendatum *</label>
-                  <input type="date" value={formData.schadendatum} onChange={e => updateField('schadendatum', e.target.value)} className={inputCls('schadendatum')} />
-                  {errors.schadendatum && <span className="text-xs text-red-500">{errors.schadendatum}</span>}
-                </div>
+                {selectedType === 'glasschaden' && (
+                  <>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Fahrzeugidentifikationsnummer (FIN) *</label>
+                      <input type="text" value={formData.fin} onChange={e => updateField('fin', e.target.value)} placeholder="z.B. WVWZZZ3CZWE123456" className={inputCls('fin')} />
+                      {errors.fin && <span className="text-xs text-red-500">{errors.fin}</span>}
+                    </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-gray-700">Schadenort *</label>
-                  <input type="text" value={formData.schadenort} onChange={e => updateField('schadenort', e.target.value)} placeholder="Straße, Ort wo der Schaden passiert ist" className={inputCls('schadenort')} />
-                  {errors.schadenort && <span className="text-xs text-red-500">{errors.schadenort}</span>}
-                </div>
+                    <div className="border-t border-gray-200 pt-4 mt-2">
+                      <h3 className="text-base font-bold text-gray-900 mb-3">🔲 Schadenfragen</h3>
+                    </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-gray-700">Schadensbeschreibung *</label>
-                  <textarea value={formData.beschreibung} onChange={e => updateField('beschreibung', e.target.value)} placeholder="Bitte beschreiben Sie den Schaden so genau wie möglich..." rows={4} className={inputCls('beschreibung')} />
-                  {errors.beschreibung && <span className="text-xs text-red-500">{errors.beschreibung}</span>}
-                </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Welche Scheibe ist beschädigt? *</label>
+                      <div className="flex flex-col gap-2">
+                        {[
+                          { value: 'frontscheibe', label: 'Frontscheibe' },
+                          { value: 'heckscheibe', label: 'Heckscheibe' },
+                          { value: 'seitenscheibe_lv', label: 'Seitenscheibe links vorne' },
+                          { value: 'seitenscheibe_lh', label: 'Seitenscheibe links hinten' },
+                          { value: 'seitenscheibe_rv', label: 'Seitenscheibe rechts vorne' },
+                          { value: 'seitenscheibe_rh', label: 'Seitenscheibe rechts hinten' },
+                          { value: 'dachscheibe', label: 'Dachscheibe / Panoramadach' },
+                        ].map(opt => (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => updateField('glasScheibe', opt.value)}
+                            className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-colors ${
+                              formData.glasScheibe === opt.value
+                                ? 'bg-[#003781] text-white border-[#003781]'
+                                : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                      {errors.glasScheibe && <span className="text-xs text-red-500">{errors.glasScheibe}</span>}
+                    </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-gray-700">Bereits polizeilich gemeldet?</label>
-                  {renderRadioGroup('polizeiGemeldet', [
-                    { value: 'ja', label: 'Ja' },
-                    { value: 'nein', label: 'Nein' },
-                    { value: 'nicht_zutreffend', label: 'Nicht zutreffend' },
-                  ])}
-                </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Was liegt vor? *</label>
+                      <div className="flex flex-col gap-2">
+                        {[
+                          { value: 'steinschlag', label: 'Steinschlag (einzeln)' },
+                          { value: 'mehrere_steinschlaege', label: 'Mehrere Steinschläge' },
+                          { value: 'riss', label: 'Riss' },
+                          { value: 'eingeschlagen', label: 'Eingeschlagen / zerstört' },
+                        ].map(opt => (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => {
+                              updateField('glasSchadensart', opt.value);
+                              if (!['steinschlag', 'mehrere_steinschlaege', 'riss'].includes(opt.value)) {
+                                updateField('glasBereich', '');
+                              }
+                              if (opt.value !== 'steinschlag') {
+                                updateField('glasGroesse', '');
+                              }
+                            }}
+                            className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-colors ${
+                              formData.glasSchadensart === opt.value
+                                ? 'bg-[#003781] text-white border-[#003781]'
+                                : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                      {errors.glasSchadensart && <span className="text-xs text-red-500">{errors.glasSchadensart}</span>}
+                    </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-gray-700">Geschätzter Schaden in €</label>
-                  <input type="number" value={formData.geschaetzterSchaden} onChange={e => updateField('geschaetzterSchaden', e.target.value)} className={inputCls('geschaetzterSchaden')} />
-                </div>
+                    {['steinschlag', 'mehrere_steinschlaege', 'riss'].includes(formData.glasSchadensart) && (
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm font-semibold text-gray-700">In welchem Bereich befindet sich der Schaden? *</label>
+                        <div className="flex flex-col gap-2">
+                          {[
+                            { value: 'rand', label: 'Weniger als 10 cm vom Rand' },
+                            { value: 'fahrsichtfeld', label: 'Fahrsichtfeld über dem Lenkrad' },
+                            { value: 'anderer', label: 'Anderer Bereich' },
+                          ].map(opt => (
+                            <button
+                              key={opt.value}
+                              type="button"
+                              onClick={() => updateField('glasBereich', opt.value)}
+                              className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-colors ${
+                                formData.glasBereich === opt.value
+                                  ? 'bg-[#003781] text-white border-[#003781]'
+                                  : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                              }`}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                        {errors.glasBereich && <span className="text-xs text-red-500">{errors.glasBereich}</span>}
+                      </div>
+                    )}
+
+                    {formData.glasSchadensart === 'steinschlag' && (
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm font-semibold text-gray-700">Größe des Schlags *</label>
+                        <div className="flex flex-col gap-2">
+                          {[
+                            { value: 'kleiner', label: 'Kleiner als eine 2-€-Münze' },
+                            { value: 'groesser', label: 'Größer als eine 2-€-Münze' },
+                          ].map(opt => (
+                            <button
+                              key={opt.value}
+                              type="button"
+                              onClick={() => updateField('glasGroesse', opt.value)}
+                              className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-colors ${
+                                formData.glasGroesse === opt.value
+                                  ? 'bg-[#003781] text-white border-[#003781]'
+                                  : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                              }`}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                        {errors.glasGroesse && <span className="text-xs text-red-500">{errors.glasGroesse}</span>}
+                      </div>
+                    )}
+
+                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mt-2">
+                      <p className="text-sm text-gray-700">
+                        <span className="font-bold">🔧 Hinweis:</span> Nach Eingang Ihrer Meldung koordinieren wir gemeinsam mit unserem Partner Carglass einen Reparaturtermin – direkt bei Ihnen oder in einer Carglass-Filiale.
+                      </p>
+                    </div>
+                  </>
+                )}
+
+                {selectedType !== 'glasschaden' && (
+                  <>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Versicherungsnummer *</label>
+                      <input type="text" value={formData.versicherungsnummer} onChange={e => updateField('versicherungsnummer', e.target.value)} className={inputCls('versicherungsnummer')} />
+                      {errors.versicherungsnummer && <span className="text-xs text-red-500">{errors.versicherungsnummer}</span>}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Schadendatum *</label>
+                      <input type="date" value={formData.schadendatum} onChange={e => updateField('schadendatum', e.target.value)} className={inputCls('schadendatum')} />
+                      {errors.schadendatum && <span className="text-xs text-red-500">{errors.schadendatum}</span>}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Schadenort *</label>
+                      <input type="text" value={formData.schadenort} onChange={e => updateField('schadenort', e.target.value)} placeholder="Straße, Ort wo der Schaden passiert ist" className={inputCls('schadenort')} />
+                      {errors.schadenort && <span className="text-xs text-red-500">{errors.schadenort}</span>}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Schadensbeschreibung *</label>
+                      <textarea value={formData.beschreibung} onChange={e => updateField('beschreibung', e.target.value)} placeholder="Bitte beschreiben Sie den Schaden so genau wie möglich..." rows={4} className={inputCls('beschreibung')} />
+                      {errors.beschreibung && <span className="text-xs text-red-500">{errors.beschreibung}</span>}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Bereits polizeilich gemeldet?</label>
+                      {renderRadioGroup('polizeiGemeldet', [
+                        { value: 'ja', label: 'Ja' },
+                        { value: 'nein', label: 'Nein' },
+                        { value: 'nicht_zutreffend', label: 'Nicht zutreffend' },
+                      ])}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Geschätzter Schaden in €</label>
+                      <input type="number" value={formData.geschaetzterSchaden} onChange={e => updateField('geschaetzterSchaden', e.target.value)} className={inputCls('geschaetzterSchaden')} />
+                    </div>
+                  </>
+                )}
 
                 {selectedType === 'kfz' && (
                   <>
@@ -627,9 +855,23 @@ export default function SchadenPage() {
                 </div>
                 <div className="flex flex-col gap-1.5 text-sm text-gray-700">
                   <p><span className="font-semibold">Name:</span> {formData.vorname} {formData.nachname}</p>
-                  <p><span className="font-semibold">Schadendatum:</span> {formData.schadendatum}</p>
-                  <p><span className="font-semibold">Schadenort:</span> {formData.schadenort}</p>
-                  <p><span className="font-semibold">Beschreibung:</span> {formData.beschreibung.length > 200 ? formData.beschreibung.slice(0, 200) + '...' : formData.beschreibung}</p>
+                  <p><span className="font-semibold">E-Mail:</span> {formData.email}</p>
+                  <p><span className="font-semibold">Telefon:</span> {formData.telefon}</p>
+                  {selectedType === 'glasschaden' ? (
+                    <>
+                      <p><span className="font-semibold">FIN:</span> {formData.fin}</p>
+                      <p><span className="font-semibold">Scheibe:</span> {glasScheibeLabel(formData.glasScheibe)}</p>
+                      <p><span className="font-semibold">Schadensart:</span> {glasSchadensartLabel(formData.glasSchadensart)}</p>
+                      {formData.glasBereich && <p><span className="font-semibold">Bereich:</span> {glasBereichLabel(formData.glasBereich)}</p>}
+                      {formData.glasGroesse && <p><span className="font-semibold">Größe:</span> {glasGroesseLabel(formData.glasGroesse)}</p>}
+                    </>
+                  ) : (
+                    <>
+                      <p><span className="font-semibold">Schadendatum:</span> {formData.schadendatum}</p>
+                      <p><span className="font-semibold">Schadenort:</span> {formData.schadenort}</p>
+                      <p><span className="font-semibold">Beschreibung:</span> {formData.beschreibung.length > 200 ? formData.beschreibung.slice(0, 200) + '...' : formData.beschreibung}</p>
+                    </>
+                  )}
                   <p><span className="font-semibold">Anzahl Dateien:</span> {files.length}</p>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">Alles korrekt? Bitte prüfen Sie Ihre Angaben.</p>

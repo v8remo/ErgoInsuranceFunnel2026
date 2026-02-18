@@ -349,9 +349,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Schaden (damage report) submission endpoint
   app.post("/api/schaden/submit", async (req, res) => {
     try {
-      const { damageType, customerName, customerEmail, customerPhone, insuranceNumber, damageDate, damageLocation, damageDescription, policeReport, estimatedDamage, extraFields, attachmentsCount, summary, fileAttachments } = req.body;
+      const { damageType, customerName, customerEmail, customerPhone, insuranceNumber, damageDate, damageLocation, damageDescription, policeReport, estimatedDamage, extraFields, attachmentsCount, summary, fileAttachments, isGlasschaden, glasScheibe } = req.body;
 
-      if (!damageType || !customerName || !customerEmail || !damageDescription) {
+      if (!damageType || !customerName || !customerEmail) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+      if (!isGlasschaden && !damageDescription) {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
@@ -367,7 +370,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
 
-      const emailHtml = `
+      const emailHtml = isGlasschaden ? `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background-color: #003781; color: white; padding: 20px; text-align: center;">
+            <h1 style="margin: 0;">🔲 Kfz-Glasschaden</h1>
+            <p style="margin: 10px 0 0 0;">ergo-stuebe.de · In Kooperation mit Carglass</p>
+          </div>
+          <div style="padding: 20px; background-color: #f7f7f7;">
+            <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0;">Kontaktdaten</h3>
+              <p><strong>Name:</strong> ${customerName}</p>
+              <p><strong>E-Mail:</strong> <a href="mailto:${customerEmail}">${customerEmail}</a></p>
+              <p><strong>Telefon:</strong> ${customerPhone || '-'}</p>
+            </div>
+            ${extraFields ? `<div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0;">Schadendetails</h3>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${extraFields}</pre>
+            </div>` : ''}
+            <div style="background-color: #e3f2fd; padding: 10px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 15px;">🔧 Carglass-Reparaturtermin koordinieren</div>
+            ${attachmentsCount ? `<div style="background-color: #fff3cd; padding: 10px 15px; border-radius: 8px; font-size: 14px;">📎 ${attachmentsCount} Datei(en) angehängt</div>` : ''}
+          </div>
+          <div style="padding: 10px 20px; font-size: 12px; color: #666; text-align: center;">
+            Eingereicht am ${now} über ergo-stuebe.de
+          </div>
+        </div>
+      ` : `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background-color: #E2001A; color: white; padding: 20px; text-align: center;">
             <h1 style="margin: 0;">🚨 Neue Schadensmeldung</h1>
@@ -413,7 +440,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { data, error } = await resendClient.emails.send({
           from: 'ERGO Schadensmeldung <onboarding@resend.dev>',
           to: 'stuebe@shopgrow.de',
-          subject: `🚨 Schadensmeldung: ${damageType} – ${customerName} – ${now}`,
+          subject: isGlasschaden
+            ? `🔲 Kfz-Glasschaden: ${customerName} – ${glasScheibe || 'Scheibe'} – ${now}`
+            : `🚨 Schadensmeldung: ${damageType} – ${customerName} – ${now}`,
           html: emailHtml,
           attachments: attachments.length > 0 ? attachments : undefined,
         });
