@@ -1,0 +1,102 @@
+Add a floating callback widget to the existing ergo-stuebe.de Replit project.
+Use the SAME EmailJS configuration already in the project.
+DO NOT create any new files except rueckruf.js and rueckruf.css.
+Add <link> and <script> tags for both in the existing index.html <head>/<body>.
+Also add the widget HTML at the bottom of index.html's <body>.
+
+---
+
+## WIDGET BEHAVIOR
+
+A floating button fixed bottom-right of the screen (on ALL screen sizes):
+- Size: 56x56px circle
+- Background: #E2001A (red)
+- Icon: 📞 (or SVG phone icon in white)
+- Box shadow for depth
+- Subtle pulse animation to draw attention
+- z-index: 9998
+
+On click → open a small popup card (NOT full screen, NOT a modal overlay):
+- Position: above the button, right-aligned
+- Width: 320px (full-width on mobile < 380px)
+- White background, rounded 16px, shadow
+- Close button (×) top right
+
+---
+
+## POPUP CARD CONTENT
+
+Header (red background, white text):
+"📞 Rückruf anfordern"
+"Wir melden uns innerhalb von 24h bei Ihnen"
+
+Form fields:
+- Vorname* (text)
+- Nachname* (text)  
+- Telefonnummer* (tel)
+- Wann soll ich zurückrufen? (select, required):
+  "So früh wie möglich"
+  "Vormittags (9–12 Uhr)"
+  "Mittags (12–14 Uhr)"
+  "Nachmittags (14–18 Uhr)"
+  "Abends (ab 18 Uhr)"
+- Worum geht es? (select, optional):
+  "Neue Versicherung"
+  "Bestehenden Vertrag prüfen"
+  "Schadensmeldung"
+  "Kündigung / Wechsel"
+  "Sonstiges"
+
+Submit button (red, full-width): "Rückruf anfordern ✓"
+Loading state: spinner + "Wird gesendet..."
+
+DSGVO line (tiny, gray):
+"🔒 Ihre Daten werden nur zur Terminvereinbarung genutzt."
+
+---
+
+## ON SUBMIT
+
+Validate required fields (inline red border + message).
+
+Send via EmailJS (same Service ID, Template ID, Public Key as existing project):
+Subject: "📞 Rückruf-Anfrage: [Name] – [Wunschzeit]"
+Template variables:
+{
+  callback_name: "...",
+  callback_phone: "...",
+  callback_time: "Nachmittags (14–18 Uhr)",
+  callback_topic: "Neue Versicherung",
+  submitted_at: "DD.MM.YYYY HH:MM",
+  source: "Rückruf-Widget ergo-stuebe.de"
+}
+
+On success:
+- Replace form with success message inside same popup:
+  ✅ "Vielen Dank, [Vorname]!"
+  "Morino meldet sich [Wunschzeit] bei Ihnen unter [Telefonnummer]."
+  Green checkmark animation.
+- Auto-close popup after 4 seconds
+
+On error:
+- Show red error text: 
+  "Fehler beim Senden. Bitte rufen Sie direkt an: 015566771019"
+- Show WhatsApp button: https://wa.me/4915566771019
+
+---
+
+## ADDITIONAL DETAILS
+
+- Widget hidden on /dokumente and /schaden pages (check window.location.pathname)
+- First visit: after 8 seconds show a small tooltip above the button:
+  "Rückruf gewünscht? 👆" (auto-hides after 4 seconds, never shows again 
+  via localStorage flag)
+- ESC key closes the popup
+- Click outside popup closes it
+- Smooth open/close animation (CSS transform + opacity)
+
+## FILES TO CREATE/MODIFY:
+1. CREATE: rueckruf.css
+2. CREATE: rueckruf.js  
+3. MODIFY: index.html only (add link/script tags + widget HTML at bottom of body)
+DO NOT touch schaden.html, dokumente.html or any other files.
