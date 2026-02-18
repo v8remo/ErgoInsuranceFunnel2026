@@ -278,6 +278,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Document submission endpoint
+  app.post("/api/documents/submit", async (req, res) => {
+    try {
+      const { documentType, customerName, customerEmail, customerPhone, summary, pdfBase64 } = req.body;
+
+      if (!documentType || !customerName || !customerEmail) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
+
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background-color: #003781; color: white; padding: 20px; text-align: center;">
+            <h1 style="margin: 0;">📄 Neues Dokument eingegangen</h1>
+            <p style="margin: 10px 0 0 0;">ergo-stuebe.de · Dokumenten-Service</p>
+          </div>
+          <div style="padding: 20px; background-color: #f7f7f7;">
+            <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <p><strong>Dokumenttyp:</strong> ${documentType}</p>
+              <p><strong>Name:</strong> ${customerName}</p>
+              <p><strong>E-Mail:</strong> <a href="mailto:${customerEmail}">${customerEmail}</a></p>
+              <p><strong>Telefon:</strong> ${customerPhone || '-'}</p>
+              <p><strong>Eingereicht am:</strong> ${now}</p>
+            </div>
+            <div style="background-color: white; padding: 15px; border-radius: 8px;">
+              <h3 style="color: #003781; margin-top: 0;">Zusammenfassung</h3>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${summary || '-'}</pre>
+            </div>
+          </div>
+          <div style="padding: 10px 20px; font-size: 12px; color: #666; text-align: center;">
+            Das signierte PDF wurde als Anhang beigefügt (falls unterstützt) oder kann vom Kunden heruntergeladen werden.
+          </div>
+        </div>
+      `;
+
+      if (process.env.RESEND_API_KEY) {
+        const attachments = pdfBase64 ? [{
+          filename: `${documentType.replace(/\s/g, '_')}_${customerName.replace(/\s/g, '_')}.pdf`,
+          content: pdfBase64,
+        }] : [];
+
+        const { Resend } = await import('resend');
+        const resendClient = new Resend(process.env.RESEND_API_KEY);
+        await resendClient.emails.send({
+          from: 'ERGO Dokumente <onboarding@resend.dev>',
+          to: 'Morino.stuebe@ergo.de',
+          subject: `📄 Neues Dokument: ${documentType} – ${customerName} – ${now}`,
+          html: emailHtml,
+          attachments,
+        });
+      }
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Document submission error:', error);
+      res.status(500).json({ message: "Failed to submit document" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

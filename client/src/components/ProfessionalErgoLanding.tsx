@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare } from 'lucide-react';
+import { Link } from 'wouter';
+import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, FileText } from 'lucide-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import FunnelOverlay from './FunnelOverlay';
 import '@/styles/funnel.css';
@@ -55,6 +56,14 @@ export default function ProfessionalErgoLanding() {
             <MessageSquare className="w-5 h-5 shrink-0" />
             Direkt über WhatsApp
           </a>
+
+          <Link
+            href="/dokumente"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#003781] text-[#003781] font-semibold text-base px-6 py-4 rounded-xl active:scale-[0.97] transition-transform md:text-lg md:px-8"
+          >
+            <FileText className="w-5 h-5 shrink-0" />
+            Dokument einreichen
+          </Link>
         </div>
       </section>
 
@@ -160,8 +169,24 @@ export default function ProfessionalErgoLanding() {
             <span>📋 Unverbindlich & kostenfrei</span>
             <span>⭐ Persönliche Beratung vor Ort</span>
           </div>
+
+          <Link href="/dokumente" className="inline-block mt-4 text-sm text-[#003781] hover:underline">
+            Oder: Dokument einreichen & unterschreiben →
+          </Link>
         </div>
       </section>
+
+      {/* ──────── FOOTER ──────── */}
+      <footer className="px-4 pb-24 sm:pb-12 max-w-3xl mx-auto">
+        <div className="border-t border-gray-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+            <Link href="/impressum" className="hover:text-gray-600">Impressum</Link>
+            <Link href="/datenschutz" className="hover:text-gray-600">Datenschutz</Link>
+            <Link href="/dokumente" className="hover:text-gray-600">Dokumente einreichen</Link>
+          </div>
+          <span>© {new Date().getFullYear()} ERGO Agentur Stübe</span>
+        </div>
+      </footer>
 
       {/* ──────── STICKY MOBILE CTA ──────── */}
       <div className="fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur border-t border-gray-200 px-4 py-3 flex gap-3 sm:hidden safe-area-bottom">
