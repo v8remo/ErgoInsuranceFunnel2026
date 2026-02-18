@@ -436,10 +436,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/callback/submit", async (req, res) => {
     try {
-      const { name, phone, callbackTime, topic } = req.body;
+      let { name, phone, callbackTime, topic } = req.body;
 
       if (!name || !phone || !callbackTime) {
         return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      name = String(name).trim().slice(0, 200);
+      phone = String(phone).trim().slice(0, 30);
+      callbackTime = String(callbackTime).trim().slice(0, 100);
+      topic = topic ? String(topic).trim().slice(0, 200) : null;
+
+      if (!name || !phone || !callbackTime) {
+        return res.status(400).json({ message: "Fields must not be empty" });
       }
 
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });

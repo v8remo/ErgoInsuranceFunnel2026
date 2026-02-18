@@ -12,6 +12,7 @@ import Datenschutz from "@/pages/Datenschutz";
 import DokumentePage from "@/pages/DokumentePage";
 import SchadenPage from "@/pages/SchadenPage";
 import NotFound from "@/pages/not-found";
+import CallbackWidget from "@/components/CallbackWidget";
 
 function AppContent() {
   useAnalytics();
@@ -36,6 +37,7 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <AppContent />
+        <CallbackWidget />
       </TooltipProvider>
     </QueryClientProvider>
   );
