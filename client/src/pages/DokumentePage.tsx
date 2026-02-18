@@ -4,7 +4,12 @@ import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import SignaturePad from 'signature_pad';
 import { apiRequest } from '@/lib/queryClient';
 
-type DocType = 'kuendigung' | 'beraterwechsel' | 'aenderung' | 'vollmacht';
+type DocType = 'kuendigung' | 'beraterwechsel' | 'aenderung' | 'vollmacht' | 'upload';
+
+interface UploadFile {
+  file: File;
+  preview?: string;
+}
 
 interface FormData {
   vorname: string;
@@ -39,6 +44,8 @@ interface FormData {
   sonstigesText: string;
   iban: string;
   kreditinstitut: string;
+  schadennummer: string;
+  uploadBeschreibung: string;
 }
 
 const initialFormData: FormData = {
@@ -49,6 +56,7 @@ const initialFormData: FormData = {
   neueStrasse: '', neuePlz: '', neuerOrt: '', kontoinhaber: '', neueIban: '', bic: '', bank: '',
   neueEmail: '', neueTelefon: '', kennzeichen: '', fahrzeugtyp: '', erstzulassung: '',
   sonstigesText: '', iban: '', kreditinstitut: '',
+  schadennummer: '', uploadBeschreibung: '',
 };
 
 const docTypeLabels: Record<DocType, string> = {
@@ -56,9 +64,11 @@ const docTypeLabels: Record<DocType, string> = {
   beraterwechsel: 'Beraterwechsel-Antrag',
   aenderung: 'Änderungsantrag',
   vollmacht: 'Vollmacht & SEPA',
+  upload: 'Rechnung / Beleg einreichen',
 };
 
 const docTypeCards: { type: DocType; icon: string; title: string; desc: string }[] = [
+  { type: 'upload', icon: '📎', title: 'Rechnung / Beleg einreichen', desc: 'Rechnungen, Belege oder Nachweise hochladen und einreichen' },
   { type: 'kuendigung', icon: '📄', title: 'Kündigungsschreiben', desc: 'Kündigung bei einem anderen Versicherer einreichen' },
   { type: 'beraterwechsel', icon: '🔄', title: 'Beraterwechsel-Antrag', desc: 'Von Morino Stübe bei ERGO betreut werden' },
   { type: 'aenderung', icon: '✏️', title: 'Änderungsantrag', desc: 'Adresse, IBAN oder andere Vertragsdaten ändern' },
@@ -109,14 +119,22 @@ export default function DokumentePage() {
   const [confirm1, setConfirm1] = useState(false);
   const [confirm2, setConfirm2] = useState(false);
   const [fadeClass, setFadeClass] = useState('opacity-100 transition-opacity duration-300');
+  const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sigPadRef = useRef<SignaturePad | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    return () => {
+      uploadFiles.forEach(uf => { if (uf.preview) URL.revokeObjectURL(uf.preview); });
+    };
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const typeParam = params.get('type') as DocType | null;
-    if (typeParam && ['kuendigung', 'beraterwechsel', 'aenderung', 'vollmacht'].includes(typeParam)) {
+    if (typeParam && ['kuendigung', 'beraterwechsel', 'aenderung', 'vollmacht', 'upload'].includes(typeParam)) {
       setSelectedType(typeParam);
       setStep(2);
     }
@@ -150,7 +168,89 @@ export default function DokumentePage() {
     setSelectedType(type);
     setFormData({ ...initialFormData });
     setErrors({});
+    setUploadFiles([]);
     goToStep(2);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    const newFiles: UploadFile[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
+      if (uploadFiles.length + newFiles.length >= 5) break;
+      if (!f.type.startsWith('image/') && f.type !== 'application/pdf') continue;
+      if (f.size > 10 * 1024 * 1024) continue;
+      const uf: UploadFile = { file: f };
+      if (f.type.startsWith('image/')) {
+        uf.preview = URL.createObjectURL(f);
+      }
+      newFiles.push(uf);
+    }
+    setUploadFiles(prev => [...prev, ...newFiles].slice(0, 5));
+    if (errors.files) setErrors(prev => { const n = { ...prev }; delete n.files; return n; });
+    e.target.value = '';
+  };
+
+  const removeFile = (index: number) => {
+    setUploadFiles(prev => {
+      const next = [...prev];
+      if (next[index]?.preview) URL.revokeObjectURL(next[index].preview!);
+      next.splice(index, 1);
+      return next;
+    });
+  };
+
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result.split(',')[1]);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+  const handleUploadSubmit = async () => {
+    const errs: Record<string, string> = {};
+    if (!formData.vorname.trim()) errs.vorname = 'Pflichtfeld';
+    if (!formData.nachname.trim()) errs.nachname = 'Pflichtfeld';
+    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) errs.email = 'Gültige E-Mail eingeben';
+    if (!formData.versicherungsnummer.trim()) errs.versicherungsnummer = 'Pflichtfeld';
+    if (uploadFiles.length === 0) errs.files = 'Bitte mindestens eine Datei hochladen';
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) return;
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const fileAttachments = await Promise.all(
+        uploadFiles.map(async (uf) => ({
+          filename: uf.file.name,
+          content: await fileToBase64(uf.file),
+        }))
+      );
+
+      await apiRequest('POST', '/api/documents/upload', {
+        vorname: formData.vorname.trim(),
+        nachname: formData.nachname.trim(),
+        email: formData.email.trim(),
+        telefon: formData.telefon.trim(),
+        versicherungsnummer: formData.versicherungsnummer.trim(),
+        schadennummer: formData.schadennummer.trim(),
+        beschreibung: formData.uploadBeschreibung.trim(),
+        fileAttachments,
+      });
+
+      goToStep(4);
+    } catch (err: any) {
+      setSubmitError(err.message || 'Fehler beim Senden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns per WhatsApp.');
+      goToStep(4);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const updateField = (field: keyof FormData, value: string) => {
@@ -482,7 +582,11 @@ export default function DokumentePage() {
     </div>
   );
 
-  const progressPercent = step === 1 ? 33 : step === 2 ? 66 : step === 3 ? 100 : 100;
+  const isUpload = selectedType === 'upload';
+  const totalSteps = isUpload ? 2 : 3;
+  const progressPercent = isUpload
+    ? (step === 1 ? 50 : 100)
+    : (step === 1 ? 33 : step === 2 ? 66 : 100);
 
   return (
     <div className="min-h-screen bg-gray-50 safe-area-bottom">
@@ -498,7 +602,7 @@ export default function DokumentePage() {
                 <div />
               )}
               <span className="text-xs text-gray-500 font-medium">
-                Schritt {Math.min(step, 3)} von 3
+                Schritt {Math.min(step, totalSteps)} von {totalSteps}
               </span>
             </div>
             <div className="h-1 bg-gray-200 rounded-full mb-6 overflow-hidden">
@@ -541,18 +645,24 @@ export default function DokumentePage() {
               <h2 className="text-xl font-bold text-gray-900 mb-1">{docTypeLabels[selectedType]}</h2>
               <p className="text-sm text-gray-500 mb-5">Bitte füllen Sie alle Pflichtfelder (*) aus.</p>
               <div className="flex flex-col gap-4">
-                <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide">Persönliche Daten</h3>
+                <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide">
+                  {selectedType === 'upload' ? 'Kontaktdaten' : 'Persönliche Daten'}
+                </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {renderField('Vorname', 'vorname')}
                   {renderField('Nachname', 'nachname')}
                 </div>
-                {renderField('Straße + Hausnummer', 'strasse')}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {renderField('PLZ', 'plz', 'text', '12345')}
-                  {renderField('Ort', 'ort')}
-                </div>
+                {selectedType !== 'upload' && (
+                  <>
+                    {renderField('Straße + Hausnummer', 'strasse')}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {renderField('PLZ', 'plz', 'text', '12345')}
+                      {renderField('Ort', 'ort')}
+                    </div>
+                  </>
+                )}
                 {renderField('E-Mail', 'email', 'email', 'name@beispiel.de')}
-                {renderField('Telefon', 'telefon', 'tel', '0151 12345678')}
+                {renderField('Telefon', 'telefon', 'tel', '0151 12345678', selectedType !== 'upload')}
 
                 {selectedType === 'kuendigung' && (
                   <>
@@ -701,12 +811,123 @@ export default function DokumentePage() {
                   </>
                 )}
 
-                <button
-                  onClick={handleStep2Next}
-                  className="w-full bg-ergo-red text-white font-semibold text-base py-4 rounded-xl min-h-[48px] active:scale-[0.97] transition-transform mt-2"
-                >
-                  Weiter zur Unterschrift →
-                </button>
+                {selectedType === 'upload' && (
+                  <>
+                    <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide mt-2">Versicherungsdaten</h3>
+                    {renderField('Versicherungsnummer', 'versicherungsnummer', 'text', 'z.B. 12345678')}
+                    {renderField('Schadennummer', 'schadennummer', 'text', 'Falls vorhanden', false)}
+
+                    <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide mt-2">Beschreibung</h3>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Worum handelt es sich? (optional)</label>
+                      <textarea
+                        value={formData.uploadBeschreibung}
+                        onChange={e => updateField('uploadBeschreibung', e.target.value)}
+                        rows={3}
+                        placeholder="z.B. Zahnarztrechnung vom 15.01., Reparaturrechnung KFZ..."
+                        className="w-full p-3 border-2 border-gray-200 rounded-xl text-base outline-none focus:border-[#003781] resize-none"
+                      />
+                    </div>
+
+                    <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide mt-2">Dateien hochladen *</h3>
+                    <div className="flex flex-col gap-3">
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*,application/pdf"
+                        multiple
+                        onChange={handleFileSelect}
+                        className="hidden"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadFiles.length >= 5}
+                        className="w-full border-2 border-dashed border-[#003781] text-[#003781] rounded-xl p-6 flex flex-col items-center gap-2 active:bg-blue-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      >
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="17 8 12 3 7 8" />
+                          <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg>
+                        <span className="font-semibold text-sm">Fotos oder PDFs auswählen</span>
+                        <span className="text-xs text-gray-400">Max. 5 Dateien, je max. 10 MB</span>
+                      </button>
+
+                      {uploadFiles.length > 0 && (
+                        <div className="flex flex-col gap-2">
+                          {uploadFiles.map((uf, i) => (
+                            <div key={i} className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-3">
+                              {uf.preview ? (
+                                <img src={uf.preview} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" />
+                              ) : (
+                                <div className="w-12 h-12 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
+                                  <span className="text-lg">📄</span>
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-gray-900 truncate">{uf.file.name}</p>
+                                <p className="text-xs text-gray-400">{(uf.file.size / 1024).toFixed(0)} KB</p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => removeFile(i)}
+                                className="w-8 h-8 flex items-center justify-center rounded-full text-red-500 hover:bg-red-50 transition-colors shrink-0"
+                                aria-label="Datei entfernen"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {errors.files && <span className="text-xs text-red-500">{errors.files}</span>}
+                    </div>
+
+                    <div className="bg-gray-50 rounded-xl p-4 mt-2">
+                      <label className="flex items-start gap-2 text-sm text-gray-700 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={confirm1}
+                          onChange={e => { setConfirm1(e.target.checked); if (errors.confirm1) setErrors(prev => { const n = { ...prev }; delete n.confirm1; return n; }); }}
+                          className="w-5 h-5 accent-[#E2001A] shrink-0 mt-0.5"
+                        />
+                        <span>Ich bin einverstanden, dass meine Daten und Dokumente zur Bearbeitung meines Anliegens verarbeitet werden (DSGVO).</span>
+                      </label>
+                      {errors.confirm1 && <p className="text-xs text-red-500 mt-1 ml-7">{errors.confirm1}</p>}
+                    </div>
+                  </>
+                )}
+
+                {selectedType !== 'upload' ? (
+                  <button
+                    onClick={handleStep2Next}
+                    className="w-full bg-ergo-red text-white font-semibold text-base py-4 rounded-xl min-h-[48px] active:scale-[0.97] transition-transform mt-2"
+                  >
+                    Weiter zur Unterschrift →
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      if (!confirm1) {
+                        setErrors(prev => ({ ...prev, confirm1: 'Bitte bestätigen.' }));
+                        return;
+                      }
+                      handleUploadSubmit();
+                    }}
+                    disabled={isSubmitting}
+                    className="w-full bg-ergo-red text-white font-semibold text-base py-4 rounded-xl min-h-[48px] active:scale-[0.97] transition-transform mt-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className="inline-block w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                        Wird gesendet...
+                      </>
+                    ) : (
+                      '📨 Dokumente jetzt einreichen'
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           )}
@@ -804,12 +1025,16 @@ export default function DokumentePage() {
               )}
 
               <h2 className="text-xl font-bold text-gray-900 mb-2">
-                {submitError ? 'PDF wurde gespeichert' : '✅ Dokument erfolgreich übermittelt!'}
+                {submitError ? (selectedType === 'upload' ? 'Fehler beim Senden' : 'PDF wurde gespeichert') : '✅ Dokument erfolgreich übermittelt!'}
               </h2>
               <p className="text-sm text-gray-500 mb-6">
                 {submitError
-                  ? 'Das PDF wurde auf Ihrem Gerät gespeichert. Bitte senden Sie es per WhatsApp oder E-Mail.'
-                  : 'Morino Stübe hat Ihre Unterlagen erhalten und meldet sich bei Bedarf bei Ihnen.'}
+                  ? (selectedType === 'upload'
+                    ? 'Bitte versuchen Sie es erneut oder senden Sie die Dokumente per WhatsApp.'
+                    : 'Das PDF wurde auf Ihrem Gerät gespeichert. Bitte senden Sie es per WhatsApp oder E-Mail.')
+                  : (selectedType === 'upload'
+                    ? 'Ihre Rechnungen/Belege wurden erfolgreich an Morino Stübe übermittelt.'
+                    : 'Morino Stübe hat Ihre Unterlagen erhalten und meldet sich bei Bedarf bei Ihnen.')}
               </p>
 
               <div className="bg-blue-50 rounded-xl p-4 text-left mb-6">
@@ -822,6 +1047,18 @@ export default function DokumentePage() {
                     <span className="text-gray-500">Name</span>
                     <span className="font-semibold text-gray-900">{formData.vorname} {formData.nachname}</span>
                   </div>
+                  {selectedType === 'upload' && formData.versicherungsnummer && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Versicherungsnr.</span>
+                      <span className="font-semibold text-gray-900">{formData.versicherungsnummer}</span>
+                    </div>
+                  )}
+                  {selectedType === 'upload' && uploadFiles.length > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Dateien</span>
+                      <span className="font-semibold text-gray-900">{uploadFiles.length} Datei(en)</span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span className="text-gray-500">Eingereicht am</span>
                     <span className="font-semibold text-gray-900">{todayFormatted()}</span>
@@ -829,7 +1066,7 @@ export default function DokumentePage() {
                 </div>
               </div>
 
-              {pdfBytes && (
+              {pdfBytes && selectedType !== 'upload' && (
                 <button
                   onClick={() => downloadPdf(pdfBytes, `${docTypeLabels[selectedType!].replace(/\s/g, '_')}_${formData.nachname}.pdf`)}
                   className="w-full bg-[#003781] text-white font-semibold text-base py-4 rounded-xl min-h-[48px] active:scale-[0.97] transition-transform mb-3 flex items-center justify-center gap-2"
@@ -839,7 +1076,7 @@ export default function DokumentePage() {
               )}
 
               <a
-                href={`https://wa.me/4915566771019?text=${encodeURIComponent(`Hallo Herr Stübe, ich habe soeben ein ${docTypeLabels[selectedType!]} über Ihre Website eingereicht. Bitte um Bestätigung. Viele Grüße, ${formData.vorname} ${formData.nachname}`)}`}
+                href={`https://wa.me/4915566771019?text=${encodeURIComponent(selectedType === 'upload' ? `Hallo Herr Stübe, ich habe soeben Rechnungen/Belege (VNR: ${formData.versicherungsnummer}) über Ihre Website eingereicht. Viele Grüße, ${formData.vorname} ${formData.nachname}` : `Hallo Herr Stübe, ich habe soeben ein ${docTypeLabels[selectedType!]} über Ihre Website eingereicht. Bitte um Bestätigung. Viele Grüße, ${formData.vorname} ${formData.nachname}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-[#25d366] text-white font-semibold text-base py-4 rounded-xl min-h-[48px] active:scale-[0.97] transition-transform mb-3 flex items-center justify-center gap-2"

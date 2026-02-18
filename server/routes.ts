@@ -434,6 +434,97 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post("/api/documents/upload", async (req, res) => {
+    try {
+      let { vorname, nachname, email, telefon, versicherungsnummer, schadennummer, beschreibung, fileAttachments } = req.body;
+
+      if (!vorname || !nachname || !email || !versicherungsnummer) {
+        return res.status(400).json({ message: "Pflichtfelder fehlen (Name, E-Mail, Versicherungsnummer)" });
+      }
+
+      vorname = String(vorname).trim().slice(0, 200);
+      nachname = String(nachname).trim().slice(0, 200);
+      email = String(email).trim().slice(0, 200);
+      telefon = telefon ? String(telefon).trim().slice(0, 30) : '';
+      versicherungsnummer = String(versicherungsnummer).trim().slice(0, 100);
+      schadennummer = schadennummer ? String(schadennummer).trim().slice(0, 100) : '';
+      beschreibung = beschreibung ? String(beschreibung).trim().slice(0, 2000) : '';
+
+      if (fileAttachments && Array.isArray(fileAttachments)) {
+        if (fileAttachments.length > 5) {
+          return res.status(400).json({ message: "Maximal 5 Dateien erlaubt" });
+        }
+        const totalSize = fileAttachments.reduce((sum: number, f: any) => sum + (f.content?.length || 0), 0);
+        if (totalSize > 25 * 1024 * 1024) {
+          return res.status(400).json({ message: "Dateien zu groß. Maximal 25 MB insgesamt." });
+        }
+      }
+
+      const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
+      const fileCount = fileAttachments?.length || 0;
+
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background-color: #003781; color: white; padding: 20px; text-align: center;">
+            <h1 style="margin: 0;">📎 Rechnung / Beleg eingereicht</h1>
+            <p style="margin: 10px 0 0 0;">ergo-stuebe.de · Dokumenten-Upload</p>
+          </div>
+          <div style="padding: 20px; background-color: #f7f7f7;">
+            <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0;">Kundendaten</h3>
+              <p><strong>Name:</strong> ${vorname} ${nachname}</p>
+              <p><strong>E-Mail:</strong> <a href="mailto:${email}">${email}</a></p>
+              <p><strong>Telefon:</strong> ${telefon || '-'}</p>
+              <p><strong>Versicherungsnummer:</strong> ${versicherungsnummer}</p>
+              ${schadennummer ? `<p><strong>Schadennummer:</strong> ${schadennummer}</p>` : ''}
+            </div>
+            ${beschreibung ? `
+            <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0;">Beschreibung</h3>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${beschreibung}</pre>
+            </div>` : ''}
+            <div style="background-color: ${fileCount > 0 ? '#d4edda' : '#fff3cd'}; padding: 10px 15px; border-radius: 8px; font-size: 14px;">
+              📎 ${fileCount} Datei(en) angehängt
+            </div>
+          </div>
+          <div style="padding: 10px 20px; font-size: 12px; color: #666; text-align: center;">
+            Eingereicht am ${now} über ergo-stuebe.de
+          </div>
+        </div>
+      `;
+
+      if (process.env.RESEND_API_KEY) {
+        const attachments = (fileAttachments || []).map((f: { filename: string; content: string }) => ({
+          filename: f.filename,
+          content: Buffer.from(f.content, 'base64'),
+        }));
+
+        const { Resend } = await import('resend');
+        const resendClient = new Resend(process.env.RESEND_API_KEY);
+        const { data, error } = await resendClient.emails.send({
+          from: 'ERGO Dokumente <onboarding@resend.dev>',
+          to: 'stuebe@shopgrow.de',
+          subject: `📎 Rechnung/Beleg: ${vorname} ${nachname} – VNR ${versicherungsnummer} – ${now}`,
+          html: emailHtml,
+          attachments: attachments.length > 0 ? attachments : undefined,
+        });
+
+        if (error) {
+          console.error('Resend upload email error:', JSON.stringify(error));
+          return res.json({ success: true, emailSent: false, emailError: error.message });
+        }
+        console.log('Document upload email sent successfully:', data?.id);
+        return res.json({ success: true, emailSent: true });
+      }
+
+      console.warn('No RESEND_API_KEY configured, skipping upload email');
+      res.json({ success: true, emailSent: false });
+    } catch (error) {
+      console.error('Document upload submission error:', error);
+      res.status(500).json({ message: "Fehler beim Einreichen der Dokumente" });
+    }
+  });
+
   app.post("/api/callback/submit", async (req, res) => {
     try {
       let { name, phone, callbackTime, topic } = req.body;

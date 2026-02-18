@@ -187,6 +187,14 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Authority: Zertifizierter ERGO-Fachberater Badges
   - Reciprocity: Kostenlose Analyse als Geschenk positioniert
 
+- 2026-02-18: Rechnung/Beleg-Upload auf Dokumente-Seite implementiert:
+  - Neuer Dokumenttyp "Rechnung / Beleg einreichen" als erste Option
+  - Vereinfachter 2-Schritt-Flow (Formular → Erfolg, ohne Unterschrift)
+  - Datei-Upload (Fotos + PDFs, max 5 Dateien, je max 10 MB)
+  - Versicherungsnummer (Pflicht) und Schadennummer (optional)
+  - E-Mail-Versand mit Anhängen über Resend an stuebe@shopgrow.de
+  - Backend-Endpoint: /api/documents/upload
+
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)
 - E-Mail-Benachrichtigungen für neue Leads gewünscht
