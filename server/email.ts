@@ -51,8 +51,8 @@ export async function sendLeadNotification(lead: Lead): Promise<boolean> {
     `;
 
     const { data, error } = await resend.emails.send({
-      from: 'ERGO Lead System <ergo@anfrage.ergo-stuebe.de>',
-      to: 'morino.stuebe@ergo.de',
+      from: 'ERGO Lead System <onboarding@resend.dev>',
+      to: 'stuebe@shopgrow.de',
       subject: `🎯 Neuer ${getInsuranceName(lead.insuranceType)} Lead von ${lead.firstName} ${lead.lastName}`,
       html: emailHtml,
     });
