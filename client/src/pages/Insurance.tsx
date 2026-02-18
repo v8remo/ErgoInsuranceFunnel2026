@@ -15,6 +15,34 @@ import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
 import { Award, Shield, Handshake, Clock } from "lucide-react";
 import type { Content } from "@shared/schema";
 
+const insuranceFAQs: Record<string, { question: string; answer: string }[]> = {
+  hausrat: [
+    { question: "Was deckt die Hausratversicherung ab?", answer: "Die Hausratversicherung schützt Ihr gesamtes Hab und Gut in der Wohnung gegen Schäden durch Feuer, Einbruchdiebstahl, Leitungswasser, Sturm und Hagel. Auch Fahrräder und Wertsachen können mitversichert werden." },
+    { question: "Wie hoch sollte die Versicherungssumme sein?", answer: "Als Faustregel gilt: ca. 650 Euro pro Quadratmeter Wohnfläche. Bei einer 80-qm-Wohnung wären das rund 52.000 Euro. Wir berechnen gerne die optimale Summe für Sie." },
+    { question: "Sind Elementarschäden mitversichert?", answer: "Elementarschäden wie Hochwasser, Starkregen oder Erdrutsch sind in der Grunddeckung oft nicht enthalten. Wir empfehlen den Einschluss als Zusatzbaustein – besonders in der Region Ganderkesee und Delmenhorst." },
+  ],
+  haftpflicht: [
+    { question: "Warum ist eine Haftpflichtversicherung so wichtig?", answer: "In Deutschland haften Sie unbegrenzt für Schäden, die Sie anderen zufügen. Ohne Haftpflichtversicherung kann ein einziger Unfall Ihre finanzielle Existenz bedrohen. Experten empfehlen eine Deckungssumme von mindestens 10 Millionen Euro." },
+    { question: "Wer ist in der Haftpflicht mitversichert?", answer: "In der Familienhaftpflicht sind Ihr Partner, Ihre Kinder (auch volljährige in Ausbildung) und Haustiere mitversichert. Singles können eine günstigere Einzelpolice wählen." },
+    { question: "Was kostet eine Haftpflichtversicherung?", answer: "Eine gute Privathaftpflicht gibt es bereits ab 8 Euro im Monat. Für Familien beginnen die Tarife bei etwa 12 Euro monatlich. Wir finden den passenden Tarif für Ihre Situation." },
+  ],
+  wohngebaeude: [
+    { question: "Was schützt die Wohngebäudeversicherung?", answer: "Die Wohngebäudeversicherung schützt Ihr Haus gegen Schäden durch Feuer, Leitungswasser, Sturm und Hagel. Das Gebäude selbst, Garagen, Carports und fest verbaute Elemente wie Heizungen und Sanitäranlagen sind versichert." },
+    { question: "Brauche ich zusätzlich Elementarschutz?", answer: "In der Region Ganderkesee, Delmenhorst und Oldenburg empfehlen wir den Elementarschutz ausdrücklich. Starkregen und Überschwemmungen nehmen zu – ohne diesen Baustein bleiben Sie auf den Kosten sitzen." },
+    { question: "Wie wird die Versicherungssumme berechnet?", answer: "Die Versicherungssumme orientiert sich am Wiederaufbauwert Ihres Gebäudes (Wert 1914). Wir berechnen diesen Wert exakt anhand Ihrer Gebäudedaten, damit Sie weder unter- noch überversichert sind." },
+  ],
+  rechtsschutz: [
+    { question: "Welche Bereiche deckt die Rechtsschutzversicherung ab?", answer: "Die ERGO Rechtsschutzversicherung umfasst Privatrecht, Berufsrecht, Verkehrsrecht und Wohnrecht. Anwalts-, Gerichts- und Gutachterkosten werden übernommen – deutschlandweit und oft auch im Ausland." },
+    { question: "Gibt es eine Wartezeit?", answer: "Ja, bei den meisten Rechtsschutzversicherungen gilt eine Wartezeit von 3 Monaten. Verkehrsrechtsschutz ist davon oft ausgenommen. Strafrechtliche Angelegenheiten sind nicht versichert." },
+    { question: "Lohnt sich eine Rechtsschutzversicherung?", answer: "Bereits ein einfacher Rechtsstreit kann schnell 5.000 bis 10.000 Euro kosten. Die Rechtsschutzversicherung gibt Ihnen die Sicherheit, Ihr Recht durchzusetzen, ohne finanzielle Risiken." },
+  ],
+  zahnzusatz: [
+    { question: "Was zahlt die Zahnzusatzversicherung?", answer: "Die Zahnzusatzversicherung übernimmt Kosten für Zahnersatz (Kronen, Brücken, Implantate), Zahnbehandlungen und professionelle Zahnreinigung, die Ihre gesetzliche Krankenkasse nicht oder nur teilweise bezahlt." },
+    { question: "Gibt es Wartezeiten oder Leistungsbegrenzungen?", answer: "In den ersten Jahren gelten oft Summenbegrenzungen (z.B. max. 1.000 Euro im ersten Jahr). Wartezeiten betragen meist 8 Monate für Zahnersatz. Je früher Sie abschließen, desto besser die Konditionen." },
+    { question: "Ab welchem Alter sollte man eine Zahnzusatz haben?", answer: "Am besten so früh wie möglich – die Beiträge sind günstiger und es gibt weniger Ausschlüsse. Ab 30 steigt der Bedarf an Zahnersatz deutlich. Wir beraten Sie gerne zum optimalen Zeitpunkt." },
+  ],
+};
+
 export default function Insurance() {
   const { type } = useParams();
   const [funnelOpen, setFunnelOpen] = useState(false);
@@ -60,9 +88,9 @@ export default function Insurance() {
   return (
     <>
       <SEO
-        title={`${insurance.title} sofort abschließen - ERGO Ganderkesee | 15% Bündelnachlass`}
-        description={`⭐ ${insurance.title} ⭐ Kostenlose Analyse bestehender Verträge ⭐ 15% Rabatt ab 5 Versicherungen ⭐ WhatsApp: 01556 6771019`}
-        keywords={`${insurance.title}, ERGO ${insurance.title}, ${insurance.title} Ganderkesee, Bündelnachlass, kostenlose Analyse, Morino Stübe, ERGO Versicherung online`}
+        title={`${insurance.title} – ERGO Agentur Stübe Ganderkesee`}
+        description={`${insurance.title} bei Ihrer ERGO Agentur in Ganderkesee. Persönliche Beratung, kostenlose Analyse bestehender Verträge und 15% Bündelnachlass ab 5 Versicherungen.`}
+        keywords={`${insurance.title}, ERGO ${insurance.title}, ${insurance.title} Ganderkesee, ${insurance.title} Delmenhorst, ${insurance.title} Oldenburg, Versicherungsvergleich, Morino Stübe`}
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Service",
@@ -70,26 +98,41 @@ export default function Insurance() {
           "description": insurance.description,
           "provider": {
             "@type": "InsuranceAgency",
-            "name": "ERGO Versicherung Ganderkesee",
+            "name": "ERGO Agentur Stübe",
             "telephone": "+4915566771019",
+            "email": "morino.stuebe@ergo.de",
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "Friedensstraße 91 A",
               "addressLocality": "Ganderkesee",
               "postalCode": "27777",
+              "addressRegion": "Niedersachsen",
               "addressCountry": "DE"
             }
           },
           "offers": {
             "@type": "Offer",
-            "description": "15% Bündelnachlass ab 5 Versicherungen + kostenlose Analyse",
+            "description": "Kostenlose Analyse bestehender Verträge und 15% Bündelnachlass ab 5 Versicherungen",
             "availability": "https://schema.org/InStock"
           },
-          "areaServed": {
-            "@type": "Country",
-            "name": "Deutschland"
-          }
+          "areaServed": [
+            { "@type": "City", "name": "Ganderkesee" },
+            { "@type": "City", "name": "Delmenhorst" },
+            { "@type": "City", "name": "Oldenburg" }
+          ]
         }}
+        additionalStructuredData={type && insuranceFAQs[type] ? [{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": insuranceFAQs[type].map(faq => ({
+            "@type": "Question",
+            "name": faq.question,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": faq.answer
+            }
+          }))
+        }] : undefined}
       />
       <Header />
       <Breadcrumb />
@@ -355,6 +398,28 @@ export default function Insurance() {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        {type && insuranceFAQs[type] && (
+          <section className="py-10 sm:py-14 bg-white">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
+                Häufige Fragen zur {insurance.title}
+              </h2>
+              <div className="space-y-4">
+                {insuranceFAQs[type].map((faq, index) => (
+                  <div key={index} className="border border-gray-200 rounded-xl p-5">
+                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-gray-500 mt-6">
+                Weitere Fragen? Kontaktieren Sie uns direkt – Morino Stübe berät Sie persönlich in Ganderkesee, Delmenhorst und Oldenburg.
+              </p>
+            </div>
+          </section>
+        )}
 
         {/* Final CTA Section with Urgency */}
         <section className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">

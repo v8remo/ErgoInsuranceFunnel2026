@@ -76,9 +76,27 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Regionen */}
           <div className="mb-6 sm:mb-0">
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Rechtliches</h3>
+            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Unsere Regionen</h3>
+            <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
+              <li>
+                <Link href="/versicherung-ganderkesee" className="hover:text-white transition-colors">
+                  Versicherung Ganderkesee
+                </Link>
+              </li>
+              <li>
+                <Link href="/versicherung-delmenhorst" className="hover:text-white transition-colors">
+                  Versicherung Delmenhorst
+                </Link>
+              </li>
+              <li>
+                <Link href="/versicherung-oldenburg" className="hover:text-white transition-colors">
+                  Versicherung Oldenburg
+                </Link>
+              </li>
+            </ul>
+            <h3 className="text-base sm:text-lg font-semibold mt-4 mb-2">Rechtliches</h3>
             <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
               <li>
                 <Link href="/impressum" className="hover:text-white transition-colors">
@@ -88,11 +106,6 @@ export default function Footer() {
               <li>
                 <Link href="/datenschutz" className="hover:text-white transition-colors">
                   Datenschutz
-                </Link>
-              </li>
-              <li>
-                <Link href="/sitemap" className="hover:text-white transition-colors">
-                  Sitemap
                 </Link>
               </li>
             </ul>

@@ -13,6 +13,8 @@ import DokumentePage from "@/pages/DokumentePage";
 import SchadenPage from "@/pages/SchadenPage";
 import KennzeichenPage from "@/pages/KennzeichenPage";
 import Erstinformation from "@/pages/Erstinformation";
+import Insurance from "@/pages/Insurance";
+import CityLanding from "@/pages/CityLanding";
 import NotFound from "@/pages/not-found";
 import CallbackWidget from "@/components/CallbackWidget";
 import CookieConsent from "@/components/CookieConsent";
@@ -31,6 +33,8 @@ function AppContent() {
       <Route path="/schaden" component={SchadenPage} />
       <Route path="/kennzeichen" component={KennzeichenPage} />
       <Route path="/erstinformation" component={Erstinformation} />
+      <Route path="/versicherung/:type" component={Insurance} />
+      <Route path="/versicherung-:city" component={CityLanding} />
       <Route component={NotFound} />
     </Switch>
   );

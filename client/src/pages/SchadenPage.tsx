@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'wouter';
 import { apiRequest } from '@/lib/queryClient';
+import SEO from "@/components/SEO";
 
 type DamageType = 'kfz' | 'glasschaden' | 'hausrat' | 'gebaeude' | 'rechtsschutz' | 'bu' | 'sonstiges';
 
@@ -404,6 +405,11 @@ export default function SchadenPage() {
 
   return (
     <div className="min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <SEO
+        title="Schaden melden – ERGO Agentur Stübe Ganderkesee"
+        description="Versicherungsschaden schnell und einfach online melden. Kfz-Schaden, Glasschaden, Hausrat oder Haftpflicht – Ihre ERGO Agentur Stübe in Ganderkesee hilft sofort."
+        keywords="Schaden melden, Versicherungsschaden, ERGO Ganderkesee, Kfz-Schaden, Glasschaden melden, Schadensmeldung"
+      />
       <div className="max-w-[600px] mx-auto px-5 py-6">
         {step < 4 && (
           <>

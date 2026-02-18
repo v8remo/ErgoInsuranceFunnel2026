@@ -1,78 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   
   <!-- Homepage -->
   <url>
     <loc>https://ergo-ganderkesee.replit.app/</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <image:image>
-      <image:loc>https://ergo-ganderkesee.replit.app/hero-image.jpg</image:loc>
-      <image:title>ERGO Versicherung Ganderkesee</image:title>
-      <image:caption>Professionelle Versicherungsberatung von Morino Stübe</image:caption>
-    </image:image>
   </url>
 
-  <!-- Insurance Landing Pages -->
+  <!-- Stadt-Landingpages -->
   <url>
-    <loc>https://ergo-ganderkesee.replit.app/versicherung/hausrat</loc>
-    <lastmod>2025-01-18</lastmod>
+    <loc>https://ergo-ganderkesee.replit.app/versicherung-ganderkesee</loc>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/versicherung-delmenhorst</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/versicherung-oldenburg</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Versicherungs-Landingpages -->
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/versicherung/hausrat</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://ergo-ganderkesee.replit.app/versicherung/haftpflicht</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://ergo-ganderkesee.replit.app/versicherung/wohngebaeude</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://ergo-ganderkesee.replit.app/versicherung/rechtsschutz</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://ergo-ganderkesee.replit.app/versicherung/zahnzusatz</loc>
-    <lastmod>2025-01-18</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
   </url>
 
-  <!-- Legal Pages -->
+  <!-- Service-Seiten -->
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/dokumente</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/schaden</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/kennzeichen</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Rechtliches -->
   <url>
     <loc>https://ergo-ganderkesee.replit.app/impressum</loc>
-    <lastmod>2025-01-17</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
     <loc>https://ergo-ganderkesee.replit.app/datenschutz</loc>
-    <lastmod>2025-01-17</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
-
-  <!-- Sitemap Page -->
+  
   <url>
-    <loc>https://ergo-ganderkesee.replit.app/sitemap</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.2</priority>
+    <loc>https://ergo-ganderkesee.replit.app/erstinformation</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 
 </urlset>

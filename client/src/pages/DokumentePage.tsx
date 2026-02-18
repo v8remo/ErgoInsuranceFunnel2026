@@ -3,6 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import SignaturePad from 'signature_pad';
 import { apiRequest } from '@/lib/queryClient';
+import SEO from "@/components/SEO";
 
 type DocType = 'kuendigung' | 'beraterwechsel' | 'aenderung' | 'vollmacht' | 'upload';
 
@@ -706,6 +707,11 @@ export default function DokumentePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 safe-area-bottom">
+      <SEO
+        title="Dokumente & Kündigungen einreichen – ERGO Agentur Stübe Ganderkesee"
+        description="Versicherungsdokumente digital einreichen: Kündigungen, Rechnungen und Belege. Schnell und sicher über Ihre ERGO Agentur Stübe in Ganderkesee."
+        keywords="Versicherung kündigen, Dokumente einreichen, ERGO Ganderkesee, Rechnung einreichen, Kündigung Versicherung"
+      />
       <div className="max-w-[600px] mx-auto px-5 py-6">
         {step < 4 && (
           <>
