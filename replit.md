@@ -8,6 +8,7 @@ Eine professionelle Lead-Generierungs-Plattform für ERGO Versicherungen mit opt
 ### Frontend (React + TypeScript)
 - **Homepage** - Übersicht aller Versicherungen mit Trust-Elementen
 - **Versicherungs-Landing-Pages** - Dedizierte Seiten für jede Versicherung
+- **Dokumente-Seite** (/dokumente) - 4-Schritt-Flow: Dokumenttyp wählen → Formular → Unterschrift → Erfolg
 - **Lead-Funnel** - 3-stufiger Conversion-Funnel mit Fortschrittsanzeige
 - **Admin-Dashboard** - Content Management und Lead-Verwaltung
 
