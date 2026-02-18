@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare } from 'lucide-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import FunnelOverlay from './FunnelOverlay';
@@ -9,199 +7,190 @@ import '@/styles/funnel.css';
 export default function ProfessionalErgoLanding() {
   const [showFunnel, setShowFunnel] = useState(false);
 
-  const whatsappNumber = "015566771019";
+  const whatsappNumber = "15566771019";
   const whatsappMessage = encodeURIComponent(
     "Hallo Herr Stübe, ich interessiere mich für eine persönliche Beratung zu meinen Versicherungen. Können wir einen Termin vereinbaren?"
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-50">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        
-        {/* 1. HERO-BEREICH */}
-        <div className="text-center mb-12">
-          <div className="bg-ergo-red text-white px-6 py-3 rounded-lg inline-block font-bold mb-6 text-lg">
-            ERGO Versicherungsfachmann • Ganderkesee
-          </div>
-          
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-6 leading-tight">
-            Ihre ERGO Agentur in Ganderkesee –<br/>
-            <span className="text-ergo-red">Persönliche Beratung rund um Ihre Absicherung</span>
-          </h1>
-          
-          <p className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
-            Unabhängig davon, ob es um Kfz, Zahnzusatz, Wohngebäude oder Haftpflicht geht – 
-            wir beraten Sie individuell und transparent.
-          </p>
-          
-          {/* CTA BUTTONS */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <Button
-              onClick={() => {
-                setShowFunnel(true);
-                trackEvent('cta_beratung_clicked', { source: 'hero_section' });
-              }}
-              className="bg-ergo-red hover:bg-red-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-            >
-              <Mail className="w-5 h-5 mr-2" />
-              Jetzt Beratung anfragen
-            </Button>
-            
-            <Button
-              onClick={() => {
-                window.open(`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`, '_blank');
-                trackEvent('whatsapp_clicked', { source: 'hero_section' });
-                trackConversion();
-              }}
-              variant="outline"
-              className="border-2 border-green-500 text-green-600 hover:bg-green-50 px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-            >
-              <MessageSquare className="w-5 h-5 mr-2" />
-              Direkt über WhatsApp schreiben
-            </Button>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
 
-        {/* 2. VERTRAUEN AUFBAUEN */}
-        <Card className="mb-12 shadow-lg border-2 border-gray-200">
-          <CardContent className="p-8">
-            <div className="flex flex-col lg:flex-row items-center gap-8">
-              <div className="flex-shrink-0">
-                <img 
-                  src="/attached_assets/089-Ti9r4yWZjrM_1756458595368.jpeg"
-                  alt="Morino Stübe - ERGO Versicherungsfachmann"
-                  className="w-32 h-32 rounded-full object-cover border-4 border-ergo-red shadow-lg"
-                />
-              </div>
-              
-              <div className="text-center lg:text-left">
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                  Morino Stübe
-                </h2>
-                <p className="text-ergo-red font-semibold text-lg mb-3">
-                  ERGO Versicherungsfachmann
-                </p>
-                <p className="text-gray-600 mb-4 text-lg leading-relaxed">
-                  Mit über 3 Jahren Erfahrung in der Versicherungsbranche berate ich Sie kompetent 
-                  und verständlich zu allen Fragen rund um Ihre Absicherung.
-                </p>
-                
-                <div className="flex flex-col sm:flex-row gap-4 text-sm text-gray-600">
-                  <div className="flex items-center">
-                    <Shield className="w-4 h-4 mr-2 text-ergo-red" />
-                    Registriert im Vermittlerregister unter der Nr. D-5H7J-7DUI1-10
-                  </div>
-                  <div className="flex items-center">
-                    <Star className="w-4 h-4 mr-2 text-yellow-500" />
-                    ERGO als starker Partner seit 1906
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex-shrink-0">
-                <img 
-                  src="/attached_assets/ergo-logo-hq.svg" 
-                  alt="ERGO Versicherungsgruppe Logo"
-                  className="h-16 w-auto"
-                />
+      {/* ──────── HERO ──────── */}
+      <section className="px-4 pt-8 pb-10 md:pt-16 md:pb-20 text-center max-w-3xl mx-auto">
+        <span className="inline-block bg-ergo-red text-white text-xs font-bold tracking-wide uppercase px-4 py-1.5 rounded-full mb-5 md:text-sm">
+          ERGO Versicherungsfachmann · Ganderkesee
+        </span>
+
+        <h1 className="text-2xl font-extrabold text-gray-900 leading-tight mb-4 md:text-4xl lg:text-5xl">
+          Ihre ERGO Agentur in Ganderkesee –{' '}
+          <span className="text-ergo-red">Persönliche Beratung rund um Ihre Absicherung</span>
+        </h1>
+
+        <p className="text-base text-gray-600 leading-relaxed mb-8 md:text-lg max-w-2xl mx-auto">
+          Ob Kfz, Zahnzusatz, Wohngebäude oder Haftpflicht – wir beraten Sie individuell und transparent.
+        </p>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
+          <button
+            onClick={() => {
+              setShowFunnel(true);
+              trackEvent('cta_beratung_clicked', { source: 'hero_section' });
+            }}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold text-base px-6 py-4 rounded-xl shadow-md active:scale-[0.97] transition-transform md:text-lg md:px-8"
+          >
+            <Mail className="w-5 h-5 shrink-0" />
+            Jetzt Beratung anfragen
+          </button>
+
+          <a
+            href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => {
+              trackEvent('whatsapp_clicked', { source: 'hero_section' });
+              trackConversion();
+            }}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-green-500 text-green-600 font-semibold text-base px-6 py-4 rounded-xl active:scale-[0.97] transition-transform md:text-lg md:px-8"
+          >
+            <MessageSquare className="w-5 h-5 shrink-0" />
+            Direkt über WhatsApp
+          </a>
+        </div>
+      </section>
+
+      {/* ──────── VERTRAUEN / BERATER ──────── */}
+      <section className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-8">
+          <div className="flex flex-col items-center text-center gap-5 md:flex-row md:text-left md:items-start">
+            <img
+              src="/attached_assets/089-Ti9r4yWZjrM_1756458595368.jpeg"
+              alt="Morino Stübe - ERGO Versicherungsfachmann"
+              className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-[3px] border-ergo-red shadow-md shrink-0"
+              loading="eager"
+            />
+
+            <div className="flex-1">
+              <h2 className="text-xl font-bold text-gray-900 mb-1 md:text-2xl">Morino Stübe</h2>
+              <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann</p>
+              <p className="text-gray-600 text-sm leading-relaxed mb-4 md:text-base">
+                Mit über 3 Jahren Erfahrung in der Versicherungsbranche berate ich Sie kompetent und verständlich zu allen Fragen rund um Ihre Absicherung.
+              </p>
+
+              <div className="flex flex-col gap-2 text-xs text-gray-500 md:text-sm">
+                <span className="flex items-center justify-center md:justify-start gap-1.5">
+                  <Shield className="w-4 h-4 text-ergo-red shrink-0" />
+                  Vermittlerregister-Nr. D-5H7J-7DUI1-10
+                </span>
+                <span className="flex items-center justify-center md:justify-start gap-1.5">
+                  <Star className="w-4 h-4 text-yellow-500 shrink-0" />
+                  ERGO als starker Partner seit 1906
+                </span>
               </div>
             </div>
-          </CardContent>
-        </Card>
 
-        {/* 3. LEISTUNGEN (BULLET-POINTS) */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-            Ihre Vorteile bei der ERGO Agentur Stübe
+            <img
+              src="/attached_assets/ergo-logo-hq.svg"
+              alt="ERGO Logo"
+              className="h-10 md:h-14 w-auto shrink-0 hidden md:block"
+              loading="eager"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ──────── VORTEILE ──────── */}
+      <section className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
+        <h2 className="text-xl font-bold text-gray-900 text-center mb-6 md:text-3xl md:mb-8">
+          Ihre Vorteile bei der ERGO Agentur Stübe
+        </h2>
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+          {[
+            {
+              title: 'Individuelle Beratung zu allen relevanten Versicherungen',
+              text: 'Kfz, Haftpflicht, Hausrat, Wohngebäude, Rechtsschutz, Zahnzusatz, BU und Lebensversicherung'
+            },
+            {
+              title: 'Transparente Gegenüberstellung von Leistungen & Beiträgen',
+              text: 'Klare Vergleiche und verständliche Erklärungen aller Tarifoptionen'
+            },
+            {
+              title: 'Unterstützung im Schadenfall – persönlich & direkt vor Ort',
+              text: 'Schnelle Hilfe und persönliche Betreuung wenn Sie uns brauchen'
+            },
+            {
+              title: 'Moderne digitale Beratung per WhatsApp, Telefon oder Video',
+              text: 'Flexible Beratungstermine, die zu Ihrem Zeitplan passen'
+            }
+          ].map((item) => (
+            <div key={item.title} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 md:p-6 flex gap-3">
+              <CheckCircle className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-gray-900 text-sm mb-1 md:text-base">{item.title}</h3>
+                <p className="text-gray-500 text-xs leading-relaxed md:text-sm">{item.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ──────── LEAD-MAGNET CTA ──────── */}
+      <section className="px-4 pb-12 md:pb-20 max-w-3xl mx-auto">
+        <div className="bg-gradient-to-br from-blue-50 to-green-50 border border-blue-200 rounded-2xl shadow-lg p-6 text-center md:p-10">
+          <h2 className="text-xl font-bold text-gray-900 mb-3 md:text-3xl">
+            Persönlicher Bedarfs-Check
           </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-bold text-gray-800 mb-2">Individuelle Beratung zu allen relevanten Versicherungen</h3>
-                    <p className="text-gray-600">Kfz, Haftpflicht, Hausrat, Wohngebäude, Rechtsschutz, Zahnzusatz, Berufsunfähigkeit und Lebensversicherung</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-bold text-gray-800 mb-2">Transparente Gegenüberstellung von Leistungen & Beiträgen</h3>
-                    <p className="text-gray-600">Klare Vergleiche und verständliche Erklärungen aller Tarifoptionen</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-bold text-gray-800 mb-2">Unterstützung im Schadenfall – persönlich & direkt vor Ort</h3>
-                    <p className="text-gray-600">Schnelle Hilfe und persönliche Betreuung wenn Sie uns brauchen</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-bold text-gray-800 mb-2">Moderne digitale Beratung per WhatsApp, Telefon oder Video</h3>
-                    <p className="text-gray-600">Flexible Beratungstermine, die zu Ihrem Zeitplan passen</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <p className="text-sm text-gray-600 leading-relaxed mb-6 max-w-lg mx-auto md:text-lg">
+            Wir prüfen mit Ihnen gemeinsam, ob Ihre Absicherung noch zu Ihrer Lebenssituation passt. Unverbindlich und kostenfrei.
+          </p>
+
+          <button
+            onClick={() => {
+              setShowFunnel(true);
+              trackEvent('lead_magnet_clicked', { source: 'bedarfs_check' });
+            }}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold text-base px-6 py-4 rounded-xl shadow-md active:scale-[0.97] transition-transform md:text-lg md:px-8 mx-auto"
+          >
+            <MapPin className="w-5 h-5 shrink-0" />
+            Jetzt Bedarfs-Check starten
+          </button>
+
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mt-5 text-xs text-gray-500 md:text-sm">
+            <span>🔒 Datenschutz nach DSGVO</span>
+            <span>📋 Unverbindlich & kostenfrei</span>
+            <span>⭐ Persönliche Beratung vor Ort</span>
           </div>
         </div>
+      </section>
 
-        {/* 4. RECHTSSICHERER LEAD-MAGNET */}
-        <Card className="bg-gradient-to-r from-blue-50 to-green-50 border-2 border-blue-200 shadow-xl">
-          <CardContent className="p-8 text-center">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Persönlicher Bedarfs-Check
-            </h2>
-            <p className="text-xl text-gray-600 mb-6 max-w-3xl mx-auto leading-relaxed">
-              Wir prüfen mit Ihnen gemeinsam, ob Ihre Absicherung noch zu Ihrer Lebenssituation passt. 
-              Unverbindlich und kostenfrei.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto mb-6">
-              <Button
-                onClick={() => {
-                  setShowFunnel(true);
-                  trackEvent('lead_magnet_clicked', { source: 'bedarfs_check' });
-                }}
-                className="bg-ergo-red hover:bg-red-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-              >
-                <MapPin className="w-5 h-5 mr-2" />
-                Jetzt Bedarfs-Check anfordern
-              </Button>
-            </div>
-            
-            <div className="text-sm text-gray-600 space-x-4">
-              <span>🔒 Datenschutz nach DSGVO</span>
-              <span>•</span>
-              <span>📋 Unverbindlich & kostenfrei</span>
-              <span>•</span>
-              <span>⭐ Persönliche Beratung vor Ort</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <FunnelOverlay isOpen={showFunnel} onClose={() => setShowFunnel(false)} />
+      {/* ──────── STICKY MOBILE CTA ──────── */}
+      <div className="fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur border-t border-gray-200 px-4 py-3 flex gap-3 sm:hidden safe-area-bottom">
+        <button
+          onClick={() => {
+            setShowFunnel(true);
+            trackEvent('cta_sticky_clicked', { source: 'sticky_bar' });
+          }}
+          className="flex-1 flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold text-sm py-3 rounded-lg active:scale-[0.97] transition-transform"
+        >
+          <Mail className="w-4 h-4" />
+          Beratung anfragen
+        </button>
+        <a
+          href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => {
+            trackEvent('whatsapp_sticky_clicked', { source: 'sticky_bar' });
+            trackConversion();
+          }}
+          className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 py-3 rounded-lg active:scale-[0.97] transition-transform"
+        >
+          <Phone className="w-4 h-4" />
+          WhatsApp
+        </a>
       </div>
+
+      <FunnelOverlay isOpen={showFunnel} onClose={() => setShowFunnel(false)} />
     </div>
   );
 }

@@ -1,12 +1,18 @@
+/* ═══════════════════════════════════
+   MOBILE-FIRST FUNNEL STYLES
+   Base = Mobile, then scale up
+   ═══════════════════════════════════ */
+
+/* ── Overlay ── */
 .funnel-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.6);
   z-index: 9999;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  animation: funnel-fade-in 0.3s ease;
+  animation: funnel-fade-in 0.25s ease;
   padding: 0;
 }
 
@@ -15,37 +21,50 @@
   to { opacity: 1; }
 }
 
+/* ── Card (mobile: full-screen sheet from bottom) ── */
 .funnel-card {
   background: #fff;
   width: 100%;
-  max-width: 480px;
-  max-height: 100vh;
+  height: 100%;
   overflow-y: auto;
-  border-radius: 0;
+  -webkit-overflow-scrolling: touch;
   position: relative;
-  animation: funnel-scale-in 0.3s ease;
+  animation: funnel-slide-up 0.3s ease;
 }
 
-@media (min-width: 768px) {
-  .funnel-card {
-    border-radius: 16px;
-    max-height: 90vh;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-  }
+@keyframes funnel-slide-up {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (min-width: 640px) {
   .funnel-overlay {
-    padding: 20px;
+    align-items: center;
+    padding: 24px;
+  }
+  .funnel-card {
+    max-width: 480px;
+    height: auto;
+    max-height: 90vh;
+    border-radius: 20px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+    animation: funnel-scale-in 0.3s ease;
   }
 }
 
 @keyframes funnel-scale-in {
-  from { transform: scale(0.95); opacity: 0; }
+  from { transform: scale(0.96); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 
+/* ── Progress bar ── */
 .funnel-progress-bar {
-  height: 4px;
+  height: 3px;
   background: #e5e7eb;
   width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .funnel-progress-fill {
@@ -55,182 +74,228 @@
   border-radius: 0 2px 2px 0;
 }
 
+/* ── Navigation ── */
 .funnel-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding: 10px 16px;
   min-height: 48px;
+  position: sticky;
+  top: 3px;
+  z-index: 2;
+  background: #fff;
 }
 
 .funnel-back-btn,
 .funnel-close-btn {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 22px;
   cursor: pointer;
   color: #6b7280;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background 0.2s;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.funnel-back-btn:hover,
-.funnel-close-btn:hover {
+.funnel-back-btn:active,
+.funnel-close-btn:active {
   background: #f3f4f6;
+}
+
+@media (hover: hover) {
+  .funnel-back-btn:hover,
+  .funnel-close-btn:hover {
+    background: #f3f4f6;
+  }
 }
 
 .funnel-close-btn {
   margin-left: auto;
 }
 
+/* ── Step content ── */
 .funnel-step-content {
-  padding: 0 24px 32px;
+  padding: 0 20px 100px;
   overflow: hidden;
 }
 
+@media (min-width: 640px) {
+  .funnel-step-content {
+    padding: 0 28px 36px;
+  }
+}
+
+/* ── Animations ── */
 .funnel-slide-in {
   animation: slideIn 0.3s ease forwards;
 }
 
 .funnel-slide-out-left {
-  animation: slideOutLeft 0.3s ease forwards;
+  animation: slideOutLeft 0.25s ease forwards;
 }
 
 .funnel-slide-out-right {
-  animation: slideOutRight 0.3s ease forwards;
+  animation: slideOutRight 0.25s ease forwards;
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(30px); }
+  from { opacity: 0; transform: translateX(24px); }
   to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes slideOutLeft {
   from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 0; transform: translateX(-24px); }
 }
 
 @keyframes slideOutRight {
   from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(30px); }
+  to { opacity: 0; transform: translateX(24px); }
 }
 
-/* STEP 1 – Hook */
+/* ═══════ STEP 1 – Hook ═══════ */
 .funnel-step-hook {
   background: linear-gradient(135deg, #003781, #0052A5);
   color: white;
-  margin: 0 -24px;
-  padding: 40px 24px;
+  margin: 0 -20px;
+  padding: 32px 20px 40px;
   text-align: center;
+}
+
+@media (min-width: 640px) {
+  .funnel-step-hook {
+    margin: 0 -28px;
+    padding: 44px 28px 48px;
+  }
 }
 
 .funnel-badge-pill {
   display: inline-block;
   background: #E2001A;
   color: white;
-  padding: 6px 16px;
+  padding: 5px 14px;
   border-radius: 999px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 640px) {
+  .funnel-badge-pill { font-size: 14px; }
 }
 
 .funnel-hook-headline {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 800;
-  line-height: 1.3;
-  margin-bottom: 16px;
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 640px) {
+  .funnel-hook-headline { font-size: 28px; }
 }
 
 .funnel-hook-subtext {
-  font-size: 16px;
+  font-size: 15px;
   opacity: 0.9;
   line-height: 1.5;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .funnel-trust-line {
-  font-size: 13px;
-  opacity: 0.8;
-  margin-top: 16px;
+  font-size: 12px;
+  opacity: 0.75;
+  margin-top: 14px;
 }
 
-/* CTA Button */
+/* ═══════ CTA Button ═══════ */
 .funnel-cta-btn {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 16px 24px;
+  padding: 16px 20px;
   background: #E2001A;
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 17px;
+  border-radius: 14px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: transform 0.15s, box-shadow 0.15s;
   text-align: center;
   text-decoration: none;
-}
-
-.funnel-cta-btn:hover {
-  background: #c5001a;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(226, 0, 26, 0.3);
+  -webkit-tap-highlight-color: transparent;
+  min-height: 52px;
 }
 
 .funnel-cta-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
+}
+
+@media (hover: hover) {
+  .funnel-cta-btn:hover {
+    background: #c5001a;
+    box-shadow: 0 4px 14px rgba(226, 0, 26, 0.25);
+  }
 }
 
 .funnel-cta-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
 }
 
 .funnel-cta-mt {
-  margin-top: 24px;
+  margin-top: 20px;
 }
 
-/* Option Cards */
+/* ═══════ Headlines ═══════ */
 .funnel-headline {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: #1f2937;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   line-height: 1.3;
 }
 
+@media (min-width: 640px) {
+  .funnel-headline { font-size: 24px; }
+}
+
 .funnel-subtext {
-  font-size: 15px;
+  font-size: 14px;
   color: #6b7280;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   line-height: 1.5;
 }
 
 .funnel-sub-headline {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: #1f2937;
-  margin: 24px 0 12px;
+  margin: 20px 0 10px;
 }
 
+/* ═══════ Option Grids ═══════ */
 .funnel-grid-2x2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 .funnel-grid-3col {
   grid-template-columns: 1fr 1fr;
 }
 
-@media (min-width: 400px) {
+@media (min-width: 420px) {
   .funnel-grid-3col {
     grid-template-columns: 1fr 1fr 1fr;
   }
@@ -240,24 +305,34 @@
   grid-template-columns: 1fr 1fr;
 }
 
+/* ═══════ Option Card ═══════ */
 .funnel-option-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 20px 12px;
+  gap: 6px;
+  padding: 16px 10px;
   border: 2px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 14px;
   background: #fff;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: border-color 0.15s, background 0.15s;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 80px;
 }
 
-.funnel-option-card:hover {
-  border-color: #003781;
+.funnel-option-card:active {
   background: #f0f4ff;
+  border-color: #003781;
+}
+
+@media (hover: hover) {
+  .funnel-option-card:hover {
+    border-color: #003781;
+    background: #f0f4ff;
+  }
 }
 
 .funnel-option-card.selected {
@@ -267,67 +342,77 @@
 }
 
 .funnel-option-icon {
-  font-size: 28px;
+  font-size: 26px;
 }
 
 .funnel-option-label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #374151;
   text-align: center;
+  line-height: 1.3;
 }
 
 .funnel-option-sub {
-  font-size: 12px;
+  font-size: 11px;
   color: #9ca3af;
 }
 
 .funnel-option-tall {
-  padding: 24px 16px;
+  padding: 20px 14px;
 }
 
 .funnel-checkmark {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 6px;
+  right: 6px;
   background: #E2001A;
   color: white;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
 }
 
-/* Full-width options */
+/* ═══════ Full-width options (Step 4) ═══════ */
 .funnel-options-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .funnel-full-option {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 18px 20px;
+  padding: 16px;
   border: 2px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 14px;
   background: #fff;
   cursor: pointer;
-  transition: all 0.2s;
-  font-size: 16px;
+  transition: border-color 0.15s, background 0.15s;
+  font-size: 15px;
   font-weight: 500;
   color: #374151;
   text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 56px;
 }
 
-.funnel-full-option:hover {
+.funnel-full-option:active {
   border-color: #003781;
   background: #f0f4ff;
+}
+
+@media (hover: hover) {
+  .funnel-full-option:hover {
+    border-color: #003781;
+    background: #f0f4ff;
+  }
 }
 
 .funnel-full-option.selected {
@@ -336,25 +421,25 @@
 }
 
 .funnel-full-option .funnel-option-icon {
-  font-size: 22px;
+  font-size: 20px;
 }
 
-/* Step 6 – Analysis */
+/* ═══════ Step 6 – Analysis ═══════ */
 .funnel-step-analysis {
   text-align: center;
-  padding-top: 40px;
+  padding-top: 32px;
 }
 
 .funnel-dots {
   display: flex;
   gap: 8px;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .funnel-dots span {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #003781;
   animation: funnel-pulse 1.4s infinite ease-in-out both;
@@ -369,7 +454,7 @@
 }
 
 .funnel-analysis-text {
-  font-size: 18px;
+  font-size: 16px;
   color: #374151;
   font-weight: 500;
 }
@@ -377,8 +462,8 @@
 .funnel-trust-items {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin: 24px 0;
+  gap: 10px;
+  margin: 20px 0;
   text-align: left;
 }
 
@@ -386,32 +471,33 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 15px;
+  font-size: 14px;
   color: #374151;
   line-height: 1.4;
 }
 
 .funnel-trust-item span {
   flex-shrink: 0;
-  font-size: 20px;
+  font-size: 18px;
 }
 
-/* Step 7 – Form */
+/* ═══════ Step 7 – Form ═══════ */
 .funnel-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .funnel-form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 14px;
 }
 
-@media (max-width: 400px) {
+@media (min-width: 420px) {
   .funnel-form-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
 }
 
@@ -422,20 +508,22 @@
 }
 
 .funnel-form-field label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #374151;
 }
 
 .funnel-form-field input {
-  padding: 12px 14px;
+  padding: 14px 14px;
   border: 2px solid #d1d5db;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 16px;
-  transition: border-color 0.2s;
+  transition: border-color 0.15s;
   outline: none;
   width: 100%;
   box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .funnel-form-field input:focus {
@@ -448,7 +536,7 @@
 
 .funnel-error {
   color: #E2001A;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
 }
 
@@ -456,17 +544,17 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 13px;
+  font-size: 12px;
   color: #6b7280;
   cursor: pointer;
   line-height: 1.5;
 }
 
 .funnel-checkbox input[type="checkbox"] {
-  margin-top: 3px;
+  margin-top: 2px;
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   accent-color: #E2001A;
 }
 
@@ -479,20 +567,20 @@
   color: #E2001A;
 }
 
-/* Step 9 – Thank You */
+/* ═══════ Step 9 – Thank You ═══════ */
 .funnel-step-thankyou {
   text-align: center;
 }
 
 .funnel-check-animation {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 24px;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
 }
 
 .funnel-checkmark-svg {
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
 }
 
 .funnel-checkmark-circle {
@@ -520,74 +608,89 @@
 .funnel-advisor-mini {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   background: #f9fafb;
-  border-radius: 12px;
-  padding: 16px;
-  margin: 20px 0;
+  border-radius: 14px;
+  padding: 14px;
+  margin: 16px 0;
   text-align: left;
 }
 
 .funnel-advisor-img {
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #E2001A;
+  flex-shrink: 0;
 }
 
 .funnel-advisor-mini strong {
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   color: #1f2937;
 }
 
 .funnel-advisor-mini span {
-  font-size: 13px;
+  font-size: 12px;
   color: #6b7280;
 }
 
 .funnel-btn-whatsapp {
   background: #25d366;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-.funnel-btn-whatsapp:hover {
+.funnel-btn-whatsapp:active {
   background: #1fba59;
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+@media (hover: hover) {
+  .funnel-btn-whatsapp:hover {
+    background: #1fba59;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+  }
 }
 
 .funnel-outline-btn {
   display: block;
   width: 100%;
-  padding: 14px 24px;
+  padding: 14px 20px;
   background: transparent;
   color: #003781;
   border: 2px solid #003781;
-  border-radius: 12px;
-  font-size: 16px;
+  border-radius: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.15s;
   text-align: center;
   text-decoration: none;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 52px;
 }
 
-.funnel-outline-btn:hover {
+.funnel-outline-btn:active {
   background: #f0f4ff;
 }
 
+@media (hover: hover) {
+  .funnel-outline-btn:hover {
+    background: #f0f4ff;
+  }
+}
+
 .funnel-small-text {
-  font-size: 13px;
+  font-size: 12px;
   color: #9ca3af;
 }
 
-/* Loading spinner */
+/* ═══════ Spinner ═══════ */
 .funnel-spinner {
   display: inline-block;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
   border-top-color: white;
   border-radius: 50%;
@@ -598,7 +701,12 @@
   to { transform: rotate(360deg); }
 }
 
-/* Multi-select card */
+/* ═══════ Multi-select card ═══════ */
 .funnel-multi {
-  padding: 16px 10px;
+  padding: 14px 8px;
+}
+
+/* ═══════ Safe area for iPhone notch ═══════ */
+.safe-area-bottom {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
 }
