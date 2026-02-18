@@ -11,6 +11,24 @@ interface UploadFile {
   preview?: string;
 }
 
+interface KuendigungEntry {
+  versicherungsgesellschaft: string;
+  versicherungsnummer: string;
+  versicherungsart: string;
+  kuendigungsgrund: string;
+  kuendigungsdatum: string;
+  hinweise: string;
+}
+
+const emptyKuendigung = (): KuendigungEntry => ({
+  versicherungsgesellschaft: '',
+  versicherungsnummer: '',
+  versicherungsart: '',
+  kuendigungsgrund: '',
+  kuendigungsdatum: '',
+  hinweise: '',
+});
+
 interface FormData {
   vorname: string;
   nachname: string;
@@ -120,6 +138,7 @@ export default function DokumentePage() {
   const [confirm2, setConfirm2] = useState(false);
   const [fadeClass, setFadeClass] = useState('opacity-100 transition-opacity duration-300');
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
+  const [kuendigungen, setKuendigungen] = useState<KuendigungEntry[]>([emptyKuendigung()]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sigPadRef = useRef<SignaturePad | null>(null);
@@ -169,6 +188,7 @@ export default function DokumentePage() {
     setFormData({ ...initialFormData });
     setErrors({});
     setUploadFiles([]);
+    setKuendigungen([emptyKuendigung()]);
     goToStep(2);
   };
 
@@ -267,6 +287,25 @@ export default function DokumentePage() {
     if (errors[field]) setErrors(prev => { const n = { ...prev }; delete n[field]; return n; });
   };
 
+  const updateKuendigung = (index: number, field: keyof KuendigungEntry, value: string) => {
+    setKuendigungen(prev => {
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
+    const errKey = `k_${index}_${field}`;
+    if (errors[errKey]) setErrors(prev => { const n = { ...prev }; delete n[errKey]; return n; });
+  };
+
+  const addKuendigung = () => {
+    setKuendigungen(prev => [...prev, emptyKuendigung()]);
+  };
+
+  const removeKuendigung = (index: number) => {
+    if (kuendigungen.length <= 1) return;
+    setKuendigungen(prev => prev.filter((_, i) => i !== index));
+  };
+
   const validateStep2 = (): boolean => {
     const e: Record<string, string> = {};
     if (!formData.vorname.trim()) e.vorname = 'Pflichtfeld';
@@ -278,10 +317,12 @@ export default function DokumentePage() {
     if (!formData.telefon.trim()) e.telefon = 'Pflichtfeld';
 
     if (selectedType === 'kuendigung') {
-      if (!formData.versicherungsgesellschaft.trim()) e.versicherungsgesellschaft = 'Pflichtfeld';
-      if (!formData.versicherungsnummer.trim()) e.versicherungsnummer = 'Pflichtfeld';
-      if (!formData.versicherungsart) e.versicherungsart = 'Bitte auswählen';
-      if (!formData.kuendigungsgrund) e.kuendigungsgrund = 'Bitte auswählen';
+      kuendigungen.forEach((k, i) => {
+        if (!k.versicherungsgesellschaft.trim()) e[`k_${i}_versicherungsgesellschaft`] = 'Pflichtfeld';
+        if (!k.versicherungsnummer.trim()) e[`k_${i}_versicherungsnummer`] = 'Pflichtfeld';
+        if (!k.versicherungsart) e[`k_${i}_versicherungsart`] = 'Bitte auswählen';
+        if (!k.kuendigungsgrund) e[`k_${i}_kuendigungsgrund`] = 'Bitte auswählen';
+      });
     }
     if (selectedType === 'beraterwechsel') {
       if (!formData.geburtsdatum) e.geburtsdatum = 'Pflichtfeld';
@@ -366,26 +407,89 @@ export default function DokumentePage() {
     const today = todayFormatted();
 
     if (selectedType === 'kuendigung') {
-      drawText(`${formData.ort}, ${today}`);
-      y -= 10;
-      drawText(`${formData.vorname} ${formData.nachname}`);
-      drawText(`${formData.strasse}`);
-      drawText(`${formData.plz} ${formData.ort}`);
-      y -= 15;
-      drawText(formData.versicherungsgesellschaft);
-      drawText(`Versicherungsnummer: ${formData.versicherungsnummer}`);
-      y -= 15;
-      drawText(`Betreff: Kündigung meiner ${formData.versicherungsart}-Versicherung`, { bold: true, size: 12 });
-      y -= 15;
-      drawText('Sehr geehrte Damen und Herren,');
-      y -= 8;
-      const datumText = formData.kuendigungsdatum ? `zum ${formatDateDE(formData.kuendigungsdatum)}` : 'zum nächstmöglichen Termin';
-      drawText(`hiermit kündige ich die oben genannte Versicherung (${formData.kuendigungsgrund}) ${datumText}, hilfsweise zum nächstmöglichen Termin.`);
-      y -= 8;
-      drawText('Ich bitte um eine schriftliche Eingangsbestätigung.');
-      if (formData.hinweise.trim()) { y -= 8; drawText(`Hinweise: ${formData.hinweise}`); }
-      y -= 15;
-      drawText('Mit freundlichen Grüßen');
+      for (let ki = 0; ki < kuendigungen.length; ki++) {
+        const k = kuendigungen[ki];
+        let currentPage = ki === 0 ? page : pdfDoc.addPage([595.28, 841.89]);
+        if (ki > 0) {
+          y = height - 50;
+          currentPage.drawText('ERGO', { x: width - margin - 80, y, font: helveticaBold, size: 28, color: ergoRed });
+          y -= 18;
+          currentPage.drawText('Agentur Stübe – Morino Stübe', { x: width - margin - 170, y, font: helvetica, size: 12, color: ergoBlue });
+          y -= 20;
+          currentPage.drawLine({ start: { x: margin, y }, end: { x: width - margin, y }, thickness: 2, color: ergoRed });
+          y -= 30;
+          const pageTitle = `Kündigungsschreiben (${ki + 1}/${kuendigungen.length})`;
+          const pageTitleWidth = helveticaBold.widthOfTextAtSize(pageTitle, 18);
+          currentPage.drawText(pageTitle, { x: (width - pageTitleWidth) / 2, y, font: helveticaBold, size: 18, color: ergoBlue });
+          y -= 35;
+        }
+        const drawTextOnPage = (text: string, opts?: { bold?: boolean; size?: number; color?: typeof black }) => {
+          const font = opts?.bold ? helveticaBold : helvetica;
+          const size = opts?.size || 11;
+          const color = opts?.color || black;
+          const maxWidth = width - 2 * margin;
+          const words = text.split(' ');
+          let line = '';
+          for (const word of words) {
+            const test = line ? `${line} ${word}` : word;
+            if (font.widthOfTextAtSize(test, size) > maxWidth && line) {
+              currentPage.drawText(line, { x: margin, y, font, size, color });
+              y -= size + 4;
+              line = word;
+            } else {
+              line = test;
+            }
+          }
+          if (line) {
+            currentPage.drawText(line, { x: margin, y, font, size, color });
+            y -= size + 4;
+          }
+        };
+
+        if (kuendigungen.length > 1) {
+          drawTextOnPage(`Kündigung ${ki + 1} von ${kuendigungen.length}`, { bold: true, size: 12, color: ergoBlue });
+          y -= 5;
+        }
+        drawTextOnPage(`${formData.ort}, ${today}`);
+        y -= 10;
+        drawTextOnPage(`${formData.vorname} ${formData.nachname}`);
+        drawTextOnPage(`${formData.strasse}`);
+        drawTextOnPage(`${formData.plz} ${formData.ort}`);
+        y -= 15;
+        drawTextOnPage(k.versicherungsgesellschaft);
+        drawTextOnPage(`Versicherungsnummer: ${k.versicherungsnummer}`);
+        y -= 15;
+        drawTextOnPage(`Betreff: Kündigung meiner ${k.versicherungsart}-Versicherung`, { bold: true, size: 12 });
+        y -= 15;
+        drawTextOnPage('Sehr geehrte Damen und Herren,');
+        y -= 8;
+        const datumText = k.kuendigungsdatum ? `zum ${formatDateDE(k.kuendigungsdatum)}` : 'zum nächstmöglichen Termin';
+        drawTextOnPage(`hiermit kündige ich die oben genannte Versicherung (${k.kuendigungsgrund}) ${datumText}, hilfsweise zum nächstmöglichen Termin.`);
+        y -= 8;
+        drawTextOnPage('Ich bitte um eine schriftliche Eingangsbestätigung.');
+        if (k.hinweise.trim()) { y -= 8; drawTextOnPage(`Hinweise: ${k.hinweise}`); }
+        y -= 15;
+        drawTextOnPage('Mit freundlichen Grüßen');
+
+        y -= 10;
+        const sigToEmbed2 = sigDataUrl || signatureDataUrl;
+        if (sigToEmbed2) {
+          try {
+            const sigBytes2 = await fetch(sigToEmbed2).then(r => r.arrayBuffer());
+            const sigImg2 = await pdfDoc.embedPng(new Uint8Array(sigBytes2));
+            const sigDims2 = sigImg2.scale(0.4);
+            currentPage.drawImage(sigImg2, { x: margin, y: y - sigDims2.height, width: sigDims2.width, height: sigDims2.height });
+            y -= sigDims2.height + 5;
+          } catch { /* signature embed failed */ }
+        }
+        currentPage.drawText('_______________________________', { x: margin, y, font: helvetica, size: 10, color: black });
+        y -= 14;
+        currentPage.drawText(`${formData.vorname} ${formData.nachname}`, { x: margin, y, font: helvetica, size: 10, color: black });
+        const footerY2 = 30;
+        const footerText2 = 'Erstellt über ergo-stuebe.de | ERGO Agentur Stübe | Tel: 015566771019 | Vermittlerregister-Nr.: D-5H7J-7DUI1-10';
+        const footerWidth2 = helvetica.widthOfTextAtSize(footerText2, 8);
+        currentPage.drawText(footerText2, { x: (width - footerWidth2) / 2, y: footerY2, font: helvetica, size: 8, color: rgb(0.5, 0.5, 0.5) });
+      }
     } else if (selectedType === 'beraterwechsel') {
       drawText(`${formData.ort}, ${today}`);
       drawText(`${formData.vorname} ${formData.nachname}, geb. ${formatDateDE(formData.geburtsdatum)}`);
@@ -457,26 +561,28 @@ export default function DokumentePage() {
       drawText('Mit freundlichen Grüßen');
     }
 
-    y -= 10;
-    const sigToEmbed = sigDataUrl || signatureDataUrl;
-    if (sigToEmbed) {
-      try {
-        const sigBytes = await fetch(sigToEmbed).then(r => r.arrayBuffer());
-        const sigImg = await pdfDoc.embedPng(new Uint8Array(sigBytes));
-        const sigDims = sigImg.scale(0.4);
-        page.drawImage(sigImg, { x: margin, y: y - sigDims.height, width: sigDims.width, height: sigDims.height });
-        y -= sigDims.height + 5;
-      } catch { /* signature embed failed */ }
+    if (selectedType !== 'kuendigung') {
+      y -= 10;
+      const sigToEmbed = sigDataUrl || signatureDataUrl;
+      if (sigToEmbed) {
+        try {
+          const sigBytes = await fetch(sigToEmbed).then(r => r.arrayBuffer());
+          const sigImg = await pdfDoc.embedPng(new Uint8Array(sigBytes));
+          const sigDims = sigImg.scale(0.4);
+          page.drawImage(sigImg, { x: margin, y: y - sigDims.height, width: sigDims.width, height: sigDims.height });
+          y -= sigDims.height + 5;
+        } catch { /* signature embed failed */ }
+      }
+
+      page.drawText('_______________________________', { x: margin, y, font: helvetica, size: 10, color: black });
+      y -= 14;
+      page.drawText(`${formData.vorname} ${formData.nachname}`, { x: margin, y, font: helvetica, size: 10, color: black });
+
+      const footerY = 30;
+      const footerText = 'Erstellt über ergo-stuebe.de | ERGO Agentur Stübe | Tel: 015566771019 | Vermittlerregister-Nr.: D-5H7J-7DUI1-10';
+      const footerWidth = helvetica.widthOfTextAtSize(footerText, 8);
+      page.drawText(footerText, { x: (width - footerWidth) / 2, y: footerY, font: helvetica, size: 8, color: rgb(0.5, 0.5, 0.5) });
     }
-
-    page.drawText('_______________________________', { x: margin, y, font: helvetica, size: 10, color: black });
-    y -= 14;
-    page.drawText(`${formData.vorname} ${formData.nachname}`, { x: margin, y, font: helvetica, size: 10, color: black });
-
-    const footerY = 30;
-    const footerText = 'Erstellt über ergo-stuebe.de | ERGO Agentur Stübe | Tel: 015566771019 | Vermittlerregister-Nr.: D-5H7J-7DUI1-10';
-    const footerWidth = helvetica.widthOfTextAtSize(footerText, 8);
-    page.drawText(footerText, { x: (width - footerWidth) / 2, y: footerY, font: helvetica, size: 8, color: rgb(0.5, 0.5, 0.5) });
 
     return pdfDoc.save();
   }
@@ -538,10 +644,15 @@ export default function DokumentePage() {
     lines.push(`E-Mail: ${formData.email}`);
     lines.push(`Telefon: ${formData.telefon}`);
     if (selectedType === 'kuendigung') {
-      lines.push(`Versicherer: ${formData.versicherungsgesellschaft}`);
-      lines.push(`Versicherungsnummer: ${formData.versicherungsnummer}`);
-      lines.push(`Art: ${formData.versicherungsart}`);
-      lines.push(`Grund: ${formData.kuendigungsgrund}`);
+      kuendigungen.forEach((k, i) => {
+        if (kuendigungen.length > 1) lines.push(`--- Kündigung ${i + 1} ---`);
+        lines.push(`Versicherer: ${k.versicherungsgesellschaft}`);
+        lines.push(`Versicherungsnummer: ${k.versicherungsnummer}`);
+        lines.push(`Art: ${k.versicherungsart}`);
+        lines.push(`Grund: ${k.kuendigungsgrund}`);
+        if (k.kuendigungsdatum) lines.push(`Datum: ${formatDateDE(k.kuendigungsdatum)}`);
+        if (k.hinweise.trim()) lines.push(`Hinweise: ${k.hinweise}`);
+      });
     }
     if (selectedType === 'beraterwechsel') {
       lines.push(`Geburtsdatum: ${formatDateDE(formData.geburtsdatum)}`);
@@ -666,35 +777,55 @@ export default function DokumentePage() {
 
                 {selectedType === 'kuendigung' && (
                   <>
-                    <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide mt-2">Versicherungsdaten</h3>
-                    {renderField('Versicherungsgesellschaft', 'versicherungsgesellschaft', 'text', 'z.B. Allianz, HUK-Coburg')}
-                    {renderField('Versicherungsnummer', 'versicherungsnummer')}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Versicherungsart *</label>
-                      <select value={formData.versicherungsart} onChange={e => updateField('versicherungsart', e.target.value)} className={selectCls('versicherungsart')}>
-                        <option value="">Bitte auswählen</option>
-                        {versicherungsarten.map(v => <option key={v} value={v}>{v}</option>)}
-                      </select>
-                      {errors.versicherungsart && <span className="text-xs text-red-500">{errors.versicherungsart}</span>}
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Kündigungsgrund *</label>
-                      <select value={formData.kuendigungsgrund} onChange={e => updateField('kuendigungsgrund', e.target.value)} className={selectCls('kuendigungsgrund')}>
-                        <option value="">Bitte auswählen</option>
-                        {kuendigungsgruende.map(g => <option key={g} value={g}>{g}</option>)}
-                      </select>
-                      {errors.kuendigungsgrund && <span className="text-xs text-red-500">{errors.kuendigungsgrund}</span>}
-                    </div>
-                    {renderField('Gewünschtes Kündigungsdatum', 'kuendigungsdatum', 'date', '', false)}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Hinweise (optional)</label>
-                      <textarea
-                        value={formData.hinweise}
-                        onChange={e => updateField('hinweise', e.target.value)}
-                        rows={3}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl text-base outline-none focus:border-[#003781] resize-none"
-                      />
-                    </div>
+                    {kuendigungen.map((k, i) => (
+                      <div key={i} className="bg-white border-2 border-gray-200 rounded-xl p-4 flex flex-col gap-3 relative">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide">
+                            Versicherung {kuendigungen.length > 1 ? `${i + 1}` : ''}
+                          </h3>
+                          {kuendigungen.length > 1 && (
+                            <button type="button" onClick={() => removeKuendigung(i)} className="text-red-500 text-xs font-semibold hover:text-red-700 min-h-[44px] px-2">✕ Entfernen</button>
+                          )}
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-sm font-semibold text-gray-700">Versicherungsgesellschaft *</label>
+                          <input type="text" value={k.versicherungsgesellschaft} onChange={e => updateKuendigung(i, 'versicherungsgesellschaft', e.target.value)} placeholder="z.B. Allianz, HUK-Coburg" className={inputCls(`k_${i}_versicherungsgesellschaft`)} />
+                          {errors[`k_${i}_versicherungsgesellschaft`] && <span className="text-xs text-red-500">{errors[`k_${i}_versicherungsgesellschaft`]}</span>}
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-sm font-semibold text-gray-700">Versicherungsnummer *</label>
+                          <input type="text" value={k.versicherungsnummer} onChange={e => updateKuendigung(i, 'versicherungsnummer', e.target.value)} className={inputCls(`k_${i}_versicherungsnummer`)} />
+                          {errors[`k_${i}_versicherungsnummer`] && <span className="text-xs text-red-500">{errors[`k_${i}_versicherungsnummer`]}</span>}
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-sm font-semibold text-gray-700">Versicherungsart *</label>
+                          <select value={k.versicherungsart} onChange={e => updateKuendigung(i, 'versicherungsart', e.target.value)} className={selectCls(`k_${i}_versicherungsart`)}>
+                            <option value="">Bitte auswählen</option>
+                            {versicherungsarten.map(v => <option key={v} value={v}>{v}</option>)}
+                          </select>
+                          {errors[`k_${i}_versicherungsart`] && <span className="text-xs text-red-500">{errors[`k_${i}_versicherungsart`]}</span>}
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-sm font-semibold text-gray-700">Kündigungsgrund *</label>
+                          <select value={k.kuendigungsgrund} onChange={e => updateKuendigung(i, 'kuendigungsgrund', e.target.value)} className={selectCls(`k_${i}_kuendigungsgrund`)}>
+                            <option value="">Bitte auswählen</option>
+                            {kuendigungsgruende.map(g => <option key={g} value={g}>{g}</option>)}
+                          </select>
+                          {errors[`k_${i}_kuendigungsgrund`] && <span className="text-xs text-red-500">{errors[`k_${i}_kuendigungsgrund`]}</span>}
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-sm font-semibold text-gray-700">Gewünschtes Kündigungsdatum</label>
+                          <input type="date" value={k.kuendigungsdatum} onChange={e => updateKuendigung(i, 'kuendigungsdatum', e.target.value)} className={inputCls(`k_${i}_kuendigungsdatum`)} />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-sm font-semibold text-gray-700">Hinweise (optional)</label>
+                          <textarea value={k.hinweise} onChange={e => updateKuendigung(i, 'hinweise', e.target.value)} rows={2} className="w-full p-3 border-2 border-gray-200 rounded-xl text-base outline-none focus:border-[#003781] resize-none" />
+                        </div>
+                      </div>
+                    ))}
+                    <button type="button" onClick={addKuendigung} className="w-full border-2 border-dashed border-[#003781] text-[#003781] rounded-xl p-3 font-semibold text-sm active:bg-blue-50 transition-colors min-h-[48px]">
+                      + Weitere Kündigung hinzufügen
+                    </button>
                   </>
                 )}
 
@@ -1062,6 +1193,12 @@ export default function DokumentePage() {
                     <span className="text-gray-500">Name</span>
                     <span className="font-semibold text-gray-900">{formData.vorname} {formData.nachname}</span>
                   </div>
+                  {selectedType === 'kuendigung' && kuendigungen.length > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Kündigungen</span>
+                      <span className="font-semibold text-gray-900">{kuendigungen.length} Versicherung(en)</span>
+                    </div>
+                  )}
                   {selectedType === 'upload' && formData.versicherungsnummer && (
                     <div className="flex justify-between">
                       <span className="text-gray-500">Versicherungsnr.</span>
