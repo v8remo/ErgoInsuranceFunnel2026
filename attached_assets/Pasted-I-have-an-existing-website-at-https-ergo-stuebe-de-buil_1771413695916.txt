@@ -1,0 +1,181 @@
+I have an existing website at https://ergo-stuebe.de built in Replit. 
+I want to keep the existing design and content but ADD a Perspective-style 
+multi-step lead funnel that opens as a full-screen overlay/modal when the 
+user clicks on "Jetzt Beratung anfragen", "Direkt über WhatsApp schreiben" 
+(only the first button), or "Jetzt Bedarfs-Check anfordern".
+
+## EXISTING SITE CONTEXT
+The site has:
+- Hero section with headline "Ihre ERGO Agentur in Ganderkesee"
+- Two CTA buttons: "Jetzt Beratung anfragen" (red) and "Direkt über WhatsApp schreiben" (green outline)
+- Advisor card: Morino Stübe, photo, ERGO logo, Registrier-Nr. D-5H7J-7DUI1-10
+- Benefits grid (4 cards)
+- "Persönlicher Bedarfs-Check" section with button
+- Footer with Tel: 015566771019, Impressum, Datenschutz links
+- Colors: ERGO blue #003781, ERGO red #E2001A
+- Phone number: 015566771019
+- WhatsApp link: https://wa.me/49015566771019
+
+## WHAT TO BUILD
+Add a full-screen funnel overlay/modal that:
+1. Opens when clicking "Jetzt Beratung anfragen" or "Jetzt Bedarfs-Check anfordern"
+2. Covers the full screen with a dark backdrop
+3. Shows a mobile-first card (max-width: 480px, centered, white, rounded corners)
+4. Has smooth slide transitions between steps (CSS transform translateX)
+5. Has a red progress bar at the top of the card
+6. Has a close button (×) top right to dismiss
+7. Has a back arrow (←) top left on all steps except step 1
+
+## FUNNEL STEPS
+
+### Step 1 – Hook
+- Background inside card: gradient #003781 → #0052A5
+- White text
+- Top badge (red pill): "⭐ 47 Beratungen diesen Monat"
+- Headline: "Sind Sie wirklich optimal abgesichert?"
+- Subtext: "Beantworten Sie 5 kurze Fragen und erhalten Sie eine kostenlose, persönliche Versicherungsanalyse."
+- CTA Button (red, full-width): "Jetzt kostenlos prüfen →"
+- Trust line below: "🔒 Unverbindlich & kostenlos · Datenschutz nach DSGVO"
+
+### Step 2 – Lebenssituation
+- Headline: "Was beschreibt Ihre aktuelle Situation?" 🏠
+- Subtext: "Damit können wir Sie gezielt beraten."
+- 2x2 icon card grid, single select (card highlights red on select):
+  - 👤 Single
+  - 💑 Paar ohne Kinder
+  - 👨‍👩‍👧 Familie mit Kindern
+  - 🏢 Selbstständig
+- Auto-advance to next step after selection (300ms delay)
+
+### Step 3 – Absicherungsbedarf
+- Headline: "Wo sehen Sie den größten Bedarf?" 🔍
+- Subtext: "Mehrfachauswahl möglich (max. 2)"
+- Multi-select cards (max 2, checkmark style):
+  - 🚗 Kfz & Mobilität
+  - 🏡 Haus & Hausrat
+  - ⚖️ Rechtsschutz
+  - 💼 Berufsunfähigkeit
+  - 👨‍👩‍👧 Familie & Vorsorge
+  - 💊 Krankenversicherung
+- "Weiter →" button appears after at least 1 selection
+
+### Step 4 – Bestandsverträge
+- Headline: "Haben Sie bereits Verträge, die Sie prüfen lassen möchten?" 📋
+- 3 large button options (full-width, outlined, highlight red on select):
+  - ✅ Ja, bestehende Verträge prüfen
+  - 🆕 Nein, ich suche neue Absicherung
+  - 🤔 Ich bin mir nicht sicher
+- Auto-advance after selection
+
+### Step 5 – Priorität
+- Headline: "Was ist Ihnen bei der Beratung am wichtigsten?" ⭐
+- 4 option cards:
+  - 💰 Bester Preis
+  - 🛡️ Lückenlose Absicherung
+  - ⚡ Schnelle & unkomplizierte Beratung
+  - 🤝 Langfristiger Ansprechpartner
+- Auto-advance after selection
+
+### Step 6 – Transition (no input, auto-advance after 2.5s)
+- Show animated pulsing dots: "Ihre Angaben werden ausgewertet..."
+- Progress bar fills to 100%
+- Then show result text: "✅ Perfekt! Auf Basis Ihrer Angaben kann Morino Ihnen eine individuelle Analyse erstellen."
+- 3 trust items:
+  - 🏆 "ERGO – seit 1906 einer der größten Versicherungskonzerne"
+  - 🕐 "Termin in 15 Min. – bequem per Video oder persönlich"
+  - 🔒 "100% kostenlos & unverbindlich"
+- CTA Button (red): "Jetzt Termin sichern →"
+- (This step does NOT auto-advance – user clicks CTA)
+
+### Step 7 – Kontaktdaten
+- Headline: "Wohin dürfen wir Ihre Analyse schicken?" 📩
+- 4 input fields:
+  - Vorname (required)
+  - Nachname (required)
+  - E-Mail (required, email validation)
+  - Telefon (required, tel)
+- DSGVO checkbox (required): 
+  "Ich stimme der Verarbeitung meiner Daten zur Terminvorbereitung zu. 
+  Mehr in unserer <a href='/datenschutz'>Datenschutzerklärung</a>."
+- CTA Button (red): "Weiter zum Terminwunsch →"
+- Inline validation: red border + error text on blur if empty/invalid
+
+### Step 8 – Terminwunsch
+- Headline: "Wie möchten Sie beraten werden?" 📅
+- 2 large selectable cards:
+  - 📹 "Online-Beratung" (Video / Telefon)
+  - 🏠 "Persönlich vor Ort" (Ganderkesee & Umgebung)
+- Time preference (radio button style cards, 2x2):
+  - 🌅 Vormittags (9–12 Uhr)
+  - ☀️ Mittags (12–14 Uhr)
+  - 🌤️ Nachmittags (14–18 Uhr)
+  - 🌙 Abends (ab 18 Uhr)
+- CTA Button (red): "Termin anfragen →"
+- On click: show loading spinner on button, then submit
+
+### Step 9 – Thank You
+- Animated green checkmark (CSS circle + checkmark draw animation)
+- Headline: "🎉 Vielen Dank, Ihre Anfrage ist eingegangen!"
+- Subtext: "Morino Stübe meldet sich innerhalb von 24 Stunden persönlich bei Ihnen."
+- Advisor mini-card:
+  - Use existing photo of Morino (reference the same image already on the page)
+  - Name: Morino Stübe
+  - Title: ERGO Versicherungsfachmann · Ganderkesee
+- 2 buttons:
+  - Green (full-width): "💬 Per WhatsApp schreiben" → https://wa.me/4915566771019
+  - Blue outline: "📋 ERGO Profil ansehen" → https://ergo-agenturen.de/privatkunden/000211325-345414/Morino-Stuebe
+- Small text: "Sie erhalten gleich eine Bestätigung per E-Mail."
+
+## FORM SUBMISSION
+On Step 8 submit button click:
+1. Collect all answers into this object:
+{
+  "timestamp": new Date().toISOString(),
+  "source": "ergo-stuebe.de",
+  "utm_source": getURLParam("utm_source") || "direct",
+  "utm_medium": getURLParam("utm_medium") || "",
+  "situation": "...",
+  "concerns": [...],
+  "existing_contracts": "...",
+  "priority": "...",
+  "contact_type": "online|vorort",
+  "time_preference": "...",
+  "first_name": "...",
+  "last_name": "...",
+  "email": "...",
+  "phone": "..."
+}
+
+2. Send POST fetch() to: https://hook.eu2.make.com/PLACEHOLDER
+   (Leave as placeholder with a comment: // TODO: Replace with your n8n or Make webhook URL)
+   
+3. On success (or even on fetch error, to not block UX): advance to Step 9
+
+4. Also send a mailto fallback as backup:
+   // Fallback: window.location.href = `mailto:morino.stuebe@ergo.de?subject=Neue Beratungsanfrage&body=${encodeURIComponent(JSON.stringify(leadData))}`
+   // Only use if webhook fails
+
+## TECHNICAL REQUIREMENTS
+- Vanilla JavaScript only (no React, no Vue) – keep it compatible with existing Replit setup
+- CSS: add new styles in a <style> block or separate CSS file, don't break existing styles
+- The modal/overlay uses z-index: 9999
+- Body scroll locked (overflow: hidden) when modal is open
+- Escape key closes the modal
+- All existing buttons that should trigger the funnel get class "open-funnel-modal"
+- Mobile-first: funnel card is full-screen on mobile (<768px), centered card on desktop
+
+## ANALYTICS (add these events)
+window.dataLayer = window.dataLayer || [];
+// Push on each step:
+window.dataLayer.push({ event: 'funnel_step_view', step_number: N, step_name: 'NAME' });
+// Push on submit:
+window.dataLayer.push({ event: 'funnel_lead_submitted', contact_type: '...', situation: '...' });
+
+## FILES TO MODIFY/CREATE
+- Modify: index.html (add modal HTML + trigger classes to existing buttons)
+- Create: funnel.css (all funnel styles)
+- Create: funnel.js (all funnel logic)
+- Include both files in index.html via <link> and <script> tags
+
+Keep all existing content and styles of the page completely intact.
+Only add the funnel overlay on top.
