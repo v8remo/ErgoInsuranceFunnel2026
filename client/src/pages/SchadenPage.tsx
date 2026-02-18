@@ -31,6 +31,7 @@ interface FormData {
   arztAufgesucht: string;
   weitereDetails: string;
   fin: string;
+  glasKennzeichen: string;
   glasScheibe: string;
   glasSchadensart: string;
   glasBereich: string;
@@ -64,6 +65,7 @@ const initialFormData: FormData = {
   arztAufgesucht: 'nein',
   weitereDetails: '',
   fin: '',
+  glasKennzeichen: '',
   glasScheibe: '',
   glasSchadensart: '',
   glasBereich: '',
@@ -161,6 +163,7 @@ export default function SchadenPage() {
 
     if (selectedType === 'glasschaden') {
       if (!formData.fin.trim()) e.fin = 'Pflichtfeld';
+      if (!formData.glasKennzeichen.trim()) e.glasKennzeichen = 'Pflichtfeld';
       if (!formData.glasScheibe) e.glasScheibe = 'Pflichtfeld';
       if (!formData.glasSchadensart) e.glasSchadensart = 'Pflichtfeld';
       const needsBereich = ['steinschlag', 'mehrere_steinschlaege', 'riss'].includes(formData.glasSchadensart);
@@ -251,6 +254,7 @@ export default function SchadenPage() {
     const lines: string[] = [];
     if (selectedType === 'glasschaden') {
       lines.push(`Fahrzeugidentifikationsnummer (FIN): ${formData.fin}`);
+      lines.push(`Kennzeichen: ${formData.glasKennzeichen}`);
       lines.push(`Beschädigte Scheibe: ${glasScheibeLabel(formData.glasScheibe)}`);
       lines.push(`Art des Schadens: ${glasSchadensartLabel(formData.glasSchadensart)}`);
       if (formData.glasBereich) lines.push(`Bereich des Schadens: ${glasBereichLabel(formData.glasBereich)}`);
@@ -294,6 +298,7 @@ export default function SchadenPage() {
     lines.push(`Telefon: ${formData.telefon}`);
     if (selectedType === 'glasschaden') {
       lines.push(`FIN: ${formData.fin}`);
+      lines.push(`Kennzeichen: ${formData.glasKennzeichen}`);
       lines.push(`Scheibe: ${glasScheibeLabel(formData.glasScheibe)}`);
       lines.push(`Schadensart: ${glasSchadensartLabel(formData.glasSchadensart)}`);
       if (formData.glasBereich) lines.push(`Bereich: ${glasBereichLabel(formData.glasBereich)}`);
@@ -486,6 +491,12 @@ export default function SchadenPage() {
                       <label className="text-sm font-semibold text-gray-700">Fahrzeugidentifikationsnummer (FIN) *</label>
                       <input type="text" value={formData.fin} onChange={e => updateField('fin', e.target.value)} placeholder="z.B. WVWZZZ3CZWE123456" className={inputCls('fin')} />
                       {errors.fin && <span className="text-xs text-red-500">{errors.fin}</span>}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Kennzeichen *</label>
+                      <input type="text" value={formData.glasKennzeichen} onChange={e => updateField('glasKennzeichen', e.target.value.toUpperCase())} placeholder="z.B. OL-AB 1234" className={inputCls('glasKennzeichen')} />
+                      {errors.glasKennzeichen && <span className="text-xs text-red-500">{errors.glasKennzeichen}</span>}
                     </div>
 
                     <div className="border-t border-gray-200 pt-4 mt-2">
@@ -860,6 +871,7 @@ export default function SchadenPage() {
                   {selectedType === 'glasschaden' ? (
                     <>
                       <p><span className="font-semibold">FIN:</span> {formData.fin}</p>
+                      <p><span className="font-semibold">Kennzeichen:</span> {formData.glasKennzeichen}</p>
                       <p><span className="font-semibold">Scheibe:</span> {glasScheibeLabel(formData.glasScheibe)}</p>
                       <p><span className="font-semibold">Schadensart:</span> {glasSchadensartLabel(formData.glasSchadensart)}</p>
                       {formData.glasBereich && <p><span className="font-semibold">Bereich:</span> {glasBereichLabel(formData.glasBereich)}</p>}
