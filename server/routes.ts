@@ -317,21 +317,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (process.env.RESEND_API_KEY) {
         const attachments = pdfBase64 ? [{
           filename: `${documentType.replace(/\s/g, '_')}_${customerName.replace(/\s/g, '_')}.pdf`,
-          content: pdfBase64,
+          content: Buffer.from(pdfBase64, 'base64'),
         }] : [];
 
         const { Resend } = await import('resend');
         const resendClient = new Resend(process.env.RESEND_API_KEY);
-        await resendClient.emails.send({
+        const { data, error } = await resendClient.emails.send({
           from: 'ERGO Dokumente <onboarding@resend.dev>',
-          to: 'Morino.stuebe@ergo.de',
+          to: 'stuebe@shopgrow.de',
           subject: `📄 Neues Dokument: ${documentType} – ${customerName} – ${now}`,
           html: emailHtml,
           attachments,
         });
+
+        if (error) {
+          console.error('Resend email error:', JSON.stringify(error));
+          return res.json({ success: true, emailSent: false, emailError: error.message });
+        }
+        console.log('Document email sent successfully:', data?.id);
+        return res.json({ success: true, emailSent: true });
       }
 
-      res.json({ success: true });
+      console.warn('No RESEND_API_KEY configured, skipping email');
+      res.json({ success: true, emailSent: false });
     } catch (error) {
       console.error('Document submission error:', error);
       res.status(500).json({ message: "Failed to submit document" });
