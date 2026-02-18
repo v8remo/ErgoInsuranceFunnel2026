@@ -323,8 +323,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { Resend } = await import('resend');
         const resendClient = new Resend(process.env.RESEND_API_KEY);
         const { data, error } = await resendClient.emails.send({
-          from: 'ERGO Dokumente <onboarding@resend.dev>',
-          to: 'stuebe@shopgrow.de',
+          from: 'ERGO Dokumente <dokumente@anfrage.ergo-stuebe.de>',
+          to: 'morino.stuebe@ergo.de',
           subject: `📄 Neues Dokument: ${documentType} – ${customerName} – ${now}`,
           html: emailHtml,
           attachments,
@@ -438,8 +438,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { Resend } = await import('resend');
         const resendClient = new Resend(process.env.RESEND_API_KEY);
         const { data, error } = await resendClient.emails.send({
-          from: 'ERGO Schadensmeldung <onboarding@resend.dev>',
-          to: 'stuebe@shopgrow.de',
+          from: 'ERGO Schadensmeldung <schaden@anfrage.ergo-stuebe.de>',
+          to: 'morino.stuebe@ergo.de',
           subject: isGlasschaden
             ? `🔲 Kfz-Glasschaden: ${customerName} – ${glasScheibe || 'Scheibe'} – ${now}`
             : `🚨 Schadensmeldung: ${damageType} – ${customerName} – ${now}`,
@@ -556,8 +556,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const resendClient = new Resend(process.env.RESEND_API_KEY);
         const vehicleDesc = body.fahrzeughersteller ? `${body.fahrzeughersteller} ${body.fahrzeugmodell || ''}`.trim() : (body.fahrzeugart || '');
         const { data, error } = await resendClient.emails.send({
-          from: 'ERGO Kennzeichen <onboarding@resend.dev>',
-          to: 'stuebe@shopgrow.de',
+          from: 'ERGO Kennzeichen <kennzeichen@anfrage.ergo-stuebe.de>',
+          to: 'morino.stuebe@ergo.de',
           subject: `${isEvb ? '🚗 eVB-Anfrage' : '🛵 Versicherungskennzeichen'}: ${vorname} ${nachname} – ${vehicleDesc} – ${now}`,
           html: emailHtml,
         });
@@ -646,8 +646,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { Resend } = await import('resend');
         const resendClient = new Resend(process.env.RESEND_API_KEY);
         const { data, error } = await resendClient.emails.send({
-          from: 'ERGO Dokumente <onboarding@resend.dev>',
-          to: 'stuebe@shopgrow.de',
+          from: 'ERGO Dokumente <dokumente@anfrage.ergo-stuebe.de>',
+          to: 'morino.stuebe@ergo.de',
           subject: `📎 Rechnung/Beleg: ${vorname} ${nachname} – VNR ${versicherungsnummer} – ${now}`,
           html: emailHtml,
           attachments: attachments.length > 0 ? attachments : undefined,
@@ -710,8 +710,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { Resend } = await import('resend');
         const resendClient = new Resend(process.env.RESEND_API_KEY);
         const { data, error } = await resendClient.emails.send({
-          from: 'ERGO Rückruf <onboarding@resend.dev>',
-          to: 'stuebe@shopgrow.de',
+          from: 'ERGO Rückruf <rueckruf@anfrage.ergo-stuebe.de>',
+          to: 'morino.stuebe@ergo.de',
           subject: `📞 Rückruf-Anfrage: ${name} – ${callbackTime}`,
           html: emailHtml,
         });
