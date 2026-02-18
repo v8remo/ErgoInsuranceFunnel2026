@@ -210,7 +210,7 @@ export default function DokumentePage() {
     }
   };
 
-  async function generatePdf(): Promise<Uint8Array> {
+  async function generatePdf(sigDataUrl?: string): Promise<Uint8Array> {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([595.28, 841.89]);
     const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -358,9 +358,10 @@ export default function DokumentePage() {
     }
 
     y -= 10;
-    if (signatureDataUrl) {
+    const sigToEmbed = sigDataUrl || signatureDataUrl;
+    if (sigToEmbed) {
       try {
-        const sigBytes = await fetch(signatureDataUrl).then(r => r.arrayBuffer());
+        const sigBytes = await fetch(sigToEmbed).then(r => r.arrayBuffer());
         const sigImg = await pdfDoc.embedPng(new Uint8Array(sigBytes));
         const sigDims = sigImg.scale(0.4);
         page.drawImage(sigImg, { x: margin, y: y - sigDims.height, width: sigDims.width, height: sigDims.height });
@@ -395,8 +396,7 @@ export default function DokumentePage() {
     setSignatureDataUrl(sigUrl);
 
     try {
-      await new Promise(r => setTimeout(r, 50));
-      const bytes = await generatePdf();
+      const bytes = await generatePdf(sigUrl);
       setPdfBytes(bytes);
 
       let pdfBase64 = '';
