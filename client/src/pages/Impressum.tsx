@@ -23,7 +23,7 @@ export default function Impressum() {
         </div>
 
         {/* Impressum Content */}
-        <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
+        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-8 border border-gray-200">
           <div className="space-y-8">
             {/* Angaben gemäß § 5 TMG */}
             <section>
@@ -112,7 +112,7 @@ export default function Impressum() {
 
             {/* Verbraucherstreitbeilegung */}
             <section>
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Verbraucherstreitbeilegung/Universalschlichtungsstelle</h2>
+              <h2 className="text-base sm:text-xl font-bold text-gray-800 mb-4">Verbraucherstreitbeilegung / Universalschlichtungsstelle</h2>
               <div className="bg-blue-50 p-6 rounded-lg">
                 <p className="text-gray-700">
                   Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer 

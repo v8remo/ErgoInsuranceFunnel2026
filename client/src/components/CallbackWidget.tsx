@@ -38,6 +38,7 @@ export default function CallbackWidget() {
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   const hidden = location === '/dokumente' || location === '/schaden';
+  const isHome = location === '/';
 
   useEffect(() => {
     if (hidden) return;
@@ -162,16 +163,16 @@ export default function CallbackWidget() {
 
       {showTooltip && !isOpen && (
         <div className="cb-tooltip fixed z-[9997] right-5 bg-white text-gray-800 text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg border border-gray-100"
-          style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}>
-          Rückruf gewünscht? 👆
+          style={{ bottom: isHome ? 'calc(env(safe-area-inset-bottom, 0px) + 120px)' : 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}>
+          Rückruf gewünscht?
         </div>
       )}
 
       <button
         ref={buttonRef}
         onClick={() => { setIsOpen(!isOpen); setShowTooltip(false); }}
-        className="cb-pulse fixed z-[9998] right-5 w-14 h-14 rounded-full bg-[#E2001A] text-white flex items-center justify-center shadow-lg active:scale-95 transition-transform"
-        style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)' }}
+        className={`cb-pulse fixed z-[9998] right-4 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#E2001A] text-white flex items-center justify-center shadow-lg active:scale-95 transition-transform sm:right-5`}
+        style={{ bottom: isHome ? 'calc(env(safe-area-inset-bottom, 0px) + 60px)' : 'calc(env(safe-area-inset-bottom, 0px) + 20px)' }}
         aria-label="Rückruf anfordern"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -182,8 +183,8 @@ export default function CallbackWidget() {
       {isOpen && (
         <div
           ref={popupRef}
-          className="cb-pop-in fixed z-[9999] right-5 w-[320px] max-w-[calc(100vw-40px)] bg-white rounded-2xl shadow-2xl overflow-hidden"
-          style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 88px)' }}
+          className="cb-pop-in fixed z-[9999] right-4 sm:right-5 w-[320px] max-w-[calc(100vw-32px)] bg-white rounded-2xl shadow-2xl overflow-y-auto"
+          style={{ bottom: isHome ? 'calc(env(safe-area-inset-bottom, 0px) + 128px)' : 'calc(env(safe-area-inset-bottom, 0px) + 88px)', maxHeight: 'calc(100vh - 160px)' }}
         >
           <button
             onClick={close}

@@ -22,7 +22,7 @@ export default function ProfessionalErgoLanding() {
           ERGO Versicherungsfachmann · Ganderkesee
         </span>
 
-        <h1 className="text-2xl font-extrabold text-gray-900 leading-tight mb-4 md:text-4xl lg:text-5xl">
+        <h1 className="text-xl font-extrabold text-gray-900 leading-tight mb-4 sm:text-2xl md:text-4xl lg:text-5xl">
           Ihre ERGO Agentur in Ganderkesee –{' '}
           <span className="text-ergo-red">Persönliche Beratung rund um Ihre Absicherung</span>
         </h1>
@@ -31,15 +31,15 @@ export default function ProfessionalErgoLanding() {
           Ob Kfz, Zahnzusatz, Wohngebäude oder Haftpflicht – wir beraten Sie individuell und transparent.
         </p>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
           <button
             onClick={() => {
               setShowFunnel(true);
               trackEvent('cta_beratung_clicked', { source: 'hero_section' });
             }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold text-base px-6 py-4 rounded-xl shadow-md active:scale-[0.97] transition-transform md:text-lg md:px-8"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold text-sm px-5 py-3.5 rounded-xl shadow-md active:scale-[0.97] transition-transform whitespace-nowrap md:text-base md:px-6 md:py-4"
           >
-            <Mail className="w-5 h-5 shrink-0" />
+            <Mail className="w-4 h-4 shrink-0 md:w-5 md:h-5" />
             Jetzt Beratung anfragen
           </button>
 
@@ -51,27 +51,29 @@ export default function ProfessionalErgoLanding() {
               trackEvent('whatsapp_clicked', { source: 'hero_section' });
               trackConversion();
             }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-green-500 text-green-600 font-semibold text-base px-6 py-4 rounded-xl active:scale-[0.97] transition-transform md:text-lg md:px-8"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-green-500 text-green-600 font-semibold text-sm px-5 py-3.5 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap md:text-base md:px-6 md:py-4"
           >
-            <MessageSquare className="w-5 h-5 shrink-0" />
+            <MessageSquare className="w-4 h-4 shrink-0 md:w-5 md:h-5" />
             Direkt über WhatsApp
           </a>
 
-          <Link
-            href="/dokumente"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#003781] text-[#003781] font-semibold text-base px-6 py-4 rounded-xl active:scale-[0.97] transition-transform md:text-lg md:px-8"
-          >
-            <FileText className="w-5 h-5 shrink-0" />
-            Dokument einreichen
-          </Link>
+          <div className="grid grid-cols-2 gap-2 sm:contents">
+            <Link
+              href="/dokumente"
+              className="flex items-center justify-center gap-1 border-2 border-[#003781] text-[#003781] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-transform text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4"
+            >
+              <FileText className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
+              Dokument einreichen
+            </Link>
 
-          <Link
-            href="/schaden"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#E2001A] text-[#E2001A] font-semibold text-base px-6 py-4 rounded-xl active:scale-[0.97] transition-transform md:text-lg md:px-8"
-          >
-            <AlertTriangle className="w-5 h-5 shrink-0" />
-            Schaden melden
-          </Link>
+            <Link
+              href="/schaden"
+              className="flex items-center justify-center gap-1 border-2 border-[#E2001A] text-[#E2001A] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-transform text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4"
+            >
+              <AlertTriangle className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
+              Schaden melden
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -117,7 +119,7 @@ export default function ProfessionalErgoLanding() {
 
       {/* ──────── VORTEILE ──────── */}
       <section className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
-        <h2 className="text-xl font-bold text-gray-900 text-center mb-6 md:text-3xl md:mb-8">
+        <h2 className="text-lg font-bold text-gray-900 text-center mb-6 sm:text-xl md:text-3xl md:mb-8">
           Ihre Vorteile bei der ERGO Agentur Stübe
         </h2>
 
@@ -154,7 +156,7 @@ export default function ProfessionalErgoLanding() {
       {/* ──────── LEAD-MAGNET CTA ──────── */}
       <section className="px-4 pb-12 md:pb-20 max-w-3xl mx-auto">
         <div className="bg-gradient-to-br from-blue-50 to-green-50 border border-blue-200 rounded-2xl shadow-lg p-6 text-center md:p-10">
-          <h2 className="text-xl font-bold text-gray-900 mb-3 md:text-3xl">
+          <h2 className="text-lg font-bold text-gray-900 mb-3 sm:text-xl md:text-3xl">
             Persönlicher Bedarfs-Check
           </h2>
           <p className="text-sm text-gray-600 leading-relaxed mb-6 max-w-lg mx-auto md:text-lg">
@@ -166,7 +168,7 @@ export default function ProfessionalErgoLanding() {
               setShowFunnel(true);
               trackEvent('lead_magnet_clicked', { source: 'bedarfs_check' });
             }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold text-base px-6 py-4 rounded-xl shadow-md active:scale-[0.97] transition-transform md:text-lg md:px-8 mx-auto"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold text-sm px-5 py-3.5 rounded-xl shadow-md active:scale-[0.97] transition-transform whitespace-nowrap md:text-base md:px-6 md:py-4 mx-auto"
           >
             <MapPin className="w-5 h-5 shrink-0" />
             Jetzt Bedarfs-Check starten
@@ -185,7 +187,7 @@ export default function ProfessionalErgoLanding() {
       </section>
 
       {/* ──────── FOOTER ──────── */}
-      <footer className="px-4 pb-24 sm:pb-12 max-w-3xl mx-auto">
+      <footer className="px-4 pb-20 sm:pb-12 max-w-3xl mx-auto">
         <div className="border-t border-gray-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
             <Link href="/impressum" className="hover:text-gray-600">Impressum</Link>
@@ -198,15 +200,15 @@ export default function ProfessionalErgoLanding() {
       </footer>
 
       {/* ──────── STICKY MOBILE CTA ──────── */}
-      <div className="fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur border-t border-gray-200 px-4 py-3 flex gap-3 sm:hidden safe-area-bottom">
+      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200 px-3 py-2.5 flex gap-2 sm:hidden safe-area-bottom">
         <button
           onClick={() => {
             setShowFunnel(true);
             trackEvent('cta_sticky_clicked', { source: 'sticky_bar' });
           }}
-          className="flex-1 flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold text-sm py-3 rounded-lg active:scale-[0.97] transition-transform"
+          className="flex-1 flex items-center justify-center gap-1.5 bg-ergo-red text-white font-semibold text-xs py-2.5 rounded-lg active:scale-[0.97] transition-transform whitespace-nowrap"
         >
-          <Mail className="w-4 h-4" />
+          <Mail className="w-3.5 h-3.5 shrink-0" />
           Beratung anfragen
         </button>
         <a
@@ -217,9 +219,9 @@ export default function ProfessionalErgoLanding() {
             trackEvent('whatsapp_sticky_clicked', { source: 'sticky_bar' });
             trackConversion();
           }}
-          className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 py-3 rounded-lg active:scale-[0.97] transition-transform"
+          className="flex items-center justify-center gap-1.5 bg-green-500 text-white font-semibold text-xs px-3 py-2.5 rounded-lg active:scale-[0.97] transition-transform whitespace-nowrap"
         >
-          <Phone className="w-4 h-4" />
+          <Phone className="w-3.5 h-3.5 shrink-0" />
           WhatsApp
         </a>
       </div>

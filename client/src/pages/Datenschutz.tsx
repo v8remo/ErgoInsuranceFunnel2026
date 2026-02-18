@@ -23,7 +23,7 @@ export default function Datenschutz() {
         </div>
 
         {/* Datenschutz Content */}
-        <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
+        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-8 border border-gray-200">
           <div className="space-y-8">
             
             {/* Allgemeine Hinweise */}
