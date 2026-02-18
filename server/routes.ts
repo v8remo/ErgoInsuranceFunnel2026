@@ -434,6 +434,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post("/api/callback/submit", async (req, res) => {
+    try {
+      const { name, phone, callbackTime, topic } = req.body;
+
+      if (!name || !phone || !callbackTime) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
+
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background-color: #E2001A; color: white; padding: 20px; text-align: center;">
+            <h1 style="margin: 0;">📞 Rückruf-Anfrage</h1>
+            <p style="margin: 10px 0 0 0;">ergo-stuebe.de · Rückruf-Widget</p>
+          </div>
+          <div style="padding: 20px; background-color: #f7f7f7;">
+            <div style="background-color: white; padding: 15px; border-radius: 8px;">
+              <p><strong>Name:</strong> ${name}</p>
+              <p><strong>Telefon:</strong> <a href="tel:${phone}">${phone}</a></p>
+              <p><strong>Gewünschte Rückrufzeit:</strong> ${callbackTime}</p>
+              <p><strong>Thema:</strong> ${topic || 'Nicht angegeben'}</p>
+              <p><strong>Eingegangen am:</strong> ${now}</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      if (process.env.RESEND_API_KEY) {
+        const { Resend } = await import('resend');
+        const resendClient = new Resend(process.env.RESEND_API_KEY);
+        const { data, error } = await resendClient.emails.send({
+          from: 'ERGO Rückruf <onboarding@resend.dev>',
+          to: 'stuebe@shopgrow.de',
+          subject: `📞 Rückruf-Anfrage: ${name} – ${callbackTime}`,
+          html: emailHtml,
+        });
+
+        if (error) {
+          console.error('Resend callback email error:', JSON.stringify(error));
+          return res.json({ success: true, emailSent: false, emailError: error.message });
+        }
+        console.log('Callback email sent successfully:', data?.id);
+        return res.json({ success: true, emailSent: true });
+      }
+
+      console.warn('No RESEND_API_KEY configured, skipping callback email');
+      res.json({ success: true, emailSent: false });
+    } catch (error) {
+      console.error('Callback submission error:', error);
+      res.status(500).json({ message: "Failed to submit callback request" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
