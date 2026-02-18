@@ -1,0 +1,157 @@
+Add a new subpage /schaden (schaden.html) to the existing ergo-stuebe.de 
+Replit project. Use the SAME EmailJS configuration already in the project.
+Same design: #003781 blue, #E2001A red, Inter font, mobile-first.
+
+Also add links to /schaden in index.html:
+- Hero section: new button "🚨 Schaden melden" (red outlined)
+- Footer: text link "Schaden melden"
+
+---
+
+## PAGE: schaden.html
+
+Header: same branding as dokumente.html (ERGO logo + Agentur Stübe)
+Progress: "Schritt X von 3"
+
+---
+
+## STEP 1 – Schadensart auswählen
+
+Headline: "🚨 Schaden melden"
+Subtext: "Wählen Sie die Art des Schadens. Wir leiten Ihre Meldung sofort weiter."
+
+6 clickable cards (2x3 grid on mobile, icon + label):
+
+🚗 Kfz-Schaden
+🏠 Hausrat-Schaden  
+🏚️ Gebäudeschaden
+⚖️ Rechtsschutz-Fall
+💼 Berufsunfähigkeit
+📋 Sonstiger Schaden
+
+Click → store type → go to Step 2.
+
+---
+
+## STEP 2 – Schadendetails eingeben
+
+### SHARED FIELDS (all types):
+- Vorname* + Nachname* (text)
+- E-Mail* (email)
+- Telefon* (tel)
+- Versicherungsnummer* (text)
+- Schadendatum* (date, default: today)
+- Schadenort* (text, placeholder: "Straße, Ort wo der Schaden passiert ist")
+- Schadensbeschreibung* (textarea, min 20 chars, 
+  placeholder: "Bitte beschreiben Sie den Schaden so genau wie möglich...")
+- Bereits polizeilich gemeldet? (radio: Ja | Nein | Nicht zutreffend)
+- Geschätzter Schaden in € (number, optional)
+
+### TYPE-SPECIFIC additional fields:
+
+🚗 Kfz:
+- Kennzeichen* (text)
+- Unfallgegner vorhanden? (radio: Ja | Nein)
+- If Ja: Name + Kennzeichen des Gegners (text fields)
+- Fahrzeug fahrbereit? (radio: Ja | Nein)
+
+🏠 Hausrat / 🏚️ Gebäude:
+- Betroffene Räume/Bereiche (text)
+- Ursache (select): Einbruch | Wasserschaden | Sturm/Hagel | Brand | Sonstiges
+- Wurden bereits Notmaßnahmen ergriffen? (radio: Ja | Nein)
+
+⚖️ Rechtsschutz:
+- Gegenseite (text, placeholder: "Name/Firma des Gegners")
+- Art des Rechtsstreits (select): Arbeitsrecht | Verkehrsrecht | Mietrecht | Vertragsrecht | Sonstiges
+- Anwalt bereits beauftragt? (radio: Ja | Nein)
+
+💼 Berufsunfähigkeit:
+- Erkrankung/Ursache (text)
+- Arbeitsunfähig seit (date)
+- Arzt bereits aufgesucht? (radio: Ja | Nein)
+
+📋 Sonstiges:
+- Freitextfeld für Details (textarea)
+
+### FOTO-UPLOAD:
+Section heading: "📷 Fotos & Dokumente anhängen (optional)"
+- Drag & Drop area OR click to select files
+- Accept: image/*, application/pdf
+- Max 5 files, max 5MB each
+- Show preview thumbnails for images
+- Show filename for PDFs
+- Remove button (×) per file
+- Files will be converted to base64 and included in email
+
+### NAVIGATION:
+"Weiter zur Übersicht →" button (red, full-width)
+Validate all required fields on click.
+
+---
+
+## STEP 3 – Zusammenfassung & Absenden
+
+Show summary of all entered data in a clean card:
+- Schadensart, Name, Datum, Ort, Beschreibung
+- Number of attached files shown
+- "Alles korrekt? Bitte prüfen Sie Ihre Angaben."
+
+Checkboxes:
+- ☐ "Alle Angaben sind korrekt und vollständig." (required)
+- ☐ "Ich bin mit der elektronischen Übermittlung einverstanden." (required)
+
+Submit button (red): "🚨 Schaden jetzt melden"
+Loading state: spinner + "Wird übermittelt..."
+
+---
+
+## EMAIL (EmailJS – same config as existing project)
+
+Subject: "🚨 Neue Schadensmeldung: [Schadensart] – [Name] – [Datum]"
+
+Template variables:
+{
+  damage_type: "Kfz-Schaden" etc.,
+  customer_name: "...",
+  customer_email: "...",
+  customer_phone: "...",
+  insurance_number: "...",
+  damage_date: "...",
+  damage_location: "...",
+  damage_description: "...",
+  police_report: "Ja/Nein",
+  estimated_damage: "...",
+  extra_fields: "[formatted string of type-specific fields]",
+  attachments_count: "3 Dateien angehängt",
+  submitted_at: "DD.MM.YYYY HH:MM",
+  // Note: attach files as base64 if EmailJS template supports it
+  // Otherwise list filenames in body and note: 
+  // "TODO: For file attachments upgrade EmailJS or use n8n webhook"
+}
+
+---
+
+## STEP 4 – Bestätigung
+
+- Green animated checkmark
+- Headline: "✅ Schadensmeldung eingegangen!"
+- Text: "Morino Stübe wurde informiert und wird sich schnellstmöglich bei Ihnen melden."
+- Info box (yellow/orange): 
+  "⚠️ Bei dringendem Notfall rufen Sie bitte direkt an: 015566771019"
+- Summary card: Schadensart, Name, eingereicht am
+- Button 1 (green): "💬 WhatsApp schreiben" → https://wa.me/4915566771019
+- Button 2 (outline): "← Zurück zur Startseite" → /
+
+---
+
+## FILES TO CREATE/MODIFY:
+1. CREATE: schaden.html
+2. CREATE: schaden.css
+3. CREATE: schaden.js
+4. MODIFY: index.html (add buttons/links as described)
+DO NOT touch any other existing files.
+
+## DIREKTLINK für WhatsApp:
+// https://ergo-stuebe.de/schaden
+// Mit Vorauswahl: https://ergo-stuebe.de/schaden?type=kfz
+// Typen: kfz | hausrat | gebaeude | rechtsschutz | bu | sonstiges

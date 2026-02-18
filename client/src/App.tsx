@@ -10,6 +10,7 @@ import AdminDashboard from "@/pages/AdminDashboard";
 import Impressum from "@/pages/Impressum";
 import Datenschutz from "@/pages/Datenschutz";
 import DokumentePage from "@/pages/DokumentePage";
+import SchadenPage from "@/pages/SchadenPage";
 import NotFound from "@/pages/not-found";
 
 function AppContent() {
@@ -23,6 +24,7 @@ function AppContent() {
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/impressum" component={Impressum} />
       <Route path="/datenschutz" component={Datenschutz} />
+      <Route path="/schaden" component={SchadenPage} />
       <Route component={NotFound} />
     </Switch>
   );

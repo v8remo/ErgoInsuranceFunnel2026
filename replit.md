@@ -9,6 +9,7 @@ Eine professionelle Lead-Generierungs-Plattform für ERGO Versicherungen mit opt
 - **Homepage** - Übersicht aller Versicherungen mit Trust-Elementen
 - **Versicherungs-Landing-Pages** - Dedizierte Seiten für jede Versicherung
 - **Dokumente-Seite** (/dokumente) - 4-Schritt-Flow: Dokumenttyp wählen → Formular → Unterschrift → Erfolg
+- **Schaden-Seite** (/schaden) - 4-Schritt-Flow: Schadensart wählen → Details + Fotos → Zusammenfassung → Erfolg
 - **Lead-Funnel** - 3-stufiger Conversion-Funnel mit Fortschrittsanzeige
 - **Admin-Dashboard** - Content Management und Lead-Verwaltung
 

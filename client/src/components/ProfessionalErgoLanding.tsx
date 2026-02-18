@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
-import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, FileText } from 'lucide-react';
+import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, FileText, AlertTriangle } from 'lucide-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import FunnelOverlay from './FunnelOverlay';
 import '@/styles/funnel.css';
@@ -63,6 +63,14 @@ export default function ProfessionalErgoLanding() {
           >
             <FileText className="w-5 h-5 shrink-0" />
             Dokument einreichen
+          </Link>
+
+          <Link
+            href="/schaden"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#E2001A] text-[#E2001A] font-semibold text-base px-6 py-4 rounded-xl active:scale-[0.97] transition-transform md:text-lg md:px-8"
+          >
+            <AlertTriangle className="w-5 h-5 shrink-0" />
+            Schaden melden
           </Link>
         </div>
       </section>
@@ -183,6 +191,7 @@ export default function ProfessionalErgoLanding() {
             <Link href="/impressum" className="hover:text-gray-600">Impressum</Link>
             <Link href="/datenschutz" className="hover:text-gray-600">Datenschutz</Link>
             <Link href="/dokumente" className="hover:text-gray-600">Dokumente einreichen</Link>
+            <Link href="/schaden" className="hover:text-gray-600">Schaden melden</Link>
           </div>
           <span>© {new Date().getFullYear()} ERGO Agentur Stübe</span>
         </div>

@@ -346,6 +346,94 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Schaden (damage report) submission endpoint
+  app.post("/api/schaden/submit", async (req, res) => {
+    try {
+      const { damageType, customerName, customerEmail, customerPhone, insuranceNumber, damageDate, damageLocation, damageDescription, policeReport, estimatedDamage, extraFields, attachmentsCount, summary, fileAttachments } = req.body;
+
+      if (!damageType || !customerName || !customerEmail || !damageDescription) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      if (fileAttachments && Array.isArray(fileAttachments)) {
+        if (fileAttachments.length > 5) {
+          return res.status(400).json({ message: "Maximal 5 Dateien erlaubt" });
+        }
+        const totalSize = fileAttachments.reduce((sum: number, f: any) => sum + (f.content?.length || 0), 0);
+        if (totalSize > 25 * 1024 * 1024) {
+          return res.status(400).json({ message: "Dateien zu groß. Maximal 25 MB insgesamt." });
+        }
+      }
+
+      const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
+
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background-color: #E2001A; color: white; padding: 20px; text-align: center;">
+            <h1 style="margin: 0;">🚨 Neue Schadensmeldung</h1>
+            <p style="margin: 10px 0 0 0;">ergo-stuebe.de · Schaden-Service</p>
+          </div>
+          <div style="padding: 20px; background-color: #f7f7f7;">
+            <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #E2001A; margin-top: 0;">Schadendetails</h3>
+              <p><strong>Schadensart:</strong> ${damageType}</p>
+              <p><strong>Name:</strong> ${customerName}</p>
+              <p><strong>E-Mail:</strong> <a href="mailto:${customerEmail}">${customerEmail}</a></p>
+              <p><strong>Telefon:</strong> ${customerPhone || '-'}</p>
+              <p><strong>Versicherungsnummer:</strong> ${insuranceNumber || '-'}</p>
+              <p><strong>Schadendatum:</strong> ${damageDate || '-'}</p>
+              <p><strong>Schadenort:</strong> ${damageLocation || '-'}</p>
+              <p><strong>Polizeilich gemeldet:</strong> ${policeReport || '-'}</p>
+              <p><strong>Geschätzter Schaden:</strong> ${estimatedDamage ? estimatedDamage + ' €' : '-'}</p>
+            </div>
+            <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0;">Beschreibung</h3>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${damageDescription}</pre>
+            </div>
+            ${extraFields ? `<div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0;">Zusätzliche Angaben</h3>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${extraFields}</pre>
+            </div>` : ''}
+            ${attachmentsCount ? `<div style="background-color: #fff3cd; padding: 10px 15px; border-radius: 8px; font-size: 14px;">📎 ${attachmentsCount} Datei(en) angehängt – bitte im Admin-Dashboard prüfen oder Kunden kontaktieren.</div>` : ''}
+          </div>
+          <div style="padding: 10px 20px; font-size: 12px; color: #666; text-align: center;">
+            Eingereicht am ${now} über ergo-stuebe.de
+          </div>
+        </div>
+      `;
+
+      if (process.env.RESEND_API_KEY) {
+        const attachments = (fileAttachments || []).map((f: { filename: string; content: string }) => ({
+          filename: f.filename,
+          content: Buffer.from(f.content, 'base64'),
+        }));
+
+        const { Resend } = await import('resend');
+        const resendClient = new Resend(process.env.RESEND_API_KEY);
+        const { data, error } = await resendClient.emails.send({
+          from: 'ERGO Schadensmeldung <ergo@anfrage.ergo-stuebe.de>',
+          to: 'morino.stuebe@ergo.de',
+          subject: `🚨 Schadensmeldung: ${damageType} – ${customerName} – ${now}`,
+          html: emailHtml,
+          attachments: attachments.length > 0 ? attachments : undefined,
+        });
+
+        if (error) {
+          console.error('Resend schaden email error:', JSON.stringify(error));
+          return res.json({ success: true, emailSent: false, emailError: error.message });
+        }
+        console.log('Schaden email sent successfully:', data?.id);
+        return res.json({ success: true, emailSent: true });
+      }
+
+      console.warn('No RESEND_API_KEY configured, skipping schaden email');
+      res.json({ success: true, emailSent: false });
+    } catch (error) {
+      console.error('Schaden submission error:', error);
+      res.status(500).json({ message: "Failed to submit damage report" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
