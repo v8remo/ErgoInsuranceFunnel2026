@@ -434,6 +434,121 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post("/api/kennzeichen/submit", async (req, res) => {
+    try {
+      const body = req.body;
+      const requestType = body.requestType;
+
+      if (!requestType || !body.vorname || !body.nachname || !body.email) {
+        return res.status(400).json({ message: "Pflichtfelder fehlen" });
+      }
+
+      if (requestType !== 'evb' && requestType !== 'kennzeichen') {
+        return res.status(400).json({ message: "Ungültiger Antragstyp" });
+      }
+
+      const vorname = String(body.vorname).trim().slice(0, 200);
+      const nachname = String(body.nachname).trim().slice(0, 200);
+      const email = String(body.email).trim().slice(0, 200);
+      const telefon = body.telefon ? String(body.telefon).trim().slice(0, 30) : '';
+      const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
+
+      const isEvb = requestType === 'evb';
+      const typeLabel = isEvb ? 'eVB-Nummer (Kfz)' : 'Versicherungskennzeichen';
+
+      const personalRows = [
+        `<p><strong>Name:</strong> ${vorname} ${nachname}</p>`,
+        body.geburtsdatum ? `<p><strong>Geburtsdatum:</strong> ${body.geburtsdatum}</p>` : '',
+        body.strasse ? `<p><strong>Adresse:</strong> ${body.strasse}, ${body.plz || ''} ${body.ort || ''}</p>` : '',
+        `<p><strong>E-Mail:</strong> <a href="mailto:${email}">${email}</a></p>`,
+        telefon ? `<p><strong>Telefon:</strong> <a href="tel:${telefon}">${telefon}</a></p>` : '',
+      ].filter(Boolean).join('');
+
+      const vehicleFields: string[] = [];
+      if (body.fahrzeugart) vehicleFields.push(`<p><strong>Fahrzeugart:</strong> ${body.fahrzeugart}</p>`);
+      if (body.fahrzeughersteller) vehicleFields.push(`<p><strong>Hersteller:</strong> ${body.fahrzeughersteller}</p>`);
+      if (body.fahrzeugmodell) vehicleFields.push(`<p><strong>Modell:</strong> ${body.fahrzeugmodell}</p>`);
+      if (body.fin) vehicleFields.push(`<p><strong>FIN:</strong> ${body.fin}</p>`);
+      if (body.erstzulassung) vehicleFields.push(`<p><strong>Erstzulassung:</strong> ${body.erstzulassung}</p>`);
+      if (body.jaehrlicheFahrleistung) vehicleFields.push(`<p><strong>Jährl. Fahrleistung:</strong> ${body.jaehrlicheFahrleistung}</p>`);
+      if (body.hauptfahrer) vehicleFields.push(`<p><strong>Hauptfahrer:</strong> ${body.hauptfahrer === 'selbst' ? 'Versicherungsnehmer selbst' : 'Andere Person'}</p>`);
+      if (body.hauptfahrerName) vehicleFields.push(`<p><strong>Hauptfahrer Name:</strong> ${body.hauptfahrerName}</p>`);
+      if (body.hauptfahrerGeburtsdatum) vehicleFields.push(`<p><strong>Hauptfahrer Geburtsdatum:</strong> ${body.hauptfahrerGeburtsdatum}</p>`);
+      if (body.bisherigVersicherer) vehicleFields.push(`<p><strong>Bisheriger Versicherer:</strong> ${body.bisherigVersicherer}</p>`);
+      if (body.bisherigSfKlasse) vehicleFields.push(`<p><strong>SF-Klasse:</strong> ${body.bisherigSfKlasse}</p>`);
+      if (body.hubraum) vehicleFields.push(`<p><strong>Hubraum:</strong> ${body.hubraum}</p>`);
+      if (body.hoechstgeschwindigkeit) vehicleFields.push(`<p><strong>Höchstgeschwindigkeit:</strong> ${body.hoechstgeschwindigkeit}</p>`);
+      if (body.bisherigVersichert === 'ja' && body.bisherigesKennzeichen) vehicleFields.push(`<p><strong>Bisheriges Kennzeichen:</strong> ${body.bisherigesKennzeichen}</p>`);
+
+      const insuranceFields: string[] = [];
+      if (body.versicherungsbeginn) insuranceFields.push(`<p><strong>Versicherungsbeginn:</strong> ${body.versicherungsbeginn}</p>`);
+      if (isEvb) {
+        const arten: string[] = ['Kfz-Haftpflicht'];
+        if (body.versicherungsartTeilkasko) arten.push('Teilkasko');
+        if (body.versicherungsartVollkasko) arten.push('Vollkasko');
+        if (body.versicherungsartSchutzbrief) arten.push('Schutzbrief');
+        insuranceFields.push(`<p><strong>Versicherungsart:</strong> ${arten.join(', ')}</p>`);
+      }
+      if (!isEvb && body.versicherungsumfang) {
+        const umfangLabel = body.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko';
+        insuranceFields.push(`<p><strong>Versicherungsumfang:</strong> ${umfangLabel}</p>`);
+      }
+      if (body.hinweise) insuranceFields.push(`<p><strong>Hinweise:</strong> ${body.hinweise}</p>`);
+
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background-color: #003781; color: white; padding: 20px; text-align: center;">
+            <h1 style="margin: 0;">${isEvb ? '🚗' : '🛵'} ${typeLabel}-Anfrage</h1>
+            <p style="margin: 10px 0 0 0;">ergo-stuebe.de · Kennzeichen-Service</p>
+          </div>
+          <div style="padding: 20px; background-color: #f7f7f7;">
+            <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0;">Persönliche Daten</h3>
+              ${personalRows}
+            </div>
+            <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0;">Fahrzeugdaten</h3>
+              ${vehicleFields.join('')}
+            </div>
+            ${insuranceFields.length > 0 ? `
+            <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0;">Versicherungsdetails</h3>
+              ${insuranceFields.join('')}
+            </div>` : ''}
+          </div>
+          <div style="padding: 10px 20px; font-size: 12px; color: #666; text-align: center;">
+            Eingereicht am ${now} über ergo-stuebe.de/kennzeichen
+          </div>
+        </div>
+      `;
+
+      if (process.env.RESEND_API_KEY) {
+        const { Resend } = await import('resend');
+        const resendClient = new Resend(process.env.RESEND_API_KEY);
+        const vehicleDesc = body.fahrzeughersteller ? `${body.fahrzeughersteller} ${body.fahrzeugmodell || ''}`.trim() : (body.fahrzeugart || '');
+        const { data, error } = await resendClient.emails.send({
+          from: 'ERGO Kennzeichen <onboarding@resend.dev>',
+          to: 'stuebe@shopgrow.de',
+          subject: `${isEvb ? '🚗 eVB-Anfrage' : '🛵 Versicherungskennzeichen'}: ${vorname} ${nachname} – ${vehicleDesc} – ${now}`,
+          html: emailHtml,
+        });
+
+        if (error) {
+          console.error('Resend kennzeichen email error:', JSON.stringify(error));
+          return res.json({ success: true, emailSent: false, emailError: error.message });
+        }
+        console.log('Kennzeichen email sent successfully:', data?.id);
+        return res.json({ success: true, emailSent: true });
+      }
+
+      console.warn('No RESEND_API_KEY configured, skipping kennzeichen email');
+      res.json({ success: true, emailSent: false });
+    } catch (error) {
+      console.error('Kennzeichen submission error:', error);
+      res.status(500).json({ message: "Fehler beim Einreichen der Anfrage" });
+    }
+  });
+
   app.post("/api/documents/upload", async (req, res) => {
     try {
       let { vorname, nachname, email, telefon, versicherungsnummer, schadennummer, beschreibung, fileAttachments } = req.body;

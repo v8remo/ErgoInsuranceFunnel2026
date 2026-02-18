@@ -1,0 +1,247 @@
+Add a new subpage /kennzeichen (kennzeichen.html) to the existing 
+ergo-stuebe.de Replit project. Use the SAME EmailJS configuration 
+already present in the project. Same design: #003781 blue, #E2001A red, 
+Inter font, mobile-first.
+
+Add links in index.html:
+- Hero section: new button "🏍️ EVB & Kennzeichen anfordern" (blue outlined)
+- Footer: text link "EVB & Versicherungskennzeichen"
+
+---
+
+## PAGE: kennzeichen.html
+
+Header: same branding as other subpages (ERGO + Agentur Stübe)
+Progress: "Schritt X von 3"
+
+---
+
+## STEP 1 – Was wird benötigt?
+
+Headline: "🚗 Was benötigen Sie?"
+Subtext: "Morino Stübe stellt Ihnen die Unterlagen schnell und unkompliziert aus."
+
+2 large clickable cards:
+
+┌──────────────────────────────────────────┐
+│ 🚗  eVB-Nummer (Kfz)                     │
+│     Elektronische Versicherungsbestätig- │
+│     ung für die Kfz-Zulassungsstelle     │
+│     (Auto, Motorrad ab 50ccm)            │
+│                                          │
+│     ✓ Für An- und Ummeldung              │
+│     ✓ 7-stelliger Code für Behörde       │
+│     ✓ Sofort nach Antragsstellung        │
+└──────────────────────────────────────────┘
+
+┌──────────────────────────────────────────┐
+│ 🛵  Versicherungskennzeichen             │
+│     Für Roller, Moped, Mofa,             │
+│     E-Scooter & Kleinkrafträder          │
+│     bis 50ccm                            │
+│                                          │
+│     ✓ Kein Gang zur Zulassungsstelle     │
+│     ✓ Kennzeichen direkt vom Berater     │
+│     ✓ Gültig bis 28.02.2027             │
+└──────────────────────────────────────────┘
+
+Card style: white, border 2px solid #e0e0e0, rounded 12px,
+hover → border-color: #E2001A.
+Click → store type → go to Step 2.
+
+Info box below cards (light blue bg, ℹ️ icon):
+"Das aktuelle Versicherungskennzeichen 2026/2027 ist SCHWARZ.
+ Es gilt vom 01.03.2026 bis 28.02.2027."
+
+URL param: ?type=evb → auto-select eVB, ?type=kennzeichen → auto-select Kennzeichen
+
+---
+
+## STEP 2A – Formular: eVB-Nummer (Kfz)
+
+Headline: "🚗 eVB-Nummer anfordern"
+Info box (yellow, ⚠️): 
+"Bitte beachten: Die eVB-Nummer kann nur im Zusammenhang mit dem 
+Abschluss einer Kfz-Versicherung ausgestellt werden. 
+Morino Stübe meldet sich nach Eingang Ihrer Anfrage umgehend bei Ihnen."
+
+PERSÖNLICHE DATEN:
+- Vorname* + Nachname* (text)
+- Geburtsdatum* (date)
+- Straße + Hausnummer* (text)
+- PLZ* (5 Ziffern) + Ort* (text)
+- E-Mail* (email)
+- Telefon* (tel)
+
+FAHRZEUGDATEN:
+Section heading: "🚗 Fahrzeugdaten"
+- Fahrzeugart* (select):
+  PKW | Motorrad (ab 50ccm) | LKW | Sonstiges
+- Fahrzeughersteller* (text, placeholder: "z.B. VW, BMW, Mercedes...")
+- Fahrzeugmodell* (text, placeholder: "z.B. Golf, 3er, A-Klasse...")
+- Erstzulassung (date, optional)
+- Fahrzeug-Identifikationsnummer / FIN (text, optional, 
+  placeholder: "17-stellige FIN aus Fahrzeugschein")
+- Bisheriger Versicherer (text, optional, 
+  placeholder: "Falls Wechsel: aktueller Versicherer")
+- Bisherige Schadensfreiheitsklasse / SF-Klasse (text, optional,
+  placeholder: "z.B. SF 12")
+- Jährliche Fahrleistung* (select):
+  bis 5.000 km | 5.000–10.000 km | 10.000–15.000 km | 
+  15.000–20.000 km | über 20.000 km
+- Hauptfahrer* (radio): Versicherungsnehmer selbst | Andere Person
+  If "Andere Person": Name + Geburtsdatum des Hauptfahrers
+- Gewünschter Versicherungsbeginn* (date, min: today)
+- Gewünschte Versicherungsart* (checkboxes):
+  ☑ Kfz-Haftpflicht (Pflicht, pre-checked, disabled)
+  ☐ Teilkasko
+  ☐ Vollkasko
+  ☐ Schutzbrief
+- Hinweise / Besonderheiten (textarea, optional)
+
+"Weiter →" button (red, full-width)
+
+---
+
+## STEP 2B – Formular: Versicherungskennzeichen (Roller/Moped)
+
+Headline: "🛵 Versicherungskennzeichen anfordern"
+
+Info box (green, ✅):
+"Das Versicherungskennzeichen erhalten Sie direkt bei Morino Stübe – 
+kein Gang zur Zulassungsstelle nötig! Alles was Sie brauchen ist die 
+Allgemeine Betriebserlaubnis (ABE) Ihres Fahrzeugs."
+
+PERSÖNLICHE DATEN:
+- Vorname* + Nachname* (text)
+- Geburtsdatum* (date)
+- Straße + Hausnummer* (text)
+- PLZ* + Ort* (text)
+- E-Mail* (email)
+- Telefon* (tel)
+
+FAHRZEUGDATEN (aus ABE):
+Section heading: "🛵 Fahrzeugdaten (aus der ABE / Betriebserlaubnis)"
+Small hint: "ℹ️ Alle folgenden Angaben finden Sie in der Allgemeinen 
+Betriebserlaubnis (ABE) Ihres Fahrzeugs."
+
+- Fahrzeugart* (select):
+  Roller (bis 45 km/h) | Moped (bis 45 km/h) | Mofa (bis 25 km/h) | 
+  Mokick (bis 45 km/h) | E-Scooter | S-Pedelec (bis 45 km/h) | 
+  Quad/Trike (bis 45 km/h) | Sonstiges Kleinkraftrad
+- Fahrzeughersteller* (text, placeholder: "z.B. Piaggio, Yamaha, Honda...")
+- Fahrzeugmodell* (text, placeholder: "z.B. Vespa GTS, PCX 125...")
+- Fahrzeug-Identifikationsnummer / FIN* (text, 
+  placeholder: "Fahrgestellnummer aus der ABE")
+- Hubraum (select, optional): 
+  bis 25ccm | bis 50ccm | bis 125ccm (mit Führerschein A1)
+- Höchstgeschwindigkeit* (select):
+  bis 25 km/h | bis 45 km/h | bis 60 km/h
+- Erstzulassung / Baujahr (text, optional)
+
+VERSICHERUNGSDETAILS:
+- Versicherungsbeginn* (date, min: today, 
+  note: "Das Versicherungsjahr läuft bis 28.02.2027")
+- Bisherige Versicherung vorhanden? (radio): Ja | Nein (Neuanmeldung)
+  If Ja: Bisheriger Versicherer + bisheriges Kennzeichen (text)
+- Versicherungsumfang* (radio):
+  🔵 Nur Haftpflicht (gesetzlich vorgeschrieben)
+  🟢 Haftpflicht + Teilkasko (empfohlen, inkl. Diebstahlschutz)
+- Hinweise (textarea, optional)
+
+"Weiter →" button (red, full-width)
+
+---
+
+## STEP 3 – Zusammenfassung & Absenden
+
+Show clean summary of all entered data:
+- Art der Anfrage (eVB oder Versicherungskennzeichen)
+- Persönliche Daten
+- Fahrzeugdaten
+- Gewünschter Versicherungsbeginn
+
+"Bitte prüfen Sie Ihre Angaben vor dem Absenden."
+
+Checkbox (required): 
+"Ich bestätige, dass alle Angaben korrekt und vollständig sind."
+Checkbox (required):
+"Ich bin einverstanden, dass meine Daten zur Bearbeitung meiner 
+Anfrage verwendet werden. (Datenschutz nach DSGVO)"
+
+Submit button (red, full-width, large):
+For eVB: "🚗 eVB-Nummer anfordern"
+For Kennzeichen: "🛵 Versicherungskennzeichen anfordern"
+
+Loading state: spinner + "Anfrage wird gesendet..."
+
+---
+
+## EMAIL (EmailJS – same config as existing project)
+
+For eVB:
+Subject: "🚗 eVB-Anfrage: [Vorname Nachname] – [Fahrzeughersteller Modell] – [Datum]"
+
+For Kennzeichen:
+Subject: "🛵 Versicherungskennzeichen: [Vorname Nachname] – [Fahrzeugart] – [Datum]"
+
+Template variables:
+{
+  request_type: "eVB-Nummer" oder "Versicherungskennzeichen",
+  customer_name: "...",
+  customer_birthday: "...",
+  customer_address: "Straße, PLZ Ort",
+  customer_email: "...",
+  customer_phone: "...",
+  vehicle_type: "...",
+  vehicle_brand: "...",
+  vehicle_model: "...",
+  vehicle_fin: "...",
+  insurance_start: "...",
+  insurance_type: "Haftpflicht + Teilkasko" etc.,
+  extra_fields: "[alle weiteren Felder als formatierter Text]",
+  submitted_at: "DD.MM.YYYY HH:MM",
+  source: "ergo-stuebe.de/kennzeichen"
+}
+
+---
+
+## STEP 4 – Bestätigung
+
+Green animated checkmark (CSS only).
+
+For eVB:
+- Headline: "✅ eVB-Anfrage eingegangen!"
+- Text: "Morino Stübe meldet sich schnellstmöglich bei Ihnen, 
+  um die eVB-Nummer auszustellen. In der Regel noch am selben Werktag."
+- Info box (blue): 
+  "💡 Tipp: Die eVB-Nummer ist 6 Monate gültig. 
+   Sie können Ihr Fahrzeug in dieser Zeit bei der Zulassungsstelle anmelden."
+
+For Kennzeichen:
+- Headline: "✅ Anfrage für Versicherungskennzeichen eingegangen!"
+- Text: "Morino Stübe meldet sich bei Ihnen zur Abwicklung. 
+  Das Kennzeichen (SCHWARZ, gültig bis 28.02.2027) erhalten 
+  Sie direkt von Ihrem ERGO Berater."
+- Info box (green):
+  "✅ Das aktuelle Versicherungskennzeichen 2026/2027 ist SCHWARZ."
+
+Both types show:
+- Summary: Art der Anfrage, Name, Fahrzeug, eingereicht am
+- Button 1 (green): "💬 WhatsApp schreiben" 
+  → https://wa.me/4915566771019?text=Hallo%20Morino%2C%20ich%20habe%20gerade%20eine%20Anfrage%20über%20ergo-stuebe.de%20gesendet.
+- Button 2 (outline): "← Zurück zur Startseite" → /
+- Small text: "Bei Fragen: 015566771019"
+
+---
+
+## FILES TO CREATE/MODIFY:
+1. CREATE: kennzeichen.html
+2. CREATE: kennzeichen.css
+3. CREATE: kennzeichen.js
+4. MODIFY: index.html (add buttons/links as described)
+DO NOT touch any other existing files.
+
+## DIREKTLINKS für WhatsApp (als Kommentar im Code):
+// eVB-Nummer:           https://ergo-stuebe.de/kennzeichen?type=evb
+// Versicherungskennz.:  https://ergo-stuebe.de/kennzeichen?type=kennzeichen

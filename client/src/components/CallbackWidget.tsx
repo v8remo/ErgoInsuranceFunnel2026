@@ -37,7 +37,7 @@ export default function CallbackWidget() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
-  const hidden = location === '/dokumente' || location === '/schaden';
+  const hidden = location === '/dokumente' || location === '/schaden' || location === '/kennzeichen';
   const isHome = location === '/';
 
   useEffect(() => {

@@ -11,6 +11,7 @@ import Impressum from "@/pages/Impressum";
 import Datenschutz from "@/pages/Datenschutz";
 import DokumentePage from "@/pages/DokumentePage";
 import SchadenPage from "@/pages/SchadenPage";
+import KennzeichenPage from "@/pages/KennzeichenPage";
 import NotFound from "@/pages/not-found";
 import CallbackWidget from "@/components/CallbackWidget";
 
@@ -26,6 +27,7 @@ function AppContent() {
       <Route path="/impressum" component={Impressum} />
       <Route path="/datenschutz" component={Datenschutz} />
       <Route path="/schaden" component={SchadenPage} />
+      <Route path="/kennzeichen" component={KennzeichenPage} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -74,6 +74,13 @@ export default function ProfessionalErgoLanding() {
               Schaden melden
             </Link>
           </div>
+
+          <Link
+            href="/kennzeichen"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#003781] text-[#003781] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-transform text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:gap-2 md:text-base md:px-6 md:py-4"
+          >
+            EVB & Kennzeichen anfordern
+          </Link>
         </div>
       </section>
 
@@ -194,6 +201,7 @@ export default function ProfessionalErgoLanding() {
             <Link href="/datenschutz" className="hover:text-gray-600">Datenschutz</Link>
             <Link href="/dokumente" className="hover:text-gray-600">Dokumente einreichen</Link>
             <Link href="/schaden" className="hover:text-gray-600">Schaden melden</Link>
+            <Link href="/kennzeichen" className="hover:text-gray-600">EVB & Kennzeichen</Link>
           </div>
           <span>© {new Date().getFullYear()} ERGO Agentur Stübe</span>
         </div>
