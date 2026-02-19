@@ -1,6 +1,5 @@
 import SEO from "@/components/SEO";
-import Breadcrumb from "@/components/Breadcrumb";
-import { Calendar, Clock, MapPin, Phone, CheckCircle } from "lucide-react";
+import { Calendar, Clock, MapPin, Phone, CheckCircle, Star } from "lucide-react";
 
 const BOOKING_URL = "https://outlook.office.com/bookwithme/user/6e73ed32cc5043c488ee4cbd522ec4b5%40ergo.de?anonymous&ismsaljsauthenabled=true";
 
@@ -13,108 +12,83 @@ export default function TerminPage() {
         locality="Ganderkesee"
       />
 
-      <section className="bg-gradient-to-br from-ergo-red to-red-700 text-white py-10 sm:py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Breadcrumb
-            items={[
-              { label: "Startseite", href: "/" },
-              { label: "Termin buchen" },
-            ]}
-          />
-          <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-2 mb-4">
-              <Calendar className="w-5 h-5" />
-              <span className="text-sm font-medium">Online-Terminbuchung</span>
+      <div className="bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 sm:pt-8 sm:pb-6">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="inline-flex items-center gap-1.5 bg-ergo-red/10 text-ergo-red text-xs font-semibold px-3 py-1 rounded-full">
+                  <Calendar className="w-3.5 h-3.5" />
+                  Online-Terminbuchung
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+                Beratungstermin buchen
+              </h1>
+              <p className="text-gray-600 text-base sm:text-lg max-w-xl">
+                Wählen Sie bequem Ihren Wunschtermin – kostenlos und unverbindlich.
+              </p>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-              Persönlichen Beratungstermin buchen
-            </h1>
-            <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
-              Wählen Sie bequem Ihren Wunschtermin – kostenlos und unverbindlich.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-6 sm:py-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div className="flex items-center gap-3 bg-white rounded-lg p-4 shadow-sm">
-              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                <CheckCircle className="w-5 h-5 text-green-600" />
+            <div className="flex flex-row lg:flex-col gap-3 lg:gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 text-sm text-gray-700">
+                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                <span>Kostenlos & unverbindlich</span>
               </div>
-              <div>
-                <p className="font-semibold text-gray-900">Kostenlos</p>
-                <p className="text-sm text-gray-600">Keine Kosten, keine Verpflichtungen</p>
+              <div className="flex items-center gap-2 text-sm text-gray-700">
+                <Clock className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                <span>Mo–Fr 9–18, Sa 9–12</span>
               </div>
-            </div>
-            <div className="flex items-center gap-3 bg-white rounded-lg p-4 shadow-sm">
-              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                <Clock className="w-5 h-5 text-blue-600" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900">Flexible Zeiten</p>
-                <p className="text-sm text-gray-600">Mo–Fr 9–18 Uhr, Sa 9–12 Uhr</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 bg-white rounded-lg p-4 shadow-sm">
-              <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-                <MapPin className="w-5 h-5 text-ergo-red" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900">Vor Ort oder Online</p>
-                <p className="text-sm text-gray-600">Ganderkesee oder per Videocall</p>
+              <div className="flex items-center gap-2 text-sm text-gray-700">
+                <MapPin className="w-4 h-4 text-ergo-red flex-shrink-0" />
+                <span>Vor Ort oder Video</span>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      <section className="py-4 sm:py-6">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
-            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-ergo-red" />
-                Wählen Sie Ihren Wunschtermin
-              </h2>
-            </div>
-            <div className="w-full" style={{ minHeight: '600px' }}>
-              <iframe
-                src={BOOKING_URL}
-                title="Termin buchen bei ERGO Agentur Stübe"
-                className="w-full border-0"
-                style={{ height: '700px', minHeight: '600px' }}
-                allow="geolocation; microphone; camera"
-                loading="lazy"
-              />
-            </div>
+        <div className="border-t border-gray-100" />
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+            <iframe
+              src={BOOKING_URL}
+              title="Termin buchen bei ERGO Agentur Stübe"
+              className="w-full border-0"
+              style={{ height: '680px' }}
+              allow="geolocation; microphone; camera"
+              loading="lazy"
+            />
           </div>
 
-          <div className="mt-8 text-center">
-            <p className="text-gray-600 mb-4">
-              Alternativ erreichen Sie uns auch direkt:
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="tel:015566771019"
-                className="inline-flex items-center gap-2 bg-ergo-red text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors"
-              >
-                <Phone className="w-5 h-5" />
-                Jetzt anrufen
-              </a>
-              <a
-                href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20m%C3%B6chte%20gerne%20einen%20Beratungstermin%20vereinbaren."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
-              >
-                💬 WhatsApp schreiben
-              </a>
-            </div>
+          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <span className="text-sm text-gray-500">Oder direkt Kontakt:</span>
+            <a
+              href="tel:015566771019"
+              className="inline-flex items-center gap-2 border-2 border-ergo-red text-ergo-red px-5 py-2.5 rounded-lg font-medium hover:bg-ergo-red hover:text-white transition-colors text-sm"
+            >
+              <Phone className="w-4 h-4" />
+              Anrufen
+            </a>
+            <a
+              href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20m%C3%B6chte%20gerne%20einen%20Beratungstermin%20vereinbaren."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border-2 border-green-600 text-green-700 px-5 py-2.5 rounded-lg font-medium hover:bg-green-600 hover:text-white transition-colors text-sm"
+            >
+              💬 WhatsApp
+            </a>
+          </div>
+
+          <div className="mt-8 mb-2 flex items-center justify-center gap-1.5 text-sm text-gray-400">
+            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+            <span className="ml-1">4,9 / 5 – Kundenbewertung</span>
           </div>
         </div>
-      </section>
+      </div>
     </>
   );
 }
