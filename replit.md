@@ -86,7 +86,7 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
 - 2025-01-17: Morino Stübe's Bild für Vertrauensaufbau integriert
 - 2025-01-17: Alle Texte auf "ERGO Ganderkesee" als selbständige Agentur angepasst
 - 2025-01-17: E-Mail-Benachrichtigungen mit Resend API implementiert
-- 2025-01-17: Automatische Lead-Benachrichtigung an stuebe@shopgrow.de
+- 2025-01-17: Automatische Lead-Benachrichtigung an morino.stuebe@ergo.de
 - 2025-01-17: Vollständige mobile Optimierung aller Seiten und Überschriften
 - 2025-01-17: CSS-Regeln für automatische Wortumbrüche bei langen Wörtern hinzugefügt
 - 2025-01-17: Responsive Schriftgrößen für alle Bildschirmgrößen implementiert
@@ -203,7 +203,7 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Vereinfachter 2-Schritt-Flow (Formular → Erfolg, ohne Unterschrift)
   - Datei-Upload (Fotos + PDFs, max 5 Dateien, je max 10 MB)
   - Versicherungsnummer (Pflicht) und Schadennummer (optional)
-  - E-Mail-Versand mit Anhängen über Resend an stuebe@shopgrow.de
+  - E-Mail-Versand mit Anhängen über Resend an morino.stuebe@ergo.de
   - Backend-Endpoint: /api/documents/upload
 - 2026-02-18: Local SEO-Optimierung implementiert:
   - SEO-Komponente professionalisiert: Emoji-Spam entfernt, locality-Prop, mehrere JSON-LD Schemas
