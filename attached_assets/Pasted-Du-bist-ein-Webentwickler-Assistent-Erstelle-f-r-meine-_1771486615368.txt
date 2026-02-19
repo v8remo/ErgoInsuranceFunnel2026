@@ -1,0 +1,245 @@
+Du bist ein Webentwickler-Assistent. Erstelle für meine Versicherungsberater-Website die Sparte "Leben & Vorsorge" mit allen folgenden ERGO-Produkten. Verwende ein modernes, responsives Design mit den ERGO-Markenfarben (Orange #EE7203, Dunkelgrau #333333, Weiß #FFFFFF). Jedes Produkt soll als eigene Sektion/Karte dargestellt werden mit: Produktname, Kurzbeschreibung, Kernleistungen, Vorteile, Zielgruppe und einem Call-to-Action-Button "Jetzt beraten lassen" der auf ein Kontaktformular oder WhatsApp-Link verweist.
+Hier sind die vollständigen Produktdaten:
+
+PRODUKT 1: ERGO Private Rentenversicherung
+Produktfamilien-Übersicht
+ERGO bietet 3 Produktfamilien für die private Altersvorsorge:
+1.1 ERGO Rente Chance (Fondsgebundene Rentenversicherung)
+
+Typ: Fondsgebundene Rentenversicherung (Schicht 3)
+Anlageform: 100% Fondsanlage
+Fondsauswahl: 92 Fonds, davon 33 ETFs, bis zu 20 gleichzeitig besparen
+Fondswechsel: Unbegrenzt kostenfrei
+Beitragsgarantie: Keine – dafür maximale Renditechancen
+Mindestbeitrag: Ab 25 €/Monat oder Einmalbeitrag ab 2.500 €
+Ablaufmanagement: Automatischer Schutz vor Kurseinbrüchen vor Rentenbeginn
+Rating: FFF+ Bestnote (Franke & Bornberg)
+Zielgruppe: Renditeorientierte Kunden, junge Sparer, ETF-Fans
+Besonderheit: Rente Chance Select ab 250 €/Monat mit erweiterten Features
+
+1.2 ERGO Rente Balance (Hybridprodukt)
+
+Typ: Kombination Fonds + Sicherungsvermögen (Schicht 3)
+Anlageform: Aufteilung frei wählbar (z.B. 70% Fonds / 30% klassisch), jederzeit änderbar
+Fondsauswahl: Gleich wie Rente Chance (92 Fonds, 33 ETFs)
+Indexbeteiligung: Für den klassischen Anteil wählbar (MSCI World EUR oder Munich Re World Wide Trend Index)
+Beitragsgarantie: Ja, für den klassischen Anteil (100%)
+Mindestbeitrag: Ab 25 €/Monat
+Rating: FFF+ Bestnote (Franke & Bornberg)
+Zielgruppe: Flexible Kunden die Sicherheit UND Rendite wollen, Unentschlossene
+Besonderheit: Einziger Tarif am Markt der Index + Fonds + Sicherheit in einem Vertrag vereint
+
+1.3 ERGO Rente Index (Indexpolice)
+
+Typ: Indexgebundene Rentenversicherung (Schicht 3)
+Anlageform: 100% Sicherungsvermögen der ERGO Vorsorge
+Indexbeteiligung: Jährliche Überschüsse fließen in Indexbeteiligung
+Verfügbare Indizes: MSCI World (EUR) oder Munich Re World Wide Trend Index, kombinierbar
+Beitragsgarantie: 100% zum Beginn der Verfügungsphase
+Verlustrisiko: Keines – im schlechtesten Fall 0% Indexrendite, aber kein Minus
+Mindestbeitrag: Ab 25 €/Monat
+Zielgruppe: Sicherheitsbewusste Kunden die kein Risiko eingehen wollen
+
+Gemeinsame Features aller 3 Produktfamilien:
+
+Beiträge flexibel: Erhöhen, senken, pausieren – jederzeit möglich
+Geld entnehmen: Bis zu 2x jährlich, ab 500 €, ohne Stornoabzug (mind. 2.500 € müssen im Vertrag bleiben)
+Zuzahlungen: Jederzeit möglich (Bonus, Weihnachtsgeld etc.)
+Rentenbeginn flexibel: Ab 62 bis über 70 Jahre
+Kapitalwahlrecht: Monatliche Rente ODER Einmalauszahlung ODER Kombination
+Naturaloption: Bei Chance/Balance – Fondsanteile ins eigene Depot übertragen statt auszahlen
+Zusatzversicherungen möglich: BU, EU, Hinterbliebenenrente, Hinterbliebenen-Kapital, Rentengarantiezeit
+
+Steuervorteile (Schicht 3):
+
+Fondswechsel während Laufzeit: Steuerfrei (im ETF-Depot: 25% Abgeltungssteuer)
+Monatliche Rente: Nur Ertragsanteil besteuert (ca. 17-22% je nach Alter bei Rentenbeginn)
+Kapitalauszahlung (ab 62 Jahre, mind. 12 J. Laufzeit): Nur 50% der Erträge steuerpflichtig
+Ertragsanteil-Tabelle: 60 J. = 22%, 63 J. = 20%, 65 J. = 18%, 67 J. = 17%
+
+
+PRODUKT 2: ERGO Zukunfts-Rente Chance
+
+Typ: Fondsgebundene Rentenversicherung (Schicht 3)
+Anlageform: Reine Fondsanlage mit modernem Rentenkonzept
+Fondsauswahl: Bis zu 20 Fonds gleichzeitig besparen
+Fondswechsel: Bis zu 12x pro Jahr kostenfrei
+Mindestbeitrag: Ab 25 €/Monat oder Einmalbeitrag ab 2.500 €
+Starteroption: Verfügbar für flexiblen Einstieg
+Sonderzahlungen: Möglich
+Zielgruppe: Junge, zukunftsorientierte Kunden
+Besonderheit: ESG-orientierte Anlageoptionen verfügbar, maximale Flexibilität
+
+
+PRODUKT 3: ERGO Basis-Rente (Rürup-Rente)
+
+Typ: Staatlich geförderte Basisversorgung (Schicht 1)
+Varianten: Basis-Rente Index, Basis-Rente Balance, Basis-Rente Chance
+Mindestbeitrag: Ab 25 €/Monat
+Steuervorteile: Beiträge zu 100% als Sonderausgaben absetzbar
+Höchstbeitrag 2026: 30.826 € (Alleinstehende) / 61.652 € (Verheiratete)
+Rentenbeginn: Ab Vollendung des 62. Lebensjahres
+Rentenzahlung: Lebenslang garantiert
+Beitragsgarantie: Bei Index-Variante 100% ab 12 Jahre Laufzeit
+Indexbeteiligung: MSCI World (EUR) oder Munich Re World Wide Trend Index
+Zuzahlungen: Flexibel möglich (ideal für Steueroptimierung am Jahresende)
+Beitragspausen: Möglich
+Zielgruppe: Selbstständige, Freiberufler, Gutverdiener
+DANV-Sondertarif: Für Anwälte, Notare, Steuerberater, Wirtschaftsprüfer
+Wichtig: Nicht kündbar, nicht beleihbar, nicht vererbbar (Kapital). Hinterbliebenenschutz als Zusatzbaustein möglich.
+Besteuerung der Rente: Bis 2040 nur teilweise steuerpflichtig (steuerfreier Anteil wird bei Rentenbeginn festgeschrieben). Ab 2040 voll steuerpflichtig.
+
+
+PRODUKT 4: ERGO Betriebliche Altersvorsorge (bAV)
+
+Typ: Betriebliche Altersvorsorge über Direktversicherung (Schicht 2)
+Funktionsprinzip: Arbeitgeber schließt Rentenversicherung für Arbeitnehmer ab, meist per Entgeltumwandlung
+Arbeitgeberzuschuss: Seit 2019 verpflichtend mind. 15% des umgewandelten Beitrags
+Steuervorteile: Beiträge aus dem Bruttoeinkommen – spart Steuern und Sozialabgaben
+Produkte: ERGO Betriebs-Rente Index, ERGO Betriebs-Rente Balance, ERGO Betriebs-Rente Chance
+Beitragsgarantie: Je nach gewähltem Produkt (Index = 100%)
+Portabilität: Vertrag kann bei Arbeitgeberwechsel mitgenommen werden
+Zielgruppe: Alle Angestellten – besonders attraktiv wegen AG-Zuschuss und Steuerersparnis
+Besonderheit: BU-Zusatzbaustein integrierbar
+
+
+PRODUKT 5: ERGO Risikolebensversicherung
+
+Typ: Reine Todesfallabsicherung
+Leistung: Auszahlung der vereinbarten Versicherungssumme im Todesfall an Begünstigte
+Empfohlene Summe: 3-5x Bruttojahreseinkommen
+Dread-Disease-Baustein: Bei Diagnose Krebs, Herzinfarkt oder Schlaganfall sofort 10% der Versicherungssumme (max. 30.000 €), bis zu 2x pro Vertrag nutzbar
+Nachversicherungsgarantie: Versicherungssumme bei wichtigen Lebensereignissen erhöhen – ohne neue Gesundheitsprüfung (z.B. Heirat, Geburt, Immobilienkauf)
+Verlaufsformen: Konstant, fallend (ideal für Kreditabsicherung), flexibel anpassbar
+Kreditabsicherung: Summe passt sich sinkendem Kreditbetrag an – spart Beiträge
+Steuer: Beiträge als Sonderausgaben absetzbar. Auszahlung im Todesfall einkommensteuerfrei.
+Gesundheitsfragen: Ja, erforderlich
+Zielgruppe: Familien, Paare, Immobilienbesitzer, Kreditnehmer, Alleinverdiener
+Beitrag: Günstig, besonders bei jungem Einstiegsalter
+
+
+PRODUKT 6: ERGO Berufsunfähigkeitsversicherung (BU)
+
+Typ: Absicherung der Arbeitskraft bei Berufsunfähigkeit
+Leistung: Monatliche BU-Rente wenn der eigene Beruf mindestens 6 Monate nicht ausgeübt werden kann
+Leistungsbeginn: Bereits bei ärztlicher Prognose von 6 Monaten BU – rückwirkende Zahlung falls später festgestellt
+Verzicht auf abstrakte Verweisung: ERGO verweist nicht auf andere Berufe
+Tarifvarianten:
+
+BU Komfort: Sinnvolle Leistungen zum attraktiven Preis-Leistungs-Verhältnis
+BU Premium: Zusätzliche Services wie medizinische Zweitmeinung (Best Doctors), zubuchbare Zusatzpakete
+
+
+Sondertarife:
+
+DANV-Tarif: Für Anwälte, Notare, Wirtschaftsprüfer, Steuerberater, Wirtschaftswissenschaftler
+ver.di-Tarif: Für ver.di-Mitglieder
+
+
+Gesundheitsfragen: Ja, erforderlich (hält Tarif für alle bezahlbar)
+Versicherbare Personen: Schüler, Azubis, Studenten, Angestellte, Selbstständige, Beamte, Hausfrauen/-männer – egal welcher Beruf, Teil- oder Vollzeit
+Wichtiger Hintergrund: Gesetzliche Erwerbsminderungsrente nur ca. 30% des Bruttoeinkommens und nur wenn man weniger als 3 Std./Tag in IRGENDEINEM Beruf arbeiten kann
+Zielgruppe: Alle Berufstätigen – je jünger, desto günstiger und einfacher Gesundheitsprüfung
+Als Zusatzbaustein: Kann auch an ERGO Rentenversicherung gekoppelt werden (günstiger als eigenständige BU)
+
+
+PRODUKT 7: ERGO Body Protect (Grundfähigkeitsversicherung)
+
+Typ: Absicherung bei Verlust von Grundfähigkeiten (Alternative zur BU)
+Leistung: Vereinbarte monatliche Rente bereits bei Verlust EINER Grundfähigkeit durch Unfall oder Krankheit
+Tarifvarianten:
+
+Grundschutz (Basis): Sehen, Sprechen, Hören, Sitzen, Gehen, Stehen, Gebrauch von Arm und Hand, Autofahren, Pflegebedürftigkeit
+Komfort: Zusätzlich Knien, Bücken, Tragen, Gleichgewicht, Feinmotorik, Tippen, Handynutzung
+Premium: Fast alle körperlichen + viele geistige Fähigkeiten (eigenverantwortliches Handeln, Gedächtnis), inkl. Best Doctors Service
+
+
+Zusatzbausteine:
+
+Sport Plus: Koordination, räumliches Sehen, Beweglichkeit Rumpf/Kopf/Gelenke, Herz-/Lungenfunktion (einzigartig am Markt)
+Psyche Plus: Depression, Schizophrenie, Belastungsstörungen – wenn weniger als 3 Std./Tag erwerbsfähig
+Pflege Plus: Lebenslange Pflege-Rente, Verdopplung der vereinbarten Rente bei Pflegebedürftigkeit
+
+
+Versicherbare Personen: Erwachsene bis 62 Jahre, Kinder ab 6 Jahren
+Gesundheitsfragen: Deutlich weniger als bei BU
+Flexibilität: Beiträge und Leistungen erhöhen, reduzieren, pausieren oder Versicherungsdauer verlängern
+Sofortauszahlung: Im Leistungsfall auf Wunsch erste 12 Monatsrenten als Einmalzahlung (z.B. für Umbauten)
+Rating: 5 Sterne (Komfort und Premium)
+Zielgruppe: Handwerker, Pflege-/Rettungskräfte, Gastronomie, körperlich Tätige, Selbstständige, alle bei denen BU zu teuer oder Gesundheitsprüfung schwierig
+Besonderheit: Günstiger als BU, weniger Gesundheitsfragen, berufsunabhängig
+
+
+PRODUKT 8: ERGO Sterbegeldversicherung
+
+Typ: Todesfallvorsorge zur Entlastung der Hinterbliebenen
+Leistung: Auszahlung einer festen Summe im Todesfall für Bestattungskosten und weitere Ausgaben
+Versicherungssumme: Bis 15.000 € (Standard) / bis 20.000 € (Premium-Tarif)
+Unfalltod: Doppelte Versicherungssumme
+Gesundheitsfragen: Keine (Abschluss ohne Gesundheitsprüfung möglich)
+Wartezeit: Ca. 12 Monate (bei Unfalltod: sofortige Leistung)
+Bestattungsvorsorgevertrag: Partnerunternehmen ANTERNIA – ca. 20% günstiger als lokales Bestattungsunternehmen
+Zweckbindung: Nicht zweckgebunden – Hinterbliebene können frei über das Geld verfügen. Bei Einsetzung eines Bestattungsinstituts als Bezugsberechtigter: Schutz vor Sozialamtszugriff
+Überschuss: Falls Todesfallsumme > Bestattungskosten → Rest wird an Erben ausgezahlt
+Auszahlung: Schnell, oft innerhalb weniger Tage nach Sterbeurkunde
+Zielgruppe: Ältere Kunden, Familien die Angehörige entlasten wollen, Personen die eigene Bestattung regeln möchten
+Wichtig: Gesetzliches Sterbegeld wurde 2004 abgeschafft – private Vorsorge umso wichtiger
+
+
+DESIGN-ANWEISUNGEN
+Farbschema:
+
+Primärfarbe: #EE7203 (ERGO Orange)
+Sekundärfarbe: #333333 (Dunkelgrau)
+Hintergrund: #F8F8F8 (Hellgrau)
+Akzente: #2E7D32 (Grün für Sicherheit), #1B4F8A (Blau für Vertrauen)
+Text: #333333 auf weißem Hintergrund
+
+Struktur:
+
+Hero-Bereich: Überschrift "Leben & Vorsorge – Ihre Zukunft. Gut abgesichert." mit Unterüberschrift und CTA-Button
+Produktübersicht: Karten-Grid (2-3 Spalten) mit allen 8 Produkten, je mit Icon, Kurztext und "Mehr erfahren"-Button
+Detailseiten: Pro Produkt eine ausklappbare oder separate Detailansicht mit allen oben genannten Informationen
+Vergleichstabelle: Für die 3 Renten-Produktfamilien (Chance, Balance, Index) eine interaktive Vergleichstabelle
+Steuervorteile-Sektion: Visueller Vergleich ETF-Depot vs. ERGO Rente
+FAQ-Bereich: Häufig gestellte Fragen mit Accordion-Funktionalität
+Kontakt-CTA: Sticky/Footer-Button "Kostenlose Beratung vereinbaren" → WhatsApp oder Kontaktformular
+
+Responsivität:
+
+Mobile-first Design
+Karten werden auf Mobilgeräten einspaltig
+Tabellen werden auf Mobile zu gestapelten Karten
+Touch-freundliche Buttons und Accordions
+
+Hinweis-Banner auf jeder Seite:
+"Alle Angaben sind unverbindlich. Für individuelle Beitragsberechnung und verbindliche Angebote kontaktieren Sie mich persönlich."
+Kontaktdaten für CTA-Buttons:
+
+Name: Morino
+Unternehmen: ERGO Versicherung
+E-Mail: weserfabrik@gmail.com
+CTA-Text: "Jetzt beraten lassen" oder "Termin vereinbaren"
+
+SEO-Hinweise:
+
+Jedes Produkt soll eigene Meta-Tags haben
+Alt-Texte für alle Bilder/Icons
+Strukturierte Daten (Schema.org) für Versicherungsprodukte
+Interne Verlinkung zwischen verwandten Produkten (z.B. Rente → BU-Zusatz)
+
+PROMPT ENDE
+
+Quellen für alle Produktdaten:
+
+https://www.ergo.de/de/Produkte/Rentenversicherung
+https://www.ergo.de/de/Produkte/Rentenversicherung/Private-Rentenversicherung
+https://www.ergo.de/de/Produkte/Rentenversicherung/chance
+https://www.ergo.de/de/Produkte/Rentenversicherung/Index-Rente/Indexbeteiligung-Rente
+https://www.ergo.de/de/Produkte/Rentenversicherung/Basis-Rente
+https://www.ergo.de/de/Produkte/Rentenversicherung/Betriebliche-Altersvorsorge
+https://www.ergo.de/de/Produkte/Rentenversicherung/Eco-Rente
+https://www.ergo.de/de/Produkte/Lebensversicherung/Risikolebensversicherung
+https://www.ergo.de/de/Produkte/Berufsunfaehigkeitsversicherung
+https://www.ergo.de/de/Produkte/grundfaehigkeitsversicherung
+https://www.ergo.de/de/Produkte/Sterbegeldversicherungen/Sterbegeldversicherung
