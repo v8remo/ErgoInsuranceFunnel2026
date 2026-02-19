@@ -6,11 +6,11 @@ import {
   Smile 
 } from "lucide-react";
 
-import hausratImage from '@assets/generated_images/Hausratversicherung_Bild_c3ff70bd.png';
-import haftpflichtImage from '@assets/generated_images/Haftpflichtversicherung_Bild_5ed28150.png';
-import wohngebaeudeImage from '@assets/generated_images/Wohngebäudeversicherung_Bild_f01c7305.png';
-import rechtsschutzImage from '@assets/generated_images/Rechtsschutzversicherung_Bild_50cb007d.png';
-import zahnzusatzImage from '@assets/generated_images/Zahnzusatzversicherung_Bild_0c576ecb.png';
+import hausratImage from '@assets/generated_images/Hausratversicherung_Bild_c3ff70bd.webp';
+import haftpflichtImage from '@assets/generated_images/Haftpflichtversicherung_Bild_5ed28150.webp';
+import wohngebaeudeImage from '@assets/generated_images/Wohngebäudeversicherung_Bild_f01c7305.webp';
+import rechtsschutzImage from '@assets/generated_images/Rechtsschutzversicherung_Bild_50cb007d.webp';
+import zahnzusatzImage from '@assets/generated_images/Zahnzusatzversicherung_Bild_0c576ecb.webp';
 
 export const insuranceConfig = {
   hausrat: {

@@ -1,4 +1,5 @@
 import { Switch, Route, useRoute } from "wouter";
+import { lazy, Suspense } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -8,20 +9,29 @@ import { useScrollTop } from "@/hooks/use-scroll-top";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
-import AdminDashboard from "@/pages/AdminDashboard";
-import Impressum from "@/pages/Impressum";
-import Datenschutz from "@/pages/Datenschutz";
-import DokumentePage from "@/pages/DokumentePage";
-import SchadenPage from "@/pages/SchadenPage";
-import KennzeichenPage from "@/pages/KennzeichenPage";
-import Erstinformation from "@/pages/Erstinformation";
-import Insurance from "@/pages/Insurance";
-import CityLanding from "@/pages/CityLanding";
-import LeadPage from "@/pages/LeadPage";
-import LebenVorsorge from "@/pages/LebenVorsorge";
 import NotFound from "@/pages/not-found";
 import CallbackWidget from "@/components/CallbackWidget";
 import CookieConsent from "@/components/CookieConsent";
+
+const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
+const Impressum = lazy(() => import("@/pages/Impressum"));
+const Datenschutz = lazy(() => import("@/pages/Datenschutz"));
+const DokumentePage = lazy(() => import("@/pages/DokumentePage"));
+const SchadenPage = lazy(() => import("@/pages/SchadenPage"));
+const KennzeichenPage = lazy(() => import("@/pages/KennzeichenPage"));
+const Erstinformation = lazy(() => import("@/pages/Erstinformation"));
+const Insurance = lazy(() => import("@/pages/Insurance"));
+const CityLanding = lazy(() => import("@/pages/CityLanding"));
+const LeadPage = lazy(() => import("@/pages/LeadPage"));
+const LebenVorsorge = lazy(() => import("@/pages/LebenVorsorge"));
+
+function PageLoader() {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="w-8 h-8 border-4 border-ergo-red border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
+}
 
 function Layout({ children }: { children: React.ReactNode }) {
   const [isAdmin] = useRoute("/admin");
@@ -43,23 +53,25 @@ function AppContent() {
   
   return (
     <Layout>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/dokumente" component={DokumentePage} />
-        <Route path="/admin" component={AdminDashboard} />
-        <Route path="/impressum" component={Impressum} />
-        <Route path="/datenschutz" component={Datenschutz} />
-        <Route path="/schaden" component={SchadenPage} />
-        <Route path="/kennzeichen" component={KennzeichenPage} />
-        <Route path="/erstinformation" component={Erstinformation} />
-        <Route path="/versicherung/:type" component={Insurance} />
-        <Route path="/versicherung-ganderkesee">{() => <CityLanding cityKey="ganderkesee" />}</Route>
-        <Route path="/versicherung-delmenhorst">{() => <CityLanding cityKey="delmenhorst" />}</Route>
-        <Route path="/versicherung-oldenburg">{() => <CityLanding cityKey="oldenburg" />}</Route>
-        <Route path="/leben-vorsorge" component={LebenVorsorge} />
-        <Route path="/beratung" component={LeadPage} />
-        <Route component={NotFound} />
-      </Switch>
+      <Suspense fallback={<PageLoader />}>
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/dokumente" component={DokumentePage} />
+          <Route path="/admin" component={AdminDashboard} />
+          <Route path="/impressum" component={Impressum} />
+          <Route path="/datenschutz" component={Datenschutz} />
+          <Route path="/schaden" component={SchadenPage} />
+          <Route path="/kennzeichen" component={KennzeichenPage} />
+          <Route path="/erstinformation" component={Erstinformation} />
+          <Route path="/versicherung/:type" component={Insurance} />
+          <Route path="/versicherung-ganderkesee">{() => <CityLanding cityKey="ganderkesee" />}</Route>
+          <Route path="/versicherung-delmenhorst">{() => <CityLanding cityKey="delmenhorst" />}</Route>
+          <Route path="/versicherung-oldenburg">{() => <CityLanding cityKey="oldenburg" />}</Route>
+          <Route path="/leben-vorsorge" component={LebenVorsorge} />
+          <Route path="/beratung" component={LeadPage} />
+          <Route component={NotFound} />
+        </Switch>
+      </Suspense>
     </Layout>
   );
 }

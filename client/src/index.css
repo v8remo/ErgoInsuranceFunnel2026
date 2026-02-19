@@ -155,13 +155,8 @@
     transition: width 0.3s ease-in-out;
   }
 
-  img {
-    will-change: transform;
-    backface-visibility: hidden;
-  }
-
   img[loading="lazy"] {
-    transition: opacity 0.3s ease;
+    content-visibility: auto;
   }
 }
 

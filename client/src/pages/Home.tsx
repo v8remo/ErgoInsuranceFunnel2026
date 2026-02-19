@@ -6,7 +6,7 @@ export default function Home() {
     <div>
       <SEO
         title="ERGO Versicherung Ganderkesee | Agentur Stübe – Kostenlose Beratung"
-        description="Ihr ERGO Versicherungsberater in Ganderkesee, Delmenhorst und Oldenburg. Persönliche Beratung, kostenlose Versicherungsanalyse und 15% Bündelnachlass ab 5 Verträgen."
+        description="Ihr ERGO Versicherungsberater in Ganderkesee, Delmenhorst und Oldenburg. Persönliche Beratung und kostenlose Versicherungsanalyse."
         keywords="ERGO Versicherung Ganderkesee, Versicherungsberater Ganderkesee, ERGO Delmenhorst, ERGO Oldenburg, Versicherung wechseln, kostenlose Versicherungsanalyse, Morino Stübe, Haftpflicht, Hausrat, Kfz-Versicherung"
         structuredData={{
           "@context": "https://schema.org",
