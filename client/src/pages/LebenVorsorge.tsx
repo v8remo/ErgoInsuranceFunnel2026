@@ -319,7 +319,7 @@ export default function LebenVorsorge() {
           },
           "offers": {
             "@type": "Offer",
-            "description": "Kostenlose Analyse bestehender Verträge und 15% Bündelnachlass ab 5 Versicherungen",
+            "description": "Kostenlose Analyse bestehender Verträge und persönliche Beratung zu Altersvorsorge & Absicherung",
             "availability": "https://schema.org/InStock"
           },
           "areaServed": [
@@ -367,7 +367,7 @@ export default function LebenVorsorge() {
                   </h1>
                   <p className="text-sm sm:text-base lg:text-lg text-ergo-dark mb-4 sm:mb-6">
                     <strong>Kostenloser Service:</strong> Von der privaten Altersvorsorge über Berufsunfähigkeit bis zur Risikolebensversicherung – ich analysiere Ihre Situation und finde die passende Absicherung.
-                    <span className="block mt-2 text-ergo-red font-bold">Profitieren Sie vom 15% Bündelnachlass ab 5 ERGO-Versicherungen!</span>
+                    <span className="block mt-2 text-ergo-red font-bold">Jetzt kostenlose Analyse Ihrer bestehenden Verträge anfordern!</span>
                   </p>
                 </div>
 
@@ -400,7 +400,7 @@ export default function LebenVorsorge() {
                     </div>
                     <div className="flex items-center text-sm text-gray-900">
                       <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
-                      <span>15% Bündelnachlass ab 5 ERGO-Versicherungen</span>
+                      <span>Optimierung bestehender Verträge & Steuervorteile</span>
                     </div>
                     <div className="flex items-center text-sm text-gray-900">
                       <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
@@ -435,7 +435,7 @@ export default function LebenVorsorge() {
                     </Button>
                   </div>
                   <p className="text-xs text-center text-gray-700 mt-3 font-medium">
-                    Immer kostenlos - Analyse bestehender Verträge - 15% Bündelnachlass ab 5 Versicherungen
+                    Immer kostenlos - Analyse bestehender Verträge - Persönliche Beratung vom Experten
                   </p>
                 </div>
               </div>
@@ -849,8 +849,8 @@ export default function LebenVorsorge() {
                 <div className="text-xs sm:text-sm text-gray-600">Franke & Bornberg</div>
               </div>
               <div className="bg-gray-50 rounded-lg p-4 shadow-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-yellow-600 mb-1">15%</div>
-                <div className="text-xs sm:text-sm text-gray-600">Bündelnachlass</div>
+                <div className="text-2xl sm:text-3xl font-bold text-yellow-600 mb-1">30+</div>
+                <div className="text-xs sm:text-sm text-gray-600">Jahre Erfahrung</div>
               </div>
             </div>
           </div>
@@ -890,11 +890,11 @@ export default function LebenVorsorge() {
         <section className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight">
-              Kostenlose Analyse & 15% Bündelnachlass!
+              Kostenlose Analyse Ihrer Altersvorsorge!
             </h2>
             <p className="text-sm sm:text-base lg:text-xl mb-6 sm:mb-8 px-2 text-white/90">
               <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer Altersvorsorge und Absicherung.
-              <strong> 15% Bündelnachlass ab 5 Versicherungen!</strong>
+              <strong> Persönliche Beratung durch Ihren ERGO-Experten vor Ort.</strong>
             </p>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
@@ -923,7 +923,7 @@ export default function LebenVorsorge() {
                 </Button>
               </div>
               <p className="text-sm font-medium mt-3 text-white/80">
-                Kostenlose Analyse - Optimierung bestehender Verträge - 15% Bündelnachlass ab 5 Versicherungen
+                Kostenlose Analyse - Optimierung bestehender Verträge - Persönliche Beratung vom Experten
               </p>
             </div>
 
