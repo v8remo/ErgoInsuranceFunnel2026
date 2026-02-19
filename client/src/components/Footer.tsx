@@ -86,6 +86,11 @@ export default function Footer() {
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Service</h3>
             <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
               <li>
+                <Link href="/termin" className="hover:text-white transition-colors font-medium">
+                  📅 Termin buchen
+                </Link>
+              </li>
+              <li>
                 <Link href="/beratung" className="hover:text-white transition-colors">
                   Kostenlose Beratung
                 </Link>

@@ -10,7 +10,8 @@ Eine professionelle Lead-Generierungs-Plattform für ERGO Versicherungen mit opt
 - **Versicherungs-Landing-Pages** - Dedizierte Seiten für jede Versicherung
 - **Dokumente-Seite** (/dokumente) - 4-Schritt-Flow: Dokumenttyp wählen → Formular → Unterschrift → Erfolg
 - **Schaden-Seite** (/schaden) - 4-Schritt-Flow: Schadensart wählen → Details + Fotos → Zusammenfassung → Erfolg
-- **Lead-Funnel** - 3-stufiger Conversion-Funnel mit Fortschrittsanzeige
+- **Lead-Funnel** - 9-stufiger Conversion-Funnel (FunnelOverlay) einheitlich auf allen Seiten
+- **Termin-Seite** (/termin) - Outlook-Buchungsseite eingebettet für direkte Online-Terminbuchung
 - **Admin-Dashboard** - Content Management und Lead-Verwaltung
 
 ### Backend (Express + PostgreSQL)
@@ -218,6 +219,18 @@ Die Plattform ist bereit für die Live-Schaltung und Google Ads Kampagnen!
   - Sender: anfrage.ergo-stuebe.de (dokumente@, schaden@, kennzeichen@, rueckruf@)
   - Empfänger: morino.stuebe@ergo.de
   - Alle 5 Endpunkte erfolgreich getestet
+
+- 2026-02-19: Outlook-Terminbuchungsseite integriert:
+  - Neue /termin Seite mit eingebettetem Microsoft Outlook Booking
+  - "Termin buchen" Button im Header (Desktop + Mobile)
+  - Termin-Link im Footer (Service-Bereich)
+  - "Direkt Termin buchen" Button im FunnelOverlay nach Formular-Absendung
+  - "Termin buchen" CTA auf allen Versicherungsseiten
+  - Termin-Link im Rückruf-Widget nach erfolgreicher Anfrage
+  - Sitemap mit /termin aktualisiert
+- 2026-02-19: FunnelOverlay (9-Schritt-Funnel) einheitlich auf allen Seiten:
+  - InsuranceFunnel durch FunnelOverlay auf Versicherungs- und LebenVorsorge-Seiten ersetzt
+  - insuranceType/insuranceLabel Props für kontextspezifische Headlines
 
 ## User Preferences
 - Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)

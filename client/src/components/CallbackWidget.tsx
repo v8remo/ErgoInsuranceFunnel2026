@@ -201,9 +201,15 @@ export default function CallbackWidget() {
                 <path d="M17 28l7 7 15-15" fill="none" stroke="#22c55e" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="50" style={{ animation: 'cb-check 0.4s ease-out 0.2s forwards', strokeDashoffset: 50 }} />
               </svg>
               <h3 className="text-lg font-bold text-gray-900 mb-1">Vielen Dank, {form.vorname}!</h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 mb-3">
                 Morino meldet sich {form.callbackTime === 'So früh wie möglich' ? 'so bald wie möglich' : form.callbackTime.toLowerCase()} bei Ihnen unter {form.phone}.
               </p>
+              <a
+                href="/termin"
+                className="inline-flex items-center gap-2 bg-[#003781] text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-[#002a66] transition-colors"
+              >
+                📅 Oder direkt Termin buchen
+              </a>
             </div>
           ) : (
             <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>

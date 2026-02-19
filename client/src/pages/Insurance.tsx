@@ -1,4 +1,4 @@
-import { useParams } from "wouter";
+import { useParams, Link } from "wouter";
 import { useState, useEffect } from "react";
 import FunnelOverlay from "@/components/FunnelOverlay";
 import '@/styles/funnel.css';
@@ -453,6 +453,16 @@ export default function Insurance() {
                 >
                   💬 Sofortige WhatsApp Beratung
                 </Button>
+                <Link href="/termin">
+                  <Button 
+                    size="lg"
+                    variant="outline"
+                    className="border-2 border-ergo-red text-ergo-red hover:bg-ergo-red hover:text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full"
+                    onClick={() => trackEvent('booking_page_clicked', { insurance_type: type, source: 'bottom_section' })}
+                  >
+                    📅 Termin buchen
+                  </Button>
+                </Link>
               </div>
               <p className="text-sm font-medium mt-3 text-[#000000]">
                 ✅ Kostenlose Analyse • Optimierung bestehender Verträge • 15% Bündelnachlass ab 5 Versicherungen

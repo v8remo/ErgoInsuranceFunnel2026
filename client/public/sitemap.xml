@@ -98,6 +98,14 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Termin buchen -->
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/termin</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Rechtliches -->
   <url>
     <loc>https://ergo-ganderkesee.replit.app/impressum</loc>

@@ -24,6 +24,7 @@ const Insurance = lazy(() => import("@/pages/Insurance"));
 const CityLanding = lazy(() => import("@/pages/CityLanding"));
 const LeadPage = lazy(() => import("@/pages/LeadPage"));
 const LebenVorsorge = lazy(() => import("@/pages/LebenVorsorge"));
+const TerminPage = lazy(() => import("@/pages/TerminPage"));
 
 function PageLoader() {
   return (
@@ -69,6 +70,7 @@ function AppContent() {
           <Route path="/versicherung-oldenburg">{() => <CityLanding cityKey="oldenburg" />}</Route>
           <Route path="/leben-vorsorge" component={LebenVorsorge} />
           <Route path="/beratung" component={LeadPage} />
+          <Route path="/termin" component={TerminPage} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

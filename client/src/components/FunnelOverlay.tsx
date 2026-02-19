@@ -557,12 +557,14 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                 💬 Per WhatsApp schreiben
               </a>
               <a
-                href="https://ergo-agenturen.de/privatkunden/000211325-345414/Morino-Stuebe"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/termin"
                 className="funnel-outline-btn"
+                onClick={() => {
+                  trackEvent('booking_from_funnel_clicked');
+                  onClose();
+                }}
               >
-                📋 ERGO Profil ansehen
+                📅 Direkt Termin buchen
               </a>
               <p className="funnel-small-text">Sie erhalten gleich eine Bestätigung per E-Mail.</p>
             </div>

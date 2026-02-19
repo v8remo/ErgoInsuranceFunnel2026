@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Phone } from "lucide-react";
+import { Menu, Phone, Calendar } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Header() {
@@ -55,6 +55,13 @@ export default function Header() {
 
           {/* Contact and Mobile Menu */}
           <div className="flex items-center space-x-2 sm:space-x-4">
+            <Link 
+              href="/termin"
+              className="hidden lg:flex items-center gap-2 bg-ergo-red text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+            >
+              <Calendar className="w-4 h-4" />
+              Termin buchen
+            </Link>
             <a 
               href="tel:015566771019" 
               className="hidden lg:flex items-center text-ergo-red hover:text-red-700 transition-colors"
@@ -102,6 +109,9 @@ export default function Header() {
                   </Link>
                   
                   <div className="pt-4 border-t space-y-4">
+                    <Link href="/termin" className="block text-lg font-bold text-ergo-red hover:text-red-700" onClick={handleMobileMenuClick}>
+                      📅 Termin buchen
+                    </Link>
                     <Link href="/dokumente" className="block text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
                       Dokumente
                     </Link>
