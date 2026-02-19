@@ -1,4 +1,4 @@
-import { useParams, Link } from "wouter";
+import { Link } from "wouter";
 import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -59,9 +59,8 @@ const insuranceProducts = [
   { name: "Zahnzusatzversicherung", href: "/versicherung/zahnzusatz", price: "ab 12€/Monat" },
 ];
 
-export default function CityLanding() {
-  const { city } = useParams();
-  const data = cityData[city as string];
+export default function CityLanding({ cityKey }: { cityKey: string }) {
+  const data = cityData[cityKey];
 
   if (!data) {
     return (

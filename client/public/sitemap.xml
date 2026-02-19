@@ -68,6 +68,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Lead-Seite (Google Ads) -->
+  <url>
+    <loc>https://ergo-ganderkesee.replit.app/beratung</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <!-- Service-Seiten -->
   <url>
     <loc>https://ergo-ganderkesee.replit.app/dokumente</loc>
