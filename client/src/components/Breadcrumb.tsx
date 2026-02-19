@@ -73,6 +73,11 @@ function generateBreadcrumbs(location: string): BreadcrumbItem[] {
       { label: 'Versicherungen', href: '/' },
       { label: insuranceTypes[pathSegments[1]] || pathSegments[1] }
     );
+  } else if (pathSegments[0] === 'leben-vorsorge') {
+    breadcrumbs.push(
+      { label: 'Versicherungen', href: '/' },
+      { label: 'Leben & Vorsorge' }
+    );
   } else {
     // Generic breadcrumb generation
     pathSegments.forEach((segment, index) => {

@@ -268,5 +268,61 @@ export const insuranceConfig = {
         options: ["Sehr wichtig", "Wichtig", "Weniger wichtig"]
       }
     ]
+  },
+  "leben-vorsorge": {
+    title: "Leben & Vorsorge",
+    description: "Private Rentenversicherung, Berufsunfähigkeit, Risikoleben & betriebliche Altersvorsorge bei ERGO. Persönliche Beratung von Morino Stübe in Ganderkesee.",
+    price: "ab 25€/Monat",
+    icon: Home,
+    image: hausratImage,
+    features: [
+      {
+        title: "7 Produktlinien",
+        description: "Von der privaten Altersvorsorge bis zur Sterbegeldversicherung – alles aus einer Hand"
+      },
+      {
+        title: "Steuervorteile sichern",
+        description: "Bis zu 100% steuerlich absetzbar bei Basis-Rente, Halbeinkünfteverfahren bei privater Rente"
+      },
+      {
+        title: "FFF+ Bestnote",
+        description: "Top-Bewertung von Franke & Bornberg für die ERGO Rentenversicherung"
+      }
+    ],
+    benefits: [
+      {
+        title: "Private Rentenversicherung",
+        description: "3 Produktfamilien: Chance, Balance und Index"
+      },
+      {
+        title: "Basis-Rente (Rürup)",
+        description: "100% steuerlich absetzbar – ideal für Selbstständige"
+      },
+      {
+        title: "Berufsunfähigkeitsversicherung",
+        description: "Absicherung Ihrer Arbeitskraft – kein Berufsverweis"
+      }
+    ],
+    questions: [
+      {
+        type: "radio" as const,
+        question: "Welches Thema interessiert Sie am meisten?",
+        name: "leben_interest",
+        options: [
+          "Altersvorsorge (Private Rente / Rürup)",
+          "Berufsunfähigkeit / Body Protect",
+          "Risikolebensversicherung",
+          "Betriebliche Altersvorsorge",
+          "Sterbegeldversicherung",
+          "Allgemeine Beratung"
+        ]
+      },
+      {
+        type: "radio" as const,
+        question: "Wie ist Ihre berufliche Situation?",
+        name: "employment_status",
+        options: ["Angestellt", "Selbstständig/Freiberufler", "Beamter", "Student/Azubi", "Rentner"]
+      }
+    ]
   }
 };
