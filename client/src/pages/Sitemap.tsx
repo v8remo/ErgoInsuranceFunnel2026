@@ -1,5 +1,3 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Link } from "wouter";
 
@@ -22,7 +20,6 @@ export default function Sitemap() {
         description="Übersicht aller Seiten der ERGO Versicherung Ganderkesee. Finden Sie schnell die gewünschten Informationen zu unseren Versicherungsprodukten."
         keywords="Sitemap, Seitenübersicht, ERGO Ganderkesee, Versicherungen"
       />
-      <Header />
       <main className="min-h-screen bg-gray-50 py-8 sm:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-ergo-dark mb-8">Sitemap</h1>
@@ -48,7 +45,6 @@ export default function Sitemap() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 }

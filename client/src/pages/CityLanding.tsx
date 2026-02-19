@@ -1,7 +1,5 @@
 import { Link } from "wouter";
 import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight } from "lucide-react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { trackEvent, trackConversion } from "@/lib/analytics";
 
@@ -106,8 +104,6 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
           }
         }}
       />
-      <Header />
-
       <main className="min-h-screen">
         <section className="py-10 md:py-16 bg-gradient-to-br from-blue-50 to-white">
           <div className="max-w-4xl mx-auto px-4">
@@ -232,8 +228,6 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
           </div>
         </section>
       </main>
-
-      <Footer />
     </>
   );
 }

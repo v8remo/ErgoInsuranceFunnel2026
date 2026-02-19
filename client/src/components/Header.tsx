@@ -95,6 +95,18 @@ export default function Header() {
                     Zahnzusatzversicherung
                   </Link>
                   
+                  <div className="pt-4 border-t space-y-4">
+                    <Link href="/dokumente" className="block text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
+                      Dokumente
+                    </Link>
+                    <Link href="/schaden" className="block text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
+                      Schaden melden
+                    </Link>
+                    <Link href="/kennzeichen" className="block text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
+                      Kennzeichen / eVB
+                    </Link>
+                  </div>
+                  
                   <div className="pt-4 border-t">
                     <a 
                       href="tel:015566771019" 

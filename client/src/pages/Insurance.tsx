@@ -1,7 +1,5 @@
 import { useParams } from "wouter";
 import { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import InsuranceFunnel from "@/components/InsuranceFunnel";
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -134,7 +132,6 @@ export default function Insurance() {
           }))
         }] : undefined}
       />
-      <Header />
       <Breadcrumb />
       <main className="min-h-screen">
         {/* Hero Section */}
@@ -482,7 +479,6 @@ export default function Insurance() {
           />
         )}
       </main>
-      <Footer />
     </>
   );
 }
