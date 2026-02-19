@@ -73,6 +73,11 @@ export default function Footer() {
                   Zahnzusatzversicherung
                 </Link>
               </li>
+              <li>
+                <Link href="/leben-vorsorge" className="hover:text-white transition-colors font-medium">
+                  Leben & Vorsorge
+                </Link>
+              </li>
             </ul>
           </div>
 

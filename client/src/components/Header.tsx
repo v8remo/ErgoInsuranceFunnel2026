@@ -48,6 +48,9 @@ export default function Header() {
             <Link href="/versicherung/zahnzusatz" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
               Zahnzusatz
             </Link>
+            <Link href="/leben-vorsorge" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors font-medium">
+              Leben & Vorsorge
+            </Link>
           </nav>
 
           {/* Contact and Mobile Menu */}
@@ -93,6 +96,9 @@ export default function Header() {
                   </Link>
                   <Link href="/versicherung/zahnzusatz" className="text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
                     Zahnzusatzversicherung
+                  </Link>
+                  <Link href="/leben-vorsorge" className="text-lg font-bold text-ergo-red hover:text-red-700" onClick={handleMobileMenuClick}>
+                    Leben & Vorsorge
                   </Link>
                   
                   <div className="pt-4 border-t space-y-4">

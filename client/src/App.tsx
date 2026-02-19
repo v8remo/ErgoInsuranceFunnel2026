@@ -18,6 +18,7 @@ import Erstinformation from "@/pages/Erstinformation";
 import Insurance from "@/pages/Insurance";
 import CityLanding from "@/pages/CityLanding";
 import LeadPage from "@/pages/LeadPage";
+import LebenVorsorge from "@/pages/LebenVorsorge";
 import NotFound from "@/pages/not-found";
 import CallbackWidget from "@/components/CallbackWidget";
 import CookieConsent from "@/components/CookieConsent";
@@ -55,6 +56,7 @@ function AppContent() {
         <Route path="/versicherung-ganderkesee">{() => <CityLanding cityKey="ganderkesee" />}</Route>
         <Route path="/versicherung-delmenhorst">{() => <CityLanding cityKey="delmenhorst" />}</Route>
         <Route path="/versicherung-oldenburg">{() => <CityLanding cityKey="oldenburg" />}</Route>
+        <Route path="/leben-vorsorge" component={LebenVorsorge} />
         <Route path="/beratung" component={LeadPage} />
         <Route component={NotFound} />
       </Switch>
