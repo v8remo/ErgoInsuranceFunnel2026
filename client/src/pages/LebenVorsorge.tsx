@@ -360,12 +360,12 @@ export default function LebenVorsorge() {
 
                   <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-ergo-dark mb-3 sm:mb-4 leading-tight break-words">
                     <span className="text-ergo-red">Leben & Vorsorge</span>
-                    <br /><span className="text-gray-700">Ihre Zukunft. Gut abgesichert.</span>
+                    <br /><span className="text-ergo-dark">Ihre Zukunft. Gut abgesichert.</span>
                     <span className="block text-lg sm:text-xl text-ergo-red font-bold mt-2">
                       Persönliche Beratung vom Experten
                     </span>
                   </h1>
-                  <p className="text-sm sm:text-base lg:text-lg text-gray-800 mb-4 sm:mb-6">
+                  <p className="text-sm sm:text-base lg:text-lg text-ergo-dark mb-4 sm:mb-6">
                     <strong>Kostenloser Service:</strong> Von der privaten Altersvorsorge über Berufsunfähigkeit bis zur Risikolebensversicherung – ich analysiere Ihre Situation und finde die passende Absicherung.
                     <span className="block mt-2 text-ergo-red font-bold">Profitieren Sie vom 15% Bündelnachlass ab 5 ERGO-Versicherungen!</span>
                   </p>
@@ -386,24 +386,24 @@ export default function LebenVorsorge() {
                 <div className="bg-white rounded-xl p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 border-2 border-blue-200 shadow-xl">
                   <h3 className="text-center text-base sm:text-lg font-bold text-ergo-red mb-3">Ihr kostenloser ERGO-Service umfasst:</h3>
                   <div className="space-y-2 mb-4">
-                    <div className="flex items-center text-sm">
-                      <span className="text-green-500 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
+                    <div className="flex items-center text-sm text-gray-900">
+                      <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
                       <span>Vollständige Analyse Ihrer Altersvorsorge</span>
                     </div>
-                    <div className="flex items-center text-sm">
-                      <span className="text-green-500 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
+                    <div className="flex items-center text-sm text-gray-900">
+                      <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
                       <span>Persönliche Beratung zu allen ERGO Leben-Produkten</span>
                     </div>
-                    <div className="flex items-center text-sm">
-                      <span className="text-green-500 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
+                    <div className="flex items-center text-sm text-gray-900">
+                      <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
                       <span>Steueroptimierung Ihrer Vorsorgeverträge</span>
                     </div>
-                    <div className="flex items-center text-sm">
-                      <span className="text-green-500 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
+                    <div className="flex items-center text-sm text-gray-900">
+                      <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
                       <span>15% Bündelnachlass ab 5 ERGO-Versicherungen</span>
                     </div>
-                    <div className="flex items-center text-sm">
-                      <span className="text-green-500 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
+                    <div className="flex items-center text-sm text-gray-900">
+                      <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
                       <span>Lebenslange Betreuung durch Ihre ERGO-Agentur</span>
                     </div>
                     <div className="border-t pt-2 text-center font-bold text-ergo-red">
@@ -434,7 +434,7 @@ export default function LebenVorsorge() {
                       WhatsApp Beratung
                     </Button>
                   </div>
-                  <p className="text-xs text-center text-gray-500 mt-3">
+                  <p className="text-xs text-center text-gray-700 mt-3 font-medium">
                     Immer kostenlos - Analyse bestehender Verträge - 15% Bündelnachlass ab 5 Versicherungen
                   </p>
                 </div>
