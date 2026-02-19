@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
-import InsuranceFunnel from "@/components/InsuranceFunnel";
+import FunnelOverlay from "@/components/FunnelOverlay";
+import '@/styles/funnel.css';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -940,13 +941,12 @@ export default function LebenVorsorge() {
           </div>
         </section>
 
-        {/* Insurance Funnel Modal */}
-        {funnelOpen && (
-          <InsuranceFunnel
-            insuranceType="leben-vorsorge"
-            onClose={closeFunnel}
-          />
-        )}
+        <FunnelOverlay
+          isOpen={funnelOpen}
+          onClose={closeFunnel}
+          insuranceType={selectedProduct || 'leben-vorsorge'}
+          insuranceLabel={selectedProduct ? (products.find(p => p.id === selectedProduct)?.name || 'Leben & Vorsorge') : 'Leben & Vorsorge'}
+        />
       </main>
     </>
   );

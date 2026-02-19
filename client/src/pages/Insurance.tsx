@@ -1,6 +1,7 @@
 import { useParams } from "wouter";
 import { useState, useEffect } from "react";
-import InsuranceFunnel from "@/components/InsuranceFunnel";
+import FunnelOverlay from "@/components/FunnelOverlay";
+import '@/styles/funnel.css';
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
 import { Button } from "@/components/ui/button";
@@ -471,13 +472,12 @@ export default function Insurance() {
           </div>
         </section>
 
-        {/* Insurance Funnel Modal */}
-        {funnelOpen && (
-          <InsuranceFunnel 
-            insuranceType={type!}
-            onClose={closeFunnel}
-          />
-        )}
+        <FunnelOverlay
+          isOpen={funnelOpen}
+          onClose={closeFunnel}
+          insuranceType={type}
+          insuranceLabel={insurance.title}
+        />
       </main>
     </>
   );

@@ -18,6 +18,8 @@ interface FunnelData {
 interface FunnelOverlayProps {
   isOpen: boolean;
   onClose: () => void;
+  insuranceType?: string;
+  insuranceLabel?: string;
 }
 
 const STEP_NAMES = [
@@ -25,7 +27,7 @@ const STEP_NAMES = [
   'prioritaet', 'auswertung', 'kontaktdaten', 'terminwunsch', 'danke'
 ];
 
-export default function FunnelOverlay({ isOpen, onClose }: FunnelOverlayProps) {
+export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranceLabel }: FunnelOverlayProps) {
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState<'forward' | 'back'>('forward');
   const [isAnimating, setIsAnimating] = useState(false);
@@ -137,7 +139,7 @@ export default function FunnelOverlay({ isOpen, onClose }: FunnelOverlayProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          insuranceType: 'general_consultation',
+          insuranceType: insuranceType || 'general_consultation',
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
@@ -229,9 +231,15 @@ export default function FunnelOverlay({ isOpen, onClose }: FunnelOverlayProps) {
           {step === 1 && (
             <div className="funnel-step funnel-step-hook">
               <div className="funnel-badge-pill">⭐ 47 Beratungen diesen Monat</div>
-              <h2 className="funnel-hook-headline">Sind Sie wirklich optimal abgesichert?</h2>
+              <h2 className="funnel-hook-headline">
+                {insuranceLabel
+                  ? `${insuranceLabel} – kostenlose Beratung sichern!`
+                  : 'Sind Sie wirklich optimal abgesichert?'}
+              </h2>
               <p className="funnel-hook-subtext">
-                Beantworten Sie 5 kurze Fragen und erhalten Sie eine kostenlose, persönliche Versicherungsanalyse.
+                {insuranceLabel
+                  ? `Beantworten Sie 5 kurze Fragen und erhalten Sie eine kostenlose, persönliche Beratung zu Ihrer ${insuranceLabel}.`
+                  : 'Beantworten Sie 5 kurze Fragen und erhalten Sie eine kostenlose, persönliche Versicherungsanalyse.'}
               </p>
               <button className="funnel-cta-btn" onClick={next}>
                 Jetzt kostenlos prüfen →
