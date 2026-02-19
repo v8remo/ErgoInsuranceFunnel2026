@@ -76,9 +76,32 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Regionen */}
+          {/* Service & Regionen */}
           <div className="mb-6 sm:mb-0">
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Unsere Regionen</h3>
+            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Service</h3>
+            <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
+              <li>
+                <Link href="/beratung" className="hover:text-white transition-colors">
+                  Kostenlose Beratung
+                </Link>
+              </li>
+              <li>
+                <Link href="/dokumente" className="hover:text-white transition-colors">
+                  Dokumente einreichen
+                </Link>
+              </li>
+              <li>
+                <Link href="/schaden" className="hover:text-white transition-colors">
+                  Schaden melden
+                </Link>
+              </li>
+              <li>
+                <Link href="/kennzeichen" className="hover:text-white transition-colors">
+                  Kennzeichen / eVB
+                </Link>
+              </li>
+            </ul>
+            <h3 className="text-base sm:text-lg font-semibold mt-4 mb-2">Regionen</h3>
             <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
               <li>
                 <Link href="/versicherung-ganderkesee" className="hover:text-white transition-colors">
@@ -96,7 +119,11 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-            <h3 className="text-base sm:text-lg font-semibold mt-4 mb-2">Rechtliches</h3>
+          </div>
+
+          {/* Rechtliches & Social */}
+          <div className="mb-6 sm:mb-0">
+            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Rechtliches</h3>
             <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
               <li>
                 <Link href="/impressum" className="hover:text-white transition-colors">
@@ -108,13 +135,15 @@ export default function Footer() {
                   Datenschutz
                 </Link>
               </li>
+              <li>
+                <Link href="/erstinformation" className="hover:text-white transition-colors">
+                  Erstinformation
+                </Link>
+              </li>
             </ul>
-          </div>
 
-          {/* Social & Links */}
-          <div className="mb-6 sm:mb-0">
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Folgen Sie uns</h3>
-            <div className="flex space-x-4 mb-4 sm:mb-6">
+            <h3 className="text-base sm:text-lg font-semibold mt-4 mb-2">Folgen Sie uns</h3>
+            <div className="flex space-x-4 mb-4">
               <a 
                 href="https://www.linkedin.com/in/morino-stuebe" 
                 target="_blank" 
@@ -150,7 +179,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-gray-700 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-gray-400">
-          <p className="text-sm sm:text-base">&copy; 2025 ERGO Versicherung - Morino Stübe. Alle Rechte vorbehalten.</p>
+          <p className="text-sm sm:text-base">&copy; 2026 ERGO Versicherung - Morino Stübe. Alle Rechte vorbehalten.</p>
           <p className="text-xs sm:text-sm mt-2">
             Vermittlerregister: <a href="https://www.vermittlerregister.info" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 break-all">www.vermittlerregister.info</a>
           </p>
