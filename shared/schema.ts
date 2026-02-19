@@ -45,6 +45,30 @@ export const adminConfig = pgTable("admin_config", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const submissions = pgTable("submissions", {
+  id: serial("id").primaryKey(),
+  type: text("type").notNull(),
+  customerName: text("customer_name").notNull(),
+  customerEmail: text("customer_email").notNull(),
+  customerPhone: text("customer_phone"),
+  subject: text("subject"),
+  summary: text("summary"),
+  details: jsonb("details"),
+  status: text("status").notNull().default("neu"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertSubmissionSchema = createInsertSchema(submissions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertSubmission = z.infer<typeof insertSubmissionSchema>;
+export type Submission = typeof submissions.$inferSelect;
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,

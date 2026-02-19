@@ -1,4 +1,4 @@
-import { users, leads, content, adminConfig, type User, type InsertUser, type Lead, type InsertLead, type Content, type InsertContent, type AdminConfig, type InsertAdminConfig } from "@shared/schema";
+import { users, leads, content, adminConfig, submissions, type User, type InsertUser, type Lead, type InsertLead, type Content, type InsertContent, type AdminConfig, type InsertAdminConfig, type Submission, type InsertSubmission } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, gte, desc, sql } from "drizzle-orm";
 
@@ -31,6 +31,13 @@ export interface IStorage {
   getAdminConfig(key: string): Promise<AdminConfig | undefined>;
   setAdminConfig(key: string, value: string): Promise<AdminConfig>;
   updateAdminPassword(newPassword: string): Promise<void>;
+
+  // Submission methods
+  createSubmission(submission: InsertSubmission): Promise<Submission>;
+  getSubmissions(filters?: { type?: string; status?: string }): Promise<Submission[]>;
+  getSubmission(id: number): Promise<Submission | undefined>;
+  updateSubmission(id: number, updates: Partial<Submission>): Promise<Submission | undefined>;
+  deleteSubmission(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -209,6 +216,42 @@ export class DatabaseStorage implements IStorage {
 
   async updateAdminPassword(newPassword: string): Promise<void> {
     await this.setAdminConfig('admin_password', newPassword);
+  }
+
+  async createSubmission(submissionData: InsertSubmission): Promise<Submission> {
+    const [result] = await db
+      .insert(submissions)
+      .values({ ...submissionData, createdAt: new Date(), updatedAt: new Date() })
+      .returning();
+    return result;
+  }
+
+  async getSubmissions(filters?: { type?: string; status?: string }): Promise<Submission[]> {
+    const conditions = [];
+    if (filters?.type) conditions.push(eq(submissions.type, filters.type));
+    if (filters?.status) conditions.push(eq(submissions.status, filters.status));
+    if (conditions.length > 0) {
+      return db.select().from(submissions).where(and(...conditions)).orderBy(desc(submissions.createdAt));
+    }
+    return db.select().from(submissions).orderBy(desc(submissions.createdAt));
+  }
+
+  async getSubmission(id: number): Promise<Submission | undefined> {
+    const [result] = await db.select().from(submissions).where(eq(submissions.id, id));
+    return result || undefined;
+  }
+
+  async updateSubmission(id: number, updates: Partial<Submission>): Promise<Submission | undefined> {
+    const [result] = await db
+      .update(submissions)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(submissions.id, id))
+      .returning();
+    return result || undefined;
+  }
+
+  async deleteSubmission(id: number): Promise<void> {
+    await db.delete(submissions).where(eq(submissions.id, id));
   }
 }
 

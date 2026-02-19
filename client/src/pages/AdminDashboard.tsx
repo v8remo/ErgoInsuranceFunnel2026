@@ -31,7 +31,7 @@ import {
   LogOut,
   Lock
 } from "lucide-react";
-import type { Lead, Content } from "@shared/schema";
+import type { Lead, Content, Submission } from "@shared/schema";
 
 interface DashboardStats {
   totalLeads: number;
@@ -46,6 +46,7 @@ export default function AdminDashboard() {
   const [filterInsurance, setFilterInsurance] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [activeTab, setActiveTab] = useState("leads");
+  const [filterSubmissionType, setFilterSubmissionType] = useState<string>("all");
   const [editingContent, setEditingContent] = useState<Content | null>(null);
   const [uploadingImages, setUploadingImages] = useState<{[key: string]: boolean}>({});
   const [imageUrls, setImageUrls] = useState<{[key: string]: string}>({});
@@ -245,6 +246,61 @@ export default function AdminDashboard() {
     if (confirm("Sind Sie sicher, dass Sie diesen Lead löschen möchten?")) {
       deleteMutation.mutate(leadId);
     }
+  };
+
+  const { data: submissionsData = [], isLoading: submissionsLoading } = useQuery<Submission[]>({
+    queryKey: ["/api/submissions", filterSubmissionType],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (filterSubmissionType !== "all") params.set("type", filterSubmissionType);
+      const response = await apiRequest("GET", `/api/submissions?${params.toString()}`);
+      return response.json();
+    },
+    enabled: isAuthenticated
+  });
+
+  const updateSubmissionMutation = useMutation({
+    mutationFn: async ({ id, status, notes }: { id: number; status: string; notes?: string }) => {
+      const response = await apiRequest("PATCH", `/api/submissions/${id}`, { status, notes });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/submissions"] });
+      toast({ title: "Status aktualisiert" });
+    }
+  });
+
+  const deleteSubmissionMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await apiRequest("DELETE", `/api/submissions/${id}`);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/submissions"] });
+      toast({ title: "Eintrag gelöscht" });
+    }
+  });
+
+  const getSubmissionTypeBadge = (type: string) => {
+    const config: Record<string, { label: string; className: string }> = {
+      dokument: { label: "Dokument", className: "bg-blue-100 text-blue-800" },
+      schaden: { label: "Schaden", className: "bg-red-100 text-red-800" },
+      kennzeichen: { label: "Kennzeichen", className: "bg-purple-100 text-purple-800" },
+      rechnung: { label: "Rechnung", className: "bg-amber-100 text-amber-800" },
+      rueckruf: { label: "Rückruf", className: "bg-green-100 text-green-800" },
+    };
+    const c = config[type] || { label: type, className: "bg-gray-100 text-gray-800" };
+    return <Badge className={c.className}>{c.label}</Badge>;
+  };
+
+  const getSubmissionStatusBadge = (status: string) => {
+    const config: Record<string, { label: string; className: string }> = {
+      neu: { label: "Neu", className: "bg-yellow-100 text-yellow-800" },
+      bearbeitung: { label: "In Bearbeitung", className: "bg-blue-100 text-blue-800" },
+      erledigt: { label: "Erledigt", className: "bg-green-100 text-green-800" },
+    };
+    const c = config[status] || { label: status, className: "bg-gray-100 text-gray-800" };
+    return <Badge className={c.className}>{c.label}</Badge>;
   };
 
   // Image upload functionality
@@ -558,34 +614,32 @@ export default function AdminDashboard() {
           
         </div>
 
-        {/* Filters and Export */}
-        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-6">
-          <div className="flex flex-col sm:flex-row gap-4 sm:justify-between sm:items-center">
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
-              <Select value={filterInsurance} onValueChange={setFilterInsurance}>
-                <SelectTrigger className="w-full sm:w-48">
-                  <SelectValue placeholder="Versicherung filtern" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Alle Versicherungen</SelectItem>
-                  <SelectItem value="hausrat">Hausratversicherung</SelectItem>
-                  <SelectItem value="haftpflicht">Haftpflichtversicherung</SelectItem>
-                  <SelectItem value="wohngebaeude">Wohngebäudeversicherung</SelectItem>
-                  <SelectItem value="rechtsschutz">Rechtsschutzversicherung</SelectItem>
-                  <SelectItem value="zahnzusatz">Zahnzusatzversicherung</SelectItem>
-                </SelectContent>
-              </Select>
-              
-              <Button 
-                onClick={() => exportMutation.mutate()}
-                disabled={exportMutation.isPending}
-                variant="outline"
-                className="w-full sm:w-auto"
+        {/* Tab Navigation */}
+        <div className="bg-white rounded-lg shadow-lg p-2 mb-4 sm:mb-6">
+          <div className="flex flex-wrap gap-1">
+            {[
+              { key: "leads", label: "Leads", icon: Users },
+              { key: "anfragen", label: "Kundenanfragen", icon: FileText },
+              { key: "content", label: "Inhalte", icon: Settings },
+            ].map(tab => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                  activeTab === tab.key
+                    ? "bg-ergo-red text-white"
+                    : "text-gray-600 hover:bg-gray-100"
+                }`}
               >
-                <Download className="w-4 h-4 mr-2" />
-                {exportMutation.isPending ? "Exportiere..." : "Export CSV"}
-              </Button>
-            </div>
+                <tab.icon className="w-4 h-4" />
+                {tab.label}
+                {tab.key === "anfragen" && submissionsData.filter(s => s.status === "neu").length > 0 && (
+                  <span className="bg-white text-ergo-red text-xs font-bold px-1.5 py-0.5 rounded-full">
+                    {submissionsData.filter(s => s.status === "neu").length}
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -650,7 +704,35 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Leads Table */}
+        {/* Leads Tab */}
+        {activeTab === "leads" && (
+        <>
+        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+            <Select value={filterInsurance} onValueChange={setFilterInsurance}>
+              <SelectTrigger className="w-full sm:w-48">
+                <SelectValue placeholder="Versicherung filtern" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Alle Versicherungen</SelectItem>
+                <SelectItem value="hausrat">Hausratversicherung</SelectItem>
+                <SelectItem value="haftpflicht">Haftpflichtversicherung</SelectItem>
+                <SelectItem value="wohngebaeude">Wohngebäudeversicherung</SelectItem>
+                <SelectItem value="rechtsschutz">Rechtsschutzversicherung</SelectItem>
+                <SelectItem value="zahnzusatz">Zahnzusatzversicherung</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button 
+              onClick={() => exportMutation.mutate()}
+              disabled={exportMutation.isPending}
+              variant="outline"
+              className="w-full sm:w-auto"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              {exportMutation.isPending ? "Exportiere..." : "Export CSV"}
+            </Button>
+          </div>
+        </div>
         <Card>
           <CardHeader>
             <CardTitle>Aktuelle Leads</CardTitle>
@@ -751,8 +833,118 @@ export default function AdminDashboard() {
             )}
           </CardContent>
         </Card>
+        </>
+        )}
+
+        {/* Submissions/Anfragen Tab */}
+        {activeTab === "anfragen" && (
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+              <CardTitle>Kundenanfragen</CardTitle>
+              <Select value={filterSubmissionType} onValueChange={setFilterSubmissionType}>
+                <SelectTrigger className="w-full sm:w-48">
+                  <SelectValue placeholder="Typ filtern" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Alle Typen</SelectItem>
+                  <SelectItem value="dokument">Dokumente</SelectItem>
+                  <SelectItem value="schaden">Schaden</SelectItem>
+                  <SelectItem value="kennzeichen">Kennzeichen</SelectItem>
+                  <SelectItem value="rechnung">Rechnungen</SelectItem>
+                  <SelectItem value="rueckruf">Rückrufe</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {submissionsLoading ? (
+              <div className="text-center py-8 text-gray-500">Lade Anfragen...</div>
+            ) : submissionsData.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">Keine Anfragen gefunden</div>
+            ) : (
+              <div className="space-y-3">
+                {submissionsData.map((sub) => (
+                  <div key={sub.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {getSubmissionTypeBadge(sub.type)}
+                        {getSubmissionStatusBadge(sub.status)}
+                        <span className="text-xs text-gray-400">
+                          {sub.createdAt ? new Date(sub.createdAt).toLocaleString("de-DE") : "-"}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Select
+                          value={sub.status}
+                          onValueChange={(val) => updateSubmissionMutation.mutate({ id: sub.id, status: val })}
+                        >
+                          <SelectTrigger className="w-36 h-8 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="neu">Neu</SelectItem>
+                            <SelectItem value="bearbeitung">In Bearbeitung</SelectItem>
+                            <SelectItem value="erledigt">Erledigt</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          className="h-8 px-2"
+                          onClick={() => {
+                            if (confirm("Eintrag wirklich löschen?")) deleteSubmissionMutation.mutate(sub.id);
+                          }}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-x-6 gap-y-1 text-sm">
+                      <div>
+                        <span className="font-medium text-gray-700">Name: </span>
+                        <span>{sub.customerName || "-"}</span>
+                      </div>
+                      {sub.customerEmail && (
+                        <div>
+                          <span className="font-medium text-gray-700">E-Mail: </span>
+                          <a href={`mailto:${sub.customerEmail}`} className="text-ergo-red hover:underline">{sub.customerEmail}</a>
+                        </div>
+                      )}
+                      {sub.customerPhone && (
+                        <div>
+                          <span className="font-medium text-gray-700">Telefon: </span>
+                          <a href={`tel:${sub.customerPhone}`} className="text-ergo-red hover:underline">{sub.customerPhone}</a>
+                        </div>
+                      )}
+                      {sub.subject && (
+                        <div>
+                          <span className="font-medium text-gray-700">Betreff: </span>
+                          <span>{sub.subject}</span>
+                        </div>
+                      )}
+                    </div>
+                    {sub.summary && (
+                      <p className="text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded">{sub.summary}</p>
+                    )}
+                    {sub.details && Object.keys(sub.details).length > 0 && (
+                      <details className="mt-2">
+                        <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700">Details anzeigen</summary>
+                        <pre className="text-xs bg-gray-50 p-2 rounded mt-1 overflow-x-auto whitespace-pre-wrap">
+                          {JSON.stringify(sub.details, null, 2)}
+                        </pre>
+                      </details>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+        )}
 
         {/* Content Management Section */}
+        {activeTab === "content" && (
         <Card className="bg-white shadow-lg border-t-4 border-ergo-red">
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -921,6 +1113,7 @@ export default function AdminDashboard() {
             </div>
           </CardContent>
         </Card>
+        )}
       </div>
 
       {/* Password Change Modal */}

@@ -278,6 +278,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Submissions API for admin
+  app.get("/api/submissions", async (req, res) => {
+    try {
+      const type = req.query.type as string | undefined;
+      const status = req.query.status as string | undefined;
+      const subs = await storage.getSubmissions({ type, status });
+      res.json(subs);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch submissions" });
+    }
+  });
+
+  app.patch("/api/submissions/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      const sub = await storage.updateSubmission(id, updates);
+      if (!sub) return res.status(404).json({ message: "Submission not found" });
+      res.json(sub);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update submission" });
+    }
+  });
+
+  app.delete("/api/submissions/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteSubmission(id);
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete submission" });
+    }
+  });
+
   // Document submission endpoint
   app.post("/api/documents/submit", async (req, res) => {
     try {
@@ -286,6 +320,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!documentType || !customerName || !customerEmail) {
         return res.status(400).json({ message: "Missing required fields" });
       }
+
+      await storage.createSubmission({
+        type: 'dokument',
+        customerName,
+        customerEmail,
+        customerPhone: customerPhone || '',
+        subject: documentType,
+        summary: summary || '',
+        details: { documentType, pdfAttached: !!pdfBase64 },
+      });
 
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
 
@@ -357,6 +401,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!isGlasschaden && !damageDescription) {
         return res.status(400).json({ message: "Missing required fields" });
       }
+
+      await storage.createSubmission({
+        type: 'schaden',
+        customerName,
+        customerEmail,
+        customerPhone: customerPhone || '',
+        subject: damageType,
+        summary: damageDescription || '',
+        details: { damageType, insuranceNumber, damageDate, damageLocation, policeReport, estimatedDamage, isGlasschaden, glasScheibe, extraFields, attachmentsCount },
+      });
 
       if (fileAttachments && Array.isArray(fileAttachments)) {
         if (fileAttachments.length > 5) {
@@ -485,6 +539,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const isEvb = requestType === 'evb';
       const typeLabel = isEvb ? 'eVB-Nummer (Kfz)' : 'Versicherungskennzeichen';
 
+      await storage.createSubmission({
+        type: 'kennzeichen',
+        customerName: `${vorname} ${nachname}`,
+        customerEmail: email,
+        customerPhone: telefon,
+        subject: typeLabel,
+        summary: '',
+        details: { requestType, vorname, nachname, geburtsdatum: body.geburtsdatum, strasse: body.strasse, plz: body.plz, ort: body.ort, fahrzeugart: body.fahrzeugart, fahrzeughersteller: body.fahrzeughersteller, fahrzeugmodell: body.fahrzeugmodell, fin: body.fin, erstzulassung: body.erstzulassung, versicherungsbeginn: body.versicherungsbeginn, hinweise: body.hinweise },
+      });
+
       const personalRows = [
         `<p><strong>Name:</strong> ${vorname} ${nachname}</p>`,
         body.geburtsdatum ? `<p><strong>Geburtsdatum:</strong> ${body.geburtsdatum}</p>` : '',
@@ -604,6 +668,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
+      await storage.createSubmission({
+        type: 'rechnung',
+        customerName: `${vorname} ${nachname}`,
+        customerEmail: email,
+        customerPhone: telefon,
+        subject: 'Rechnung/Beleg',
+        summary: beschreibung || '',
+        details: { versicherungsnummer, schadennummer, fileCount: fileAttachments?.length || 0 },
+      });
+
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
       const fileCount = fileAttachments?.length || 0;
 
@@ -685,6 +759,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!name || !phone || !callbackTime) {
         return res.status(400).json({ message: "Fields must not be empty" });
       }
+
+      await storage.createSubmission({
+        type: 'rueckruf',
+        customerName: name,
+        customerEmail: '',
+        customerPhone: phone,
+        subject: topic || 'Rückruf',
+        summary: callbackTime,
+        details: { callbackTime, topic },
+      });
 
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
 
