@@ -11,7 +11,8 @@ import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/a
 import { insuranceConfig } from "@/lib/insurance-config";
 import { useQuery } from "@tanstack/react-query";
 import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
-import { Award, Shield, Handshake, Clock } from "lucide-react";
+import morinoPortrait from "@assets/image_(1)_1771598345651.png";
+import { Award, Shield, Handshake, Clock, Star, Instagram, ExternalLink } from "lucide-react";
 import type { Content } from "@shared/schema";
 
 const insuranceFAQs: Record<string, { question: string; answer: string }[]> = {
@@ -392,6 +393,57 @@ export default function Insurance() {
               <div className="bg-white rounded-lg p-4 shadow-sm">
                 <div className="text-2xl sm:text-3xl font-bold text-yellow-600 mb-1">30%</div>
                 <div className="text-xs sm:text-sm text-gray-600">Durchschn. Ersparnis</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Berater & Testsieger Section */}
+        <section className="py-10 sm:py-14 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <div className="flex flex-col md:flex-row gap-6 items-start">
+              <div className="flex-shrink-0">
+                <img
+                  src={morinoPortrait}
+                  alt="Morino Stübe – Ihr ERGO Berater"
+                  className="w-32 h-40 sm:w-40 sm:h-52 rounded-2xl object-cover object-top shadow-lg border-2 border-gray-100"
+                  loading="lazy"
+                />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Ihr Berater: Morino Stübe</h2>
+                <p className="text-ergo-red font-semibold text-sm mb-3">ERGO Versicherungsfachmann · Ganderkesee</p>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Ich berate Sie persönlich und transparent zur {insurance.title}. Gemeinsam finden wir die beste Lösung für Ihre Situation – kostenlos und unverbindlich. Besuchen Sie mich in Ganderkesee oder wir beraten Sie digital per Video oder WhatsApp.
+                </p>
+                <div className="flex flex-wrap gap-3 mb-4">
+                  <a
+                    href="https://www.instagram.com/morino_stuebe/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm text-pink-600 hover:text-pink-700 font-medium"
+                    onClick={() => trackEvent('instagram_clicked', { source: 'insurance_page', type })}
+                  >
+                    <Instagram className="w-4 h-4" />
+                    @morino_stuebe
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    { label: "Zahnzusatz", rating: "SEHR GUT (0,5)", source: "Stiftung Warentest '24" },
+                    { label: "BU-Versicherung", rating: "SEHR GUT", source: "Finanztest '24" },
+                    { label: "Kfz Best-Tarif", rating: "HERVORRAGEND", source: "Franke & Bornberg '25" },
+                    { label: "Service", rating: "11x Champion", source: "ServiceValue '25" },
+                  ].map((award) => (
+                    <div key={award.label} className="bg-gray-50 rounded-lg p-2.5 text-center border border-gray-100">
+                      <Award className="w-4 h-4 text-yellow-500 mx-auto mb-1" />
+                      <p className="text-xs font-bold text-gray-900 leading-tight">{award.rating}</p>
+                      <p className="text-[10px] text-gray-500 mt-0.5">{award.label}</p>
+                      <p className="text-[10px] text-gray-400">{award.source}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

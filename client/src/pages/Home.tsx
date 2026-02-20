@@ -53,7 +53,7 @@ export default function Home() {
           },
           "sameAs": [
             "https://www.linkedin.com/in/morino-stuebe",
-            "https://www.instagram.com/morino.stuebe.ergo"
+            "https://www.instagram.com/morino_stuebe"
           ]
         }}
       />

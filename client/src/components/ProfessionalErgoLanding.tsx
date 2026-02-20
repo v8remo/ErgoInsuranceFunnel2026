@@ -1,9 +1,24 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
-import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, FileText, AlertTriangle } from 'lucide-react';
+import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, FileText, AlertTriangle, Award, Trophy, Instagram, ExternalLink } from 'lucide-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import FunnelOverlay from './FunnelOverlay';
 import '@/styles/funnel.css';
+
+import ichBinDaPhoto from '@assets/Untitled_(2)_1771598345647.png';
+import sittingPhoto from '@assets/ich_bin_da_1771598345650.png';
+import portraitPhoto from '@assets/image_(1)_1771598345651.png';
+import beraterBranding from '@assets/Unbenannt_(1)_1771598345651.png';
+import standingPhoto from '@assets/image_1771598345651.png';
+
+const awards = [
+  { source: 'Stiftung Warentest', product: 'Zahnzusatz', rating: 'SEHR GUT (0,5)', label: 'Testsieger 2024', color: 'bg-yellow-50 border-yellow-300' },
+  { source: 'Stiftung Warentest', product: 'Reisekranken', rating: 'GUT (2,3)', label: 'Testsieger 2024', color: 'bg-yellow-50 border-yellow-300' },
+  { source: 'Finanztest', product: 'BU-Versicherung', rating: 'SEHR GUT', label: '2024', color: 'bg-green-50 border-green-300' },
+  { source: 'Franke & Bornberg', product: 'Kfz-Versicherung', rating: 'HERVORRAGEND', label: '2025', color: 'bg-blue-50 border-blue-300' },
+  { source: 'ServiceValue', product: 'Service-Champion', rating: '11× in Folge', label: '2025', color: 'bg-purple-50 border-purple-300' },
+  { source: 'Branchen-Champion', product: 'Rechtsschutz', rating: 'Platz 1 Kundenzufriedenheit', label: '2025', color: 'bg-red-50 border-red-300' },
+];
 
 export default function ProfessionalErgoLanding() {
   const [showFunnel, setShowFunnel] = useState(false);
@@ -89,9 +104,9 @@ export default function ProfessionalErgoLanding() {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-8">
           <div className="flex flex-col items-center text-center gap-5 md:flex-row md:text-left md:items-start">
             <img
-              src="/attached_assets/089-Ti9r4yWZjrM_1756458595368.jpeg"
+              src={portraitPhoto}
               alt="Morino Stübe - ERGO Versicherungsfachmann"
-              className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-[3px] border-ergo-red shadow-md shrink-0"
+              className="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover border-[3px] border-ergo-red shadow-md shrink-0"
               loading="eager"
             />
 
@@ -119,6 +134,39 @@ export default function ProfessionalErgoLanding() {
               alt="ERGO Logo"
               className="h-10 md:h-14 w-auto shrink-0 hidden md:block"
               loading="eager"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ──────── PHOTO GALLERY ──────── */}
+      <section className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
+        <h2 className="text-lg font-bold text-gray-900 text-center mb-6 sm:text-xl md:text-3xl md:mb-8">
+          Ihr Berater – persönlich & nahbar
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+          <div className="col-span-2 md:col-span-1 md:row-span-2">
+            <img
+              src={ichBinDaPhoto}
+              alt="Morino Stübe – Ich bin für dich da"
+              className="w-full h-full object-cover rounded-2xl shadow-md border border-gray-100"
+              loading="lazy"
+            />
+          </div>
+          <div>
+            <img
+              src={beraterBranding}
+              alt="Morino Stübe – Dein ERGO Berater"
+              className="w-full h-full object-cover rounded-2xl shadow-md border border-gray-100"
+              loading="lazy"
+            />
+          </div>
+          <div>
+            <img
+              src={standingPhoto}
+              alt="Morino Stübe – stehend"
+              className="w-full h-full object-cover rounded-2xl shadow-md border border-gray-100"
+              loading="lazy"
             />
           </div>
         </div>
@@ -157,6 +205,79 @@ export default function ProfessionalErgoLanding() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ──────── TESTSIEGER / AWARDS ──────── */}
+      <section className="px-4 pb-10 md:pb-16 max-w-4xl mx-auto">
+        <div className="text-center mb-6 md:mb-8">
+          <span className="inline-flex items-center gap-2 bg-yellow-50 text-yellow-700 text-xs font-bold uppercase tracking-wide px-4 py-1.5 rounded-full mb-4">
+            <Trophy className="w-4 h-4" />
+            Ausgezeichnet
+          </span>
+          <h2 className="text-lg font-bold text-gray-900 sm:text-xl md:text-3xl">
+            ERGO – Vielfach ausgezeichnet & getestet
+          </h2>
+          <p className="text-sm text-gray-500 mt-2 md:text-base max-w-xl mx-auto">
+            Unabhängige Tests bestätigen: ERGO bietet Top-Leistungen zu fairen Konditionen.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+          {awards.map((award) => (
+            <div
+              key={award.product}
+              className={`rounded-xl border-2 ${award.color} p-4 md:p-5 flex flex-col items-center text-center transition-shadow hover:shadow-md`}
+            >
+              <Award className="w-8 h-8 text-ergo-red mb-2" />
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{award.source}</p>
+              <h3 className="font-bold text-gray-900 text-sm md:text-base mt-1">{award.product}</h3>
+              <span className="inline-block bg-white text-ergo-red font-extrabold text-xs md:text-sm px-3 py-1 rounded-full mt-2 border border-ergo-red/20">
+                {award.rating}
+              </span>
+              <p className="text-xs text-gray-400 mt-2">{award.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ──────── INSTAGRAM ──────── */}
+      <section className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
+        <div className="bg-gradient-to-br from-pink-50 via-purple-50 to-orange-50 border border-pink-200 rounded-2xl shadow-lg p-6 md:p-10 text-center">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#833AB4] via-[#E1306C] to-[#F77737] text-white mb-4 shadow-md">
+            <Instagram className="w-7 h-7" />
+          </div>
+
+          <h2 className="text-lg font-bold text-gray-900 mb-2 sm:text-xl md:text-3xl">
+            Folgen Sie mir auf Instagram
+          </h2>
+          <p className="text-sm text-gray-600 leading-relaxed mb-6 max-w-md mx-auto md:text-base">
+            Versicherungstipps, Einblicke in meinen Berateralltag und aktuelle Angebote – direkt auf Ihrem Smartphone.
+          </p>
+
+          <div className="grid grid-cols-3 gap-2 md:gap-3 mb-6 max-w-sm mx-auto">
+            <div className="aspect-square rounded-xl bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center overflow-hidden">
+              <img src={sittingPhoto} alt="Instagram Preview" className="w-full h-full object-cover rounded-xl" loading="lazy" />
+            </div>
+            <div className="aspect-square rounded-xl bg-gradient-to-br from-purple-200 to-orange-200 flex items-center justify-center overflow-hidden">
+              <img src={ichBinDaPhoto} alt="Instagram Preview" className="w-full h-full object-cover rounded-xl" loading="lazy" />
+            </div>
+            <div className="aspect-square rounded-xl bg-gradient-to-br from-orange-200 to-pink-200 flex items-center justify-center overflow-hidden">
+              <img src={standingPhoto} alt="Instagram Preview" className="w-full h-full object-cover rounded-xl" loading="lazy" />
+            </div>
+          </div>
+
+          <a
+            href="https://www.instagram.com/morino_stuebe/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('instagram_clicked', { source: 'instagram_section' })}
+            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#F77737] text-white font-semibold text-sm px-6 py-3.5 rounded-xl shadow-md active:scale-[0.97] transition-transform md:text-base md:px-8 md:py-4"
+          >
+            <Instagram className="w-5 h-5" />
+            @morino_stuebe
+            <ExternalLink className="w-4 h-4" />
+          </a>
         </div>
       </section>
 
