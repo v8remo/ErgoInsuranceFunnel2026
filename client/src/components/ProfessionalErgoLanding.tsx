@@ -45,70 +45,118 @@ export default function ProfessionalErgoLanding() {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
 
       {/* ──────── HERO ──────── */}
-      <section className="px-4 pt-8 pb-10 md:pt-16 md:pb-20 text-center max-w-3xl mx-auto">
-        <span className="inline-block bg-ergo-red text-white text-xs font-bold tracking-wide uppercase px-4 py-1.5 rounded-full mb-5 md:text-sm">
-          ERGO Versicherungsfachmann · Ganderkesee
-        </span>
+      <section className="px-4 pt-8 pb-10 md:pt-12 md:pb-16 max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-center md:gap-10 lg:gap-14">
+          {/* LEFT: Text + CTAs */}
+          <div className="flex-1 text-center md:text-left mb-8 md:mb-0">
+            <span className="inline-block bg-ergo-red text-white text-xs font-bold tracking-wide uppercase px-4 py-1.5 rounded-full mb-5 md:text-sm">
+              ERGO Versicherungsfachmann · Ganderkesee
+            </span>
 
-        <h1 className="text-xl font-extrabold text-gray-900 leading-tight mb-4 sm:text-2xl md:text-4xl lg:text-5xl">
-          Ihre ERGO Agentur in Ganderkesee –{' '}
-          <span className="text-ergo-red">Persönliche Beratung rund um Ihre Absicherung</span>
-        </h1>
+            <h1 className="text-xl font-extrabold text-gray-900 leading-tight mb-4 sm:text-2xl md:text-3xl lg:text-4xl">
+              Ihre ERGO Agentur in Ganderkesee –{' '}
+              <span className="text-ergo-red">Persönliche Beratung rund um Ihre Absicherung</span>
+            </h1>
 
-        <p className="text-base text-gray-600 leading-relaxed mb-8 md:text-lg max-w-2xl mx-auto">
-          Ob Kfz, Zahnzusatz, Wohngebäude oder Haftpflicht – wir beraten Sie individuell und transparent.
-        </p>
+            <p className="text-base text-gray-600 leading-relaxed mb-6 md:text-lg max-w-xl">
+              Ob Kfz, Zahnzusatz, Wohngebäude oder Haftpflicht – wir beraten Sie individuell und transparent.
+            </p>
 
-        <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
-          <button
-            onClick={() => {
-              setShowFunnel(true);
-              trackEvent('cta_beratung_clicked', { source: 'hero_section' });
-            }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold text-sm px-5 py-3.5 rounded-xl shadow-md active:scale-[0.97] transition-transform whitespace-nowrap md:text-base md:px-6 md:py-4"
-          >
-            <Mail className="w-4 h-4 shrink-0 md:w-5 md:h-5" />
-            Jetzt Beratung anfragen
-          </button>
+            <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center md:justify-start sm:gap-3">
+              <button
+                onClick={() => {
+                  setShowFunnel(true);
+                  trackEvent('cta_beratung_clicked', { source: 'hero_section' });
+                }}
+                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold text-sm px-5 py-3.5 rounded-xl shadow-md active:scale-[0.97] transition-transform whitespace-nowrap md:text-base md:px-6 md:py-4"
+              >
+                <Mail className="w-4 h-4 shrink-0 md:w-5 md:h-5" />
+                Jetzt Beratung anfragen
+              </button>
 
-          <a
-            href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => {
-              trackEvent('whatsapp_clicked', { source: 'hero_section' });
-              trackConversion();
-            }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-green-500 text-green-600 font-semibold text-sm px-5 py-3.5 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap md:text-base md:px-6 md:py-4"
-          >
-            <MessageSquare className="w-4 h-4 shrink-0 md:w-5 md:h-5" />
-            Direkt über WhatsApp
-          </a>
+              <a
+                href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => {
+                  trackEvent('whatsapp_clicked', { source: 'hero_section' });
+                  trackConversion();
+                }}
+                className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-green-500 text-green-600 font-semibold text-sm px-5 py-3.5 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap md:text-base md:px-6 md:py-4"
+              >
+                <MessageSquare className="w-4 h-4 shrink-0 md:w-5 md:h-5" />
+                Direkt über WhatsApp
+              </a>
+            </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:contents">
-            <Link
-              href="/dokumente"
-              className="flex items-center justify-center gap-1 border-2 border-[#003781] text-[#003781] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-transform text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4"
-            >
-              <FileText className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
-              Dokument einreichen
-            </Link>
+            <div className="flex flex-col gap-2 mt-3 sm:flex-row sm:flex-wrap sm:justify-center md:justify-start sm:gap-3">
+              <div className="grid grid-cols-2 gap-2 sm:contents">
+                <Link
+                  href="/dokumente"
+                  className="flex items-center justify-center gap-1 border-2 border-[#003781] text-[#003781] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-transform text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4"
+                >
+                  <FileText className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
+                  Dokument einreichen
+                </Link>
 
-            <Link
-              href="/schaden"
-              className="flex items-center justify-center gap-1 border-2 border-[#E2001A] text-[#E2001A] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-transform text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4"
-            >
-              <AlertTriangle className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
-              Schaden melden
-            </Link>
+                <Link
+                  href="/schaden"
+                  className="flex items-center justify-center gap-1 border-2 border-[#E2001A] text-[#E2001A] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-transform text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4"
+                >
+                  <AlertTriangle className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
+                  Schaden melden
+                </Link>
+              </div>
+
+              <Link
+                href="/kennzeichen"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#003781] text-[#003781] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-transform text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:gap-2 md:text-base md:px-6 md:py-4"
+              >
+                EVB & Kennzeichen anfordern
+              </Link>
+            </div>
           </div>
 
-          <Link
-            href="/kennzeichen"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#003781] text-[#003781] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-transform text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:gap-2 md:text-base md:px-6 md:py-4"
-          >
-            EVB & Kennzeichen anfordern
-          </Link>
+          {/* RIGHT: Video */}
+          <div className="flex-shrink-0 w-full md:w-[45%] lg:w-[42%]">
+            <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-xl aspect-video relative">
+              {!videoPlaying ? (
+                <button
+                  onClick={handlePlayVideo}
+                  className="w-full h-full flex flex-col items-center justify-center group cursor-pointer"
+                  aria-label="Video abspielen"
+                >
+                  <img
+                    src={ichBinDaPhoto}
+                    alt="Morino Stübe Vorstellung"
+                    className="absolute inset-0 w-full h-full object-cover opacity-70"
+                    loading="eager"
+                  />
+                  <div className="relative z-10 flex flex-col items-center">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/90 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#E2001A" className="w-8 h-8 sm:w-10 sm:h-10 ml-1">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                    <p className="text-white font-semibold text-sm sm:text-base mt-3 drop-shadow-lg">Video abspielen</p>
+                  </div>
+                </button>
+              ) : (
+                <video
+                  ref={videoRef}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  className="w-full h-full object-contain bg-black"
+                  onError={(e) => { e.stopPropagation(); }}
+                >
+                  <source src="/videos/vorstellung.mp4" type="video/mp4" />
+                  Ihr Browser unterstützt dieses Videoformat leider nicht.
+                </video>
+              )}
+            </div>
+            <p className="text-center text-gray-400 text-xs mt-2">Morino Stübe – Ihr ERGO Berater</p>
+          </div>
         </div>
       </section>
 
@@ -164,52 +212,6 @@ export default function ProfessionalErgoLanding() {
           loading="lazy"
         />
         <p className="text-center text-gray-500 text-sm mt-3">Morino Stübe – Ihr ERGO Berater in Ganderkesee</p>
-      </section>
-
-      {/* ──────── VIDEO VORSTELLUNG ──────── */}
-      <section className="px-4 pb-10 md:pb-16 max-w-2xl mx-auto">
-        <h2 className="text-lg font-bold text-gray-900 text-center mb-6 sm:text-xl md:text-3xl md:mb-8">
-          Lernen Sie mich kennen
-        </h2>
-        <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg aspect-video relative">
-          {!videoPlaying ? (
-            <button
-              onClick={handlePlayVideo}
-              className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 group cursor-pointer"
-              aria-label="Video abspielen"
-            >
-              <img
-                src={ichBinDaPhoto}
-                alt="Morino Stübe Vorstellung"
-                className="absolute inset-0 w-full h-full object-cover opacity-60"
-                loading="lazy"
-              />
-              <div className="relative z-10 flex flex-col items-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/90 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#E2001A" className="w-8 h-8 sm:w-10 sm:h-10 ml-1">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-                <p className="text-white font-semibold text-sm sm:text-base mt-3 drop-shadow-lg">Video abspielen</p>
-              </div>
-            </button>
-          ) : (
-            <video
-              ref={videoRef}
-              controls
-              playsInline
-              preload="metadata"
-              className="w-full h-full object-contain bg-black"
-              onError={(e) => { e.stopPropagation(); }}
-            >
-              <source src="/videos/vorstellung.mp4" type="video/mp4" />
-              Ihr Browser unterstützt dieses Videoformat leider nicht.
-            </video>
-          )}
-        </div>
-        <p className="text-center text-gray-400 text-xs mt-3">
-          Persönliche Vorstellung von Morino Stübe – Ihr ERGO Berater
-        </p>
       </section>
 
       {/* ──────── VORTEILE ──────── */}
