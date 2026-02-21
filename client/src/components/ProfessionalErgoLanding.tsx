@@ -6,6 +6,8 @@ import FunnelOverlay from './FunnelOverlay';
 import '@/styles/funnel.css';
 
 import ichBinDaPhoto from '@assets/Untitled_(2)_1771598345647.png';
+import beraterPhoto from '@assets/ich_bin_da_1771598345650.png';
+import imagePhoto from '@assets/image_1771598345651.png';
 
 const awards = [
   { source: 'Stiftung Warentest', product: 'Zahnzusatz', rating: 'SEHR GUT (0,5)', label: 'Testsieger 2024', color: 'bg-yellow-50 border-yellow-300' },
@@ -165,7 +167,7 @@ export default function ProfessionalErgoLanding() {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-8">
           <div className="flex flex-col items-center text-center gap-5 md:flex-row md:text-left md:items-start">
             <img
-              src={ichBinDaPhoto}
+              src={beraterPhoto}
               alt="Morino Stübe - ERGO Versicherungsfachmann"
               className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-md shrink-0 bg-white"
               loading="eager"
@@ -198,20 +200,6 @@ export default function ProfessionalErgoLanding() {
             />
           </div>
         </div>
-      </section>
-
-      {/* ──────── BERATER FOTO ──────── */}
-      <section className="px-4 pb-10 md:pb-16 max-w-md mx-auto">
-        <h2 className="text-lg font-bold text-gray-900 text-center mb-6 sm:text-xl md:text-3xl md:mb-8">
-          Ihr Berater – persönlich & nahbar
-        </h2>
-        <img
-          src={ichBinDaPhoto}
-          alt="Morino Stübe – Ich bin für dich da"
-          className="w-full rounded-2xl shadow-lg border border-gray-100"
-          loading="lazy"
-        />
-        <p className="text-center text-gray-500 text-sm mt-3">Morino Stübe – Ihr ERGO Berater in Ganderkesee</p>
       </section>
 
       {/* ──────── VORTEILE ──────── */}
@@ -336,7 +324,7 @@ export default function ProfessionalErgoLanding() {
 
           <div className="mb-6 max-w-xs mx-auto">
             <div className="aspect-[4/5] rounded-xl bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center overflow-hidden">
-              <img src={ichBinDaPhoto} alt="Morino Stübe Instagram" className="w-full h-full object-contain rounded-xl" loading="lazy" />
+              <img src={imagePhoto} alt="Morino Stübe Instagram" className="w-full h-full object-contain rounded-xl" loading="lazy" />
             </div>
           </div>
 
