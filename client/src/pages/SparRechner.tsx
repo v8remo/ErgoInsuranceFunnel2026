@@ -115,7 +115,7 @@ export default function SparRechner() {
 
             <div className="space-y-3">
               {entries.map((entry, i) => (
-                <div key={entry.name} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
+                <div key={entry.name} className={`flex flex-wrap items-center gap-2 sm:gap-3 p-3 rounded-xl border-2 transition-all ${
                   entry.active ? 'border-green-300 bg-green-50' : 'border-gray-200'
                 }`}>
                   <button
@@ -126,20 +126,20 @@ export default function SparRechner() {
                   >
                     {entry.active && '✓'}
                   </button>
-                  <span className={`flex-1 font-medium text-sm ${entry.active ? 'text-gray-900' : 'text-gray-500'}`}>
+                  <span className={`flex-1 min-w-0 font-medium text-sm ${entry.active ? 'text-gray-900' : 'text-gray-500'}`}>
                     {entry.name}
                   </span>
                   {entry.active && (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 shrink-0">
                       <input
                         type="text"
                         inputMode="decimal"
                         value={entry.beitrag}
                         onChange={(e) => updateBeitrag(i, e.target.value)}
                         placeholder="0"
-                        className="w-20 text-right p-2 border border-gray-300 rounded-lg text-sm font-semibold focus:outline-none focus:border-green-500"
+                        className="w-[72px] text-right p-2 border border-gray-300 rounded-lg text-sm font-semibold focus:outline-none focus:border-green-500"
                       />
-                      <span className="text-sm text-gray-500">€/Jahr</span>
+                      <span className="text-xs sm:text-sm text-gray-500">€/J.</span>
                     </div>
                   )}
                 </div>
@@ -172,24 +172,30 @@ export default function SparRechner() {
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 md:p-8">
                 <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">Ihre Ersparnis</h3>
 
-                <div className="grid grid-cols-3 gap-4 text-center mb-6">
-                  <div className="bg-gray-50 rounded-xl p-4">
-                    <p className="text-xs text-gray-500 mb-1">Aktuell</p>
-                    <p className="text-lg font-bold text-gray-900">{totalBeitrag.toFixed(0)} €</p>
-                    <p className="text-xs text-gray-400">pro Jahr</p>
+                <div className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:gap-4 text-center mb-6">
+                  <div className="bg-gray-50 rounded-xl p-4 flex items-center justify-between sm:flex-col sm:justify-center">
+                    <p className="text-xs text-gray-500 sm:mb-1">Aktuell</p>
+                    <div className="flex items-baseline gap-1 sm:flex-col sm:items-center">
+                      <p className="text-xl sm:text-lg font-bold text-gray-900">{totalBeitrag.toFixed(0)} €</p>
+                      <p className="text-xs text-gray-400">pro Jahr</p>
+                    </div>
                   </div>
-                  <div className="bg-red-50 rounded-xl p-4">
-                    <div className="flex items-center justify-center gap-1 mb-1">
+                  <div className="bg-red-50 rounded-xl p-4 flex items-center justify-between sm:flex-col sm:justify-center">
+                    <div className="flex items-center gap-1 sm:mb-1">
                       <TrendingDown className="w-3 h-3 text-red-500" />
                       <p className="text-xs text-red-500 font-semibold">-{rabattProzent}%</p>
                     </div>
-                    <p className="text-lg font-bold text-red-600">-{ersparnis.toFixed(0)} €</p>
-                    <p className="text-xs text-gray-400">Ersparnis</p>
+                    <div className="flex items-baseline gap-1 sm:flex-col sm:items-center">
+                      <p className="text-xl sm:text-lg font-bold text-red-600">-{ersparnis.toFixed(0)} €</p>
+                      <p className="text-xs text-gray-400">Ersparnis</p>
+                    </div>
                   </div>
-                  <div className="bg-green-50 rounded-xl p-4">
-                    <p className="text-xs text-green-600 mb-1 font-semibold">Mit ERGO</p>
-                    <p className="text-lg font-bold text-green-700">{neuerBeitrag.toFixed(0)} €</p>
-                    <p className="text-xs text-gray-400">pro Jahr</p>
+                  <div className="bg-green-50 rounded-xl p-4 flex items-center justify-between sm:flex-col sm:justify-center">
+                    <p className="text-xs text-green-600 font-semibold sm:mb-1">Mit ERGO</p>
+                    <div className="flex items-baseline gap-1 sm:flex-col sm:items-center">
+                      <p className="text-xl sm:text-lg font-bold text-green-700">{neuerBeitrag.toFixed(0)} €</p>
+                      <p className="text-xs text-gray-400">pro Jahr</p>
+                    </div>
                   </div>
                 </div>
 

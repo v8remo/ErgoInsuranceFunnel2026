@@ -250,14 +250,14 @@ export default function VersicherungsCheck() {
                     const Icon = config.icon;
                     return (
                       <Link key={i} href={rec.link}>
-                        <div className={`flex items-start gap-3 p-4 rounded-xl border-2 ${config.color} cursor-pointer hover:shadow-md transition-shadow`}>
+                        <div className={`flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl border-2 ${config.color} cursor-pointer hover:shadow-md transition-shadow`}>
                           <Icon className="w-5 h-5 shrink-0 mt-0.5" />
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="font-bold text-gray-900">{rec.name}</span>
-                              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/80">{config.label}</span>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-2 mb-1">
+                              <span className="font-bold text-gray-900 text-sm sm:text-base">{rec.name}</span>
+                              <span className="text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-white/80 self-start">{config.label}</span>
                             </div>
-                            <p className="text-sm text-gray-600">{rec.reason}</p>
+                            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{rec.reason}</p>
                           </div>
                           <ChevronRight className="w-5 h-5 shrink-0 text-gray-400 mt-1" />
                         </div>

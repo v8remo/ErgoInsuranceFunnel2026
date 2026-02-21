@@ -160,9 +160,9 @@ export default function AktionsSeiten() {
             <span className="text-5xl mb-4 block">{data.icon}</span>
             <h1 className="text-2xl md:text-4xl font-bold mb-3">{data.title}</h1>
             <p className="text-lg md:text-xl text-white/90 mb-6">{data.subtitle}</p>
-            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold border ${data.urgencyColor}`}>
-              <Clock className="w-4 h-4" />
-              {data.urgencyText}
+            <div className={`inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-bold border ${data.urgencyColor} max-w-full text-center`}>
+              <Clock className="w-4 h-4 shrink-0" />
+              <span className="break-words">{data.urgencyText}</span>
             </div>
           </div>
         </section>
