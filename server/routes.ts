@@ -530,6 +530,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Ungültiger Antragstyp" });
       }
 
+      if (requestType === 'kennzeichen' && body.abeAttachments && Array.isArray(body.abeAttachments)) {
+        if (body.abeAttachments.length > 5) {
+          return res.status(400).json({ message: "Maximal 5 ABE-Dateien erlaubt" });
+        }
+        const totalSize = body.abeAttachments.reduce((sum: number, f: any) => sum + (f.content?.length || 0), 0);
+        if (totalSize > 25 * 1024 * 1024) {
+          return res.status(400).json({ message: "ABE-Dateien zu groß. Maximal 25 MB insgesamt." });
+        }
+      }
+
       const vorname = String(body.vorname).trim().slice(0, 200);
       const nachname = String(body.nachname).trim().slice(0, 200);
       const email = String(body.email).trim().slice(0, 200);
@@ -608,6 +618,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
               <h3 style="color: #003781; margin-top: 0;">Versicherungsdetails</h3>
               ${insuranceFields.join('')}
             </div>` : ''}
+            ${!isEvb && body.abeAttachments?.length > 0 ? `
+            <div style="background-color: #d4edda; padding: 10px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 15px;">
+              📄 ${body.abeAttachments.length} ABE-Datei(en) angehängt
+            </div>` : ''}
           </div>
           <div style="padding: 10px 20px; font-size: 12px; color: #666; text-align: center;">
             Eingereicht am ${now} über ergo-stuebe.de/kennzeichen
@@ -619,11 +633,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { Resend } = await import('resend');
         const resendClient = new Resend(process.env.RESEND_API_KEY);
         const vehicleDesc = body.fahrzeughersteller ? `${body.fahrzeughersteller} ${body.fahrzeugmodell || ''}`.trim() : (body.fahrzeugart || '');
+
+        const attachments = (!isEvb && body.abeAttachments && Array.isArray(body.abeAttachments))
+          ? body.abeAttachments.map((f: { filename: string; content: string }) => ({
+              filename: f.filename,
+              content: Buffer.from(f.content, 'base64'),
+            }))
+          : [];
+
         const { data, error } = await resendClient.emails.send({
           from: 'ERGO Kennzeichen <kennzeichen@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
           subject: `${isEvb ? '🚗 eVB-Anfrage' : '🛵 Versicherungskennzeichen'}: ${vorname} ${nachname} – ${vehicleDesc} – ${now}`,
           html: emailHtml,
+          attachments: attachments.length > 0 ? attachments : undefined,
         });
 
         if (error) {

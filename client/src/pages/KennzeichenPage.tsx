@@ -5,6 +5,11 @@ import SEO from "@/components/SEO";
 
 type KennzeichenType = 'evb' | 'kennzeichen';
 
+interface AbeFile {
+  file: File;
+  preview?: string;
+}
+
 interface FormData {
   vorname: string;
   nachname: string;
@@ -70,6 +75,47 @@ export default function KennzeichenPage() {
   const [confirm1, setConfirm1] = useState(false);
   const [confirm2, setConfirm2] = useState(false);
   const [fadeClass, setFadeClass] = useState('opacity-100 transition-opacity duration-300');
+  const [abeFiles, setAbeFiles] = useState<AbeFile[]>([]);
+
+  const handleAbeFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    const newFiles: AbeFile[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
+      if (abeFiles.length + newFiles.length >= 5) break;
+      if (!f.type.startsWith('image/') && f.type !== 'application/pdf') continue;
+      if (f.size > 10 * 1024 * 1024) continue;
+      const af: AbeFile = { file: f };
+      if (f.type.startsWith('image/')) {
+        af.preview = URL.createObjectURL(f);
+      }
+      newFiles.push(af);
+    }
+    setAbeFiles(prev => [...prev, ...newFiles].slice(0, 5));
+    if (errors.abeFiles) setErrors(prev => { const n = { ...prev }; delete n.abeFiles; return n; });
+    e.target.value = '';
+  };
+
+  const removeAbeFile = (index: number) => {
+    setAbeFiles(prev => {
+      const next = [...prev];
+      if (next[index]?.preview) URL.revokeObjectURL(next[index].preview!);
+      next.splice(index, 1);
+      return next;
+    });
+  };
+
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result.split(',')[1]);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -131,6 +177,7 @@ export default function KennzeichenPage() {
       if (!formData.hoechstgeschwindigkeit) e.hoechstgeschwindigkeit = 'Bitte auswählen';
       if (!formData.versicherungsbeginn) e.versicherungsbeginn = 'Pflichtfeld';
       if (!formData.versicherungsumfang) e.versicherungsumfang = 'Bitte auswählen';
+      if (abeFiles.length === 0) e.abeFiles = 'Bitte laden Sie die ABE (Allgemeine Betriebserlaubnis) hoch';
       if (formData.bisherigVersichert === 'ja') {
         if (!formData.bisherigVersicherer.trim()) e.bisherigVersicherer = 'Pflichtfeld';
       }
@@ -192,10 +239,21 @@ export default function KennzeichenPage() {
     setSubmitError(null);
 
     try {
+      let abeAttachments: { filename: string; content: string }[] = [];
+      if (selectedType === 'kennzeichen' && abeFiles.length > 0) {
+        abeAttachments = await Promise.all(
+          abeFiles.map(async (af) => ({
+            filename: af.file.name,
+            content: await fileToBase64(af.file),
+          }))
+        );
+      }
+
       await apiRequest('POST', '/api/kennzeichen/submit', {
         requestType: selectedType,
         ...formData,
         summary: buildSummary(),
+        abeAttachments: abeAttachments.length > 0 ? abeAttachments : undefined,
       });
       goToStep(4);
     } catch (err: any) {
@@ -567,8 +625,63 @@ export default function KennzeichenPage() {
                 </div>
 
                 <div className="border-t border-gray-200 pt-4 mt-2">
-                  <p className="text-sm font-bold text-[#003781] uppercase tracking-wide mb-2">Fahrzeugdaten (aus der ABE / Betriebserlaubnis)</p>
-                  <p className="text-xs text-gray-500 mb-4">Alle folgenden Angaben finden Sie in der Allgemeinen Betriebserlaubnis (ABE) Ihres Fahrzeugs.</p>
+                  <p className="text-sm font-bold text-[#003781] uppercase tracking-wide mb-2">ABE hochladen (Pflicht)</p>
+                  <p className="text-xs text-gray-500 mb-3">Bitte laden Sie die Allgemeine Betriebserlaubnis (ABE) Ihres Fahrzeugs hoch. Diese benötigen wir zur Ausstellung des Versicherungskennzeichens.</p>
+                </div>
+
+                <div className="flex flex-col gap-2" data-field="abeFiles">
+                  <div
+                    className={`border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-colors ${errors.abeFiles ? 'border-red-400 bg-red-50' : 'border-gray-300 hover:border-[#003781] bg-gray-50 hover:bg-blue-50'}`}
+                    onClick={() => document.getElementById('abe-file-input')?.click()}
+                  >
+                    <input
+                      id="abe-file-input"
+                      type="file"
+                      accept="image/*,.pdf"
+                      multiple
+                      onChange={handleAbeFileSelect}
+                      className="hidden"
+                    />
+                    <div className="text-3xl mb-2">📄</div>
+                    <p className="text-sm font-semibold text-gray-700">ABE hochladen *</p>
+                    <p className="text-xs text-gray-500 mt-1">Foto oder PDF der Allgemeinen Betriebserlaubnis</p>
+                    <p className="text-xs text-gray-400 mt-1">Max. 5 Dateien, je max. 10 MB (Bilder oder PDF)</p>
+                  </div>
+                  {errors.abeFiles && <span className="text-xs text-red-500">{errors.abeFiles}</span>}
+
+                  {abeFiles.length > 0 && (
+                    <div className="flex flex-col gap-2 mt-1">
+                      {abeFiles.map((af, index) => (
+                        <div key={index} className="flex items-center gap-3 bg-white border border-gray-200 rounded-lg p-3">
+                          {af.preview ? (
+                            <img src={af.preview} alt="ABE Vorschau" className="w-12 h-12 rounded object-cover flex-shrink-0" />
+                          ) : (
+                            <div className="w-12 h-12 rounded bg-blue-50 flex items-center justify-center flex-shrink-0 text-lg">📎</div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900 truncate">{af.file.name}</p>
+                            <p className="text-xs text-gray-500">{(af.file.size / 1024).toFixed(0)} KB</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeAbeFile(index)}
+                            className="text-red-500 hover:text-red-700 text-sm font-semibold px-2 py-1 min-h-[44px] flex items-center"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">
+                    <strong>Wo finde ich die ABE?</strong> Die ABE wird beim Kauf des Fahrzeugs mitgeliefert. Sie enthält alle technischen Daten wie Hersteller, Typ, Hubraum und Höchstgeschwindigkeit. Bei Verlust kann eine Kopie beim Hersteller angefordert werden.
+                  </div>
+                </div>
+
+                <div className="border-t border-gray-200 pt-4 mt-2">
+                  <p className="text-sm font-bold text-[#003781] uppercase tracking-wide mb-2">Fahrzeugdaten (aus der ABE)</p>
+                  <p className="text-xs text-gray-500 mb-4">Alle folgenden Angaben finden Sie in der ABE Ihres Fahrzeugs.</p>
                 </div>
 
                 <div className="flex flex-col gap-1" data-field="fahrzeugart">
@@ -792,6 +905,17 @@ export default function KennzeichenPage() {
                     )}
                   </div>
                 </div>
+
+                {selectedType === 'kennzeichen' && abeFiles.length > 0 && (
+                  <div>
+                    <p className="text-sm font-bold text-[#003781] uppercase tracking-wide mb-2">ABE (Betriebserlaubnis)</p>
+                    <div className="flex flex-col gap-1.5 text-sm text-gray-700">
+                      {abeFiles.map((af, i) => (
+                        <p key={i}>📄 {af.file.name} ({(af.file.size / 1024).toFixed(0)} KB)</p>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {formData.hinweise && (
                   <div>
