@@ -149,6 +149,27 @@ export default function ProfessionalErgoLanding() {
         <p className="text-center text-gray-500 text-sm mt-3">Morino Stübe – Ihr ERGO Berater in Ganderkesee</p>
       </section>
 
+      {/* ──────── VIDEO VORSTELLUNG ──────── */}
+      <section className="px-4 pb-10 md:pb-16 max-w-2xl mx-auto">
+        <h2 className="text-lg font-bold text-gray-900 text-center mb-6 sm:text-xl md:text-3xl md:mb-8">
+          Lernen Sie mich kennen
+        </h2>
+        <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg aspect-video flex items-center justify-center relative">
+          <div className="text-center text-white p-6">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-8 h-8">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+            <p className="text-sm text-white/80 font-medium">Video-Vorstellung</p>
+            <p className="text-xs text-white/50 mt-1">Demnächst verfügbar</p>
+          </div>
+        </div>
+        <p className="text-center text-gray-400 text-xs mt-3">
+          Persönliche Vorstellung von Morino Stübe – Ihr ERGO Berater
+        </p>
+      </section>
+
       {/* ──────── VORTEILE ──────── */}
       <section className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
         <h2 className="text-lg font-bold text-gray-900 text-center mb-6 sm:text-xl md:text-3xl md:mb-8">
@@ -215,6 +236,43 @@ export default function ProfessionalErgoLanding() {
               <p className="text-xs text-gray-400 mt-2">{award.label}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ──────── ONLINE TOOLS ──────── */}
+      <section className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
+        <h2 className="text-lg font-bold text-gray-900 text-center mb-6 sm:text-xl md:text-3xl md:mb-8">
+          Unsere Online-Tools für Sie
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Link href="/versicherungscheck" onClick={() => trackEvent('tool_clicked', { tool: 'versicherungscheck' })}>
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-5 hover:shadow-md transition-shadow cursor-pointer">
+              <div className="text-2xl mb-2">🔍</div>
+              <h3 className="font-bold text-gray-900 text-sm md:text-base">Versicherungscheck</h3>
+              <p className="text-xs text-gray-600 mt-1">In 2 Minuten Ihren Versicherungsbedarf ermitteln</p>
+            </div>
+          </Link>
+          <Link href="/sparrechner" onClick={() => trackEvent('tool_clicked', { tool: 'sparrechner' })}>
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-5 hover:shadow-md transition-shadow cursor-pointer">
+              <div className="text-2xl mb-2">💰</div>
+              <h3 className="font-bold text-gray-900 text-sm md:text-base">Bündel-Sparrechner</h3>
+              <p className="text-xs text-gray-600 mt-1">Berechnen Sie Ihre Ersparnis mit dem ERGO Bündelnachlass</p>
+            </div>
+          </Link>
+          <Link href="/schaden" onClick={() => trackEvent('tool_clicked', { tool: 'schaden' })}>
+            <div className="bg-gradient-to-br from-red-50 to-orange-50 border border-red-200 rounded-2xl p-5 hover:shadow-md transition-shadow cursor-pointer">
+              <div className="text-2xl mb-2">🛡️</div>
+              <h3 className="font-bold text-gray-900 text-sm md:text-base">Schaden melden</h3>
+              <p className="text-xs text-gray-600 mt-1">Schnell und einfach mit Foto-Upload</p>
+            </div>
+          </Link>
+          <Link href="/kennzeichen" onClick={() => trackEvent('tool_clicked', { tool: 'kennzeichen' })}>
+            <div className="bg-gradient-to-br from-yellow-50 to-amber-50 border border-yellow-200 rounded-2xl p-5 hover:shadow-md transition-shadow cursor-pointer">
+              <div className="text-2xl mb-2">🚗</div>
+              <h3 className="font-bold text-gray-900 text-sm md:text-base">eVB & Kennzeichen</h3>
+              <p className="text-xs text-gray-600 mt-1">eVB-Nummer und Versicherungskennzeichen beantragen</p>
+            </div>
+          </Link>
         </div>
       </section>
 

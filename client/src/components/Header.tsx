@@ -112,6 +112,12 @@ export default function Header() {
                     <Link href="/termin" className="block text-lg font-bold text-ergo-red hover:text-red-700" onClick={handleMobileMenuClick}>
                       📅 Termin buchen
                     </Link>
+                    <Link href="/versicherungscheck" className="block text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
+                      🔍 Versicherungscheck
+                    </Link>
+                    <Link href="/sparrechner" className="block text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
+                      💰 Sparrechner
+                    </Link>
                     <Link href="/dokumente" className="block text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
                       Dokumente
                     </Link>

@@ -25,6 +25,9 @@ const CityLanding = lazy(() => import("@/pages/CityLanding"));
 const LeadPage = lazy(() => import("@/pages/LeadPage"));
 const LebenVorsorge = lazy(() => import("@/pages/LebenVorsorge"));
 const TerminPage = lazy(() => import("@/pages/TerminPage"));
+const VersicherungsCheck = lazy(() => import("@/pages/VersicherungsCheck"));
+const SparRechner = lazy(() => import("@/pages/SparRechner"));
+const AktionsSeiten = lazy(() => import("@/pages/AktionsSeiten"));
 
 function PageLoader() {
   return (
@@ -71,6 +74,9 @@ function AppContent() {
           <Route path="/leben-vorsorge" component={LebenVorsorge} />
           <Route path="/beratung" component={LeadPage} />
           <Route path="/termin" component={TerminPage} />
+          <Route path="/versicherungscheck" component={VersicherungsCheck} />
+          <Route path="/sparrechner" component={SparRechner} />
+          <Route path="/aktion/:slug" component={AktionsSeiten} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

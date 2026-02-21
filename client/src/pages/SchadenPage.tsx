@@ -810,18 +810,43 @@ export default function SchadenPage() {
                 )}
 
                 <div className="border-t border-gray-200 pt-4 mt-2">
-                  <h3 className="text-base font-bold text-gray-900 mb-3">📷 Fotos & Dokumente anhängen (optional)</h3>
+                  <h3 className="text-base font-bold text-gray-900 mb-2">📷 Fotos & Dokumente anhängen (optional)</h3>
+                  <p className="text-xs text-gray-500 mb-3">Fotografieren Sie den Schaden direkt oder laden Sie vorhandene Bilder hoch. Das beschleunigt die Bearbeitung erheblich.</p>
+
+                  <div className="flex gap-2 mb-3">
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex-1 flex items-center justify-center gap-2 min-h-[48px] bg-[#003781] text-white rounded-xl font-semibold text-sm hover:bg-[#002a61] transition-colors"
+                    >
+                      📁 Dateien auswählen
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = 'image/*';
+                        input.capture = 'environment';
+                        input.onchange = (e) => { handleFiles((e.target as HTMLInputElement).files); };
+                        input.click();
+                      }}
+                      className="flex items-center justify-center gap-2 min-h-[48px] px-4 bg-green-600 text-white rounded-xl font-semibold text-sm hover:bg-green-700 transition-colors"
+                    >
+                      📸 Kamera
+                    </button>
+                  </div>
+
                   <div
                     onClick={() => fileInputRef.current?.click()}
                     onDragOver={e => { e.preventDefault(); setIsDragOver(true); }}
                     onDragLeave={() => setIsDragOver(false)}
                     onDrop={e => { e.preventDefault(); setIsDragOver(false); handleFiles(e.dataTransfer.files); }}
-                    className={`border-dashed border-2 rounded-xl p-6 text-center cursor-pointer transition-colors ${
+                    className={`border-dashed border-2 rounded-xl p-4 text-center cursor-pointer transition-colors ${
                       isDragOver ? 'border-[#003781] bg-blue-50' : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
-                    <p className="text-sm text-gray-500">Dateien hierher ziehen oder klicken zum Auswählen</p>
-                    <p className="text-xs text-gray-400 mt-1">Max. 5 Dateien, je max. 5 MB (Bilder & PDF)</p>
+                    <p className="text-xs text-gray-400">Oder Dateien hierher ziehen (max. 5 Dateien, je max. 5 MB)</p>
                   </div>
                   <input
                     ref={fileInputRef}
@@ -832,21 +857,29 @@ export default function SchadenPage() {
                     onChange={e => { handleFiles(e.target.files); e.target.value = ''; }}
                   />
                   {files.length > 0 && (
-                    <div className="flex flex-col gap-2 mt-3">
-                      {files.map((file, i) => (
-                        <div key={i} className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-2">
-                          {file.type.startsWith('image/') ? (
-                            <img src={URL.createObjectURL(file)} alt="" className="w-12 h-12 object-cover rounded-lg" />
-                          ) : (
-                            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-xs font-bold text-gray-500">PDF</div>
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">{file.name}</p>
-                            <p className="text-xs text-gray-400">{formatFileSize(file.size)}</p>
+                    <div className="mt-3">
+                      <p className="text-xs font-semibold text-gray-700 mb-2">{files.length} Datei{files.length !== 1 ? 'en' : ''} ausgewählt:</p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {files.map((file, i) => (
+                          <div key={i} className="relative group bg-white border border-gray-200 rounded-xl overflow-hidden">
+                            {file.type.startsWith('image/') ? (
+                              <img src={URL.createObjectURL(file)} alt="" className="w-full h-24 object-cover" />
+                            ) : (
+                              <div className="w-full h-24 bg-gray-100 flex items-center justify-center text-2xl">📄</div>
+                            )}
+                            <div className="p-2">
+                              <p className="text-xs font-medium text-gray-900 truncate">{file.name}</p>
+                              <p className="text-xs text-gray-400">{formatFileSize(file.size)}</p>
+                            </div>
+                            <button
+                              onClick={() => removeFile(i)}
+                              className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs font-bold flex items-center justify-center opacity-80 hover:opacity-100"
+                            >
+                              ×
+                            </button>
                           </div>
-                          <button onClick={() => removeFile(i)} className="text-gray-400 hover:text-red-500 text-xl font-bold px-2">×</button>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
