@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { Link } from 'wouter';
 import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, FileText, AlertTriangle, Award, Trophy, Instagram, ExternalLink } from 'lucide-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
@@ -18,6 +18,23 @@ const awards = [
 
 export default function ProfessionalErgoLanding() {
   const [showFunnel, setShowFunnel] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handlePlayVideo = useCallback(() => {
+    setVideoPlaying(true);
+    trackEvent('video_play', { video: 'vorstellung' });
+    setTimeout(() => {
+      if (videoRef.current) {
+        const vid = videoRef.current;
+        vid.onerror = (e) => { if (e instanceof Event) e.stopPropagation(); };
+        const sources = vid.querySelectorAll('source');
+        sources.forEach(s => { s.onerror = (e) => { if (e instanceof Event) e.stopPropagation(); }; });
+        vid.load();
+        vid.play().catch(() => {});
+      }
+    }, 150);
+  }, []);
 
   const whatsappNumber = "15566771019";
   const whatsappMessage = encodeURIComponent(
@@ -154,16 +171,41 @@ export default function ProfessionalErgoLanding() {
         <h2 className="text-lg font-bold text-gray-900 text-center mb-6 sm:text-xl md:text-3xl md:mb-8">
           Lernen Sie mich kennen
         </h2>
-        <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg aspect-video flex items-center justify-center relative">
-          <div className="text-center text-white p-6">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-8 h-8">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </div>
-            <p className="text-sm text-white/80 font-medium">Video-Vorstellung</p>
-            <p className="text-xs text-white/50 mt-1">Demnächst verfügbar</p>
-          </div>
+        <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg aspect-video relative">
+          {!videoPlaying ? (
+            <button
+              onClick={handlePlayVideo}
+              className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 group cursor-pointer"
+              aria-label="Video abspielen"
+            >
+              <img
+                src={ichBinDaPhoto}
+                alt="Morino Stübe Vorstellung"
+                className="absolute inset-0 w-full h-full object-cover opacity-60"
+                loading="lazy"
+              />
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/90 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#E2001A" className="w-8 h-8 sm:w-10 sm:h-10 ml-1">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+                <p className="text-white font-semibold text-sm sm:text-base mt-3 drop-shadow-lg">Video abspielen</p>
+              </div>
+            </button>
+          ) : (
+            <video
+              ref={videoRef}
+              controls
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-contain bg-black"
+              onError={(e) => { e.stopPropagation(); }}
+            >
+              <source src="/videos/vorstellung.mp4" type="video/mp4" />
+              Ihr Browser unterstützt dieses Videoformat leider nicht.
+            </video>
+          )}
         </div>
         <p className="text-center text-gray-400 text-xs mt-3">
           Persönliche Vorstellung von Morino Stübe – Ihr ERGO Berater
