@@ -10,8 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
 import { insuranceConfig } from "@/lib/insurance-config";
 import { useQuery } from "@tanstack/react-query";
-import sittingPhoto from "@assets/ich_bin_da_1771598345650.png";
-import beraterBranding from "@assets/Unbenannt_(1)_1771598345651.png";
+import sittingPhoto from "@assets/optimized/ich_bin_da.webp";
+import beraterBranding from "@assets/optimized/unbenannt1.webp";
 import { Award, Shield, Handshake, Clock, Star, Instagram, ExternalLink } from "lucide-react";
 import type { Content } from "@shared/schema";
 

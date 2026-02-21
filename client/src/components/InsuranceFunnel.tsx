@@ -13,7 +13,7 @@ import { trackEvent } from "@/lib/analytics";
 import { insuranceConfig } from "@/lib/insurance-config";
 import { X, CheckCircle, Phone, Clock, Calculator, Handshake, Shield } from "lucide-react";
 import type { InsertLead } from "@shared/schema";
-import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
+import morinoImage from "@assets/optimized/morino_small.webp";
 
 interface InsuranceFunnelProps {
   insuranceType: string;

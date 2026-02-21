@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
 import { Award, Shield, Handshake, Clock, ChevronDown, Phone, MessageCircle, Check, X, Heart, Briefcase, Users, Building2, Star, TrendingUp, Umbrella, Wallet } from "lucide-react";
-import standingPhoto from "@assets/image_1771598345651.png";
+import standingPhoto from "@assets/optimized/image.webp";
 import heroImage from "@assets/generated_images/LebenVorsorge_Bild.jpg";
 
 const products = [

@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Award, Shield, Handshake, Clock } from "lucide-react";
-import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
+import morinoImage from "@assets/optimized/morino_small.webp";
 
 const testimonials = [
   {

@@ -5,9 +5,9 @@ import { trackEvent, trackConversion } from '@/lib/analytics';
 import FunnelOverlay from './FunnelOverlay';
 import '@/styles/funnel.css';
 
-import ichBinDaPhoto from '@assets/Untitled_(2)_1771598345647.png';
-import beraterPhoto from '@assets/ich_bin_da_1771598345650.png';
-import imagePhoto from '@assets/image_1771598345651.png';
+import ichBinDaPhoto from '@assets/optimized/untitled2.webp';
+import beraterPhoto from '@assets/optimized/ich_bin_da.webp';
+import imagePhoto from '@assets/optimized/image.webp';
 
 const awards = [
   { source: 'Stiftung Warentest', product: 'Zahnzusatz', rating: 'SEHR GUT (0,5)', label: 'Testsieger 2024', color: 'bg-yellow-50 border-yellow-300' },

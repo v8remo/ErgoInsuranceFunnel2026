@@ -3,8 +3,8 @@ import { Link } from "wouter";
 import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight, Award, Star, Users, Home, Car, Heart, Scale, Umbrella, ChevronDown, ChevronUp, Instagram, Clock, FileCheck, TrendingUp, Building2, UserCheck } from "lucide-react";
 import SEO from "@/components/SEO";
 import { trackEvent, trackConversion } from "@/lib/analytics";
-import standingPhoto from "@assets/image_1771598345651.png";
-import portraitPhoto from "@assets/image_(1)_1771598345651.png";
+import standingPhoto from "@assets/optimized/image.webp";
+import portraitPhoto from "@assets/optimized/image_1.webp";
 
 const cityData: Record<string, {
   name: string;
