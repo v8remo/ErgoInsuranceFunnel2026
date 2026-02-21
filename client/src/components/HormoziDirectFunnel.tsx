@@ -256,7 +256,7 @@ export default function HormoziDirectFunnel() {
                     <img 
                       src="/attached_assets/089-Ti9r4yWZjrM_1756458595368.jpeg"
                       alt="Morino Stübe - Ihr ERGO Berater"
-                      className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-ergo-red shadow-lg"
+                      className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-contain bg-white border-4 border-ergo-red shadow-lg"
                     />
                     <div className="text-center sm:text-left">
                       <h3 className="text-xl font-bold text-gray-800 mb-1">Morino Stübe</h3>
@@ -501,7 +501,7 @@ export default function HormoziDirectFunnel() {
                       <img 
                         src="/attached_assets/089-Ti9r4yWZjrM_1756458595368.jpeg"
                         alt="Morino Stübe - Ihr ERGO Berater"
-                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-ergo-red shadow-lg"
+                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-contain bg-white border-4 border-ergo-red shadow-lg"
                       />
                       <div className="text-center sm:text-left">
                         <h4 className="text-lg font-bold text-gray-800 mb-1">👋 Ich bin Morino Stübe</h4>

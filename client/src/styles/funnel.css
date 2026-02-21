@@ -620,7 +620,8 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: contain;
+  background: white;
   border: 2px solid #E2001A;
   flex-shrink: 0;
 }

@@ -6,10 +6,6 @@ import FunnelOverlay from './FunnelOverlay';
 import '@/styles/funnel.css';
 
 import ichBinDaPhoto from '@assets/Untitled_(2)_1771598345647.png';
-import sittingPhoto from '@assets/ich_bin_da_1771598345650.png';
-import portraitPhoto from '@assets/image_(1)_1771598345651.png';
-import beraterBranding from '@assets/Unbenannt_(1)_1771598345651.png';
-import standingPhoto from '@assets/image_1771598345651.png';
 
 const awards = [
   { source: 'Stiftung Warentest', product: 'Zahnzusatz', rating: 'SEHR GUT (0,5)', label: 'Testsieger 2024', color: 'bg-yellow-50 border-yellow-300' },
@@ -104,9 +100,9 @@ export default function ProfessionalErgoLanding() {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-8">
           <div className="flex flex-col items-center text-center gap-5 md:flex-row md:text-left md:items-start">
             <img
-              src={portraitPhoto}
+              src={ichBinDaPhoto}
               alt="Morino Stübe - ERGO Versicherungsfachmann"
-              className="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover border-[3px] border-ergo-red shadow-md shrink-0"
+              className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-md shrink-0 bg-white"
               loading="eager"
             />
 
@@ -139,37 +135,18 @@ export default function ProfessionalErgoLanding() {
         </div>
       </section>
 
-      {/* ──────── PHOTO GALLERY ──────── */}
-      <section className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
+      {/* ──────── BERATER FOTO ──────── */}
+      <section className="px-4 pb-10 md:pb-16 max-w-md mx-auto">
         <h2 className="text-lg font-bold text-gray-900 text-center mb-6 sm:text-xl md:text-3xl md:mb-8">
           Ihr Berater – persönlich & nahbar
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-          <div className="col-span-2 md:col-span-1 md:row-span-2">
-            <img
-              src={ichBinDaPhoto}
-              alt="Morino Stübe – Ich bin für dich da"
-              className="w-full h-full object-cover rounded-2xl shadow-md border border-gray-100"
-              loading="lazy"
-            />
-          </div>
-          <div>
-            <img
-              src={beraterBranding}
-              alt="Morino Stübe – Dein ERGO Berater"
-              className="w-full h-full object-cover rounded-2xl shadow-md border border-gray-100"
-              loading="lazy"
-            />
-          </div>
-          <div>
-            <img
-              src={standingPhoto}
-              alt="Morino Stübe – stehend"
-              className="w-full h-full object-cover rounded-2xl shadow-md border border-gray-100"
-              loading="lazy"
-            />
-          </div>
-        </div>
+        <img
+          src={ichBinDaPhoto}
+          alt="Morino Stübe – Ich bin für dich da"
+          className="w-full rounded-2xl shadow-lg border border-gray-100"
+          loading="lazy"
+        />
+        <p className="text-center text-gray-500 text-sm mt-3">Morino Stübe – Ihr ERGO Berater in Ganderkesee</p>
       </section>
 
       {/* ──────── VORTEILE ──────── */}
@@ -255,15 +232,9 @@ export default function ProfessionalErgoLanding() {
             Versicherungstipps, Einblicke in meinen Berateralltag und aktuelle Angebote – direkt auf Ihrem Smartphone.
           </p>
 
-          <div className="grid grid-cols-3 gap-2 md:gap-3 mb-6 max-w-sm mx-auto">
-            <div className="aspect-square rounded-xl bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center overflow-hidden">
-              <img src={sittingPhoto} alt="Instagram Preview" className="w-full h-full object-cover rounded-xl" loading="lazy" />
-            </div>
-            <div className="aspect-square rounded-xl bg-gradient-to-br from-purple-200 to-orange-200 flex items-center justify-center overflow-hidden">
-              <img src={ichBinDaPhoto} alt="Instagram Preview" className="w-full h-full object-cover rounded-xl" loading="lazy" />
-            </div>
-            <div className="aspect-square rounded-xl bg-gradient-to-br from-orange-200 to-pink-200 flex items-center justify-center overflow-hidden">
-              <img src={standingPhoto} alt="Instagram Preview" className="w-full h-full object-cover rounded-xl" loading="lazy" />
+          <div className="mb-6 max-w-xs mx-auto">
+            <div className="aspect-[4/5] rounded-xl bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center overflow-hidden">
+              <img src={ichBinDaPhoto} alt="Morino Stübe Instagram" className="w-full h-full object-contain rounded-xl" loading="lazy" />
             </div>
           </div>
 

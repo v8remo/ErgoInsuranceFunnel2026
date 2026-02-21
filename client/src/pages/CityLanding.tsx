@@ -3,8 +3,8 @@ import { Link } from "wouter";
 import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight, Award, Star, Users, Home, Car, Heart, Scale, Umbrella, ChevronDown, ChevronUp, Instagram, Clock, FileCheck, TrendingUp, Building2, UserCheck } from "lucide-react";
 import SEO from "@/components/SEO";
 import { trackEvent, trackConversion } from "@/lib/analytics";
+import standingPhoto from "@assets/image_1771598345651.png";
 import portraitPhoto from "@assets/image_(1)_1771598345651.png";
-import brandingPhoto from "@assets/Untitled_(2)_1771598345647.png";
 
 const cityData: Record<string, {
   name: string;
@@ -331,9 +331,9 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               <div className="space-y-4">
                 <div className="flex items-center gap-3 mb-4">
                   <img
-                    src={portraitPhoto}
+                    src={standingPhoto}
                     alt="Morino Stübe - ERGO Versicherungsberater"
-                    className="w-20 h-20 rounded-full object-cover border-2 border-ergo-red shadow-md"
+                    className="w-20 h-20 rounded-full object-contain border-2 border-ergo-red shadow-md bg-white"
                     loading="lazy"
                   />
                   <div>
@@ -357,8 +357,8 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               </div>
               <div className="flex justify-center">
                 <img
-                  src={brandingPhoto}
-                  alt="Morino Stübe - Ich bin für dich da"
+                  src={portraitPhoto}
+                  alt="Morino Stübe - Ihr ERGO Berater"
                   className="rounded-2xl shadow-lg max-w-[320px] w-full"
                   loading="lazy"
                 />

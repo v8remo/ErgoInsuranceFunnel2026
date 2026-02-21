@@ -492,11 +492,11 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
               <div className="bg-ergo-gray border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <div className="flex-shrink-0">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden shadow-lg">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden shadow-lg bg-white">
                       <img 
                         src={morinoImage} 
                         alt="Morino Stübe - Ihr Experte" 
-                        className="w-full h-full object-cover object-center"
+                        className="w-full h-full object-contain"
                       />
                     </div>
                   </div>

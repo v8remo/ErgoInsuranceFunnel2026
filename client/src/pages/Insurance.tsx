@@ -10,8 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
 import { insuranceConfig } from "@/lib/insurance-config";
 import { useQuery } from "@tanstack/react-query";
-import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
-import morinoPortrait from "@assets/image_(1)_1771598345651.png";
+import sittingPhoto from "@assets/ich_bin_da_1771598345650.png";
+import beraterBranding from "@assets/Unbenannt_(1)_1771598345651.png";
 import { Award, Shield, Handshake, Clock, Star, Instagram, ExternalLink } from "lucide-react";
 import type { Content } from "@shared/schema";
 
@@ -323,11 +323,11 @@ export default function Insurance() {
               <CardContent className="p-4 sm:p-6 lg:p-8">
                 <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-6 lg:gap-8">
                   <div className="flex-shrink-0">
-                    <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-lg">
+                    <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-2xl overflow-hidden shadow-lg">
                       <img 
-                        src={morinoImage} 
+                        src={sittingPhoto} 
                         alt="Morino Stübe - Ihr Versicherungsexperte" 
-                        className="w-full h-full object-cover object-center"
+                        className="w-full h-full object-contain bg-white"
                         loading="lazy"
                         decoding="async"
                       />
@@ -404,9 +404,9 @@ export default function Insurance() {
             <div className="flex flex-col md:flex-row gap-6 items-start">
               <div className="flex-shrink-0">
                 <img
-                  src={morinoPortrait}
+                  src={beraterBranding}
                   alt="Morino Stübe – Ihr ERGO Berater"
-                  className="w-32 h-40 sm:w-40 sm:h-52 rounded-2xl object-cover object-top shadow-lg border-2 border-gray-100"
+                  className="w-32 h-40 sm:w-40 sm:h-52 rounded-2xl object-contain shadow-lg border-2 border-gray-100 bg-white"
                   loading="lazy"
                 />
               </div>

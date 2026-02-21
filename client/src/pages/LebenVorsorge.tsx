@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
 import { Award, Shield, Handshake, Clock, ChevronDown, Phone, MessageCircle, Check, X, Heart, Briefcase, Users, Building2, Star, TrendingUp, Umbrella, Wallet } from "lucide-react";
-import morinoImage from "@assets/089-Ti9r4yWZjrM.jpeg";
+import standingPhoto from "@assets/image_1771598345651.png";
 import heroImage from "@assets/generated_images/LebenVorsorge_Bild.jpg";
 
 const products = [
@@ -782,11 +782,11 @@ export default function LebenVorsorge() {
               <CardContent className="p-4 sm:p-6 lg:p-8">
                 <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-6 lg:gap-8">
                   <div className="flex-shrink-0">
-                    <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-lg">
+                    <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-2xl overflow-hidden shadow-lg">
                       <img
-                        src={morinoImage}
+                        src={standingPhoto}
                         alt="Morino Stübe - Ihr Versicherungsexperte"
-                        className="w-full h-full object-cover object-center"
+                        className="w-full h-full object-contain bg-white"
                         loading="lazy"
                         decoding="async"
                       />

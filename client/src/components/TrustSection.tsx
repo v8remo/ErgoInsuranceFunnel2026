@@ -68,11 +68,11 @@ export default function TrustSection() {
             <CardContent className="p-6 sm:p-8">
               <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-8">
                 <div className="flex-shrink-0">
-                  <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-lg">
+                  <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-2xl overflow-hidden shadow-lg">
                     <img 
                       src={morinoImage} 
                       alt="Morino Stübe - Ihr Versicherungsexperte" 
-                      className="w-full h-full object-cover object-center"
+                      className="w-full h-full object-contain bg-white"
                     />
                   </div>
                 </div>
