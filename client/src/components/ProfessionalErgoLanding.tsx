@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { Link } from 'wouter';
-import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, FileText, AlertTriangle, Award, Trophy, Instagram, ExternalLink } from 'lucide-react';
+import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, FileText, AlertTriangle, Award, Trophy, Instagram, ExternalLink, ChevronRight } from 'lucide-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import FunnelOverlay from './FunnelOverlay';
 import '@/styles/funnel.css';
@@ -238,6 +238,62 @@ export default function ProfessionalErgoLanding() {
         </div>
       </section>
 
+      {/* ──────── ONLINE TOOLS ──────── */}
+      <section className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
+        <div className="text-center mb-6 md:mb-8">
+          <span className="inline-flex items-center gap-2 bg-[#003781]/10 text-[#003781] text-xs font-bold uppercase tracking-wide px-4 py-1.5 rounded-full mb-4">
+            Jetzt ausprobieren
+          </span>
+          <h2 className="text-lg font-bold text-gray-900 sm:text-xl md:text-3xl">
+            Unsere Online-Tools für Sie
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Link href="/versicherungscheck" onClick={() => trackEvent('tool_clicked', { tool: 'versicherungscheck' })}>
+            <div className="group bg-white border-2 border-blue-200 rounded-2xl p-5 md:p-6 hover:border-[#003781] hover:shadow-lg transition-all cursor-pointer relative overflow-hidden">
+              <div className="absolute top-0 right-0 bg-[#003781] text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl">KOSTENLOS</div>
+              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">🔍</div>
+              <h3 className="font-bold text-gray-900 text-base md:text-lg">Versicherungscheck</h3>
+              <p className="text-sm text-gray-500 mt-1 leading-relaxed">In 2 Minuten Ihren Versicherungsbedarf ermitteln</p>
+              <div className="mt-3 inline-flex items-center gap-1 text-[#003781] font-semibold text-sm group-hover:gap-2 transition-all">
+                Jetzt starten <ChevronRight className="w-4 h-4" />
+              </div>
+            </div>
+          </Link>
+          <Link href="/sparrechner" onClick={() => trackEvent('tool_clicked', { tool: 'sparrechner' })}>
+            <div className="group bg-white border-2 border-green-200 rounded-2xl p-5 md:p-6 hover:border-green-500 hover:shadow-lg transition-all cursor-pointer relative overflow-hidden">
+              <div className="absolute top-0 right-0 bg-green-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl">BIS 15% SPAREN</div>
+              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">💰</div>
+              <h3 className="font-bold text-gray-900 text-base md:text-lg">Bündel-Sparrechner</h3>
+              <p className="text-sm text-gray-500 mt-1 leading-relaxed">Berechnen Sie Ihre Ersparnis mit dem ERGO Bündelnachlass</p>
+              <div className="mt-3 inline-flex items-center gap-1 text-green-600 font-semibold text-sm group-hover:gap-2 transition-all">
+                Jetzt berechnen <ChevronRight className="w-4 h-4" />
+              </div>
+            </div>
+          </Link>
+          <Link href="/schaden" onClick={() => trackEvent('tool_clicked', { tool: 'schaden' })}>
+            <div className="group bg-white border-2 border-red-200 rounded-2xl p-5 md:p-6 hover:border-ergo-red hover:shadow-lg transition-all cursor-pointer relative overflow-hidden">
+              <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">🛡️</div>
+              <h3 className="font-bold text-gray-900 text-base md:text-lg">Schaden melden</h3>
+              <p className="text-sm text-gray-500 mt-1 leading-relaxed">Schnell und einfach mit Foto-Upload</p>
+              <div className="mt-3 inline-flex items-center gap-1 text-ergo-red font-semibold text-sm group-hover:gap-2 transition-all">
+                Jetzt melden <ChevronRight className="w-4 h-4" />
+              </div>
+            </div>
+          </Link>
+          <Link href="/kennzeichen" onClick={() => trackEvent('tool_clicked', { tool: 'kennzeichen' })}>
+            <div className="group bg-white border-2 border-amber-200 rounded-2xl p-5 md:p-6 hover:border-amber-500 hover:shadow-lg transition-all cursor-pointer relative overflow-hidden">
+              <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">🚗</div>
+              <h3 className="font-bold text-gray-900 text-base md:text-lg">eVB & Kennzeichen</h3>
+              <p className="text-sm text-gray-500 mt-1 leading-relaxed">eVB-Nummer und Versicherungskennzeichen beantragen</p>
+              <div className="mt-3 inline-flex items-center gap-1 text-amber-600 font-semibold text-sm group-hover:gap-2 transition-all">
+                Jetzt anfordern <ChevronRight className="w-4 h-4" />
+              </div>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* ──────── TESTSIEGER / AWARDS ──────── */}
       <section className="px-4 pb-10 md:pb-16 max-w-4xl mx-auto">
         <div className="text-center mb-6 md:mb-8">
@@ -253,58 +309,21 @@ export default function ProfessionalErgoLanding() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+        <div className="flex flex-wrap justify-center gap-3 md:gap-4">
           {awards.map((award) => (
             <div
               key={award.product}
-              className={`rounded-xl border-2 ${award.color} p-4 md:p-5 flex flex-col items-center text-center transition-shadow hover:shadow-md`}
+              className="flex items-center gap-3 bg-white rounded-full border border-gray-200 shadow-sm px-4 py-2.5 md:px-5 md:py-3"
             >
-              <Award className="w-8 h-8 text-ergo-red mb-2" />
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{award.source}</p>
-              <h3 className="font-bold text-gray-900 text-sm md:text-base mt-1">{award.product}</h3>
-              <span className="inline-block bg-white text-ergo-red font-extrabold text-xs md:text-sm px-3 py-1 rounded-full mt-2 border border-ergo-red/20">
-                {award.rating}
-              </span>
-              <p className="text-xs text-gray-400 mt-2">{award.label}</p>
+              <div className="w-8 h-8 rounded-full bg-yellow-50 flex items-center justify-center shrink-0">
+                <Award className="w-4 h-4 text-yellow-600" />
+              </div>
+              <div className="min-w-0">
+                <p className="font-bold text-gray-900 text-xs md:text-sm leading-tight">{award.product}</p>
+                <p className="text-[10px] md:text-xs text-gray-500 leading-tight">{award.source} · {award.rating}</p>
+              </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* ──────── ONLINE TOOLS ──────── */}
-      <section className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
-        <h2 className="text-lg font-bold text-gray-900 text-center mb-6 sm:text-xl md:text-3xl md:mb-8">
-          Unsere Online-Tools für Sie
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Link href="/versicherungscheck" onClick={() => trackEvent('tool_clicked', { tool: 'versicherungscheck' })}>
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-5 hover:shadow-md transition-shadow cursor-pointer">
-              <div className="text-2xl mb-2">🔍</div>
-              <h3 className="font-bold text-gray-900 text-sm md:text-base">Versicherungscheck</h3>
-              <p className="text-xs text-gray-600 mt-1">In 2 Minuten Ihren Versicherungsbedarf ermitteln</p>
-            </div>
-          </Link>
-          <Link href="/sparrechner" onClick={() => trackEvent('tool_clicked', { tool: 'sparrechner' })}>
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-5 hover:shadow-md transition-shadow cursor-pointer">
-              <div className="text-2xl mb-2">💰</div>
-              <h3 className="font-bold text-gray-900 text-sm md:text-base">Bündel-Sparrechner</h3>
-              <p className="text-xs text-gray-600 mt-1">Berechnen Sie Ihre Ersparnis mit dem ERGO Bündelnachlass</p>
-            </div>
-          </Link>
-          <Link href="/schaden" onClick={() => trackEvent('tool_clicked', { tool: 'schaden' })}>
-            <div className="bg-gradient-to-br from-red-50 to-orange-50 border border-red-200 rounded-2xl p-5 hover:shadow-md transition-shadow cursor-pointer">
-              <div className="text-2xl mb-2">🛡️</div>
-              <h3 className="font-bold text-gray-900 text-sm md:text-base">Schaden melden</h3>
-              <p className="text-xs text-gray-600 mt-1">Schnell und einfach mit Foto-Upload</p>
-            </div>
-          </Link>
-          <Link href="/kennzeichen" onClick={() => trackEvent('tool_clicked', { tool: 'kennzeichen' })}>
-            <div className="bg-gradient-to-br from-yellow-50 to-amber-50 border border-yellow-200 rounded-2xl p-5 hover:shadow-md transition-shadow cursor-pointer">
-              <div className="text-2xl mb-2">🚗</div>
-              <h3 className="font-bold text-gray-900 text-sm md:text-base">eVB & Kennzeichen</h3>
-              <p className="text-xs text-gray-600 mt-1">eVB-Nummer und Versicherungskennzeichen beantragen</p>
-            </div>
-          </Link>
         </div>
       </section>
 
