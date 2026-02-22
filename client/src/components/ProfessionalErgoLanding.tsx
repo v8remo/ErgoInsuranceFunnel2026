@@ -271,26 +271,6 @@ export default function ProfessionalErgoLanding() {
               </div>
             </div>
           </Link>
-          <Link href="/schaden" onClick={() => trackEvent('tool_clicked', { tool: 'schaden' })}>
-            <div className="group bg-white border-2 border-red-200 rounded-2xl p-5 md:p-6 hover:border-ergo-red hover:shadow-lg transition-all cursor-pointer relative overflow-hidden">
-              <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">🛡️</div>
-              <h3 className="font-bold text-gray-900 text-base md:text-lg">Schaden melden</h3>
-              <p className="text-sm text-gray-500 mt-1 leading-relaxed">Schnell und einfach mit Foto-Upload</p>
-              <div className="mt-3 inline-flex items-center gap-1 text-ergo-red font-semibold text-sm group-hover:gap-2 transition-all">
-                Jetzt melden <ChevronRight className="w-4 h-4" />
-              </div>
-            </div>
-          </Link>
-          <Link href="/kennzeichen" onClick={() => trackEvent('tool_clicked', { tool: 'kennzeichen' })}>
-            <div className="group bg-white border-2 border-amber-200 rounded-2xl p-5 md:p-6 hover:border-amber-500 hover:shadow-lg transition-all cursor-pointer relative overflow-hidden">
-              <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">🚗</div>
-              <h3 className="font-bold text-gray-900 text-base md:text-lg">eVB & Kennzeichen</h3>
-              <p className="text-sm text-gray-500 mt-1 leading-relaxed">eVB-Nummer und Versicherungskennzeichen beantragen</p>
-              <div className="mt-3 inline-flex items-center gap-1 text-amber-600 font-semibold text-sm group-hover:gap-2 transition-all">
-                Jetzt anfordern <ChevronRight className="w-4 h-4" />
-              </div>
-            </div>
-          </Link>
         </div>
       </section>
 
@@ -358,6 +338,46 @@ export default function ProfessionalErgoLanding() {
             @morino_stuebe
             <ExternalLink className="w-4 h-4" />
           </a>
+        </div>
+      </section>
+
+      {/* ──────── KUNDENSERVICE ──────── */}
+      <section className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
+        <div className="text-center mb-5 md:mb-6">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">Bereits Kunde?</p>
+          <h2 className="text-base font-bold text-gray-900 sm:text-lg md:text-xl">
+            Schneller Kundenservice
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <Link href="/schaden" onClick={() => trackEvent('tool_clicked', { tool: 'schaden' })}>
+            <div className="flex flex-col items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-white hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer text-center">
+              <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-lg">🛡️</div>
+              <span className="font-semibold text-gray-900 text-sm">Schaden melden</span>
+              <span className="text-[11px] text-gray-400 leading-tight">Mit Foto-Upload</span>
+            </div>
+          </Link>
+          <Link href="/kennzeichen" onClick={() => trackEvent('tool_clicked', { tool: 'kennzeichen' })}>
+            <div className="flex flex-col items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-white hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer text-center">
+              <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-lg">🚗</div>
+              <span className="font-semibold text-gray-900 text-sm">eVB & Kennzeichen</span>
+              <span className="text-[11px] text-gray-400 leading-tight">eVB & Versicherungskennzeichen</span>
+            </div>
+          </Link>
+          <Link href="/dokumente" onClick={() => trackEvent('tool_clicked', { tool: 'dokumente' })}>
+            <div className="flex flex-col items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-white hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer text-center">
+              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg">📄</div>
+              <span className="font-semibold text-gray-900 text-sm">Dokumente</span>
+              <span className="text-[11px] text-gray-400 leading-tight">Einreichen & unterschreiben</span>
+            </div>
+          </Link>
+          <Link href="/termin" onClick={() => trackEvent('tool_clicked', { tool: 'termin' })}>
+            <div className="flex flex-col items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-white hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer text-center">
+              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-lg">📅</div>
+              <span className="font-semibold text-gray-900 text-sm">Termin buchen</span>
+              <span className="text-[11px] text-gray-400 leading-tight">Online-Terminvereinbarung</span>
+            </div>
+          </Link>
         </div>
       </section>
 
