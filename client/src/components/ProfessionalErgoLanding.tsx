@@ -46,8 +46,27 @@ export default function ProfessionalErgoLanding() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
 
+      {/* ──────── E-SCOOTER KENNZEICHEN BANNER ──────── */}
+      <Link href="/kennzeichen?type=kennzeichen" onClick={() => trackEvent('escooter_banner_clicked', { source: 'top_banner' })}>
+        <div className="mx-4 mt-4 md:mt-6 max-w-6xl md:mx-auto bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 rounded-2xl p-4 md:p-5 flex items-center gap-3 md:gap-5 shadow-lg cursor-pointer active:scale-[0.99] transition-transform group relative overflow-hidden">
+          <div className="absolute inset-0 bg-white/5 group-hover:bg-white/10 transition-colors" />
+          <div className="relative flex items-center gap-3 md:gap-5 w-full">
+            <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-white/20 flex items-center justify-center text-2xl md:text-3xl shrink-0">🛴</div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="inline-block bg-white text-green-700 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Ab 01.03.2026</span>
+                <span className="inline-block bg-yellow-400 text-yellow-900 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide animate-pulse">Neu</span>
+              </div>
+              <p className="text-white font-bold text-sm md:text-base mt-1 leading-snug">Neue E-Scooter Kennzeichen – jetzt beantragen!</p>
+              <p className="text-white/80 text-xs md:text-sm mt-0.5 hidden sm:block">Versicherungskennzeichen 2026/2027 ab 42 € – direkt online anfordern</p>
+            </div>
+            <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white/80 shrink-0 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+      </Link>
+
       {/* ──────── HERO ──────── */}
-      <section className="px-4 pt-8 pb-10 md:pt-12 md:pb-16 max-w-6xl mx-auto">
+      <section className="px-4 pt-6 pb-10 md:pt-10 md:pb-16 max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:gap-10 lg:gap-14">
           {/* LEFT: Text + CTAs */}
           <div className="flex-1 text-center md:text-left mb-8 md:mb-0">
