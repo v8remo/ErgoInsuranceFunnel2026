@@ -1,7 +1,7 @@
 import SEO from "@/components/SEO";
 import { Calendar, Clock, MapPin, Phone, CheckCircle, Star } from "lucide-react";
 
-const BOOKING_URL = "https://outlook.office.com/bookwithme/user/6e73ed32cc5043c488ee4cbd522ec4b5%40ergo.de?anonymous&ismsaljsauthenabled=true";
+const BOOKING_URL = "https://bookingtime.ergo.de/000211325/26fefc36f9cb107c1c5a7a5b9bab3a2820efaefef1d0b8d8f8845362952fbd05/calendar";
 
 export default function TerminPage() {
   return (
