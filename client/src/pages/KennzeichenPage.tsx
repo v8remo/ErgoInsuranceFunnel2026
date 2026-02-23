@@ -54,9 +54,85 @@ const initialFormData: FormData = {
   versicherungsumfang: 'haftpflicht',
 };
 
+const PREMIUM_MONTHS = ['2026-03','2026-04','2026-05','2026-06','2026-07','2026-08','2026-09','2026-10','2026-11','2026-12','2027-01','2027-02'];
+
+const PREMIUM_TABLE: Record<string, Record<string, Record<string, number>>> = {
+  "E-Scooter": {
+    "haftpflicht_teilkasko": { "2026-03": 69.00, "2026-04": 62.09, "2026-05": 55.19, "2026-06": 51.75, "2026-07": 48.29, "2026-08": 41.39, "2026-09": 34.51, "2026-10": 27.61, "2026-11": 20.70, "2026-12": 17.25, "2027-01": 10.35, "2027-02": 10.35 },
+    "haftpflicht": { "2026-03": 42.00, "2026-04": 37.79, "2026-05": 33.59, "2026-06": 31.50, "2026-07": 29.39, "2026-08": 25.19, "2026-09": 21.00, "2026-10": 16.80, "2026-11": 12.60, "2026-12": 10.50, "2027-01": 6.30, "2027-02": 6.30 },
+  },
+  "Mofa / Moped / Roller": {
+    "haftpflicht_teilkasko": { "2026-03": 111.00, "2026-04": 99.90, "2026-05": 88.80, "2026-06": 83.25, "2026-07": 77.70, "2026-08": 66.59, "2026-09": 55.52, "2026-10": 44.41, "2026-11": 33.30, "2026-12": 27.75, "2027-01": 16.65, "2027-02": 16.65 },
+    "haftpflicht": { "2026-03": 79.00, "2026-04": 71.10, "2026-05": 63.20, "2026-06": 59.25, "2026-07": 55.30, "2026-08": 47.40, "2026-09": 39.51, "2026-10": 31.61, "2026-11": 23.70, "2026-12": 19.75, "2027-01": 11.85, "2027-02": 11.85 },
+  },
+  "Segway": {
+    "haftpflicht_teilkasko": { "2026-03": 97.00, "2026-04": 87.30, "2026-05": 77.60, "2026-06": 72.76, "2026-07": 67.89, "2026-08": 58.19, "2026-09": 48.50, "2026-10": 38.80, "2026-11": 29.10, "2026-12": 24.26, "2027-01": 14.55, "2027-02": 14.55 },
+    "haftpflicht": { "2026-03": 60.00, "2026-04": 54.00, "2026-05": 48.00, "2026-06": 45.01, "2026-07": 42.00, "2026-08": 36.00, "2026-09": 30.00, "2026-10": 24.00, "2026-11": 18.00, "2026-12": 15.01, "2027-01": 9.00, "2027-02": 9.00 },
+  },
+  "S-Pedelec": {
+    "haftpflicht_teilkasko": { "2026-03": 111.00, "2026-04": 99.90, "2026-05": 88.80, "2026-06": 83.27, "2026-07": 77.71, "2026-08": 66.60, "2026-09": 55.50, "2026-10": 44.40, "2026-11": 33.30, "2026-12": 27.77, "2027-01": 16.66, "2027-02": 16.66 },
+    "haftpflicht": { "2026-03": 62.00, "2026-04": 55.80, "2026-05": 49.60, "2026-06": 46.51, "2026-07": 43.40, "2026-08": 37.20, "2026-09": 31.00, "2026-10": 24.80, "2026-11": 18.60, "2026-12": 15.51, "2027-01": 9.31, "2027-02": 9.31 },
+  },
+  "Krankenfahrstuhl": {
+    "haftpflicht_teilkasko": { "2026-03": 96.01, "2026-04": 86.42, "2026-05": 76.80, "2026-06": 72.01, "2026-07": 67.21, "2026-08": 57.61, "2026-09": 48.02, "2026-10": 38.40, "2026-11": 28.81, "2026-12": 24.00, "2027-01": 14.40, "2027-02": 14.40 },
+    "haftpflicht": { "2026-03": 75.01, "2026-04": 67.51, "2026-05": 60.00, "2026-06": 56.25, "2026-07": 52.50, "2026-08": 45.01, "2026-09": 37.51, "2026-10": 30.00, "2026-11": 22.50, "2026-12": 18.75, "2027-01": 11.25, "2027-02": 11.25 },
+  },
+};
+
+const MONTH_LABELS: Record<string, string> = {
+  "2026-03": "März 2026",
+  "2026-04": "April 2026",
+  "2026-05": "Mai 2026",
+  "2026-06": "Juni 2026",
+  "2026-07": "Juli 2026",
+  "2026-08": "August 2026",
+  "2026-09": "September 2026",
+  "2026-10": "Oktober 2026",
+  "2026-11": "November 2026",
+  "2026-12": "Dezember 2026",
+  "2027-01": "Januar 2027",
+  "2027-02": "Februar 2027",
+};
+
+const VEHICLE_SHORT_NAMES: Record<string, string> = {
+  "E-Scooter": "E-Scooter",
+  "Mofa / Moped / Roller": "Moped",
+  "Segway": "Segway",
+  "S-Pedelec": "S-Pedelec",
+  "Krankenfahrstuhl": "KFS",
+};
+
+function getPremium(fahrzeugart: string, versicherungsumfang: string, versicherungsbeginn: string): number | null {
+  if (!fahrzeugart || !versicherungsumfang || !versicherungsbeginn) return null;
+  const cat = PREMIUM_TABLE[fahrzeugart];
+  if (!cat) return null;
+  const cov = cat[versicherungsumfang];
+  if (!cov) return null;
+  const price = cov[versicherungsbeginn];
+  return price !== undefined ? price : null;
+}
+
+function getVersicherungszeitraum(versicherungsbeginn: string): string {
+  if (!versicherungsbeginn) return '';
+  const [y, m] = versicherungsbeginn.split('-');
+  return `01.${m}.${y} – 28.02.2027`;
+}
+
+function getVerwendungszweck(fahrzeugart: string, versicherungsumfang: string, nachname: string, vorname: string, versicherungsbeginn: string): string {
+  const shortVehicle = VEHICLE_SHORT_NAMES[fahrzeugart] || fahrzeugart;
+  const shortCoverage = versicherungsumfang === 'haftpflicht_teilkasko' ? 'HP+TK' : 'HP';
+  const [y, m] = versicherungsbeginn.split('-');
+  return `ERGO ${shortVehicle} ${shortCoverage} | ${nachname}, ${vorname} | ab ${m}/${y}`;
+}
+
 function formatDateDE(dateStr: string): string {
   if (!dateStr) return '';
-  const [y, m, d] = dateStr.split('-');
+  const parts = dateStr.split('-');
+  if (parts.length === 2) {
+    const [y, m] = parts;
+    return `01.${m}.${y}`;
+  }
+  const [y, m, d] = parts;
   return `${d}.${m}.${y}`;
 }
 
@@ -76,6 +152,7 @@ export default function KennzeichenPage() {
   const [confirm2, setConfirm2] = useState(false);
   const [fadeClass, setFadeClass] = useState('opacity-100 transition-opacity duration-300');
   const [abeFiles, setAbeFiles] = useState<AbeFile[]>([]);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
   const handleAbeFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -147,6 +224,13 @@ export default function KennzeichenPage() {
   const updateField = (field: keyof FormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field as string]) setErrors(prev => { const n = { ...prev }; delete n[field as string]; return n; });
+  };
+
+  const copyToClipboard = (text: string, fieldName: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedField(fieldName);
+      setTimeout(() => setCopiedField(null), 2000);
+    });
   };
 
   const validateStep2 = (): boolean => {
@@ -223,6 +307,12 @@ export default function KennzeichenPage() {
     if (selectedType === 'kennzeichen') {
       lines.push(`Höchstgeschwindigkeit: ${formData.hoechstgeschwindigkeit}`);
       lines.push(`Versicherungsumfang: ${formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko'}`);
+      const premium = getPremium(formData.fahrzeugart, formData.versicherungsumfang, formData.versicherungsbeginn);
+      if (premium !== null) {
+        lines.push(`Zeitraum: ${getVersicherungszeitraum(formData.versicherungsbeginn)}`);
+        lines.push(`Beitrag: ${premium.toFixed(2).replace('.', ',')} €`);
+        lines.push(`Verwendungszweck: ${getVerwendungszweck(formData.fahrzeugart, formData.versicherungsumfang, formData.nachname, formData.vorname, formData.versicherungsbeginn)}`);
+      }
     }
     if (formData.hinweise) lines.push(`Hinweise: ${formData.hinweise}`);
     return lines.join('\n');
@@ -268,6 +358,8 @@ export default function KennzeichenPage() {
     `w-full p-3 border-2 rounded-xl text-base outline-none transition-colors ${errors[field] ? 'border-red-500' : 'border-gray-200 focus:border-[#003781]'}`;
 
   const progressPercent = step === 1 ? 33 : step === 2 ? 66 : 100;
+
+  const currentPremium = selectedType === 'kennzeichen' ? getPremium(formData.fahrzeugart, formData.versicherungsumfang, formData.versicherungsbeginn) : null;
 
   return (
     <div className="min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
@@ -688,14 +780,11 @@ export default function KennzeichenPage() {
                   <label className="text-sm font-semibold text-gray-700">Fahrzeugart *</label>
                   <select value={formData.fahrzeugart} onChange={e => updateField('fahrzeugart', e.target.value)} className={`${inputCls('fahrzeugart')} bg-white`}>
                     <option value="">Bitte auswählen</option>
-                    <option value="Roller (bis 45 km/h)">Roller (bis 45 km/h)</option>
-                    <option value="Moped (bis 45 km/h)">Moped (bis 45 km/h)</option>
-                    <option value="Mofa (bis 25 km/h)">Mofa (bis 25 km/h)</option>
-                    <option value="Mokick (bis 45 km/h)">Mokick (bis 45 km/h)</option>
                     <option value="E-Scooter">E-Scooter</option>
-                    <option value="S-Pedelec (bis 45 km/h)">S-Pedelec (bis 45 km/h)</option>
-                    <option value="Quad/Trike (bis 45 km/h)">Quad/Trike (bis 45 km/h)</option>
-                    <option value="Sonstiges Kleinkraftrad">Sonstiges Kleinkraftrad</option>
+                    <option value="Mofa / Moped / Roller">Mofa / Moped / Roller</option>
+                    <option value="Segway">Segway</option>
+                    <option value="S-Pedelec">S-Pedelec</option>
+                    <option value="Krankenfahrstuhl">Krankenfahrstuhl</option>
                   </select>
                   {errors.fahrzeugart && <span className="text-xs text-red-500">{errors.fahrzeugart}</span>}
                 </div>
@@ -746,7 +835,12 @@ export default function KennzeichenPage() {
 
                 <div className="flex flex-col gap-1" data-field="versicherungsbeginn">
                   <label className="text-sm font-semibold text-gray-700">Versicherungsbeginn *</label>
-                  <input type="date" value={formData.versicherungsbeginn} onChange={e => updateField('versicherungsbeginn', e.target.value)} min={todayISO()} className={inputCls('versicherungsbeginn')} />
+                  <select value={formData.versicherungsbeginn} onChange={e => updateField('versicherungsbeginn', e.target.value)} className={`${inputCls('versicherungsbeginn')} bg-white`}>
+                    <option value="">Bitte auswählen</option>
+                    {PREMIUM_MONTHS.map(m => (
+                      <option key={m} value={m}>{MONTH_LABELS[m]}</option>
+                    ))}
+                  </select>
                   <p className="text-xs text-gray-500">Das Versicherungsjahr läuft bis 28.02.2027</p>
                   {errors.versicherungsbeginn && <span className="text-xs text-red-500">{errors.versicherungsbeginn}</span>}
                 </div>
@@ -824,6 +918,34 @@ export default function KennzeichenPage() {
                   {errors.versicherungsumfang && <span className="text-xs text-red-500">{errors.versicherungsumfang}</span>}
                 </div>
 
+                {currentPremium !== null && (
+                  <div className="bg-green-50 border-2 border-green-300 rounded-xl p-5">
+                    <p className="text-sm font-bold text-green-800 uppercase tracking-wide mb-3">Ihr Beitrag</p>
+                    <div className="flex flex-col gap-2 text-sm text-green-900">
+                      <div className="flex justify-between">
+                        <span>Fahrzeugtyp</span>
+                        <span className="font-semibold">{formData.fahrzeugart}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Versicherungsumfang</span>
+                        <span className="font-semibold">{formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Zeitraum</span>
+                        <span className="font-semibold">{getVersicherungszeitraum(formData.versicherungsbeginn)}</span>
+                      </div>
+                      <div className="border-t border-green-300 pt-3 mt-1 flex justify-between items-center">
+                        <span className="font-bold text-base">Beitrag</span>
+                        <span className="font-extrabold text-2xl text-green-800">{currentPremium.toFixed(2).replace('.', ',')} €</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-green-700 mt-3">Versicherungssumme: 100 Mio. € pauschal</p>
+                    {formData.versicherungsumfang === 'haftpflicht_teilkasko' && (
+                      <p className="text-xs text-green-700 mt-1">Teilkasko: 150 € Selbstbeteiligung je Schadenfall. Bei Totalentwendung des Fahrzeugs gilt eine Selbstbeteiligung von 300 €.</p>
+                    )}
+                  </div>
+                )}
+
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold text-gray-700">Hinweise</label>
                   <textarea value={formData.hinweise} onChange={e => updateField('hinweise', e.target.value)} rows={3} placeholder="Zusätzliche Hinweise oder Wünsche..." className={inputCls('hinweise')} />
@@ -898,6 +1020,12 @@ export default function KennzeichenPage() {
                     {selectedType === 'kennzeichen' && (
                       <>
                         <p><span className="font-semibold">Versicherungsumfang:</span> {formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko'}</p>
+                        {currentPremium !== null && (
+                          <>
+                            <p><span className="font-semibold">Zeitraum:</span> {getVersicherungszeitraum(formData.versicherungsbeginn)}</p>
+                            <p><span className="font-semibold">Beitrag:</span> <span className="text-green-700 font-bold">{currentPremium.toFixed(2).replace('.', ',')} €</span></p>
+                          </>
+                        )}
                         {formData.bisherigVersichert === 'ja' && formData.bisherigVersicherer && (
                           <p><span className="font-semibold">Bisheriger Versicherer:</span> {formData.bisherigVersicherer}</p>
                         )}
@@ -1007,9 +1135,54 @@ export default function KennzeichenPage() {
               )}
 
               {!submitError && selectedType === 'kennzeichen' && (
-                <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-5 text-left text-sm text-green-800">
-                  Das aktuelle Versicherungskennzeichen 2026/2027 ist <strong>SCHWARZ</strong>.
-                </div>
+                <>
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-5 text-left text-sm text-green-800">
+                    Das aktuelle Versicherungskennzeichen 2026/2027 ist <strong>SCHWARZ</strong>.
+                  </div>
+
+                  {currentPremium !== null && (
+                    <div className="bg-white border-2 border-[#003781] rounded-xl p-5 mb-5 text-left">
+                      <p className="text-sm font-bold text-[#003781] uppercase tracking-wide mb-4">Überweisungsdaten</p>
+                      <div className="flex flex-col gap-3 text-sm text-gray-700">
+                        <div>
+                          <p className="text-xs text-gray-500 mb-0.5">Empfänger</p>
+                          <p className="font-semibold">Morino Stübe</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 mb-0.5">IBAN</p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold font-mono">DE09 1101 0101 5121 0459 76</p>
+                            <button
+                              type="button"
+                              onClick={() => copyToClipboard('DE09110101015121045976', 'iban')}
+                              className="text-[#003781] hover:text-[#E2001A] transition-colors text-base min-h-[32px] min-w-[32px] flex items-center justify-center"
+                            >
+                              {copiedField === 'iban' ? <span className="text-xs text-green-600 font-semibold">Kopiert!</span> : '📋'}
+                            </button>
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 mb-0.5">Verwendungszweck</p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold text-sm break-all">{getVerwendungszweck(formData.fahrzeugart, formData.versicherungsumfang, formData.nachname, formData.vorname, formData.versicherungsbeginn)}</p>
+                            <button
+                              type="button"
+                              onClick={() => copyToClipboard(getVerwendungszweck(formData.fahrzeugart, formData.versicherungsumfang, formData.nachname, formData.vorname, formData.versicherungsbeginn), 'verwendungszweck')}
+                              className="text-[#003781] hover:text-[#E2001A] transition-colors text-base min-h-[32px] min-w-[32px] flex items-center justify-center flex-shrink-0"
+                            >
+                              {copiedField === 'verwendungszweck' ? <span className="text-xs text-green-600 font-semibold">Kopiert!</span> : '📋'}
+                            </button>
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 mb-0.5">Betrag</p>
+                          <p className="font-extrabold text-xl text-green-700">{currentPremium.toFixed(2).replace('.', ',')} €</p>
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-4 leading-relaxed">Bitte überweisen Sie den Betrag innerhalb von 7 Tagen. Nach Zahlungseingang erhalten Sie Ihr Versicherungskennzeichen bzw. Ihre Versicherungsplakette von Ihrem ERGO Berater.</p>
+                    </div>
+                  )}
+                </>
               )}
 
               <div className="bg-blue-50 rounded-xl p-4 text-left mb-6">

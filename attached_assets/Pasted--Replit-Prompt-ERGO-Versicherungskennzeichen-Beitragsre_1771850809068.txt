@@ -1,0 +1,255 @@
+# Replit Prompt: ERGO Versicherungskennzeichen Beitragsrechner
+
+## Aufgabe
+
+Erweitere mein bestehendes Beantragungsformular um eine automatische Beitragsberechnung für Versicherungskennzeichen/-plaketten (ERGO Versicherung AG). Am Ende des Formulars soll der berechnete Beitrag angezeigt werden, zusammen mit Überweisungsdaten und einem automatisch generierten Verwendungszweck.
+
+## Versicherungsjahr
+
+01.03.2026 – 28.02.2027. Kennzeichenfarbe: Grün.
+
+## WICHTIG: Keine Berechnung – nur Lookup!
+
+Berechne die Beiträge NICHT mit einer Formel, sondern verwende die exakten Werte aus den untenstehenden Tabellen als Lookup. Speichere sie als Dictionary/Object im Code. Bei ERGO gibt es KEINE altersabhängigen Aufschläge – alle Fahrer zahlen den gleichen Beitrag.
+
+## Exakte Beitragstabelle (in Euro, inkl. 19% Versicherungssteuer)
+
+### Elektrokleinstfahrzeug / E-Scooter (WKZ 010)
+
+**Haftpflicht + Teilkasko (Form 12):**
+
+| Beginn ab | Beitrag |
+|---|---|
+| 01.03.2026 | 69,00 € |
+| 01.04.2026 | 62,09 € |
+| 01.05.2026 | 55,19 € |
+| 01.06.2026 | 51,75 € |
+| 01.07.2026 | 48,29 € |
+| 01.08.2026 | 41,39 € |
+| 01.09.2026 | 34,51 € |
+| 01.10.2026 | 27,61 € |
+| 01.11.2026 | 20,70 € |
+| 01.12.2026 | 17,25 € |
+| 01.01.2027 | 10,35 € |
+| 01.02.2027 | 10,35 € |
+
+**Nur Haftpflicht (Form 10):**
+
+| Beginn ab | Beitrag |
+|---|---|
+| 01.03.2026 | 42,00 € |
+| 01.04.2026 | 37,79 € |
+| 01.05.2026 | 33,59 € |
+| 01.06.2026 | 31,50 € |
+| 01.07.2026 | 29,39 € |
+| 01.08.2026 | 25,19 € |
+| 01.09.2026 | 21,00 € |
+| 01.10.2026 | 16,80 € |
+| 01.11.2026 | 12,60 € |
+| 01.12.2026 | 10,50 € |
+| 01.01.2027 | 6,30 € |
+| 01.02.2027 | 6,30 € |
+
+### Mofa, Moped, Mokick, Roller (WKZ 005)
+
+**Haftpflicht + Teilkasko (Form 12):**
+
+| Beginn ab | Beitrag |
+|---|---|
+| 01.03.2026 | 111,00 € |
+| 01.04.2026 | 99,90 € |
+| 01.05.2026 | 88,80 € |
+| 01.06.2026 | 83,25 € |
+| 01.07.2026 | 77,70 € |
+| 01.08.2026 | 66,59 € |
+| 01.09.2026 | 55,52 € |
+| 01.10.2026 | 44,41 € |
+| 01.11.2026 | 33,30 € |
+| 01.12.2026 | 27,75 € |
+| 01.01.2027 | 16,65 € |
+| 01.02.2027 | 16,65 € |
+
+**Nur Haftpflicht (Form 10):**
+
+| Beginn ab | Beitrag |
+|---|---|
+| 01.03.2026 | 79,00 € |
+| 01.04.2026 | 71,10 € |
+| 01.05.2026 | 63,20 € |
+| 01.06.2026 | 59,25 € |
+| 01.07.2026 | 55,30 € |
+| 01.08.2026 | 47,40 € |
+| 01.09.2026 | 39,51 € |
+| 01.10.2026 | 31,61 € |
+| 01.11.2026 | 23,70 € |
+| 01.12.2026 | 19,75 € |
+| 01.01.2027 | 11,85 € |
+| 01.02.2027 | 11,85 € |
+
+### Segway (WKZ 004)
+
+**Haftpflicht + Teilkasko (Form 12):**
+
+| Beginn ab | Beitrag |
+|---|---|
+| 01.03.2026 | 97,00 € |
+| 01.04.2026 | 87,30 € |
+| 01.05.2026 | 77,60 € |
+| 01.06.2026 | 72,76 € |
+| 01.07.2026 | 67,89 € |
+| 01.08.2026 | 58,19 € |
+| 01.09.2026 | 48,50 € |
+| 01.10.2026 | 38,80 € |
+| 01.11.2026 | 29,10 € |
+| 01.12.2026 | 24,26 € |
+| 01.01.2027 | 14,55 € |
+| 01.02.2027 | 14,55 € |
+
+**Nur Haftpflicht (Form 10):**
+
+| Beginn ab | Beitrag |
+|---|---|
+| 01.03.2026 | 60,00 € |
+| 01.04.2026 | 54,00 € |
+| 01.05.2026 | 48,00 € |
+| 01.06.2026 | 45,01 € |
+| 01.07.2026 | 42,00 € |
+| 01.08.2026 | 36,00 € |
+| 01.09.2026 | 30,00 € |
+| 01.10.2026 | 24,00 € |
+| 01.11.2026 | 18,00 € |
+| 01.12.2026 | 15,01 € |
+| 01.01.2027 | 9,00 € |
+| 01.02.2027 | 9,00 € |
+
+### S-Pedelec (WKZ 009)
+
+**Haftpflicht + Teilkasko (Form 12):**
+
+| Beginn ab | Beitrag |
+|---|---|
+| 01.03.2026 | 111,00 € |
+| 01.04.2026 | 99,90 € |
+| 01.05.2026 | 88,80 € |
+| 01.06.2026 | 83,27 € |
+| 01.07.2026 | 77,71 € |
+| 01.08.2026 | 66,60 € |
+| 01.09.2026 | 55,50 € |
+| 01.10.2026 | 44,40 € |
+| 01.11.2026 | 33,30 € |
+| 01.12.2026 | 27,77 € |
+| 01.01.2027 | 16,66 € |
+| 01.02.2027 | 16,66 € |
+
+**Nur Haftpflicht (Form 10):**
+
+| Beginn ab | Beitrag |
+|---|---|
+| 01.03.2026 | 62,00 € |
+| 01.04.2026 | 55,80 € |
+| 01.05.2026 | 49,60 € |
+| 01.06.2026 | 46,51 € |
+| 01.07.2026 | 43,40 € |
+| 01.08.2026 | 37,20 € |
+| 01.09.2026 | 31,00 € |
+| 01.10.2026 | 24,80 € |
+| 01.11.2026 | 18,60 € |
+| 01.12.2026 | 15,51 € |
+| 01.01.2027 | 9,31 € |
+| 01.02.2027 | 9,31 € |
+
+### Krankenfahrstuhl (WKZ 006)
+
+**Haftpflicht + Teilkasko (Form 12):**
+
+| Beginn ab | Beitrag |
+|---|---|
+| 01.03.2026 | 96,01 € |
+| 01.04.2026 | 86,42 € |
+| 01.05.2026 | 76,80 € |
+| 01.06.2026 | 72,01 € |
+| 01.07.2026 | 67,21 € |
+| 01.08.2026 | 57,61 € |
+| 01.09.2026 | 48,02 € |
+| 01.10.2026 | 38,40 € |
+| 01.11.2026 | 28,81 € |
+| 01.12.2026 | 24,00 € |
+| 01.01.2027 | 14,40 € |
+| 01.02.2027 | 14,40 € |
+
+**Nur Haftpflicht (Form 10):**
+
+| Beginn ab | Beitrag |
+|---|---|
+| 01.03.2026 | 75,01 € |
+| 01.04.2026 | 67,51 € |
+| 01.05.2026 | 60,00 € |
+| 01.06.2026 | 56,25 € |
+| 01.07.2026 | 52,50 € |
+| 01.08.2026 | 45,01 € |
+| 01.09.2026 | 37,51 € |
+| 01.10.2026 | 30,00 € |
+| 01.11.2026 | 22,50 € |
+| 01.12.2026 | 18,75 € |
+| 01.01.2027 | 11,25 € |
+| 01.02.2027 | 11,25 € |
+
+## Formular-Eingabefelder (falls noch nicht vorhanden, ergänzen)
+
+1. **Vorname** (Text, Pflichtfeld)
+2. **Nachname** (Text, Pflichtfeld)
+3. **Fahrzeugtyp** (Dropdown-Auswahl):
+   - E-Scooter
+   - Mofa / Moped / Roller
+   - Segway
+   - S-Pedelec
+   - Krankenfahrstuhl
+4. **Versicherungsumfang** (Auswahl):
+   - "Nur Haftpflicht"
+   - "Haftpflicht + Teilkasko"
+5. **Versicherungsbeginn** (Dropdown: März 2026 bis Februar 2027)
+
+## Ausgabe nach Absenden / Berechnung
+
+### 1. Zusammenfassung
+```
+Fahrzeugtyp:           E-Scooter
+Versicherungsumfang:   Haftpflicht + Teilkasko
+Versicherungszeitraum: 01.07.2026 – 28.02.2027
+Zu zahlender Beitrag:  48,29 €
+```
+
+### 2. Überweisungsdaten
+```
+Empfänger:        Morino Stübe
+IBAN:             DE09 1101 0101 5121 0459 76
+Verwendungszweck: ERGO E-Scooter HP+TK | Müller, Thomas | ab 07/2026
+Betrag:           48,29 €
+```
+
+### 3. Verwendungszweck (automatisch generiert)
+
+Format: `ERGO [Fahrzeugtyp kurz] [HP oder HP+TK] | [Nachname], [Vorname] | ab [MM/JJJJ]`
+
+Kürzel Fahrzeugtypen:
+- E-Scooter → "E-Scooter"
+- Mofa / Moped / Roller → "Moped"
+- Segway → "Segway"
+- S-Pedelec → "S-Pedelec"
+- Krankenfahrstuhl → "KFS"
+
+Beispiele:
+- `ERGO E-Scooter HP+TK | Müller, Thomas | ab 07/2026`
+- `ERGO Moped HP | Schmidt, Anna | ab 03/2026`
+
+## Zusätzliche Anforderungen
+
+- Der Beitrag soll sich **live aktualisieren** wenn der Kunde Fahrzeugtyp, Versicherungsumfang oder Beginn-Monat ändert
+- Die IBAN **formatiert mit Leerzeichen** anzeigen: DE09 1101 0101 5121 0459 76
+- **"Kopieren"-Button** neben Verwendungszweck und IBAN
+- Hinweistext unter den Überweisungsdaten:
+  > "Bitte überweisen Sie den Betrag innerhalb von 7 Tagen. Nach Zahlungseingang erhalten Sie Ihr Versicherungskennzeichen bzw. Ihre Versicherungsplakette von Ihrem ERGO Berater."
+- Bei Auswahl "Haftpflicht + Teilkasko" zusätzlich anzeigen:
+  > "Teilkasko: 150 € Selbstbeteiligung je Schadenfall. Bei Totalentwendung des Fahrzeugs gilt eine Selbstbeteiligung von 300 €."
+- Versicherungssumme bei allen Produkten: 100 Mio. € pauschal
+- Design: professionell, mobilfreundlich
