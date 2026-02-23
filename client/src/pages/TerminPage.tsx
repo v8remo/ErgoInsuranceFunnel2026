@@ -1,7 +1,7 @@
 import SEO from "@/components/SEO";
 import { Calendar, Clock, MapPin, Phone, CheckCircle, Star } from "lucide-react";
 
-const BOOKING_URL = "https://bookingtime.ergo.de/000211325/5c150c0f5916727cb4fec62a7ff7317fbac1fc8a2c39853cef06a41882dd62a9/calendar";
+const BOOKING_URL = "https://ergo-frontend.onlinetermine.com/000211325/start?intcid=1001183&childId=bookingtimeSatelliteIframe_000211325&initialWidth=918&childId=bookingtimeSatelliteIframe_000211325&parentTitle=ERGO%20Versicherung%20Morino%20St%C3%BCbe%20in%20Ganderkesee%20%7C%20Versicherung&parentUrl=https%3A%2F%2Fmorino-stuebe.ergo.de%2F";
 
 export default function TerminPage() {
   return (
