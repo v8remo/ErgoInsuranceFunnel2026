@@ -640,8 +640,6 @@ export default function DokumentePage() {
       pdfBase64 = btoa(pdfBase64);
       const summary = buildSummary();
 
-      downloadPdf(bytes, `${docTypeLabels[selectedType!].replace(/\s/g, '_')}_${formData.nachname}.pdf`);
-
       try {
         await apiRequest('POST', '/api/documents/submit', {
           documentType: docTypeLabels[selectedType!],
@@ -651,8 +649,10 @@ export default function DokumentePage() {
           summary,
           pdfBase64,
         });
+        downloadPdf(bytes, `${docTypeLabels[selectedType!].replace(/\s/g, '_')}_${formData.nachname}.pdf`);
         goToStep(4);
       } catch (err: any) {
+        downloadPdf(bytes, `${docTypeLabels[selectedType!].replace(/\s/g, '_')}_${formData.nachname}.pdf`);
         setSubmitError(err.message || 'Fehler beim Senden. Das PDF wurde trotzdem heruntergeladen.');
         goToStep(4);
       }
