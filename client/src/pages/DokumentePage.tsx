@@ -353,6 +353,13 @@ export default function DokumentePage() {
   };
 
   async function generatePdf(sigDataUrl?: string): Promise<Uint8Array> {
+    const s = (str: string) => str
+      .replace(/\u2013|\u2014/g, '-')
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/\u2026/g, '...')
+      .replace(/[^\x00-\xFF]/g, '?');
+
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([595.28, 841.89]);
     const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -367,14 +374,14 @@ export default function DokumentePage() {
     if (selectedType !== 'kuendigung') {
       page.drawText('ERGO', { x: width - margin - 80, y, font: helveticaBold, size: 28, color: ergoRed });
       y -= 18;
-      page.drawText('Agentur Stübe – Morino Stübe', { x: width - margin - 170, y, font: helvetica, size: 12, color: ergoBlue });
+      page.drawText('Agentur Stuebe - Morino Stuebe', { x: width - margin - 170, y, font: helvetica, size: 12, color: ergoBlue });
       y -= 20;
       page.drawLine({ start: { x: margin, y }, end: { x: width - margin, y }, thickness: 2, color: ergoRed });
       y -= 30;
 
       const title = docTypeLabels[selectedType!];
       const titleWidth = helveticaBold.widthOfTextAtSize(title, 18);
-      page.drawText(title, { x: (width - titleWidth) / 2, y, font: helveticaBold, size: 18, color: ergoBlue });
+      page.drawText(s(title), { x: (width - titleWidth) / 2, y, font: helveticaBold, size: 18, color: ergoBlue });
       y -= 35;
     }
 
@@ -383,7 +390,7 @@ export default function DokumentePage() {
       const size = opts?.size || 11;
       const color = opts?.color || black;
       const maxWidth = width - 2 * margin;
-      const words = text.split(' ');
+      const words = s(text).split(' ');
       let line = '';
       for (const word of words) {
         const test = line ? `${line} ${word}` : word;
@@ -402,8 +409,8 @@ export default function DokumentePage() {
     };
 
     const drawLine = (label: string, value: string) => {
-      page.drawText(`${label}:`, { x: margin, y, font: helveticaBold, size: 10, color: black });
-      page.drawText(value, { x: margin + 180, y, font: helvetica, size: 10, color: black });
+      page.drawText(s(`${label}:`), { x: margin, y, font: helveticaBold, size: 10, color: black });
+      page.drawText(s(value), { x: margin + 180, y, font: helvetica, size: 10, color: black });
       y -= 16;
     };
 
@@ -432,25 +439,25 @@ export default function DokumentePage() {
 
         const drawOnPage = (text: string, opts?: { bold?: boolean; size?: number; color?: typeof black; indent?: number }) => {
           const f = opts?.bold ? helveticaBold : helvetica;
-          const s = opts?.size || 11;
+          const sz = opts?.size || 11;
           const c = opts?.color || black;
           const xPos = margin + (opts?.indent || 0);
           const maxW = width - margin - xPos;
-          const words = text.split(' ');
+          const words = s(text).split(' ');
           let ln = '';
           for (const w of words) {
             const test = ln ? `${ln} ${w}` : w;
-            if (f.widthOfTextAtSize(test, s) > maxW && ln) {
-              currentPage.drawText(ln, { x: xPos, y, font: f, size: s, color: c });
-              y -= s + 5;
+            if (f.widthOfTextAtSize(test, sz) > maxW && ln) {
+              currentPage.drawText(ln, { x: xPos, y, font: f, size: sz, color: c });
+              y -= sz + 5;
               ln = w;
             } else {
               ln = test;
             }
           }
           if (ln) {
-            currentPage.drawText(ln, { x: xPos, y, font: f, size: s, color: c });
-            y -= s + 5;
+            currentPage.drawText(ln, { x: xPos, y, font: f, size: sz, color: c });
+            y -= sz + 5;
           }
         };
 
@@ -500,7 +507,7 @@ export default function DokumentePage() {
         }
         currentPage.drawText('_______________________________', { x: margin, y, font: helvetica, size: 10, color: black });
         y -= 14;
-        currentPage.drawText(`${formData.vorname} ${formData.nachname}`, { x: margin, y, font: helvetica, size: 10, color: black });
+        currentPage.drawText(s(`${formData.vorname} ${formData.nachname}`), { x: margin, y, font: helvetica, size: 10, color: black });
       }
     } else if (selectedType === 'beraterwechsel') {
       drawText(`${formData.ort}, ${today}`);
@@ -588,10 +595,10 @@ export default function DokumentePage() {
 
       page.drawText('_______________________________', { x: margin, y, font: helvetica, size: 10, color: black });
       y -= 14;
-      page.drawText(`${formData.vorname} ${formData.nachname}`, { x: margin, y, font: helvetica, size: 10, color: black });
+      page.drawText(s(`${formData.vorname} ${formData.nachname}`), { x: margin, y, font: helvetica, size: 10, color: black });
 
       const footerY = 30;
-      const footerText = 'Erstellt über ergo-stuebe.de | ERGO Agentur Stübe | Tel: 015566771019 | Vermittlerregister-Nr.: D-5H7J-7DUI1-10';
+      const footerText = 'Erstellt ueber ergo-stuebe.de | ERGO Agentur Stuebe | Tel: 015566771019 | Vermittlerregister-Nr.: D-5H7J-7DUI1-10';
       const footerWidth = helvetica.widthOfTextAtSize(footerText, 8);
       page.drawText(footerText, { x: (width - footerWidth) / 2, y: footerY, font: helvetica, size: 8, color: rgb(0.5, 0.5, 0.5) });
     }
