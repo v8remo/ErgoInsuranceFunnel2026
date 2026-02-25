@@ -352,6 +352,16 @@ export default function DokumentePage() {
     }
   };
 
+  function dataUrlToBytes(dataUrl: string): Uint8Array {
+    const base64 = dataUrl.split(',')[1];
+    const binaryStr = atob(base64);
+    const bytes = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) {
+      bytes[i] = binaryStr.charCodeAt(i);
+    }
+    return bytes;
+  }
+
   async function generatePdf(sigDataUrl?: string): Promise<Uint8Array> {
     const s = (str: string) => str
       .replace(/\u2013|\u2014/g, '-')
@@ -422,8 +432,7 @@ export default function DokumentePage() {
       const sigSrc = sigDataUrl || signatureDataUrl;
       if (sigSrc) {
         try {
-          const sigBuf = await fetch(sigSrc).then(r => r.arrayBuffer());
-          sigImg = await pdfDoc.embedPng(new Uint8Array(sigBuf));
+          sigImg = await pdfDoc.embedPng(dataUrlToBytes(sigSrc));
           sigDims = sigImg.scale(0.4);
         } catch { /* signature embed failed */ }
       }
@@ -585,8 +594,7 @@ export default function DokumentePage() {
       const sigToEmbed = sigDataUrl || signatureDataUrl;
       if (sigToEmbed) {
         try {
-          const sigBytes = await fetch(sigToEmbed).then(r => r.arrayBuffer());
-          const sigImg = await pdfDoc.embedPng(new Uint8Array(sigBytes));
+          const sigImg = await pdfDoc.embedPng(dataUrlToBytes(sigToEmbed));
           const sigDims = sigImg.scale(0.4);
           page.drawImage(sigImg, { x: margin, y: y - sigDims.height, width: sigDims.width, height: sigDims.height });
           y -= sigDims.height + 5;
