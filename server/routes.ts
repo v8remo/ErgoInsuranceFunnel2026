@@ -329,6 +329,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         subject: documentType,
         summary: summary || '',
         details: { documentType, pdfAttached: !!pdfBase64 },
+        pdfData: pdfBase64 || null,
       });
 
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });

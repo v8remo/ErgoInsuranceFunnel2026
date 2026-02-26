@@ -54,6 +54,7 @@ export const submissions = pgTable("submissions", {
   subject: text("subject"),
   summary: text("summary"),
   details: jsonb("details"),
+  pdfData: text("pdf_data"),
   status: text("status").notNull().default("neu"),
   notes: text("notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),

@@ -935,6 +935,26 @@ export default function AdminDashboard() {
                         </pre>
                       </details>
                     )}
+                    {sub.type === 'dokument' && (sub as any).pdfData && (
+                      <button
+                        onClick={() => {
+                          const pdfData = (sub as any).pdfData as string;
+                          const byteStr = atob(pdfData);
+                          const bytes = new Uint8Array(byteStr.length);
+                          for (let i = 0; i < byteStr.length; i++) bytes[i] = byteStr.charCodeAt(i);
+                          const blob = new Blob([bytes], { type: 'application/pdf' });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `${sub.subject?.replace(/\s/g, '_') ?? 'Dokument'}_${sub.customerName?.replace(/\s/g, '_') ?? ''}.pdf`;
+                          a.click();
+                          URL.revokeObjectURL(url);
+                        }}
+                        className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3 py-1.5 hover:bg-blue-100 transition-colors"
+                      >
+                        📥 PDF herunterladen
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
