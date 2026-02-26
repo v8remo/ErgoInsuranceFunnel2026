@@ -77,8 +77,6 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getLeads(filters?: { insuranceType?: string; status?: string }): Promise<Lead[]> {
-    let query = db.select().from(leads);
-    
     const conditions = [];
     if (filters?.insuranceType) {
       conditions.push(eq(leads.insuranceType, filters.insuranceType));
@@ -88,10 +86,10 @@ export class DatabaseStorage implements IStorage {
     }
     
     if (conditions.length > 0) {
-      query = query.where(and(...conditions));
+      return db.select().from(leads).where(and(...conditions)).orderBy(desc(leads.createdAt));
     }
     
-    return query.orderBy(desc(leads.createdAt));
+    return db.select().from(leads).orderBy(desc(leads.createdAt));
   }
 
   async updateLead(id: number, updates: Partial<Lead>): Promise<Lead | undefined> {

@@ -927,7 +927,7 @@ export default function AdminDashboard() {
                     {sub.summary && (
                       <p className="text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded">{sub.summary}</p>
                     )}
-                    {sub.details && Object.keys(sub.details).length > 0 && (
+                    {sub.details && typeof sub.details === 'object' && !Array.isArray(sub.details) && Object.keys(sub.details as Record<string, unknown>).length > 0 && (
                       <details className="mt-2">
                         <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700">Details anzeigen</summary>
                         <pre className="text-xs bg-gray-50 p-2 rounded mt-1 overflow-x-auto whitespace-pre-wrap">
