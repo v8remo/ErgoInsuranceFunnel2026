@@ -61,7 +61,7 @@ const PREMIUM_TABLE: Record<string, Record<string, Record<string, number>>> = {
     "haftpflicht_teilkasko": { "2026-03": 69.00, "2026-04": 62.09, "2026-05": 55.19, "2026-06": 51.75, "2026-07": 48.29, "2026-08": 41.39, "2026-09": 34.51, "2026-10": 27.61, "2026-11": 20.70, "2026-12": 17.25, "2027-01": 10.35, "2027-02": 10.35 },
     "haftpflicht": { "2026-03": 42.00, "2026-04": 37.79, "2026-05": 33.59, "2026-06": 31.50, "2026-07": 29.39, "2026-08": 25.19, "2026-09": 21.00, "2026-10": 16.80, "2026-11": 12.60, "2026-12": 10.50, "2027-01": 6.30, "2027-02": 6.30 },
   },
-  "Mofa / Moped / Roller": {
+  "Mofa / Moped / Mokick / Roller": {
     "haftpflicht_teilkasko": { "2026-03": 111.00, "2026-04": 99.90, "2026-05": 88.80, "2026-06": 83.25, "2026-07": 77.70, "2026-08": 66.59, "2026-09": 55.52, "2026-10": 44.41, "2026-11": 33.30, "2026-12": 27.75, "2027-01": 16.65, "2027-02": 16.65 },
     "haftpflicht": { "2026-03": 79.00, "2026-04": 71.10, "2026-05": 63.20, "2026-06": 59.25, "2026-07": 55.30, "2026-08": 47.40, "2026-09": 39.51, "2026-10": 31.61, "2026-11": 23.70, "2026-12": 19.75, "2027-01": 11.85, "2027-02": 11.85 },
   },
@@ -96,7 +96,7 @@ const MONTH_LABELS: Record<string, string> = {
 
 const VEHICLE_SHORT_NAMES: Record<string, string> = {
   "E-Scooter": "E-Scooter",
-  "Mofa / Moped / Roller": "Moped",
+  "Mofa / Moped / Mokick / Roller": "Moped",
   "Segway": "Segway",
   "S-Pedelec": "S-Pedelec",
   "Krankenfahrstuhl": "KFS",
@@ -306,7 +306,7 @@ export default function KennzeichenPage() {
     }
     if (selectedType === 'kennzeichen') {
       lines.push(`Höchstgeschwindigkeit: ${formData.hoechstgeschwindigkeit}`);
-      lines.push(`Versicherungsumfang: ${formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko'}`);
+      lines.push(`Versicherungsumfang: ${formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko inkl. Diebstahlschutz'}`);
       const premium = getPremium(formData.fahrzeugart, formData.versicherungsumfang, formData.versicherungsbeginn);
       if (premium !== null) {
         lines.push(`Zeitraum: ${getVersicherungszeitraum(formData.versicherungsbeginn)}`);
@@ -781,7 +781,7 @@ export default function KennzeichenPage() {
                   <select value={formData.fahrzeugart} onChange={e => updateField('fahrzeugart', e.target.value)} className={`${inputCls('fahrzeugart')} bg-white`}>
                     <option value="">Bitte auswählen</option>
                     <option value="E-Scooter">E-Scooter</option>
-                    <option value="Mofa / Moped / Roller">Mofa / Moped / Roller</option>
+                    <option value="Mofa / Moped / Mokick / Roller">Mofa / Moped / Mokick / Roller</option>
                     <option value="Segway">Segway</option>
                     <option value="S-Pedelec">S-Pedelec</option>
                     <option value="Krankenfahrstuhl">Krankenfahrstuhl</option>
@@ -911,8 +911,8 @@ export default function KennzeichenPage() {
                           : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
                       }`}
                     >
-                      <span className="font-semibold text-sm">Haftpflicht + Teilkasko</span>
-                      <p className={`text-xs mt-1 ${formData.versicherungsumfang === 'haftpflicht_teilkasko' ? 'text-white/80' : 'text-gray-500'}`}>empfohlen, inkl. Diebstahlschutz</p>
+                      <span className="font-semibold text-sm">Haftpflicht + Teilkasko inkl. Diebstahlschutz</span>
+                      <p className={`text-xs mt-1 ${formData.versicherungsumfang === 'haftpflicht_teilkasko' ? 'text-white/80' : 'text-gray-500'}`}>empfohlen, 150 € SB je Schadenfall</p>
                     </button>
                   </div>
                   {errors.versicherungsumfang && <span className="text-xs text-red-500">{errors.versicherungsumfang}</span>}
@@ -928,7 +928,7 @@ export default function KennzeichenPage() {
                       </div>
                       <div className="flex justify-between">
                         <span>Versicherungsumfang</span>
-                        <span className="font-semibold">{formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko'}</span>
+                        <span className="font-semibold">{formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'HP + Teilkasko inkl. Diebstahlschutz'}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Zeitraum</span>
@@ -1019,7 +1019,7 @@ export default function KennzeichenPage() {
                     )}
                     {selectedType === 'kennzeichen' && (
                       <>
-                        <p><span className="font-semibold">Versicherungsumfang:</span> {formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko'}</p>
+                        <p><span className="font-semibold">Versicherungsumfang:</span> {formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko inkl. Diebstahlschutz'}</p>
                         {currentPremium !== null && (
                           <>
                             <p><span className="font-semibold">Zeitraum:</span> {getVersicherungszeitraum(formData.versicherungsbeginn)}</p>
