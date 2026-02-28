@@ -15,12 +15,16 @@
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="google" content="notranslate" />
-    <meta name="google-site-verification" content="pending" />
     <meta name="geo.region" content="DE-NI" />
     <meta name="geo.placename" content="Ganderkesee" />
     <meta name="geo.position" content="53.0373;8.5405" />
     <meta name="ICBM" content="53.0373, 8.5405" />
-    
+
+    <!-- Hreflang -->
+    <link rel="alternate" hreflang="de" href="https://ergo-ganderkesee.de/" />
+    <link rel="alternate" hreflang="x-default" href="https://ergo-ganderkesee.de/" />
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ergo-ganderkesee.de/" />
     <meta property="og:title" content="ERGO Versicherung Ganderkesee – Persönliche Beratung" />
@@ -28,13 +32,15 @@
     <meta property="og:image" content="https://ergo-ganderkesee.de/og-image.jpg" />
     <meta property="og:site_name" content="ERGO Versicherung Ganderkesee" />
     <meta property="og:locale" content="de_DE" />
-    
+
+    <!-- Twitter Card -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://ergo-ganderkesee.de/" />
     <meta property="twitter:title" content="ERGO Versicherung Ganderkesee" />
     <meta property="twitter:description" content="Persönliche ERGO Versicherungsberatung. Jetzt kostenlos beraten lassen!" />
     <meta property="twitter:image" content="https://ergo-ganderkesee.de/og-image.jpg" />
-    
+
+    <!-- Business Contact Data -->
     <meta name="business:contact_data:street_address" content="Friedensstraße 91 A" />
     <meta name="business:contact_data:locality" content="Ganderkesee" />
     <meta name="business:contact_data:postal_code" content="27777" />
@@ -42,13 +48,20 @@
     <meta name="business:contact_data:email" content="morino.stuebe@ergo.de" />
     <meta name="business:contact_data:phone_number" content="+4915566771019" />
     <meta name="business:contact_data:website" content="https://ergo-ganderkesee.de/" />
-    
+
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/svg+xml" href="/attached_assets/ergo-logo-hq.svg" />
+    <link rel="apple-touch-icon" href="/attached_assets/ergo-logo-hq.svg" />
+
+    <!-- Preconnect & DNS Prefetch -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-    
+
+    <!-- Canonical -->
     <link rel="canonical" href="https://ergo-ganderkesee.de/" />
-    
+
+    <!-- Structured Data: InsuranceAgency -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -88,7 +101,8 @@
         { "@type": "City", "name": "Oldenburg" }
       ],
       "sameAs": [
-        "https://wa.me/4915566771019"
+        "https://wa.me/4915566771019",
+        "https://www.instagram.com/morino_stuebe/"
       ],
       "priceRange": "$$",
       "hasOfferCatalog": {
@@ -99,12 +113,70 @@
           { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Haftpflichtversicherung" } },
           { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wohngebäudeversicherung" } },
           { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Rechtsschutzversicherung" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Zahnzusatzversicherung" } }
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Zahnzusatzversicherung" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Berufsunfähigkeitsversicherung" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Lebensversicherung" } }
         ]
       }
     }
     </script>
-    
+
+    <!-- Structured Data: BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Startseite", "item": "https://ergo-ganderkesee.de/" },
+        { "@type": "ListItem", "position": 2, "name": "Versicherungen", "item": "https://ergo-ganderkesee.de/versicherung/hausrat" },
+        { "@type": "ListItem", "position": 3, "name": "Beratung anfragen", "item": "https://ergo-ganderkesee.de/termin" }
+      ]
+    }
+    </script>
+
+    <!-- Structured Data: FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Ist die Erstberatung bei der ERGO Agentur Stübe kostenlos?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja, die Erstberatung und der Versicherungscheck sind 100% kostenlos und unverbindlich. Sie erhalten eine individuelle Analyse Ihrer aktuellen Absicherung ohne versteckte Kosten."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie schnell kann ich einen Beratungstermin bekommen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In der Regel können wir innerhalb von 24 Stunden einen Termin anbieten – ob online per Video, telefonisch oder persönlich vor Ort in Ganderkesee."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Kann ich bestehende Verträge von anderen Anbietern prüfen lassen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Selbstverständlich. Wir analysieren Ihre bestehenden Verträge und zeigen Ihnen transparent, ob und wo Optimierungspotenzial besteht – ohne Wechselzwang."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Welche Versicherungen kann ich bei der ERGO Agentur Stübe abschließen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Wir beraten zu allen gängigen Versicherungsprodukten: Kfz, Hausrat, Haftpflicht, Wohngebäude, Rechtsschutz, Zahnzusatz, Berufsunfähigkeit, Lebens- und Rentenversicherung."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Google Ads / Analytics -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -154,6 +226,6 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
+    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js" defer></script>
   </body>
 </html>
