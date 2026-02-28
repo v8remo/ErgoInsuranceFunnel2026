@@ -184,4 +184,18 @@
   .safe-area-bottom {
     padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
+
+  .animate-pulse-subtle {
+    animation: pulse-subtle 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-subtle {
+    0%, 100% { box-shadow: 0 4px 14px rgba(226, 0, 26, 0.2); }
+    50% { box-shadow: 0 4px 20px rgba(226, 0, 26, 0.4); }
+  }
+
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgb(229 231 235 / 0.6), transparent);
+  }
 }
