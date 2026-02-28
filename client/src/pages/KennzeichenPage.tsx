@@ -462,50 +462,50 @@ export default function KennzeichenPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1" data-field="vorname">
                     <label className="text-sm font-semibold text-gray-700">Vorname *</label>
-                    <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} />
+                    <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} autoComplete="given-name" enterKeyHint="next" />
                     {errors.vorname && <span className="text-xs text-red-500">{errors.vorname}</span>}
                   </div>
                   <div className="flex flex-col gap-1" data-field="nachname">
                     <label className="text-sm font-semibold text-gray-700">Nachname *</label>
-                    <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} />
+                    <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} autoComplete="family-name" enterKeyHint="next" />
                     {errors.nachname && <span className="text-xs text-red-500">{errors.nachname}</span>}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1" data-field="geburtsdatum">
                   <label className="text-sm font-semibold text-gray-700">Geburtsdatum *</label>
-                  <input type="date" value={formData.geburtsdatum} onChange={e => updateField('geburtsdatum', e.target.value)} className={inputCls('geburtsdatum')} />
+                  <input type="date" value={formData.geburtsdatum} onChange={e => updateField('geburtsdatum', e.target.value)} className={inputCls('geburtsdatum')} autoComplete="bday" />
                   {errors.geburtsdatum && <span className="text-xs text-red-500">{errors.geburtsdatum}</span>}
                 </div>
 
                 <div className="flex flex-col gap-1" data-field="strasse">
                   <label className="text-sm font-semibold text-gray-700">Straße + Hausnummer *</label>
-                  <input type="text" value={formData.strasse} onChange={e => updateField('strasse', e.target.value)} className={inputCls('strasse')} />
+                  <input type="text" value={formData.strasse} onChange={e => updateField('strasse', e.target.value)} className={inputCls('strasse')} autoComplete="street-address" enterKeyHint="next" />
                   {errors.strasse && <span className="text-xs text-red-500">{errors.strasse}</span>}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1" data-field="plz">
                     <label className="text-sm font-semibold text-gray-700">PLZ *</label>
-                    <input type="text" value={formData.plz} onChange={e => updateField('plz', e.target.value)} maxLength={5} className={inputCls('plz')} />
+                    <input type="text" inputMode="numeric" value={formData.plz} onChange={e => updateField('plz', e.target.value)} maxLength={5} className={inputCls('plz')} autoComplete="postal-code" enterKeyHint="next" />
                     {errors.plz && <span className="text-xs text-red-500">{errors.plz}</span>}
                   </div>
                   <div className="flex flex-col gap-1" data-field="ort">
                     <label className="text-sm font-semibold text-gray-700">Ort *</label>
-                    <input type="text" value={formData.ort} onChange={e => updateField('ort', e.target.value)} className={inputCls('ort')} />
+                    <input type="text" value={formData.ort} onChange={e => updateField('ort', e.target.value)} className={inputCls('ort')} autoComplete="address-level2" enterKeyHint="next" />
                     {errors.ort && <span className="text-xs text-red-500">{errors.ort}</span>}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1" data-field="email">
                   <label className="text-sm font-semibold text-gray-700">E-Mail *</label>
-                  <input type="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} />
+                  <input type="email" inputMode="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} autoComplete="email" enterKeyHint="next" />
                   {errors.email && <span className="text-xs text-red-500">{errors.email}</span>}
                 </div>
 
                 <div className="flex flex-col gap-1" data-field="telefon">
                   <label className="text-sm font-semibold text-gray-700">Telefon *</label>
-                  <input type="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} />
+                  <input type="tel" inputMode="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} autoComplete="tel" enterKeyHint="next" />
                   {errors.telefon && <span className="text-xs text-red-500">{errors.telefon}</span>}
                 </div>
 
@@ -622,19 +622,19 @@ export default function KennzeichenPage() {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-semibold text-gray-700">Gewünschte Versicherungsart *</label>
                   <label className="flex items-center gap-3 p-3 bg-gray-100 rounded-xl cursor-not-allowed">
-                    <input type="checkbox" checked={true} disabled className="w-4 h-4 accent-[#003781]" />
+                    <input type="checkbox" checked={true} disabled className="w-5 h-5 accent-[#003781] shrink-0 cursor-pointer" />
                     <span className="text-sm text-gray-700">Kfz-Haftpflicht <span className="text-xs text-gray-400">(Pflicht)</span></span>
                   </label>
                   <label className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
-                    <input type="checkbox" checked={formData.versicherungsartTeilkasko} onChange={e => updateField('versicherungsartTeilkasko', e.target.checked)} className="w-4 h-4 accent-[#003781]" />
+                    <input type="checkbox" checked={formData.versicherungsartTeilkasko} onChange={e => updateField('versicherungsartTeilkasko', e.target.checked)} className="w-5 h-5 accent-[#003781] shrink-0 cursor-pointer" />
                     <span className="text-sm text-gray-700">Teilkasko</span>
                   </label>
                   <label className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
-                    <input type="checkbox" checked={formData.versicherungsartVollkasko} onChange={e => updateField('versicherungsartVollkasko', e.target.checked)} className="w-4 h-4 accent-[#003781]" />
+                    <input type="checkbox" checked={formData.versicherungsartVollkasko} onChange={e => updateField('versicherungsartVollkasko', e.target.checked)} className="w-5 h-5 accent-[#003781] shrink-0 cursor-pointer" />
                     <span className="text-sm text-gray-700">Vollkasko</span>
                   </label>
                   <label className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
-                    <input type="checkbox" checked={formData.versicherungsartSchutzbrief} onChange={e => updateField('versicherungsartSchutzbrief', e.target.checked)} className="w-4 h-4 accent-[#003781]" />
+                    <input type="checkbox" checked={formData.versicherungsartSchutzbrief} onChange={e => updateField('versicherungsartSchutzbrief', e.target.checked)} className="w-5 h-5 accent-[#003781] shrink-0 cursor-pointer" />
                     <span className="text-sm text-gray-700">Schutzbrief</span>
                   </label>
                 </div>
@@ -669,50 +669,50 @@ export default function KennzeichenPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1" data-field="vorname">
                     <label className="text-sm font-semibold text-gray-700">Vorname *</label>
-                    <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} />
+                    <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} autoComplete="given-name" enterKeyHint="next" />
                     {errors.vorname && <span className="text-xs text-red-500">{errors.vorname}</span>}
                   </div>
                   <div className="flex flex-col gap-1" data-field="nachname">
                     <label className="text-sm font-semibold text-gray-700">Nachname *</label>
-                    <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} />
+                    <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} autoComplete="family-name" enterKeyHint="next" />
                     {errors.nachname && <span className="text-xs text-red-500">{errors.nachname}</span>}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1" data-field="geburtsdatum">
                   <label className="text-sm font-semibold text-gray-700">Geburtsdatum *</label>
-                  <input type="date" value={formData.geburtsdatum} onChange={e => updateField('geburtsdatum', e.target.value)} className={inputCls('geburtsdatum')} />
+                  <input type="date" value={formData.geburtsdatum} onChange={e => updateField('geburtsdatum', e.target.value)} className={inputCls('geburtsdatum')} autoComplete="bday" />
                   {errors.geburtsdatum && <span className="text-xs text-red-500">{errors.geburtsdatum}</span>}
                 </div>
 
                 <div className="flex flex-col gap-1" data-field="strasse">
                   <label className="text-sm font-semibold text-gray-700">Straße + Hausnummer *</label>
-                  <input type="text" value={formData.strasse} onChange={e => updateField('strasse', e.target.value)} className={inputCls('strasse')} />
+                  <input type="text" value={formData.strasse} onChange={e => updateField('strasse', e.target.value)} className={inputCls('strasse')} autoComplete="street-address" enterKeyHint="next" />
                   {errors.strasse && <span className="text-xs text-red-500">{errors.strasse}</span>}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1" data-field="plz">
                     <label className="text-sm font-semibold text-gray-700">PLZ *</label>
-                    <input type="text" value={formData.plz} onChange={e => updateField('plz', e.target.value)} maxLength={5} className={inputCls('plz')} />
+                    <input type="text" inputMode="numeric" value={formData.plz} onChange={e => updateField('plz', e.target.value)} maxLength={5} className={inputCls('plz')} autoComplete="postal-code" enterKeyHint="next" />
                     {errors.plz && <span className="text-xs text-red-500">{errors.plz}</span>}
                   </div>
                   <div className="flex flex-col gap-1" data-field="ort">
                     <label className="text-sm font-semibold text-gray-700">Ort *</label>
-                    <input type="text" value={formData.ort} onChange={e => updateField('ort', e.target.value)} className={inputCls('ort')} />
+                    <input type="text" value={formData.ort} onChange={e => updateField('ort', e.target.value)} className={inputCls('ort')} autoComplete="address-level2" enterKeyHint="next" />
                     {errors.ort && <span className="text-xs text-red-500">{errors.ort}</span>}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1" data-field="email">
                   <label className="text-sm font-semibold text-gray-700">E-Mail *</label>
-                  <input type="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} />
+                  <input type="email" inputMode="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} autoComplete="email" enterKeyHint="next" />
                   {errors.email && <span className="text-xs text-red-500">{errors.email}</span>}
                 </div>
 
                 <div className="flex flex-col gap-1" data-field="telefon">
                   <label className="text-sm font-semibold text-gray-700">Telefon *</label>
-                  <input type="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} />
+                  <input type="tel" inputMode="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} autoComplete="tel" enterKeyHint="next" />
                   {errors.telefon && <span className="text-xs text-red-500">{errors.telefon}</span>}
                 </div>
 
@@ -1155,7 +1155,7 @@ export default function KennzeichenPage() {
                             <button
                               type="button"
                               onClick={() => copyToClipboard('DE09110101015121045976', 'iban')}
-                              className="text-[#003781] hover:text-[#E2001A] transition-colors text-base min-h-[32px] min-w-[32px] flex items-center justify-center"
+                              className="text-[#003781] hover:text-[#E2001A] transition-colors text-base min-h-[44px] min-w-[44px] flex items-center justify-center"
                             >
                               {copiedField === 'iban' ? <span className="text-xs text-green-600 font-semibold">Kopiert!</span> : '📋'}
                             </button>
@@ -1168,7 +1168,7 @@ export default function KennzeichenPage() {
                             <button
                               type="button"
                               onClick={() => copyToClipboard(getVerwendungszweck(formData.fahrzeugart, formData.versicherungsumfang, formData.nachname, formData.vorname, formData.versicherungsbeginn), 'verwendungszweck')}
-                              className="text-[#003781] hover:text-[#E2001A] transition-colors text-base min-h-[32px] min-w-[32px] flex items-center justify-center flex-shrink-0"
+                              className="text-[#003781] hover:text-[#E2001A] transition-colors text-base min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0"
                             >
                               {copiedField === 'verwendungszweck' ? <span className="text-xs text-green-600 font-semibold">Kopiert!</span> : '📋'}
                             </button>

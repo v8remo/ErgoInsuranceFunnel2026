@@ -154,8 +154,8 @@ export default function ProfessionalErgoLanding() {
               <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-white/20 flex items-center justify-center text-2xl md:text-3xl shrink-0">🛴</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-block bg-white text-green-700 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Ab 01.03.2026</span>
-                  <span className="inline-block bg-yellow-400 text-yellow-900 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide animate-pulse">Neu</span>
+                  <span className="inline-block bg-white text-green-700 text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Ab 01.03.2026</span>
+                  <span className="inline-block bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide animate-pulse">Neu</span>
                 </div>
                 <p className="text-white font-bold text-sm md:text-base mt-1 leading-snug">Neue E-Scooter Kennzeichen – jetzt beantragen!</p>
                 <p className="text-white/80 text-xs md:text-sm mt-0.5 hidden sm:block">Versicherungskennzeichen 2026/2027 ab 42 € – direkt online anfordern</p>
@@ -277,7 +277,7 @@ export default function ProfessionalErgoLanding() {
               <div className="grid grid-cols-2 gap-2 sm:contents">
                 <Link
                   href="/dokumente"
-                  className="flex items-center justify-center gap-1 border-2 border-[#003781] text-[#003781] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-[#003781]/5"
+                  className="flex items-center justify-center gap-1.5 border-2 border-[#003781] text-[#003781] font-semibold text-[13px] px-3 py-3 min-h-[44px] rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-[#003781]/5"
                 >
                   <FileText className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
                   Dokument einreichen
@@ -285,7 +285,7 @@ export default function ProfessionalErgoLanding() {
 
                 <Link
                   href="/schaden"
-                  className="flex items-center justify-center gap-1 border-2 border-[#E2001A] text-[#E2001A] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-red-50"
+                  className="flex items-center justify-center gap-1.5 border-2 border-[#E2001A] text-[#E2001A] font-semibold text-[13px] px-3 py-3 min-h-[44px] rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-red-50"
                 >
                   <AlertTriangle className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
                   Schaden melden
@@ -294,7 +294,7 @@ export default function ProfessionalErgoLanding() {
 
               <Link
                 href="/kennzeichen"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#003781] text-[#003781] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-[#003781]/5"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#003781] text-[#003781] font-semibold text-[13px] px-3 py-3 min-h-[44px] rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-[#003781]/5"
               >
                 EVB & Kennzeichen anfordern
               </Link>
@@ -566,7 +566,7 @@ export default function ProfessionalErgoLanding() {
                 </div>
                 <div className="min-w-0">
                   <p className="font-bold text-gray-900 text-xs md:text-sm leading-tight">{award.product}</p>
-                  <p className="text-[10px] md:text-xs text-gray-500 leading-tight">{award.source} · {award.rating}</p>
+                  <p className="text-xs text-gray-500 leading-tight">{award.source} · {award.rating}</p>
                 </div>
               </div>
             ))}
@@ -825,17 +825,17 @@ export default function ProfessionalErgoLanding() {
         </div>
       </footer>
 
-      {/* ──────── STICKY CTA BAR (Mobile + Desktop ab scroll) ──────── */}
-      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2.5 flex gap-2 sm:hidden safe-area-bottom">
+      {/* ──────── STICKY CTA BAR (Mobile) ──────── */}
+      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={() => {
             setShowFunnel(true);
             trackEvent('cta_sticky_clicked', { source: 'sticky_bar' });
           }}
-          className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-xs py-2.5 rounded-lg whitespace-nowrap shadow-lg shadow-red-500/20"
+          className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm min-h-[44px] py-3 rounded-xl whitespace-nowrap shadow-lg shadow-red-500/20"
         >
-          <Mail className="w-3.5 h-3.5 shrink-0" />
+          <Mail className="w-4 h-4 shrink-0" />
           Kostenlose Analyse
         </motion.button>
         <a
@@ -846,9 +846,9 @@ export default function ProfessionalErgoLanding() {
             trackEvent('whatsapp_sticky_clicked', { source: 'sticky_bar' });
             trackConversion();
           }}
-          className="flex items-center justify-center gap-1.5 bg-green-500 text-white font-semibold text-xs px-3 py-2.5 rounded-lg active:scale-[0.97] transition-transform whitespace-nowrap"
+          className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 min-h-[44px] py-3 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap"
         >
-          <Phone className="w-3.5 h-3.5 shrink-0" />
+          <Phone className="w-4 h-4 shrink-0" />
           WhatsApp
         </a>
       </div>

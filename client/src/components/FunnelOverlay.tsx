@@ -551,6 +551,8 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                           onBlur={() => { if (!data.firstName.trim()) setErrors(prev => ({ ...prev, firstName: 'Pflichtfeld' })); }}
                           className={errors.firstName ? 'error' : ''}
                           placeholder="Ihr Vorname"
+                          autoComplete="given-name"
+                          enterKeyHint="next"
                         />
                         {errors.firstName && <span className="funnel-error">{errors.firstName}</span>}
                       </div>
@@ -563,6 +565,8 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                           onBlur={() => { if (!data.lastName.trim()) setErrors(prev => ({ ...prev, lastName: 'Pflichtfeld' })); }}
                           className={errors.lastName ? 'error' : ''}
                           placeholder="Ihr Nachname"
+                          autoComplete="family-name"
+                          enterKeyHint="next"
                         />
                         {errors.lastName && <span className="funnel-error">{errors.lastName}</span>}
                       </div>
@@ -571,11 +575,14 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                       <label>E-Mail *</label>
                       <input
                         type="email"
+                        inputMode="email"
                         value={data.email}
                         onChange={e => { setData(prev => ({ ...prev, email: e.target.value })); setErrors(prev => ({ ...prev, email: '' })); }}
                         onBlur={() => { if (!data.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) setErrors(prev => ({ ...prev, email: 'Bitte gültige E-Mail' })); }}
                         className={errors.email ? 'error' : ''}
                         placeholder="ihre.email@beispiel.de"
+                        autoComplete="email"
+                        enterKeyHint="next"
                       />
                       {errors.email && <span className="funnel-error">{errors.email}</span>}
                     </div>
@@ -583,11 +590,14 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                       <label>Telefon *</label>
                       <input
                         type="tel"
+                        inputMode="tel"
                         value={data.phone}
                         onChange={e => { setData(prev => ({ ...prev, phone: e.target.value })); setErrors(prev => ({ ...prev, phone: '' })); }}
                         onBlur={() => { if (!data.phone.trim()) setErrors(prev => ({ ...prev, phone: 'Pflichtfeld' })); }}
                         className={errors.phone ? 'error' : ''}
                         placeholder="01234 567890"
+                        autoComplete="tel"
+                        enterKeyHint="done"
                       />
                       {errors.phone && <span className="funnel-error">{errors.phone}</span>}
                     </div>

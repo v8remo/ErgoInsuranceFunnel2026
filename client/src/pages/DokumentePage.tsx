@@ -707,7 +707,7 @@ export default function DokumentePage() {
   const selectCls = (field: string) =>
     `w-full p-3 border-2 rounded-xl text-base outline-none transition-colors bg-white ${errors[field] ? 'border-red-500' : 'border-gray-200 focus:border-[#003781]'}`;
 
-  const renderField = (label: string, field: keyof FormData, type = 'text', placeholder = '', required = true) => (
+  const renderField = (label: string, field: keyof FormData, type = 'text', placeholder = '', required = true, extraProps?: React.InputHTMLAttributes<HTMLInputElement>) => (
     <div className="flex flex-col gap-1">
       <label className="text-sm font-semibold text-gray-700">{label}{required && ' *'}</label>
       <input
@@ -716,6 +716,7 @@ export default function DokumentePage() {
         onChange={e => updateField(field, e.target.value)}
         placeholder={placeholder}
         className={inputCls(field)}
+        {...extraProps}
       />
       {errors[field] && <span className="text-xs text-red-500">{errors[field]}</span>}
     </div>
@@ -793,20 +794,20 @@ export default function DokumentePage() {
                   {selectedType === 'upload' ? 'Kontaktdaten' : 'Persönliche Daten'}
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {renderField('Vorname', 'vorname')}
-                  {renderField('Nachname', 'nachname')}
+                  {renderField('Vorname', 'vorname', 'text', '', true, { autoComplete: 'given-name', enterKeyHint: 'next' as any })}
+                  {renderField('Nachname', 'nachname', 'text', '', true, { autoComplete: 'family-name', enterKeyHint: 'next' as any })}
                 </div>
                 {selectedType !== 'upload' && (
                   <>
-                    {renderField('Straße + Hausnummer', 'strasse')}
+                    {renderField('Straße + Hausnummer', 'strasse', 'text', '', true, { autoComplete: 'street-address', enterKeyHint: 'next' as any })}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {renderField('PLZ', 'plz', 'text', '12345')}
-                      {renderField('Ort', 'ort')}
+                      {renderField('PLZ', 'plz', 'text', '12345', true, { inputMode: 'numeric' as any, autoComplete: 'postal-code', maxLength: 5, enterKeyHint: 'next' as any })}
+                      {renderField('Ort', 'ort', 'text', '', true, { autoComplete: 'address-level2', enterKeyHint: 'next' as any })}
                     </div>
                   </>
                 )}
-                {renderField('E-Mail', 'email', 'email', 'name@beispiel.de')}
-                {renderField('Telefon', 'telefon', 'tel', '0151 12345678', selectedType !== 'upload')}
+                {renderField('E-Mail', 'email', 'email', 'name@beispiel.de', true, { inputMode: 'email' as any, autoComplete: 'email', enterKeyHint: 'next' as any })}
+                {renderField('Telefon', 'telefon', 'tel', '0151 12345678', selectedType !== 'upload', { inputMode: 'tel' as any, autoComplete: 'tel', enterKeyHint: 'next' as any })}
 
                 {selectedType === 'kuendigung' && (
                   <>
@@ -883,7 +884,7 @@ export default function DokumentePage() {
                               type="checkbox"
                               checked={formData.vertraegeUebertragen.includes(v)}
                               onChange={() => toggleArrayField('vertraegeUebertragen', v)}
-                              className="w-5 h-5 accent-[#E2001A] shrink-0"
+                              className="w-5 h-5 accent-[#E2001A] shrink-0 cursor-pointer"
                             />
                             {v}
                           </label>
@@ -907,7 +908,7 @@ export default function DokumentePage() {
                               type="checkbox"
                               checked={formData.aenderungen.includes(opt)}
                               onChange={() => toggleArrayField('aenderungen', opt)}
-                              className="w-5 h-5 accent-[#E2001A] shrink-0"
+                              className="w-5 h-5 accent-[#E2001A] shrink-0 cursor-pointer"
                             />
                             {opt}
                           </label>
@@ -937,13 +938,13 @@ export default function DokumentePage() {
                     {formData.aenderungen.includes('E-Mail-Adresse') && (
                       <div className="bg-blue-50 rounded-xl p-4 flex flex-col gap-3">
                         <span className="text-xs font-bold text-[#003781]">Neue E-Mail</span>
-                        {renderField('Neue E-Mail-Adresse', 'neueEmail', 'email')}
+                        {renderField('Neue E-Mail-Adresse', 'neueEmail', 'email', '', true, { inputMode: 'email' as any, autoComplete: 'email', enterKeyHint: 'done' as any })}
                       </div>
                     )}
                     {formData.aenderungen.includes('Telefonnummer') && (
                       <div className="bg-blue-50 rounded-xl p-4 flex flex-col gap-3">
                         <span className="text-xs font-bold text-[#003781]">Neue Telefonnummer</span>
-                        {renderField('Neue Telefonnummer', 'neueTelefon', 'tel')}
+                        {renderField('Neue Telefonnummer', 'neueTelefon', 'tel', '', true, { inputMode: 'tel' as any, autoComplete: 'tel', enterKeyHint: 'done' as any })}
                       </div>
                     )}
                     {formData.aenderungen.includes('Fahrzeugdaten') && (
@@ -1058,7 +1059,7 @@ export default function DokumentePage() {
                               <button
                                 type="button"
                                 onClick={() => removeFile(i)}
-                                className="w-8 h-8 flex items-center justify-center rounded-full text-red-500 hover:bg-red-50 transition-colors shrink-0"
+                                className="w-10 h-10 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-red-500 hover:bg-red-50 transition-colors shrink-0 shadow-sm"
                                 aria-label="Datei entfernen"
                               >
                                 ✕

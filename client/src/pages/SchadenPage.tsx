@@ -469,25 +469,25 @@ export default function SchadenPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-semibold text-gray-700">Vorname *</label>
-                    <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} />
+                    <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} autoComplete="given-name" enterKeyHint="next" />
                     {errors.vorname && <span className="text-xs text-red-500">{errors.vorname}</span>}
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-semibold text-gray-700">Nachname *</label>
-                    <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} />
+                    <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} autoComplete="family-name" enterKeyHint="next" />
                     {errors.nachname && <span className="text-xs text-red-500">{errors.nachname}</span>}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold text-gray-700">Telefon *</label>
-                  <input type="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} />
+                  <input type="tel" inputMode="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} autoComplete="tel" enterKeyHint="next" />
                   {errors.telefon && <span className="text-xs text-red-500">{errors.telefon}</span>}
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold text-gray-700">E-Mail *</label>
-                  <input type="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} />
+                  <input type="email" inputMode="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} autoComplete="email" enterKeyHint="next" />
                   {errors.email && <span className="text-xs text-red-500">{errors.email}</span>}
                 </div>
 
@@ -873,7 +873,7 @@ export default function SchadenPage() {
                             </div>
                             <button
                               onClick={() => removeFile(i)}
-                              className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs font-bold flex items-center justify-center opacity-80 hover:opacity-100"
+                              className="absolute -top-1 -right-1 w-8 h-8 bg-red-500 text-white rounded-full text-xs font-bold flex items-center justify-center opacity-90 hover:opacity-100 shadow-sm"
                             >
                               ×
                             </button>
@@ -930,13 +930,13 @@ export default function SchadenPage() {
 
               <div className="flex flex-col gap-3 mb-5">
                 <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" checked={confirm1} onChange={e => { setConfirm1(e.target.checked); if (errors.confirm1) setErrors(prev => { const n = { ...prev }; delete n.confirm1; return n; }); }} className="mt-1 w-4 h-4 accent-[#003781]" />
+                  <input type="checkbox" checked={confirm1} onChange={e => { setConfirm1(e.target.checked); if (errors.confirm1) setErrors(prev => { const n = { ...prev }; delete n.confirm1; return n; }); }} className="mt-0.5 w-5 h-5 accent-[#003781] shrink-0 cursor-pointer" />
                   <span className="text-sm text-gray-700">Alle Angaben sind korrekt und vollständig.</span>
                 </label>
                 {errors.confirm1 && <span className="text-xs text-red-500 ml-7">{errors.confirm1}</span>}
 
                 <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" checked={confirm2} onChange={e => { setConfirm2(e.target.checked); if (errors.confirm2) setErrors(prev => { const n = { ...prev }; delete n.confirm2; return n; }); }} className="mt-1 w-4 h-4 accent-[#003781]" />
+                  <input type="checkbox" checked={confirm2} onChange={e => { setConfirm2(e.target.checked); if (errors.confirm2) setErrors(prev => { const n = { ...prev }; delete n.confirm2; return n; }); }} className="mt-0.5 w-5 h-5 accent-[#003781] shrink-0 cursor-pointer" />
                   <span className="text-sm text-gray-700">Ich bin mit der elektronischen Übermittlung einverstanden.</span>
                 </label>
                 {errors.confirm2 && <span className="text-xs text-red-500 ml-7">{errors.confirm2}</span>}
