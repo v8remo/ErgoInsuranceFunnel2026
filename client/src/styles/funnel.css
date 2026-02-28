@@ -3,7 +3,7 @@
    Base = Mobile, then scale up
    ═══════════════════════════════════ */
 
-/* ── Overlay ── */
+/* ── Overlay (Framer Motion handles enter/exit animations) ── */
 .funnel-overlay {
   position: fixed;
   inset: 0;
@@ -12,7 +12,6 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  animation: funnel-fade-in 0.25s ease;
   padding: 0;
 }
 
@@ -29,7 +28,6 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   position: relative;
-  animation: funnel-slide-up 0.3s ease;
 }
 
 @keyframes funnel-slide-up {
@@ -67,10 +65,10 @@
   z-index: 2;
 }
 
+/* Framer Motion handles the progress animation */
 .funnel-progress-fill {
   height: 100%;
   background: #E2001A;
-  transition: width 0.5s ease;
   border-radius: 0 2px 2px 0;
 }
 
@@ -132,32 +130,17 @@
   }
 }
 
-/* ── Animations ── */
+/* ── Animations (Framer Motion handles step transitions now) ── */
 .funnel-slide-in {
-  animation: slideIn 0.3s ease forwards;
+  animation: none;
 }
 
 .funnel-slide-out-left {
-  animation: slideOutLeft 0.25s ease forwards;
+  animation: none;
 }
 
 .funnel-slide-out-right {
-  animation: slideOutRight 0.25s ease forwards;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(24px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideOutLeft {
-  from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(-24px); }
-}
-
-@keyframes slideOutRight {
-  from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(24px); }
+  animation: none;
 }
 
 /* ═══════ STEP 1 – Hook ═══════ */

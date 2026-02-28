@@ -1,82 +1,93 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Phone, Calendar } from "lucide-react";
-import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleMobileMenuClick = () => {
     setIsOpen(false);
-    // Small delay to ensure menu closes before scrolling
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);
   };
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50 w-full">
+    <header
+      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+        scrolled
+          ? "bg-white/80 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.08)] border-b border-gray-200/50"
+          : "bg-white border-b border-gray-200"
+      }`}
+    >
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
         <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo and Brand */}
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center group">
             <div className="text-left">
-              <div className="text-xl sm:text-2xl font-bold text-ergo-red">ERGO</div>
+              <div className="text-xl sm:text-2xl font-bold text-ergo-red transition-transform duration-200 group-hover:scale-105 origin-left">ERGO</div>
               <div className="text-xs sm:text-sm text-gray-600">Agentur Stübe</div>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-4 lg:space-x-6">
-            <Link href="/" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
+            <Link href="/" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-ergo-red after:transition-all after:duration-300 hover:after:w-full">
               Startseite
             </Link>
-            <Link href="/versicherung/hausrat" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
+            <Link href="/versicherung/hausrat" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-ergo-red after:transition-all after:duration-300 hover:after:w-full">
               Hausrat
             </Link>
-            <Link href="/versicherung/haftpflicht" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
+            <Link href="/versicherung/haftpflicht" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-ergo-red after:transition-all after:duration-300 hover:after:w-full">
               Haftpflicht
             </Link>
-            <Link href="/versicherung/wohngebaeude" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
+            <Link href="/versicherung/wohngebaeude" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-ergo-red after:transition-all after:duration-300 hover:after:w-full">
               Wohngebäude
             </Link>
-            <Link href="/versicherung/rechtsschutz" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
+            <Link href="/versicherung/rechtsschutz" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-ergo-red after:transition-all after:duration-300 hover:after:w-full">
               Rechtsschutz
             </Link>
-            <Link href="/versicherung/zahnzusatz" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors">
+            <Link href="/versicherung/zahnzusatz" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-ergo-red after:transition-all after:duration-300 hover:after:w-full">
               Zahnzusatz
             </Link>
-            <Link href="/leben-vorsorge" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors font-medium">
+            <Link href="/leben-vorsorge" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors font-medium relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-ergo-red after:transition-all after:duration-300 hover:after:w-full">
               Leben & Vorsorge
             </Link>
           </nav>
 
           {/* Contact and Mobile Menu */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            <Link 
+            <Link
               href="/termin"
-              className="hidden lg:flex items-center gap-2 bg-ergo-red text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+              className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white px-4 py-2 rounded-xl hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 text-sm font-medium"
             >
               <Calendar className="w-4 h-4" />
               Termin buchen
             </Link>
-            <a 
-              href="tel:015566771019" 
+            <a
+              href="tel:015566771019"
               className="hidden lg:flex items-center text-ergo-red hover:text-red-700 transition-colors"
             >
               <Phone className="w-4 h-4 mr-2" />
               <span className="font-medium">015566771019</span>
             </a>
-            
-            <a 
-              href="tel:015566771019" 
+
+            <a
+              href="tel:015566771019"
               className="flex lg:hidden items-center text-ergo-red hover:text-red-700 transition-colors p-2"
             >
               <Phone className="w-5 h-5" />
             </a>
-            
+
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
@@ -107,16 +118,16 @@ export default function Header() {
                   <Link href="/leben-vorsorge" className="text-lg font-bold text-ergo-red hover:text-red-700" onClick={handleMobileMenuClick}>
                     Leben & Vorsorge
                   </Link>
-                  
+
                   <div className="pt-4 border-t space-y-4">
                     <Link href="/termin" className="block text-lg font-bold text-ergo-red hover:text-red-700" onClick={handleMobileMenuClick}>
-                      📅 Termin buchen
+                      Termin buchen
                     </Link>
                     <Link href="/versicherungscheck" className="block text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
-                      🔍 Versicherungscheck
+                      Versicherungscheck
                     </Link>
                     <Link href="/sparrechner" className="block text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
-                      💰 Sparrechner
+                      Sparrechner
                     </Link>
                     <Link href="/dokumente" className="block text-lg font-medium text-gray-900 hover:text-ergo-red" onClick={handleMobileMenuClick}>
                       Dokumente
@@ -128,10 +139,10 @@ export default function Header() {
                       Kennzeichen / eVB
                     </Link>
                   </div>
-                  
+
                   <div className="pt-4 border-t">
-                    <a 
-                      href="tel:015566771019" 
+                    <a
+                      href="tel:015566771019"
                       className="flex items-center text-ergo-red font-medium text-lg"
                     >
                       <Phone className="w-5 h-5 mr-2" />
