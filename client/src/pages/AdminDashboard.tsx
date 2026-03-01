@@ -29,7 +29,8 @@ import {
   Trash2,
   ArrowLeft,
   LogOut,
-  Lock
+  Lock,
+  Instagram
 } from "lucide-react";
 import type { Lead, Content, Submission } from "@shared/schema";
 
@@ -640,6 +641,13 @@ export default function AdminDashboard() {
                 )}
               </button>
             ))}
+            <a
+              href="/admin/instagram"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 ml-auto border border-dashed border-gray-300 hover:border-pink-400 hover:text-pink-600"
+            >
+              <Instagram className="w-4 h-4" />
+              Instagram Generator
+            </a>
           </div>
         </div>
 

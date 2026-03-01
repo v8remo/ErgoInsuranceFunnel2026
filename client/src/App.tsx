@@ -28,6 +28,7 @@ const TerminPage = lazy(() => import("@/pages/TerminPage"));
 const VersicherungsCheck = lazy(() => import("@/pages/VersicherungsCheck"));
 const SparRechner = lazy(() => import("@/pages/SparRechner"));
 const AktionsSeiten = lazy(() => import("@/pages/AktionsSeiten"));
+const InstagramGenerator = lazy(() => import("@/pages/InstagramGenerator"));
 
 function PageLoader() {
   return (
@@ -39,8 +40,9 @@ function PageLoader() {
 
 function Layout({ children }: { children: React.ReactNode }) {
   const [isAdmin] = useRoute("/admin");
+  const [isInstagram] = useRoute("/admin/instagram");
   const [isBeratung] = useRoute("/beratung");
-  const hideLayout = isAdmin || isBeratung;
+  const hideLayout = isAdmin || isInstagram || isBeratung;
 
   return (
     <>
@@ -77,6 +79,7 @@ function AppContent() {
           <Route path="/versicherungscheck" component={VersicherungsCheck} />
           <Route path="/sparrechner" component={SparRechner} />
           <Route path="/aktion/:slug" component={AktionsSeiten} />
+          <Route path="/admin/instagram" component={InstagramGenerator} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>
