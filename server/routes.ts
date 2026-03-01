@@ -882,6 +882,67 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post("/api/instagram/generate", async (req, res) => {
+    try {
+      const { topicName, topicIcon, topicId } = req.body;
+      if (!topicName) return res.status(400).json({ message: "topicName required" });
+
+      const OpenAI = (await import('openai')).default;
+      const openai = new OpenAI({
+        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+      });
+
+      const prompt = `Du bist ein Experte für Instagram-Content für eine ERGO Versicherungsagentur in Ganderkesee (Norddeutschland).
+
+Generiere eine NEUE, frische Instagram Carousel-Story zum Thema "${topicIcon || ''} ${topicName}" für ERGO Versicherung Morino Stübe.
+
+Die Story soll den gleichen professionellen Stil haben, aber eine KOMPLETT ANDERE Geschichte, ein anderes Szenario und andere Beispiele als bekannte Versicherungsanekdoten.
+
+Regeln:
+- Zielgruppe: Norddeutsche Familien, 25-55 Jahre
+- Ton: Direkt, ehrlich, leicht emotional, seriös
+- Echte Alltagssituationen – keine Klischees
+- Spezifische (aber fiktive) Details machen es authentischer
+- CTA-Keyword: GROSS, ein Wort, passend zum Thema
+
+Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
+{
+  "hooks": {
+    "schock": "Schockierender Hook (max 65 Zeichen, Zeilenumbruch mit \\n erlaubt)",
+    "frage": "Frage als Hook (max 65 Zeichen)?",
+    "zahl": "Statistik oder Zahl als Hook (max 65 Zeichen)",
+    "story": "Story-basierter Hook (max 65 Zeichen)",
+    "negativ": "Verlust-basierter Hook (max 65 Zeichen)"
+  },
+  "storySetup": "Kurze Szene: Wer ist die Person, was ist die Situation (1-2 Sätze, max 120 Zeichen)",
+  "problem": "Das konkrete Problem das entsteht (1-2 Sätze, max 150 Zeichen)",
+  "consequence": "Was ist das Ergebnis (kurzer Satz, max 80 Zeichen)",
+  "consequenceNumber": "Konkrete Zahl z.B. 12.400 oder 68",
+  "consequenceLabel": "Was die Zahl bedeutet z.B. '€ Eigenschaden' oder '% unterschätzen das'",
+  "emotionalQuote": "Emotionales Zitat als ob von der betroffenen Person (max 120 Zeichen)",
+  "explanationBullets": ["Erklärung 1 (max 50 Zeichen)", "Erklärung 2 (max 50 Zeichen)", "Erklärung 3 (max 50 Zeichen)"],
+  "solutionSteps": ["Lösung 1 (max 50 Zeichen)", "Lösung 2 (max 50 Zeichen)", "Lösung 3 (max 50 Zeichen)"],
+  "ctaKeyword": "KEYWORD",
+  "caption": "Instagram Caption ca. 150 Zeichen, 1 Emoji, endet mit Frage",
+  "hashtags": ["#hashtag1", "#hashtag2", "#hashtag3", "#hashtag4", "#hashtag5"]
+}`;
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-5.2",
+        messages: [{ role: "user", content: prompt }],
+        response_format: { type: "json_object" },
+        max_completion_tokens: 1800,
+      });
+
+      const generated = JSON.parse(response.choices[0]?.message?.content || '{}');
+      res.json({ success: true, content: generated });
+    } catch (error) {
+      console.error('Instagram generate error:', error);
+      res.status(500).json({ message: "Fehler bei der KI-Generierung" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

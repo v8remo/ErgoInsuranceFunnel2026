@@ -198,4 +198,12 @@
     height: 1px;
     background: linear-gradient(to right, transparent, rgb(229 231 235 / 0.6), transparent);
   }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

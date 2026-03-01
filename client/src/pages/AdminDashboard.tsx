@@ -587,30 +587,33 @@ export default function AdminDashboard() {
               <h1 className="text-xl sm:text-2xl font-bold text-ergo-dark">ERGO Admin Dashboard</h1>
               <p className="text-sm sm:text-base text-ergo-dark-light">Leads verwalten und Inhalte bearbeiten</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-shrink-0">
               <Button
                 variant="outline"
                 onClick={handleBackToHome}
-                className="flex items-center gap-2"
+                className="flex items-center gap-1.5 px-3"
+                title="Zurück zur Website"
               >
                 <ArrowLeft className="h-4 w-4" />
-                Zurück
+                <span className="hidden sm:inline">Zurück</span>
               </Button>
               <Button
                 variant="outline"
                 onClick={() => setShowPasswordChange(true)}
-                className="flex items-center gap-2"
+                className="flex items-center gap-1.5 px-3"
+                title="Passwort ändern"
               >
                 <Lock className="h-4 w-4" />
-                Passwort ändern
+                <span className="hidden sm:inline">Passwort</span>
               </Button>
               <Button
                 variant="outline"
                 onClick={handleLogout}
-                className="flex items-center gap-2"
+                className="flex items-center gap-1.5 px-3"
+                title="Abmelden"
               >
                 <LogOut className="h-4 w-4" />
-                Abmelden
+                <span className="hidden sm:inline">Abmelden</span>
               </Button>
             </div>
           </div>
@@ -619,23 +622,23 @@ export default function AdminDashboard() {
 
         {/* Tab Navigation */}
         <div className="bg-white rounded-lg shadow-lg p-2 mb-4 sm:mb-6">
-          <div className="flex flex-wrap gap-1">
+          <div className="flex overflow-x-auto gap-1 pb-0.5 scrollbar-hide">
             {[
               { key: "leads", label: "Leads", icon: Users },
-              { key: "anfragen", label: "Kundenanfragen", icon: FileText },
+              { key: "anfragen", label: "Anfragen", icon: FileText },
               { key: "content", label: "Inhalte", icon: Settings },
               { key: "instagram", label: "Instagram", icon: Instagram },
             ].map(tab => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
                   activeTab === tab.key
                     ? "bg-ergo-red text-white"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
-                <tab.icon className="w-4 h-4" />
+                <tab.icon className="w-4 h-4 flex-shrink-0" />
                 {tab.label}
                 {tab.key === "anfragen" && submissionsData.filter(s => s.status === "neu").length > 0 && (
                   <span className="bg-white text-ergo-red text-xs font-bold px-1.5 py-0.5 rounded-full">

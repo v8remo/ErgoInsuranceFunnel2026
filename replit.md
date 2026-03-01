@@ -39,7 +39,7 @@ The platform features a clean, professional design with a focus on user experien
 - **Lead Optimization:** Clear Call-to-Actions, trust elements, simplified multi-step processes, and immediate lead capture.
 - **Tracking:** Google Analytics 4, Meta Pixel integration, event tracking for key interactions, funnel tracking, and conversion tracking for lead generation (Google Ads conversion tracking).
 - **Admin Features:** Lead management with filtering, content management system, CSV export, real-time statistics, and PDF download button for Dokument-Submissions (base64 stored in `pdf_data` column).
-- **Instagram Generator:** Admin-only tool at `/admin/instagram` for generating branded ERGO social media slides (html-to-image, Inter/Montserrat fonts).
+- **Instagram Generator:** Admin-only tool at `/admin/instagram` for generating branded ERGO social media slides (html-to-image, Inter/Montserrat fonts). Features mobile-optimized layout, inline topic switcher, hook-type selector, and AI-powered content regeneration (POST /api/instagram/generate via OpenAI gpt-5.2) that generates fresh story variations in the same style for any topic.
 - **Email Notifications:** Automated lead notifications via Resend API (e.g., for document uploads, claims, and license plate requests).
 - **Compliance:** Full compliance with German legal requirements (Impressum, Datenschutzerklärung, Cookie-Consent-Banner, Erstinformation nach § 15 VersVermV).
 - **Local SEO:** Dedicated city landing pages (`/versicherung-ganderkesee`, `/versicherung-delmenhorst`, `/versicherung-oldenburg`) with localized content, FAQs, testimonials, and regional information.
@@ -56,3 +56,4 @@ The platform features a clean, professional design with a focus on user experien
 - **Microsoft Outlook Booking:** Embedded for online appointment scheduling.
 - **IHK (Industrie- und Handelskammer):** Registration number and details included in legal disclosures.
 - **LfD Niedersachsen (Landesbeauftragte für den Datenschutz):** Referenced for data protection compliance.
+- **OpenAI (via Replit AI Integrations):** Used for Instagram content generation (gpt-5.2, POST /api/instagram/generate). No own API key needed – billed to Replit credits.
