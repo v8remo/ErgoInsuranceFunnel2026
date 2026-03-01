@@ -4,7 +4,7 @@
 The ERGO Versicherungsplattform is a professional lead generation platform designed for ERGO insurance agencies. It features optimized landing pages for various insurance products and an administrative dashboard for content and lead management. The platform aims to enhance online presence, streamline lead capture, and provide robust tools for managing customer interactions and marketing efforts. Key capabilities include comprehensive SEO, high performance, and conversion-optimized funnels to maximize lead generation from campaigns like Google Ads. The business vision is to provide a competitive edge in the insurance market through a highly effective digital presence.
 
 ## User Preferences
-- Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)
+- Admin-Passwort: Wird über die Umgebungsvariable ADMIN_PASSWORD konfiguriert (bcrypt-gehasht in der Datenbank gespeichert)
 - E-Mail-Benachrichtigungen für neue Leads gewünscht
 - Platform soll Google Ads ready sein
 - Sichere Admin-Authentifizierung mit Passwort-Änderungsfunktion gewünscht
