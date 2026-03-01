@@ -23,6 +23,7 @@ export default function InstagramGenerator() {
   const [slides, setSlides] = useState<SlideData[]>([]);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [downloading, setDownloading] = useState(false);
+  const [showTopicSwitcher, setShowTopicSwitcher] = useState(false);
   const slideRef = useRef<HTMLDivElement>(null);
   const storyRef = useRef<HTMLDivElement>(null);
 
@@ -31,6 +32,7 @@ export default function InstagramGenerator() {
     setSlides(generateSlidesFromTopic(topic, hookType));
     setActiveSlideIndex(0);
     setActiveTab('slides');
+    setShowTopicSwitcher(false);
   }, [hookType]);
 
   const handleHookChange = useCallback((newHook: HookType) => {
@@ -274,9 +276,9 @@ export default function InstagramGenerator() {
         ) : (
           <div>
             {/* Back button + Controls */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: showTopicSwitcher ? 12 : 24, flexWrap: 'wrap' }}>
               <button
-                onClick={() => { setSelectedTopic(null); setSlides([]); }}
+                onClick={() => { setSelectedTopic(null); setSlides([]); setShowTopicSwitcher(false); }}
                 style={{
                   padding: '10px 20px',
                   backgroundColor: '#FFFFFF',
@@ -291,7 +293,7 @@ export default function InstagramGenerator() {
                   gap: 8,
                 }}
               >
-                ← Zurück
+                ← Alle Themen
               </button>
 
               <div style={{
@@ -303,6 +305,26 @@ export default function InstagramGenerator() {
               }}>
                 {selectedTopic.icon} {selectedTopic.name}
               </div>
+
+              {/* Quick topic switcher button */}
+              <button
+                onClick={() => setShowTopicSwitcher(prev => !prev)}
+                style={{
+                  padding: '10px 18px',
+                  backgroundColor: showTopicSwitcher ? ERGO.primary : '#FFFFFF',
+                  color: showTopicSwitcher ? '#FFFFFF' : ERGO.textDark,
+                  border: `2px solid ${showTopicSwitcher ? ERGO.primary : '#e0e0e0'}`,
+                  borderRadius: 10,
+                  cursor: 'pointer',
+                  fontSize: 14,
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                }}
+              >
+                🔄 Thema wechseln
+              </button>
 
               {/* Format selector */}
               <div style={{ display: 'flex', gap: 8 }}>
@@ -326,6 +348,63 @@ export default function InstagramGenerator() {
                 ))}
               </div>
             </div>
+
+            {/* Inline topic switcher panel */}
+            {showTopicSwitcher && (
+              <div style={{
+                backgroundColor: '#f8f8f8',
+                border: '2px solid #e8e8e8',
+                borderRadius: 14,
+                padding: '16px 20px',
+                marginBottom: 24,
+              }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: ERGO.textMedium, marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Anderes Thema auswählen:
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                  {TOPICS.map((topic) => (
+                    <button
+                      key={topic.id}
+                      onClick={() => handleSelectTopic(topic)}
+                      style={{
+                        padding: '8px 16px',
+                        backgroundColor: selectedTopic?.id === topic.id ? ERGO.primary : '#FFFFFF',
+                        color: selectedTopic?.id === topic.id ? '#FFFFFF' : ERGO.textDark,
+                        border: `2px solid ${selectedTopic?.id === topic.id ? ERGO.primary : '#e0e0e0'}`,
+                        borderRadius: 20,
+                        cursor: 'pointer',
+                        fontSize: 13,
+                        fontWeight: 600,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6,
+                        transition: 'all 0.15s',
+                      }}
+                      onMouseEnter={e => {
+                        if (selectedTopic?.id !== topic.id) {
+                          e.currentTarget.style.borderColor = ERGO.primary;
+                          e.currentTarget.style.color = ERGO.primary;
+                        }
+                      }}
+                      onMouseLeave={e => {
+                        if (selectedTopic?.id !== topic.id) {
+                          e.currentTarget.style.borderColor = '#e0e0e0';
+                          e.currentTarget.style.color = ERGO.textDark;
+                        }
+                      }}
+                    >
+                      <span>{topic.icon}</span>
+                      <span>{topic.name}</span>
+                      {topic.seasonal && (
+                        <span style={{ fontSize: 11, backgroundColor: ERGO.accentBg, color: ERGO.primary, padding: '1px 6px', borderRadius: 10 }}>
+                          {topic.seasonal}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Hook selector */}
             <div style={{ marginBottom: 24, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
