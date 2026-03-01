@@ -46,7 +46,7 @@ export default function InstagramGenerator() {
     typeof window !== 'undefined' ? window.innerWidth : 1200
   );
   const slideRef = useRef<HTMLDivElement>(null);
-  const storyRef = useRef<HTMLDivElement>(null);
+  const storyRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const onResize = () => setWindowWidth(window.innerWidth);
@@ -149,15 +149,33 @@ export default function InstagramGenerator() {
 
   const downloadPng = useCallback(async (el: HTMLElement, filename: string, embeddedFontCSS: string) => {
     let styleEl: HTMLStyleElement | null = null;
+    // All cross-origin <link> stylesheets that we temporarily remove to avoid
+    // html-to-image's SecurityError when it tries to read their cssRules
+    const removedLinks: { el: HTMLLinkElement; next: ChildNode | null }[] = [];
     try {
+      // 1. Inject base64 font CSS so fonts remain available after we remove the remote links
       if (embeddedFontCSS) {
         styleEl = document.createElement('style');
         styleEl.setAttribute('data-font-embed', '1');
         styleEl.textContent = embeddedFontCSS;
         document.head.appendChild(styleEl);
       }
+
+      // 2. Remove ALL external font/CSS links that would trigger CORS errors
+      document.head.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]').forEach(link => {
+        try {
+          // accessing href can be same-origin, so test cssRules instead
+          const sheet = Array.from(document.styleSheets).find(s => s.href === link.href);
+          if (sheet) { sheet.cssRules; } // throws if cross-origin
+        } catch {
+          removedLinks.push({ el: link, next: link.nextSibling });
+          document.head.removeChild(link);
+        }
+      });
+
       await document.fonts.ready;
       const dataUrl = await toPng(el, { quality: 1, pixelRatio: 1, cacheBust: true });
+
       const link = document.createElement('a');
       link.download = filename;
       link.href = dataUrl;
@@ -165,6 +183,14 @@ export default function InstagramGenerator() {
       link.click();
       document.body.removeChild(link);
     } finally {
+      // Restore removed stylesheets in original order
+      removedLinks.forEach(({ el, next }) => {
+        if (next && document.head.contains(next as ChildNode)) {
+          document.head.insertBefore(el, next);
+        } else {
+          document.head.appendChild(el);
+        }
+      });
       if (styleEl && document.head.contains(styleEl)) {
         document.head.removeChild(styleEl);
       }
@@ -575,14 +601,17 @@ export default function InstagramGenerator() {
                       </div>
                       <div style={{ marginTop: 6, fontSize: 12, fontWeight: 600, color: ERGO.textDark, textAlign: 'center' }}>Frame {i + 1}: {frame.label}</div>
                       <button
-                        onClick={() => handleDownloadSlide(storyRef, `${selectedTopic.id}_story_${i + 1}.png`)}
+                        onClick={() => {
+                          const ref = { current: storyRefs.current[i] };
+                          handleDownloadSlide(ref, `${selectedTopic.id}_story_${i + 1}.png`);
+                        }}
                         disabled={downloading}
                         style={{ marginTop: 6, width: '100%', padding: '5px 10px', backgroundColor: ERGO.primary, color: '#FFFFFF', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 11, fontWeight: 600 }}
                       >
                         PNG
                       </button>
                       <div style={{ position: 'fixed', left: -9999, top: 0 }}>
-                        <StoryFrameRenderer ref={storyRef} frame={frame} frameIndex={i} totalFrames={selectedTopic.storyFrames!.length} />
+                        <StoryFrameRenderer ref={el => { storyRefs.current[i] = el; }} frame={frame} frameIndex={i} totalFrames={selectedTopic.storyFrames!.length} />
                       </div>
                     </div>
                   ))}
