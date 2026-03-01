@@ -48,6 +48,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
   const [direction, setDirection] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAnalysisResult, setShowAnalysisResult] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   const [data, setData] = useState<FunnelData>({
@@ -83,13 +84,22 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
+  const handleClose = useCallback(() => {
+    if (step >= 3 && step < 9 && !sessionStorage.getItem('funnel_exit_shown')) {
+      setShowExitConfirm(true);
+      sessionStorage.setItem('funnel_exit_shown', '1');
+      return;
+    }
+    onClose();
+  }, [step, onClose]);
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) onClose();
+      if (e.key === 'Escape' && isOpen) handleClose();
     };
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
-  }, [isOpen, onClose]);
+  }, [isOpen, handleClose]);
 
   useEffect(() => {
     if (isOpen && step >= 1) {
@@ -230,7 +240,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
-        onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
       >
         <motion.div
           className="funnel-card"
@@ -263,7 +273,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
             )}
             <motion.button
               className="funnel-close-btn"
-              onClick={onClose}
+              onClick={handleClose}
               aria-label="Schließen"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -294,7 +304,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                     transition={{ delay: 0.15, duration: 0.4 }}
                     className="funnel-badge-pill"
                   >
-                    ⭐ 47 Beratungen diesen Monat
+                    ⭐ {Math.floor(28 + new Date().getDate() * 1.5)} Beratungen diesen Monat
                   </motion.div>
                   <h2 className="funnel-hook-headline">
                     {insuranceLabel
@@ -621,6 +631,12 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                     >
                       Weiter zum Terminwunsch →
                     </motion.button>
+                    <p className="text-center text-xs text-gray-400 mt-3">
+                      Lieber direkt schreiben?{' '}
+                      <a href="https://wa.me/4915566771019" target="_blank" rel="noopener noreferrer" className="text-green-600 font-semibold hover:underline">
+                        WhatsApp →
+                      </a>
+                    </p>
                   </div>
                 </motion.div>
               )}
@@ -783,6 +799,40 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Exit-Intent Confirmation */}
+      {showExitConfirm && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4"
+          onClick={(e) => { if (e.target === e.currentTarget) setShowExitConfirm(false); }}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl"
+          >
+            <div className="text-4xl mb-3">🤔</div>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Ihre Analyse ist fast fertig!</h3>
+            <p className="text-sm text-gray-600 mb-5">Wirklich abbrechen? Ihre bisherigen Angaben gehen verloren.</p>
+            <div className="flex flex-col gap-2.5">
+              <button
+                onClick={() => setShowExitConfirm(false)}
+                className="w-full py-3 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold rounded-xl shadow-lg"
+              >
+                Weiter machen
+              </button>
+              <button
+                onClick={() => { setShowExitConfirm(false); onClose(); }}
+                className="w-full py-3 text-gray-500 text-sm hover:text-gray-700 transition-colors"
+              >
+                Abbrechen
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }

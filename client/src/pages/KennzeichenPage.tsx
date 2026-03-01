@@ -380,11 +380,18 @@ export default function KennzeichenPage() {
                 <div />
               )}
               <span className="text-xs text-gray-500 font-medium">
-                Schritt {Math.min(step, 3)} von 3
+                Schritt {Math.min(step, 3)} von 3 — {step === 1 ? 'Auswahl' : step === 2 ? 'Angaben' : 'Absenden'}
               </span>
             </div>
-            <div className="h-1 bg-gray-200 rounded-full mb-6 overflow-hidden">
+            <div className="h-1 bg-gray-200 rounded-full mb-3 overflow-hidden">
               <div className="h-full bg-[#E2001A] rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercent}%` }} />
+            </div>
+            <div className="flex items-center justify-center gap-3 text-[11px] text-gray-400 mb-5">
+              <span>🔒 DSGVO-konform</span>
+              <span>·</span>
+              <span>⚡ Schnelle Bearbeitung</span>
+              <span>·</span>
+              <span>✅ ERGO Partner</span>
             </div>
           </>
         )}
@@ -437,9 +444,18 @@ export default function KennzeichenPage() {
                 </button>
               </div>
 
-              <div className="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
+              <div className="mt-5 bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
                 Das aktuelle Versicherungskennzeichen 2026/2027 ist <strong>SCHWARZ</strong>. Es gilt vom 01.03.2026 bis 28.02.2027.
               </div>
+
+              <details className="mt-4 bg-gray-50 border border-gray-200 rounded-xl overflow-hidden">
+                <summary className="p-4 text-sm font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors">
+                  ℹ️ Was ist eine eVB-Nummer?
+                </summary>
+                <div className="px-4 pb-4 text-xs text-gray-600 leading-relaxed">
+                  Die <strong>eVB (elektronische Versicherungsbestätigung)</strong> ist ein 7-stelliger Code, den Sie für die Kfz-Zulassungsstelle benötigen. Sie ersetzt die frühere Doppelkarte und bestätigt, dass Ihr Fahrzeug haftpflichtversichert ist. Die eVB wird für Neuzulassungen, Ummeldungen und Halterwechsel benötigt.
+                </div>
+              </details>
 
               <div className="mt-6 text-center">
                 <Link href="/" className="text-sm text-[#003781] font-medium">← Zurück zur Startseite</Link>

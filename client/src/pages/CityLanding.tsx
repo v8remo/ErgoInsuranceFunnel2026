@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight, Award, Star, Users, Home, Car, Heart, Scale, Umbrella, ChevronDown, ChevronUp, Instagram, Clock, FileCheck, TrendingUp, Building2, UserCheck } from "lucide-react";
+import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight, Award, Star, Users, Home, Car, Heart, Scale, Umbrella, ChevronDown, ChevronUp, Instagram, Clock, FileCheck, TrendingUp, Building2, UserCheck, Mail } from "lucide-react";
 import SEO from "@/components/SEO";
 import { trackEvent, trackConversion } from "@/lib/analytics";
+import FunnelOverlay from "@/components/FunnelOverlay";
+import '@/styles/funnel.css';
 import standingPhoto from "@assets/optimized/image.webp";
 import portraitPhoto from "@assets/optimized/image_1.webp";
 
@@ -185,11 +187,11 @@ const insuranceProducts = [
   { name: "Wohngebäudeversicherung", href: "/versicherung/wohngebaeude", price: "ab 25€/Monat", icon: Building2 },
   { name: "Rechtsschutzversicherung", href: "/versicherung/rechtsschutz", price: "ab 22€/Monat", icon: Scale },
   { name: "Zahnzusatzversicherung", href: "/versicherung/zahnzusatz", price: "ab 12€/Monat", icon: Heart },
-  { name: "Kfz-Versicherung", href: "/#kontakt", price: "individuell", icon: Car },
-  { name: "Berufsunfähigkeitsversicherung", href: "/#kontakt", price: "ab 35€/Monat", icon: UserCheck },
-  { name: "Unfallversicherung", href: "/#kontakt", price: "ab 10€/Monat", icon: Umbrella },
+  { name: "Kfz-Versicherung", href: "/versicherung/leben-vorsorge", price: "individuell", icon: Car },
+  { name: "Berufsunfähigkeitsversicherung", href: "/versicherung/leben-vorsorge", price: "ab 35€/Monat", icon: UserCheck },
+  { name: "Unfallversicherung", href: "/versicherung/leben-vorsorge", price: "ab 10€/Monat", icon: Umbrella },
   { name: "Risikolebensversicherung", href: "/versicherung/leben-vorsorge", price: "ab 5€/Monat", icon: Heart },
-  { name: "Private Krankenversicherung (DKV)", href: "/#kontakt", price: "individuell", icon: FileCheck },
+  { name: "Private Krankenversicherung (DKV)", href: "/versicherung/leben-vorsorge", price: "individuell", icon: FileCheck },
 ];
 
 const ergoAwards = [
@@ -221,6 +223,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
 export default function CityLanding({ cityKey }: { cityKey: string }) {
   const data = cityData[cityKey];
+  const [showFunnel, setShowFunnel] = useState(false);
 
   if (!data) {
     return (
@@ -269,7 +272,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
           ]
         }}
       />
-      <main className="min-h-screen">
+      <main className="min-h-screen pb-16 sm:pb-0">
         {/* Hero Section */}
         <section className="py-10 md:py-16 bg-gradient-to-br from-blue-50 to-white">
           <div className="max-w-4xl mx-auto px-4">
@@ -295,15 +298,22 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               Ortsteile: {data.ortsteile.join(", ")}
             </p>
 
+            <div className="inline-flex items-center gap-2 text-xs text-green-600 font-semibold bg-green-50 px-3 py-1.5 rounded-full mb-4">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              Heute noch {3 + (new Date().getDay() % 3)} freie Beratungstermine
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-3 mb-8">
-              <Link
-                href="/"
-                onClick={() => trackEvent("city_cta_beratung", { city: data.name })}
+              <button
+                onClick={() => {
+                  setShowFunnel(true);
+                  trackEvent("city_cta_beratung", { city: data.name });
+                }}
                 className="flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold px-6 py-3.5 rounded-xl shadow-md hover:bg-red-700 transition-colors"
               >
                 <ArrowRight className="w-5 h-5" />
-                Jetzt Beratung anfragen
-              </Link>
+                Kostenlose Analyse starten
+              </button>
               <a
                 href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
                 target="_blank"
@@ -610,6 +620,34 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
             </div>
           </div>
         </section>
+        {/* Sticky Mobile CTA Bar */}
+        <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
+          <button
+            onClick={() => {
+              setShowFunnel(true);
+              trackEvent('city_sticky_cta', { city: data.name });
+            }}
+            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm min-h-[44px] py-3 rounded-xl whitespace-nowrap shadow-lg shadow-red-500/20 animate-pulse-subtle"
+          >
+            <Mail className="w-4 h-4 shrink-0" />
+            Kostenlose Analyse
+          </button>
+          <a
+            href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => {
+              trackEvent('city_sticky_whatsapp', { city: data.name });
+              trackConversion();
+            }}
+            className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 min-h-[44px] py-3 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap"
+          >
+            <MessageSquare className="w-4 h-4 shrink-0" />
+            WhatsApp
+          </a>
+        </div>
+
+        <FunnelOverlay isOpen={showFunnel} onClose={() => setShowFunnel(false)} />
       </main>
     </>
   );

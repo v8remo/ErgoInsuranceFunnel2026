@@ -422,11 +422,18 @@ export default function SchadenPage() {
                 <div />
               )}
               <span className="text-xs text-gray-500 font-medium">
-                Schritt {Math.min(step, 3)} von 3
+                Schritt {Math.min(step, 3)} von 3 — {step === 1 ? 'Schadenart' : step === 2 ? 'Details' : 'Absenden'}
               </span>
             </div>
-            <div className="h-1 bg-gray-200 rounded-full mb-6 overflow-hidden">
+            <div className="h-1 bg-gray-200 rounded-full mb-3 overflow-hidden">
               <div className="h-full bg-[#E2001A] rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercent}%` }} />
+            </div>
+            <div className="flex items-center justify-center gap-3 text-[11px] text-gray-400 mb-5">
+              <span>🔒 DSGVO-konform</span>
+              <span>·</span>
+              <span>⚡ Antwort in 24h</span>
+              <span>·</span>
+              <span>✅ Kostenlos</span>
             </div>
           </>
         )}
@@ -953,6 +960,12 @@ export default function SchadenPage() {
               >
                 {isSubmitting ? 'Wird übermittelt...' : '🚨 Schaden jetzt melden'}
               </button>
+              <p className="text-center text-xs text-gray-400 mt-3">
+                Lieber per WhatsApp?{' '}
+                <a href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20m%C3%B6chte%20einen%20Schaden%20melden." target="_blank" rel="noopener noreferrer" className="text-green-600 font-semibold hover:underline">
+                  Direkt schreiben →
+                </a>
+              </p>
             </div>
           )}
 
@@ -974,8 +987,13 @@ export default function SchadenPage() {
                 }
               `}</style>
 
-              <h2 className="text-2xl font-extrabold text-gray-900 mb-2">✅ Schadensmeldung eingegangen!</h2>
-              <p className="text-sm text-gray-600 mb-5">Morino Stübe wurde informiert und wird sich schnellstmöglich bei Ihnen melden.</p>
+              <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Schadensmeldung eingegangen!</h2>
+              <p className="text-sm text-gray-600 mb-4">Morino Stübe wurde informiert und wird sich innerhalb von 24 Stunden bei Ihnen melden.</p>
+              <div className="flex items-center justify-center gap-3 mb-5 text-xs text-gray-500">
+                <span className="flex items-center gap-1">⭐ 4,9/5 Bewertung</span>
+                <span>·</span>
+                <span>ERGO Versicherungsfachmann</span>
+              </div>
 
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 text-left">
                 <p className="text-sm font-semibold text-amber-800">⚠️ Bei dringendem Notfall rufen Sie bitte direkt an:</p>

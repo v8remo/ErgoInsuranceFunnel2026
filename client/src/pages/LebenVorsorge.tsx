@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
-import { Award, Shield, Handshake, Clock, ChevronDown, Phone, MessageCircle, Check, X, Heart, Briefcase, Users, Building2, Star, TrendingUp, Umbrella, Wallet } from "lucide-react";
+import { Award, Shield, Handshake, Clock, ChevronDown, Phone, MessageCircle, Check, X, Heart, Briefcase, Users, Building2, Star, TrendingUp, Umbrella, Wallet, Mail, MessageSquare } from "lucide-react";
 import standingPhoto from "@assets/optimized/image.webp";
 import heroImage from "@assets/generated_images/LebenVorsorge_Bild.jpg";
 
@@ -346,7 +346,7 @@ export default function LebenVorsorge() {
         { label: "Versicherungen", href: "/" },
         { label: "Leben & Vorsorge" }
       ]} />
-      <main className="min-h-screen">
+      <main className="min-h-screen pb-16 sm:pb-0">
         {/* Hero Section */}
         <section className="py-6 sm:py-8 lg:py-12 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white overflow-hidden">
           <div className="w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
@@ -940,6 +940,30 @@ export default function LebenVorsorge() {
             </div>
           </div>
         </section>
+
+        {/* Sticky Mobile CTA Bar */}
+        <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
+          <button
+            onClick={() => {
+              setFunnelOpen(true);
+              trackEvent('sticky_cta_clicked', { source: 'leben_vorsorge' });
+            }}
+            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm min-h-[44px] py-3 rounded-xl whitespace-nowrap shadow-lg shadow-red-500/20 animate-pulse-subtle"
+          >
+            <Mail className="w-4 h-4 shrink-0" />
+            Kostenlose Beratung
+          </button>
+          <a
+            href="https://wa.me/4915566771019"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackConversion()}
+            className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 min-h-[44px] py-3 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap"
+          >
+            <MessageSquare className="w-4 h-4 shrink-0" />
+            WhatsApp
+          </a>
+        </div>
 
         <FunnelOverlay
           isOpen={funnelOpen}

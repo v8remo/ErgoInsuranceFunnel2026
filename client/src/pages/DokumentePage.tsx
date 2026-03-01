@@ -747,11 +747,18 @@ export default function DokumentePage() {
                 <div />
               )}
               <span className="text-xs text-gray-500 font-medium">
-                Schritt {Math.min(step, totalSteps)} von {totalSteps}
+                Schritt {Math.min(step, totalSteps)} von {totalSteps} — {step === 1 ? 'Dokumenttyp' : step === 2 ? 'Angaben' : 'Unterschrift'}
               </span>
             </div>
-            <div className="h-1 bg-gray-200 rounded-full mb-6 overflow-hidden">
+            <div className="h-1 bg-gray-200 rounded-full mb-3 overflow-hidden">
               <div className="h-full bg-[#E2001A] rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercent}%` }} />
+            </div>
+            <div className="flex items-center justify-center gap-3 text-[11px] text-gray-400 mb-5">
+              <span>🔒 DSGVO-konform</span>
+              <span>·</span>
+              <span>📄 Rechtsgültig</span>
+              <span>·</span>
+              <span>✅ Kostenlos</span>
             </div>
           </>
         )}
@@ -760,9 +767,16 @@ export default function DokumentePage() {
 
           {step === 1 && (
             <div>
-              <div className="text-center mb-6">
+              <div className="text-center mb-5">
                 <h1 className="text-2xl font-extrabold text-gray-900 mb-2">Dokument erstellen</h1>
                 <p className="text-sm text-gray-500">Wählen Sie den gewünschten Dokumenttyp aus</p>
+              </div>
+              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5 flex items-start gap-3">
+                <span className="text-lg shrink-0">⚡</span>
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">Digital einreichen – schneller als per Post</p>
+                  <p className="text-xs text-gray-500 mt-1">Sofort beim Berater · Rechtsgültig unterschrieben · Kein Porto</p>
+                </div>
               </div>
               <div className="flex flex-col gap-3">
                 {docTypeCards.map(card => (
