@@ -256,7 +256,8 @@ export default function InstagramGenerator() {
     }
   }, [selectedTopic, slides, format, loadFontCSS, downloadPng]);
 
-  // Renders a single story frame on-demand (no shared ref timing issues)
+  // Renders a single story frame on-demand and downloads it as PNG.
+  // Uses direct DOM access (no ref) to avoid closure / batching timing issues.
   const handleDownloadStoryFrame = useCallback(async (
     frame: StoryFrame,
     frameIndex: number,
@@ -271,29 +272,24 @@ export default function InstagramGenerator() {
     try {
       const { createRoot } = await import('react-dom/client');
       const root = createRoot(container);
-      await new Promise<void>((resolve, reject) => {
-        root.render(
-          <StoryFrameRenderer
-            ref={(el) => {
-              if (el) {
-                requestAnimationFrame(async () => {
-                  try {
-                    await downloadPng(el, filename, css);
-                  } catch (err) {
-                    reject(err);
-                  } finally {
-                    root.unmount();
-                    resolve();
-                  }
-                });
-              }
-            }}
-            frame={frame}
-            frameIndex={frameIndex}
-            totalFrames={totalFrames}
-          />
-        );
-      });
+
+      // Render without a ref — we grab the DOM child directly after two animation frames
+      root.render(
+        <StoryFrameRenderer
+          frame={frame}
+          frameIndex={frameIndex}
+          totalFrames={totalFrames}
+        />
+      );
+
+      // Wait 2 frames: first for React to commit, second for layout/paint
+      await new Promise<void>(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+      const el = container.firstElementChild as HTMLElement | null;
+      if (el) {
+        await downloadPng(el, filename, css);
+      }
+      root.unmount();
     } catch (err) {
       console.error('Story download failed:', err);
     } finally {
