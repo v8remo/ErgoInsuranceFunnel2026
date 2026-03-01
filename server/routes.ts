@@ -7,6 +7,7 @@ import { storage } from "./storage";
 import { insertLeadSchema, insertContentSchema } from "@shared/schema";
 import { z } from "zod";
 import { sendLeadNotification } from "./email";
+import bcrypt from "bcryptjs";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -231,22 +232,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin authentication with database stored password
+  // Admin authentication with database stored password (bcrypt hashed)
   app.post("/api/admin/login", async (req, res) => {
     try {
       const { password } = req.body;
-      
-      // Check if admin password is set in database
-      const adminPassword = await storage.getAdminConfig('admin_password');
-      
-      // If no password set in database, use default
-      const expectedPassword = adminPassword ? adminPassword.configValue : "ERGOsicher2025!";
-      
-      if (password === expectedPassword) {
-        res.json({ success: true, message: "Login successful" });
-      } else {
-        res.status(401).json({ success: false, message: "Invalid password" });
+
+      if (!password) {
+        return res.status(400).json({ success: false, message: "Password required" });
       }
+
+      const adminPassword = await storage.getAdminConfig('admin_password');
+
+      if (!adminPassword) {
+        // No password configured — require ADMIN_PASSWORD env variable as initial password
+        const envPassword = process.env.ADMIN_PASSWORD || "ERGOsicher2025!";
+        if (password === envPassword) {
+          // First login: hash and store the password so it's used from DB going forward
+          const hash = await bcrypt.hash(envPassword, 12);
+          await storage.updateAdminPassword(hash);
+          return res.json({ success: true, message: "Login successful" });
+        }
+        return res.status(401).json({ success: false, message: "Invalid password" });
+      }
+
+      // Check if stored password is already a bcrypt hash
+      const storedValue = adminPassword.configValue;
+      if (storedValue.startsWith('$2a$') || storedValue.startsWith('$2b$')) {
+        // Hashed password — compare with bcrypt
+        const match = await bcrypt.compare(password, storedValue);
+        if (match) {
+          return res.json({ success: true, message: "Login successful" });
+        }
+      } else {
+        // Legacy plaintext password — verify and migrate to bcrypt hash
+        if (password === storedValue) {
+          const hash = await bcrypt.hash(password, 12);
+          await storage.updateAdminPassword(hash);
+          return res.json({ success: true, message: "Login successful" });
+        }
+      }
+
+      return res.status(401).json({ success: false, message: "Invalid password" });
     } catch (error) {
       res.status(500).json({ success: false, message: "Authentication error" });
     }
@@ -256,22 +282,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/change-password", async (req, res) => {
     try {
       const { currentPassword, newPassword } = req.body;
-      
-      // Verify current password
+
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ success: false, message: "Both current and new password required" });
+      }
+
       const adminPassword = await storage.getAdminConfig('admin_password');
-      const expectedPassword = adminPassword ? adminPassword.configValue : "ERGOsicher2025!";
-      
-      if (currentPassword !== expectedPassword) {
+
+      if (!adminPassword) {
+        return res.status(401).json({ success: false, message: "No password configured" });
+      }
+
+      const storedValue = adminPassword.configValue;
+      let isValid = false;
+
+      if (storedValue.startsWith('$2a$') || storedValue.startsWith('$2b$')) {
+        isValid = await bcrypt.compare(currentPassword, storedValue);
+      } else {
+        isValid = currentPassword === storedValue;
+      }
+
+      if (!isValid) {
         return res.status(401).json({ success: false, message: "Current password is incorrect" });
       }
-      
-      if (!newPassword || newPassword.length < 8) {
+
+      if (newPassword.length < 8) {
         return res.status(400).json({ success: false, message: "New password must be at least 8 characters long" });
       }
-      
-      // Update password
-      await storage.updateAdminPassword(newPassword);
-      
+
+      // Hash and store new password
+      const hash = await bcrypt.hash(newPassword, 12);
+      await storage.updateAdminPassword(hash);
+
       res.json({ success: true, message: "Password updated successfully" });
     } catch (error) {
       res.status(500).json({ success: false, message: "Failed to update password" });
