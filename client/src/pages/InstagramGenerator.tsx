@@ -10,6 +10,7 @@ import {
   type FormatKey,
   type HookType,
   type SlideData,
+  type StoryFrame,
 } from '@/lib/instagram-config';
 import { SlideRenderer, StoryFrameRenderer } from '@/components/instagram/SlideRenderer';
 
@@ -46,7 +47,6 @@ export default function InstagramGenerator() {
     typeof window !== 'undefined' ? window.innerWidth : 1200
   );
   const slideRef = useRef<HTMLDivElement>(null);
-  const storyRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const onResize = () => setWindowWidth(window.innerWidth);
@@ -255,6 +255,52 @@ export default function InstagramGenerator() {
       setDownloading(false);
     }
   }, [selectedTopic, slides, format, loadFontCSS, downloadPng]);
+
+  // Renders a single story frame on-demand (no shared ref timing issues)
+  const handleDownloadStoryFrame = useCallback(async (
+    frame: StoryFrame,
+    frameIndex: number,
+    totalFrames: number,
+    filename: string,
+  ) => {
+    setDownloading(true);
+    const css = await loadFontCSS();
+    const container = document.createElement('div');
+    container.style.cssText = 'position:fixed;left:-9999px;top:0;pointer-events:none;';
+    document.body.appendChild(container);
+    try {
+      const { createRoot } = await import('react-dom/client');
+      const root = createRoot(container);
+      await new Promise<void>((resolve, reject) => {
+        root.render(
+          <StoryFrameRenderer
+            ref={(el) => {
+              if (el) {
+                requestAnimationFrame(async () => {
+                  try {
+                    await downloadPng(el, filename, css);
+                  } catch (err) {
+                    reject(err);
+                  } finally {
+                    root.unmount();
+                    resolve();
+                  }
+                });
+              }
+            }}
+            frame={frame}
+            frameIndex={frameIndex}
+            totalFrames={totalFrames}
+          />
+        );
+      });
+    } catch (err) {
+      console.error('Story download failed:', err);
+    } finally {
+      if (document.body.contains(container)) document.body.removeChild(container);
+      setDownloading(false);
+    }
+  }, [loadFontCSS, downloadPng]);
 
   const copyToClipboard = useCallback((text: string) => {
     navigator.clipboard.writeText(text);
@@ -601,18 +647,15 @@ export default function InstagramGenerator() {
                       </div>
                       <div style={{ marginTop: 6, fontSize: 12, fontWeight: 600, color: ERGO.textDark, textAlign: 'center' }}>Frame {i + 1}: {frame.label}</div>
                       <button
-                        onClick={() => {
-                          const ref = { current: storyRefs.current[i] };
-                          handleDownloadSlide(ref, `${selectedTopic.id}_story_${i + 1}.png`);
-                        }}
+                        onClick={() => handleDownloadStoryFrame(
+                          frame, i, selectedTopic.storyFrames!.length,
+                          `${selectedTopic.id}_story_${i + 1}.png`
+                        )}
                         disabled={downloading}
                         style={{ marginTop: 6, width: '100%', padding: '5px 10px', backgroundColor: ERGO.primary, color: '#FFFFFF', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 11, fontWeight: 600 }}
                       >
-                        PNG
+                        {downloading ? '...' : 'PNG'}
                       </button>
-                      <div style={{ position: 'fixed', left: -9999, top: 0 }}>
-                        <StoryFrameRenderer ref={el => { storyRefs.current[i] = el; }} frame={frame} frameIndex={i} totalFrames={selectedTopic.storyFrames!.length} />
-                      </div>
                     </div>
                   ))}
                 </div>
