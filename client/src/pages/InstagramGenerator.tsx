@@ -130,9 +130,11 @@ export default function InstagramGenerator() {
 
   return (
     <div style={{
-      minHeight: '100vh',
+      minHeight: '50vh',
       backgroundColor: '#f8f9fa',
       fontFamily: "'Inter', sans-serif",
+      borderRadius: '8px',
+      overflow: 'hidden',
     }}>
       {/* Header */}
       <div style={{

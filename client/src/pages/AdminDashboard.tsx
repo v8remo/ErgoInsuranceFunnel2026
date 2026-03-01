@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,9 +29,12 @@ import {
   Trash2,
   ArrowLeft,
   LogOut,
-  Lock
+  Lock,
+  Instagram
 } from "lucide-react";
 import type { Lead, Content, Submission } from "@shared/schema";
+
+const InstagramGenerator = lazy(() => import("@/pages/InstagramGenerator"));
 
 interface DashboardStats {
   totalLeads: number;
@@ -621,6 +624,7 @@ export default function AdminDashboard() {
               { key: "leads", label: "Leads", icon: Users },
               { key: "anfragen", label: "Kundenanfragen", icon: FileText },
               { key: "content", label: "Inhalte", icon: Settings },
+              { key: "instagram", label: "Instagram", icon: Instagram },
             ].map(tab => (
               <button
                 key={tab.key}
@@ -1133,6 +1137,17 @@ export default function AdminDashboard() {
             </div>
           </CardContent>
         </Card>
+        )}
+
+        {/* Instagram Generator Tab */}
+        {activeTab === "instagram" && (
+          <Suspense fallback={
+            <div className="flex items-center justify-center py-20">
+              <div className="w-8 h-8 border-4 border-ergo-red border-t-transparent rounded-full animate-spin" />
+            </div>
+          }>
+            <InstagramGenerator />
+          </Suspense>
         )}
       </div>
 
