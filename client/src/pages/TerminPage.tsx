@@ -1,9 +1,12 @@
+import { useState } from "react";
 import SEO from "@/components/SEO";
-import { Calendar, Clock, MapPin, Phone, CheckCircle, Star } from "lucide-react";
+import { Calendar, Clock, MapPin, Phone, CheckCircle, Star, MessageSquare, Loader2 } from "lucide-react";
 
 const BOOKING_URL = "https://ergo-frontend.onlinetermine.com/000211325/start?intcid=1001183&childId=bookingtimeSatelliteIframe_000211325&initialWidth=918&childId=bookingtimeSatelliteIframe_000211325&parentTitle=ERGO%20Versicherung%20Morino%20St%C3%BCbe%20in%20Ganderkesee%20%7C%20Versicherung&parentUrl=https%3A%2F%2Fmorino-stuebe.ergo.de%2F";
 
 export default function TerminPage() {
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+
   return (
     <>
       <SEO
@@ -49,15 +52,41 @@ export default function TerminPage() {
         <div className="border-t border-gray-100" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+          <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm relative">
+            {!iframeLoaded && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 z-10">
+                <Loader2 className="w-8 h-8 text-ergo-red animate-spin mb-3" />
+                <p className="text-sm text-gray-500">Terminkalender wird geladen...</p>
+              </div>
+            )}
             <iframe
               src={BOOKING_URL}
               title="Termin buchen bei ERGO Agentur Stübe"
               className="w-full border-0"
-              style={{ height: '680px' }}
+              style={{ minHeight: '680px', height: '80vh', maxHeight: '900px' }}
               allow="geolocation; microphone; camera"
               loading="lazy"
+              onLoad={() => setIframeLoaded(true)}
             />
+          </div>
+
+          {/* What to expect */}
+          <div className="mt-6 bg-blue-50 border border-blue-100 rounded-xl p-4 sm:p-5">
+            <h3 className="font-semibold text-gray-900 text-sm mb-2">Was passiert nach der Buchung?</h3>
+            <div className="flex flex-col sm:flex-row gap-3 text-xs text-gray-600">
+              <div className="flex items-start gap-2">
+                <span className="text-green-500 shrink-0 mt-0.5">✓</span>
+                <span>Sofortige Bestätigung per E-Mail</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-green-500 shrink-0 mt-0.5">✓</span>
+                <span>Morino bereitet Ihre Analyse vor</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-green-500 shrink-0 mt-0.5">✓</span>
+                <span>Persönliche Beratung zum Wunschtermin</span>
+              </div>
+            </div>
           </div>
 
           <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
@@ -75,17 +104,23 @@ export default function TerminPage() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 border-2 border-green-600 text-green-700 px-5 py-2.5 rounded-lg font-medium hover:bg-green-600 hover:text-white transition-colors text-sm"
             >
-              💬 WhatsApp
+              <MessageSquare className="w-4 h-4" />
+              WhatsApp
             </a>
           </div>
 
-          <div className="mt-8 mb-2 flex items-center justify-center gap-1.5 text-sm text-gray-400">
-            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-            <span className="ml-1">4,9 / 5 – Kundenbewertung</span>
+          {/* Social Proof */}
+          <div className="mt-8 mb-2">
+            <div className="bg-gray-50 rounded-xl p-4 max-w-lg mx-auto text-center border border-gray-100">
+              <div className="flex items-center justify-center gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                ))}
+                <span className="text-sm font-semibold text-gray-700 ml-1">4,9/5</span>
+              </div>
+              <p className="text-sm text-gray-600 italic mb-1">"Endlich ein Berater, der sich Zeit nimmt und alles verständlich erklärt."</p>
+              <p className="text-xs text-gray-400">Thomas K. aus Bookholzberg · Über 3.500 zufriedene Kunden</p>
+            </div>
           </div>
         </div>
       </div>

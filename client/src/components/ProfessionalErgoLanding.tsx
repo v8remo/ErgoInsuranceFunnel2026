@@ -101,7 +101,7 @@ export default function ProfessionalErgoLanding() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroParallaxY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const heroParallaxY = useTransform(scrollYProgress, [0, 1], [0, 35]);
 
   const handlePlayVideo = useCallback(() => {
     setVideoPlaying(true);
@@ -154,8 +154,8 @@ export default function ProfessionalErgoLanding() {
               <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-white/20 flex items-center justify-center text-2xl md:text-3xl shrink-0">🛴</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-block bg-white text-green-700 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Ab 01.03.2026</span>
-                  <span className="inline-block bg-yellow-400 text-yellow-900 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide animate-pulse">Neu</span>
+                  <span className="inline-block bg-white text-green-700 text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Ab 01.03.2026</span>
+                  <span className="inline-block bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide animate-pulse">Neu</span>
                 </div>
                 <p className="text-white font-bold text-sm md:text-base mt-1 leading-snug">Neue E-Scooter Kennzeichen – jetzt beantragen!</p>
                 <p className="text-white/80 text-xs md:text-sm mt-0.5 hidden sm:block">Versicherungskennzeichen 2026/2027 ab 42 € – direkt online anfordern</p>
@@ -167,7 +167,7 @@ export default function ProfessionalErgoLanding() {
       </motion.div>
 
       {/* ──────── HERO ──────── */}
-      <section ref={heroRef} className="px-4 pt-6 pb-10 md:pt-10 md:pb-16 max-w-6xl mx-auto relative">
+      <section ref={heroRef} className="px-4 pt-6 pb-10 md:pt-10 md:pb-16 max-w-6xl mx-auto relative overflow-hidden">
         {/* Subtle dot pattern background */}
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
@@ -209,7 +209,7 @@ export default function ProfessionalErgoLanding() {
               </div>
               <span className="text-sm font-semibold text-gray-700">4.9/5</span>
               <span className="text-xs text-gray-500">(247 Bewertungen)</span>
-              <span className="hidden sm:inline-block text-xs text-green-600 font-medium bg-green-50 px-2 py-0.5 rounded-full">
+              <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-0.5 rounded-full">
                 Heute noch {getAvailableSlots()} freie Termine
               </span>
             </motion.div>
@@ -277,7 +277,7 @@ export default function ProfessionalErgoLanding() {
               <div className="grid grid-cols-2 gap-2 sm:contents">
                 <Link
                   href="/dokumente"
-                  className="flex items-center justify-center gap-1 border-2 border-[#003781] text-[#003781] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-[#003781]/5"
+                  className="flex items-center justify-center gap-1.5 border-2 border-[#003781] text-[#003781] font-semibold text-[13px] px-3 py-3 min-h-[44px] rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-[#003781]/5"
                 >
                   <FileText className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
                   Dokument einreichen
@@ -285,7 +285,7 @@ export default function ProfessionalErgoLanding() {
 
                 <Link
                   href="/schaden"
-                  className="flex items-center justify-center gap-1 border-2 border-[#E2001A] text-[#E2001A] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-red-50"
+                  className="flex items-center justify-center gap-1.5 border-2 border-[#E2001A] text-[#E2001A] font-semibold text-[13px] px-3 py-3 min-h-[44px] rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-red-50"
                 >
                   <AlertTriangle className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
                   Schaden melden
@@ -294,7 +294,7 @@ export default function ProfessionalErgoLanding() {
 
               <Link
                 href="/kennzeichen"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#003781] text-[#003781] font-semibold text-xs px-2.5 py-3 rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-[#003781]/5"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#003781] text-[#003781] font-semibold text-[13px] px-3 py-3 min-h-[44px] rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-[#003781]/5"
               >
                 EVB & Kennzeichen anfordern
               </Link>
@@ -324,7 +324,6 @@ export default function ProfessionalErgoLanding() {
                     className="absolute inset-0 w-full h-full object-cover opacity-70"
                     width={640}
                     height={360}
-                    fetchPriority="high"
                   />
                   <div className="relative z-10 flex flex-col items-center">
                     <motion.div
@@ -345,6 +344,7 @@ export default function ProfessionalErgoLanding() {
                   controls
                   playsInline
                   preload="metadata"
+                  poster="/videos/vorstellung-poster.webp"
                   className="w-full h-full object-contain bg-black"
                   onError={(e) => { e.stopPropagation(); }}
                 >
@@ -361,9 +361,11 @@ export default function ProfessionalErgoLanding() {
       {/* ──────── STATISTIK-BAND ──────── */}
       <motion.section
         {...fadeInUp}
-        className="px-4 pb-10 md:pb-16 max-w-4xl mx-auto"
+        className="px-4 pt-6 md:pt-8 pb-10 md:pb-16 max-w-4xl mx-auto"
       >
-        <div className="grid grid-cols-3 gap-4 md:gap-8">
+        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-6 md:p-8 relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
+          <div className="grid grid-cols-3 gap-4 md:gap-8 divide-x divide-gray-200/60">
           {[
             { value: 3500, suffix: '+', label: 'Zufriedene Kunden' },
             { value: 15, suffix: '+', label: 'Versicherungsprodukte' },
@@ -377,12 +379,13 @@ export default function ProfessionalErgoLanding() {
               transition={{ duration: 0.5, delay: i * 0.15 }}
               className="text-center"
             >
-              <div className="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
+              <div className="text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
                 <AnimatedCounter target={stat.value} suffix={stat.suffix} />
               </div>
-              <p className="text-xs md:text-sm text-gray-500 mt-1 font-medium">{stat.label}</p>
+              <p className="text-xs md:text-sm text-gray-500 mt-1.5 font-medium">{stat.label}</p>
             </motion.div>
           ))}
+          </div>
         </div>
       </motion.section>
 
@@ -401,7 +404,6 @@ export default function ProfessionalErgoLanding() {
               className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-lg shrink-0 bg-white"
               width={160}
               height={208}
-              fetchPriority="high"
             />
 
             <div className="flex-1">
@@ -484,6 +486,8 @@ export default function ProfessionalErgoLanding() {
         </motion.div>
       </motion.section>
 
+      <div className="section-divider max-w-lg mx-auto my-2" />
+
       {/* ──────── ONLINE TOOLS ──────── */}
       <motion.section {...fadeInUp} className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
         <div className="text-center mb-6 md:mb-8">
@@ -561,12 +565,12 @@ export default function ProfessionalErgoLanding() {
                 key={`${award.product}-${i}`}
                 className={`flex items-center gap-3 ${award.color} border rounded-full shadow-sm px-4 py-2.5 md:px-5 md:py-3 shrink-0`}
               >
-                <div className="w-8 h-8 rounded-full bg-yellow-50 flex items-center justify-center shrink-0">
-                  <Award className="w-4 h-4 text-yellow-600" />
+                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-yellow-50 flex items-center justify-center shrink-0">
+                  <Award className="w-4.5 h-4.5 md:w-5 md:h-5 text-yellow-600" />
                 </div>
                 <div className="min-w-0">
                   <p className="font-bold text-gray-900 text-xs md:text-sm leading-tight">{award.product}</p>
-                  <p className="text-[10px] md:text-xs text-gray-500 leading-tight">{award.source} · {award.rating}</p>
+                  <p className="text-xs text-gray-500 leading-tight">{award.source} · {award.rating}</p>
                 </div>
               </div>
             ))}
@@ -583,6 +587,8 @@ export default function ProfessionalErgoLanding() {
         </div>
 
         <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-100 p-6 md:p-8 min-h-[180px] overflow-hidden">
+          {/* Decorative quote */}
+          <div className="absolute top-4 left-5 text-6xl md:text-7xl font-serif text-gray-100 select-none pointer-events-none leading-none">"</div>
           <AnimatePresence mode="wait">
             <motion.div
               key={currentTestimonial}
@@ -590,7 +596,7 @@ export default function ProfessionalErgoLanding() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-center"
+              className="text-center relative"
             >
               <div className="flex justify-center mb-3">
                 {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
@@ -674,6 +680,8 @@ export default function ProfessionalErgoLanding() {
           </motion.a>
         </div>
       </motion.section>
+
+      <div className="section-divider max-w-lg mx-auto my-2" />
 
       {/* ──────── KUNDENSERVICE ──────── */}
       <motion.section {...fadeInUp} className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
@@ -770,6 +778,8 @@ export default function ProfessionalErgoLanding() {
         </div>
       </motion.section>
 
+      <div className="section-divider max-w-lg mx-auto my-2" />
+
       {/* ──────── LEAD-MAGNET CTA ──────── */}
       <motion.section {...fadeInUp} className="px-4 pb-12 md:pb-20 max-w-3xl mx-auto">
         <div className="bg-gradient-to-br from-blue-50 via-white to-green-50 border border-blue-200/50 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-6 text-center md:p-10 relative overflow-hidden">
@@ -777,11 +787,14 @@ export default function ProfessionalErgoLanding() {
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-[#E2001A]/10 to-[#003781]/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-br from-green-500/10 to-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
-          <h2 className="text-lg font-bold text-gray-900 mb-3 sm:text-xl md:text-3xl relative">
-            Persönlicher Bedarfs-Check
+          <h2 className="text-lg font-bold text-gray-900 mb-2 sm:text-xl md:text-3xl relative">
+            Zahlen Sie zu viel für zu wenig Schutz?
           </h2>
+          <p className="text-xs text-green-600 font-semibold mb-3 relative">
+            Heute noch {getAvailableSlots()} Beratungsplätze frei
+          </p>
           <p className="text-sm text-gray-600 leading-relaxed mb-6 max-w-lg mx-auto md:text-lg relative">
-            Wir prüfen mit Ihnen gemeinsam, ob Ihre Absicherung noch zu Ihrer Lebenssituation passt. Unverbindlich und kostenfrei.
+            In nur 2 Minuten prüfen wir gemeinsam, ob Ihre Absicherung noch zu Ihrer Lebenssituation passt – unverbindlich und kostenfrei.
           </p>
 
           <motion.button
@@ -794,7 +807,7 @@ export default function ProfessionalErgoLanding() {
             className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm px-5 py-3.5 rounded-xl shadow-lg shadow-red-500/20 whitespace-nowrap md:text-base md:px-6 md:py-4 mx-auto relative transition-colors"
           >
             <MapPin className="w-5 h-5 shrink-0" />
-            Jetzt Bedarfs-Check starten
+            Kostenlose Analyse starten
           </motion.button>
 
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mt-5 text-xs text-gray-500 md:text-sm relative">
@@ -810,32 +823,78 @@ export default function ProfessionalErgoLanding() {
       </motion.section>
 
       {/* ──────── FOOTER ──────── */}
-      <footer className="px-4 pb-20 sm:pb-12 max-w-3xl mx-auto">
-        <div className="border-t border-gray-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
-          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-            <Link href="/impressum" className="hover:text-gray-600 transition-colors">Impressum</Link>
-            <Link href="/datenschutz" className="hover:text-gray-600 transition-colors">Datenschutz</Link>
-            <Link href="/erstinformation" className="hover:text-gray-600 transition-colors">Erstinformation</Link>
-            <Link href="/dokumente" className="hover:text-gray-600 transition-colors">Dokumente einreichen</Link>
-            <Link href="/schaden" className="hover:text-gray-600 transition-colors">Schaden melden</Link>
-            <Link href="/kennzeichen" className="hover:text-gray-600 transition-colors">EVB & Kennzeichen</Link>
-            <button onClick={() => { import('@/lib/analytics').then(m => { m.revokeMarketingConsent(); localStorage.removeItem(m.CONSENT_KEY); window.location.reload(); }); }} className="hover:text-gray-600 cursor-pointer transition-colors">Cookie-Einstellungen</button>
+      <footer className="px-4 pb-20 sm:pb-12 max-w-4xl mx-auto">
+        <div className="border-t border-gray-200 pt-8 md:pt-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
+            {/* Spalte 1: Agentur-Info */}
+            <div>
+              <h3 className="font-bold text-gray-900 text-sm mb-3">ERGO Agentur Stübe</h3>
+              <address className="not-italic text-xs text-gray-500 leading-relaxed space-y-1">
+                <p>Morino Stübe</p>
+                <p>Friedensstr. 91A</p>
+                <p>27777 Ganderkesee</p>
+                <p className="pt-2">Vermittlerregister-Nr.: D-ABCD-12345-67</p>
+              </address>
+            </div>
+            {/* Spalte 2: Kontakt */}
+            <div>
+              <h3 className="font-bold text-gray-900 text-sm mb-3">Kontakt</h3>
+              <div className="text-xs text-gray-500 space-y-2">
+                <a href="tel:+4915566771019" className="flex items-center gap-2 hover:text-gray-700 transition-colors">
+                  <Phone className="w-3.5 h-3.5 shrink-0" />
+                  01556 677 1019
+                </a>
+                <a href="mailto:morino.stuebe@ergo.de" className="flex items-center gap-2 hover:text-gray-700 transition-colors">
+                  <Mail className="w-3.5 h-3.5 shrink-0" />
+                  morino.stuebe@ergo.de
+                </a>
+                <a href={`https://wa.me/4915566771019`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-gray-700 transition-colors">
+                  <MessageSquare className="w-3.5 h-3.5 shrink-0" />
+                  WhatsApp Chat
+                </a>
+              </div>
+              <div className="mt-3 text-xs text-gray-500">
+                <p className="font-semibold text-gray-700 mb-1">Bürozeiten</p>
+                <p>Mo – Fr: 9:00 – 18:00 Uhr</p>
+                <p>Sa: 9:00 – 12:00 Uhr</p>
+              </div>
+            </div>
+            {/* Spalte 3: Schnelllinks */}
+            <div>
+              <h3 className="font-bold text-gray-900 text-sm mb-3">Schnellzugriff</h3>
+              <div className="text-xs text-gray-500 space-y-1.5">
+                <Link href="/schaden" className="block hover:text-gray-700 transition-colors">Schaden melden</Link>
+                <Link href="/dokumente" className="block hover:text-gray-700 transition-colors">Dokumente einreichen</Link>
+                <Link href="/kennzeichen" className="block hover:text-gray-700 transition-colors">EVB & Kennzeichen</Link>
+                <Link href="/versicherungscheck" className="block hover:text-gray-700 transition-colors">Versicherungscheck</Link>
+                <Link href="/sparrechner" className="block hover:text-gray-700 transition-colors">Bündel-Sparrechner</Link>
+              </div>
+            </div>
           </div>
-          <span>© {new Date().getFullYear()} ERGO Agentur Stübe</span>
+          {/* Untere Leiste */}
+          <div className="border-t border-gray-100 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+              <Link href="/impressum" className="hover:text-gray-600 transition-colors">Impressum</Link>
+              <Link href="/datenschutz" className="hover:text-gray-600 transition-colors">Datenschutz</Link>
+              <Link href="/erstinformation" className="hover:text-gray-600 transition-colors">Erstinformation</Link>
+              <button onClick={() => { import('@/lib/analytics').then(m => { m.revokeMarketingConsent(); localStorage.removeItem(m.CONSENT_KEY); window.location.reload(); }); }} className="hover:text-gray-600 cursor-pointer transition-colors">Cookie-Einstellungen</button>
+            </div>
+            <span>© {new Date().getFullYear()} ERGO Agentur Stübe</span>
+          </div>
         </div>
       </footer>
 
-      {/* ──────── STICKY CTA BAR (Mobile + Desktop ab scroll) ──────── */}
-      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2.5 flex gap-2 sm:hidden safe-area-bottom">
+      {/* ──────── STICKY CTA BAR (Mobile) ──────── */}
+      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={() => {
             setShowFunnel(true);
             trackEvent('cta_sticky_clicked', { source: 'sticky_bar' });
           }}
-          className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-xs py-2.5 rounded-lg whitespace-nowrap shadow-lg shadow-red-500/20"
+          className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm min-h-[44px] py-3 rounded-xl whitespace-nowrap shadow-lg shadow-red-500/20 animate-pulse-subtle"
         >
-          <Mail className="w-3.5 h-3.5 shrink-0" />
+          <Mail className="w-4 h-4 shrink-0" />
           Kostenlose Analyse
         </motion.button>
         <a
@@ -846,9 +905,9 @@ export default function ProfessionalErgoLanding() {
             trackEvent('whatsapp_sticky_clicked', { source: 'sticky_bar' });
             trackConversion();
           }}
-          className="flex items-center justify-center gap-1.5 bg-green-500 text-white font-semibold text-xs px-3 py-2.5 rounded-lg active:scale-[0.97] transition-transform whitespace-nowrap"
+          className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 min-h-[44px] py-3 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap"
         >
-          <Phone className="w-3.5 h-3.5 shrink-0" />
+          <Phone className="w-4 h-4 shrink-0" />
           WhatsApp
         </a>
       </div>

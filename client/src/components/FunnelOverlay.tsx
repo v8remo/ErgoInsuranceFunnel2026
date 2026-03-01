@@ -48,6 +48,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
   const [direction, setDirection] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAnalysisResult, setShowAnalysisResult] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   const [data, setData] = useState<FunnelData>({
@@ -83,13 +84,22 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
+  const handleClose = useCallback(() => {
+    if (step >= 3 && step < 9 && !sessionStorage.getItem('funnel_exit_shown')) {
+      setShowExitConfirm(true);
+      sessionStorage.setItem('funnel_exit_shown', '1');
+      return;
+    }
+    onClose();
+  }, [step, onClose]);
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) onClose();
+      if (e.key === 'Escape' && isOpen) handleClose();
     };
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
-  }, [isOpen, onClose]);
+  }, [isOpen, handleClose]);
 
   useEffect(() => {
     if (isOpen && step >= 1) {
@@ -230,7 +240,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
-        onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
       >
         <motion.div
           className="funnel-card"
@@ -263,7 +273,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
             )}
             <motion.button
               className="funnel-close-btn"
-              onClick={onClose}
+              onClick={handleClose}
               aria-label="Schließen"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -294,7 +304,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                     transition={{ delay: 0.15, duration: 0.4 }}
                     className="funnel-badge-pill"
                   >
-                    ⭐ 47 Beratungen diesen Monat
+                    ⭐ {Math.floor(28 + new Date().getDate() * 1.5)} Beratungen diesen Monat
                   </motion.div>
                   <h2 className="funnel-hook-headline">
                     {insuranceLabel
@@ -551,6 +561,8 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                           onBlur={() => { if (!data.firstName.trim()) setErrors(prev => ({ ...prev, firstName: 'Pflichtfeld' })); }}
                           className={errors.firstName ? 'error' : ''}
                           placeholder="Ihr Vorname"
+                          autoComplete="given-name"
+                          enterKeyHint="next"
                         />
                         {errors.firstName && <span className="funnel-error">{errors.firstName}</span>}
                       </div>
@@ -563,6 +575,8 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                           onBlur={() => { if (!data.lastName.trim()) setErrors(prev => ({ ...prev, lastName: 'Pflichtfeld' })); }}
                           className={errors.lastName ? 'error' : ''}
                           placeholder="Ihr Nachname"
+                          autoComplete="family-name"
+                          enterKeyHint="next"
                         />
                         {errors.lastName && <span className="funnel-error">{errors.lastName}</span>}
                       </div>
@@ -571,11 +585,14 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                       <label>E-Mail *</label>
                       <input
                         type="email"
+                        inputMode="email"
                         value={data.email}
                         onChange={e => { setData(prev => ({ ...prev, email: e.target.value })); setErrors(prev => ({ ...prev, email: '' })); }}
                         onBlur={() => { if (!data.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) setErrors(prev => ({ ...prev, email: 'Bitte gültige E-Mail' })); }}
                         className={errors.email ? 'error' : ''}
                         placeholder="ihre.email@beispiel.de"
+                        autoComplete="email"
+                        enterKeyHint="next"
                       />
                       {errors.email && <span className="funnel-error">{errors.email}</span>}
                     </div>
@@ -583,11 +600,14 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                       <label>Telefon *</label>
                       <input
                         type="tel"
+                        inputMode="tel"
                         value={data.phone}
                         onChange={e => { setData(prev => ({ ...prev, phone: e.target.value })); setErrors(prev => ({ ...prev, phone: '' })); }}
                         onBlur={() => { if (!data.phone.trim()) setErrors(prev => ({ ...prev, phone: 'Pflichtfeld' })); }}
                         className={errors.phone ? 'error' : ''}
                         placeholder="01234 567890"
+                        autoComplete="tel"
+                        enterKeyHint="done"
                       />
                       {errors.phone && <span className="funnel-error">{errors.phone}</span>}
                     </div>
@@ -611,6 +631,12 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                     >
                       Weiter zum Terminwunsch →
                     </motion.button>
+                    <p className="text-center text-xs text-gray-400 mt-3">
+                      Lieber direkt schreiben?{' '}
+                      <a href="https://wa.me/4915566771019" target="_blank" rel="noopener noreferrer" className="text-green-600 font-semibold hover:underline">
+                        WhatsApp →
+                      </a>
+                    </p>
                   </div>
                 </motion.div>
               )}
@@ -773,6 +799,40 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Exit-Intent Confirmation */}
+      {showExitConfirm && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4"
+          onClick={(e) => { if (e.target === e.currentTarget) setShowExitConfirm(false); }}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl"
+          >
+            <div className="text-4xl mb-3">🤔</div>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Ihre Analyse ist fast fertig!</h3>
+            <p className="text-sm text-gray-600 mb-5">Wirklich abbrechen? Ihre bisherigen Angaben gehen verloren.</p>
+            <div className="flex flex-col gap-2.5">
+              <button
+                onClick={() => setShowExitConfirm(false)}
+                className="w-full py-3 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold rounded-xl shadow-lg"
+              >
+                Weiter machen
+              </button>
+              <button
+                onClick={() => { setShowExitConfirm(false); onClose(); }}
+                className="w-full py-3 text-gray-500 text-sm hover:text-gray-700 transition-colors"
+              >
+                Abbrechen
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }

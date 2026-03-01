@@ -422,11 +422,18 @@ export default function SchadenPage() {
                 <div />
               )}
               <span className="text-xs text-gray-500 font-medium">
-                Schritt {Math.min(step, 3)} von 3
+                Schritt {Math.min(step, 3)} von 3 — {step === 1 ? 'Schadenart' : step === 2 ? 'Details' : 'Absenden'}
               </span>
             </div>
-            <div className="h-1 bg-gray-200 rounded-full mb-6 overflow-hidden">
+            <div className="h-1 bg-gray-200 rounded-full mb-3 overflow-hidden">
               <div className="h-full bg-[#E2001A] rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercent}%` }} />
+            </div>
+            <div className="flex items-center justify-center gap-3 text-[11px] text-gray-400 mb-5">
+              <span>🔒 DSGVO-konform</span>
+              <span>·</span>
+              <span>⚡ Antwort in 24h</span>
+              <span>·</span>
+              <span>✅ Kostenlos</span>
             </div>
           </>
         )}
@@ -469,25 +476,25 @@ export default function SchadenPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-semibold text-gray-700">Vorname *</label>
-                    <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} />
+                    <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} autoComplete="given-name" enterKeyHint="next" />
                     {errors.vorname && <span className="text-xs text-red-500">{errors.vorname}</span>}
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-semibold text-gray-700">Nachname *</label>
-                    <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} />
+                    <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} autoComplete="family-name" enterKeyHint="next" />
                     {errors.nachname && <span className="text-xs text-red-500">{errors.nachname}</span>}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold text-gray-700">Telefon *</label>
-                  <input type="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} />
+                  <input type="tel" inputMode="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} autoComplete="tel" enterKeyHint="next" />
                   {errors.telefon && <span className="text-xs text-red-500">{errors.telefon}</span>}
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-semibold text-gray-700">E-Mail *</label>
-                  <input type="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} />
+                  <input type="email" inputMode="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} autoComplete="email" enterKeyHint="next" />
                   {errors.email && <span className="text-xs text-red-500">{errors.email}</span>}
                 </div>
 
@@ -873,7 +880,7 @@ export default function SchadenPage() {
                             </div>
                             <button
                               onClick={() => removeFile(i)}
-                              className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs font-bold flex items-center justify-center opacity-80 hover:opacity-100"
+                              className="absolute -top-1 -right-1 w-8 h-8 bg-red-500 text-white rounded-full text-xs font-bold flex items-center justify-center opacity-90 hover:opacity-100 shadow-sm"
                             >
                               ×
                             </button>
@@ -930,13 +937,13 @@ export default function SchadenPage() {
 
               <div className="flex flex-col gap-3 mb-5">
                 <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" checked={confirm1} onChange={e => { setConfirm1(e.target.checked); if (errors.confirm1) setErrors(prev => { const n = { ...prev }; delete n.confirm1; return n; }); }} className="mt-1 w-4 h-4 accent-[#003781]" />
+                  <input type="checkbox" checked={confirm1} onChange={e => { setConfirm1(e.target.checked); if (errors.confirm1) setErrors(prev => { const n = { ...prev }; delete n.confirm1; return n; }); }} className="mt-0.5 w-5 h-5 accent-[#003781] shrink-0 cursor-pointer" />
                   <span className="text-sm text-gray-700">Alle Angaben sind korrekt und vollständig.</span>
                 </label>
                 {errors.confirm1 && <span className="text-xs text-red-500 ml-7">{errors.confirm1}</span>}
 
                 <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" checked={confirm2} onChange={e => { setConfirm2(e.target.checked); if (errors.confirm2) setErrors(prev => { const n = { ...prev }; delete n.confirm2; return n; }); }} className="mt-1 w-4 h-4 accent-[#003781]" />
+                  <input type="checkbox" checked={confirm2} onChange={e => { setConfirm2(e.target.checked); if (errors.confirm2) setErrors(prev => { const n = { ...prev }; delete n.confirm2; return n; }); }} className="mt-0.5 w-5 h-5 accent-[#003781] shrink-0 cursor-pointer" />
                   <span className="text-sm text-gray-700">Ich bin mit der elektronischen Übermittlung einverstanden.</span>
                 </label>
                 {errors.confirm2 && <span className="text-xs text-red-500 ml-7">{errors.confirm2}</span>}
@@ -953,6 +960,12 @@ export default function SchadenPage() {
               >
                 {isSubmitting ? 'Wird übermittelt...' : '🚨 Schaden jetzt melden'}
               </button>
+              <p className="text-center text-xs text-gray-400 mt-3">
+                Lieber per WhatsApp?{' '}
+                <a href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20m%C3%B6chte%20einen%20Schaden%20melden." target="_blank" rel="noopener noreferrer" className="text-green-600 font-semibold hover:underline">
+                  Direkt schreiben →
+                </a>
+              </p>
             </div>
           )}
 
@@ -974,8 +987,13 @@ export default function SchadenPage() {
                 }
               `}</style>
 
-              <h2 className="text-2xl font-extrabold text-gray-900 mb-2">✅ Schadensmeldung eingegangen!</h2>
-              <p className="text-sm text-gray-600 mb-5">Morino Stübe wurde informiert und wird sich schnellstmöglich bei Ihnen melden.</p>
+              <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Schadensmeldung eingegangen!</h2>
+              <p className="text-sm text-gray-600 mb-4">Morino Stübe wurde informiert und wird sich innerhalb von 24 Stunden bei Ihnen melden.</p>
+              <div className="flex items-center justify-center gap-3 mb-5 text-xs text-gray-500">
+                <span className="flex items-center gap-1">⭐ 4,9/5 Bewertung</span>
+                <span>·</span>
+                <span>ERGO Versicherungsfachmann</span>
+              </div>
 
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 text-left">
                 <p className="text-sm font-semibold text-amber-800">⚠️ Bei dringendem Notfall rufen Sie bitte direkt an:</p>

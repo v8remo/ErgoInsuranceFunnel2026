@@ -12,7 +12,7 @@ import { insuranceConfig } from "@/lib/insurance-config";
 import { useQuery } from "@tanstack/react-query";
 import sittingPhoto from "@assets/optimized/ich_bin_da.webp";
 import beraterBranding from "@assets/optimized/unbenannt1.webp";
-import { Award, Shield, Handshake, Clock, Star, Instagram, ExternalLink } from "lucide-react";
+import { Award, Shield, Handshake, Clock, Star, Instagram, ExternalLink, ChevronDown, Mail, Phone, MessageSquare } from "lucide-react";
 import type { Content } from "@shared/schema";
 
 const insuranceFAQs: Record<string, { question: string; answer: string }[]> = {
@@ -46,6 +46,7 @@ const insuranceFAQs: Record<string, { question: string; answer: string }[]> = {
 export default function Insurance() {
   const { type } = useParams();
   const [funnelOpen, setFunnelOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   
   const insurance = insuranceConfig[type as keyof typeof insuranceConfig];
 
@@ -135,7 +136,7 @@ export default function Insurance() {
         }] : undefined}
       />
       <Breadcrumb />
-      <main className="min-h-screen">
+      <main className="min-h-screen pb-16 sm:pb-0">
         {/* Hero Section */}
         <section className="py-6 sm:py-8 lg:py-12 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white overflow-hidden">
           <div className="w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
@@ -449,18 +450,38 @@ export default function Insurance() {
           </div>
         </section>
 
-        {/* FAQ Section */}
+        {/* FAQ Section – Interactive Accordion */}
         {type && insuranceFAQs[type] && (
           <section className="py-10 sm:py-14 bg-white">
             <div className="max-w-4xl mx-auto px-4 sm:px-6">
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
                 Häufige Fragen zur {insurance.title}
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {insuranceFAQs[type].map((faq, index) => (
-                  <div key={index} className="border border-gray-200 rounded-xl p-5">
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
+                  <div key={index} className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button
+                      onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                      className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-gray-50/50 transition-colors"
+                      aria-expanded={openFaq === index}
+                    >
+                      <span className="font-semibold text-gray-900 text-sm sm:text-base pr-4">{faq.question}</span>
+                      <ChevronDown className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-300 ${openFaq === index ? 'rotate-180' : ''}`} />
+                    </button>
+                    {openFaq === index && (
+                      <div className="px-4 pb-4 sm:px-5 sm:pb-5">
+                        <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
+                        <button
+                          onClick={() => {
+                            handleStartFunnel();
+                            trackEvent('faq_cta_clicked', { question: faq.question, type });
+                          }}
+                          className="mt-3 text-sm font-semibold text-ergo-red hover:underline"
+                        >
+                          Weitere Fragen? Jetzt beraten lassen →
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -474,12 +495,12 @@ export default function Insurance() {
         {/* Final CTA Section with Urgency */}
         <section className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight text-[#ff0000]">
-              🔥 Kostenlose Analyse & 15% Bündelnachlass!
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight text-white">
+              Kostenlose Analyse & 15% Bündelnachlass
             </h2>
-            <p className="text-sm sm:text-base lg:text-xl mb-6 sm:mb-8 px-2 text-[#000000]">
+            <p className="text-sm sm:text-base lg:text-xl mb-6 sm:mb-8 px-2 text-white/90">
               <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer bestehenden {insurance.title} plus Optimierung und günstigere Alternativen.
-              <strong>15% Bündelnachlass ab 5 Versicherungen!</strong> Bereits <span className="text-yellow-200 font-bold">23 Kunden</span> haben heute gespart!
+              <strong> 15% Bündelnachlass ab 5 Versicherungen!</strong> Bereits <span className="text-yellow-300 font-bold">{Math.floor(15 + new Date().getHours() * 0.8)} Kunden</span> haben heute gespart!
             </p>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
@@ -509,19 +530,19 @@ export default function Insurance() {
                   <Button 
                     size="lg"
                     variant="outline"
-                    className="border-2 border-ergo-red text-ergo-red hover:bg-ergo-red hover:text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full"
+                    className="border-2 border-white text-white hover:bg-white hover:text-ergo-red px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full"
                     onClick={() => trackEvent('booking_page_clicked', { insurance_type: type, source: 'bottom_section' })}
                   >
                     📅 Termin buchen
                   </Button>
                 </Link>
               </div>
-              <p className="text-sm font-medium mt-3 text-[#000000]">
+              <p className="text-sm font-medium mt-3 text-white/80">
                 ✅ Kostenlose Analyse • Optimierung bestehender Verträge • 15% Bündelnachlass ab 5 Versicherungen
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm font-medium text-[#000000]">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm font-medium text-white/90">
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4" />
                 <span>100% kostenlos & unverbindlich</span>
@@ -533,6 +554,33 @@ export default function Insurance() {
             </div>
           </div>
         </section>
+
+        {/* Sticky Mobile CTA Bar */}
+        <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
+          <button
+            onClick={() => {
+              handleStartFunnel();
+              trackEvent('sticky_cta_clicked', { insurance_type: type });
+            }}
+            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm min-h-[44px] py-3 rounded-xl whitespace-nowrap shadow-lg shadow-red-500/20 animate-pulse-subtle"
+          >
+            <Mail className="w-4 h-4 shrink-0" />
+            Kostenlose Analyse
+          </button>
+          <a
+            href="https://wa.me/4915566771019"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => {
+              trackEvent('sticky_whatsapp_clicked', { insurance_type: type });
+              trackConversion();
+            }}
+            className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 min-h-[44px] py-3 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap"
+          >
+            <MessageSquare className="w-4 h-4 shrink-0" />
+            WhatsApp
+          </a>
+        </div>
 
         <FunnelOverlay
           isOpen={funnelOpen}

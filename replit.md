@@ -4,7 +4,7 @@
 The ERGO Versicherungsplattform is a professional lead generation platform designed for ERGO insurance agencies. It features optimized landing pages for various insurance products and an administrative dashboard for content and lead management. The platform aims to enhance online presence, streamline lead capture, and provide robust tools for managing customer interactions and marketing efforts. Key capabilities include comprehensive SEO, high performance, and conversion-optimized funnels to maximize lead generation from campaigns like Google Ads. The business vision is to provide a competitive edge in the insurance market through a highly effective digital presence.
 
 ## User Preferences
-- Admin-Passwort: ERGOsicher2025! (Standard, kann geändert werden)
+- Admin-Passwort: Wird über die Umgebungsvariable ADMIN_PASSWORD konfiguriert (bcrypt-gehasht in der Datenbank gespeichert)
 - E-Mail-Benachrichtigungen für neue Leads gewünscht
 - Platform soll Google Ads ready sein
 - Sichere Admin-Authentifizierung mit Passwort-Änderungsfunktion gewünscht
@@ -38,7 +38,8 @@ The platform features a clean, professional design with a focus on user experien
 - **Performance:** Optimized images, lazy loading, minimal bundle size, and fast loading times.
 - **Lead Optimization:** Clear Call-to-Actions, trust elements, simplified multi-step processes, and immediate lead capture.
 - **Tracking:** Google Analytics 4, Meta Pixel integration, event tracking for key interactions, funnel tracking, and conversion tracking for lead generation (Google Ads conversion tracking).
-- **Admin Features:** Lead management with filtering, content management system, CSV export, and real-time statistics.
+- **Admin Features:** Lead management with filtering, content management system, CSV export, real-time statistics, and PDF download button for Dokument-Submissions (base64 stored in `pdf_data` column).
+- **Instagram Generator:** Admin-only tool at `/admin/instagram` for generating branded ERGO social media slides (html-to-image, Inter/Montserrat fonts).
 - **Email Notifications:** Automated lead notifications via Resend API (e.g., for document uploads, claims, and license plate requests).
 - **Compliance:** Full compliance with German legal requirements (Impressum, Datenschutzerklärung, Cookie-Consent-Banner, Erstinformation nach § 15 VersVermV).
 - **Local SEO:** Dedicated city landing pages (`/versicherung-ganderkesee`, `/versicherung-delmenhorst`, `/versicherung-oldenburg`) with localized content, FAQs, testimonials, and regional information.
