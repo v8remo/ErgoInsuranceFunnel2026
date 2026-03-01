@@ -11,6 +11,16 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        "ergo-red": "#E2001A",
+        "ergo-red-hover": "#c5001a",
+        "ergo-red-light": "#fff0f0",
+        "ergo-red-dark": "#a50014",
+        "ergo-blue": "#003781",
+        "ergo-blue-light": "#eff4ff",
+        "ergo-dark": "#151d28",
+        "ergo-dark-light": "#2d3a4c",
+        "ergo-gray": "#f4f5f7",
+        "ergo-gray-light": "#f9f9fc",
         background: "var(--background)",
         foreground: "var(--foreground)",
         card: {
