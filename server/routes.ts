@@ -882,6 +882,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Font-embed proxy: fetches Google Fonts and converts to base64 data URIs
+  // This allows html-to-image to embed fonts in PNG exports without CORS errors
+  let fontEmbedCache: { css: string; at: number } | null = null;
+  app.get("/api/instagram/font-embed", async (req, res) => {
+    try {
+      const CACHE_TTL = 12 * 60 * 60 * 1000; // 12 hours
+      if (fontEmbedCache && Date.now() - fontEmbedCache.at < CACHE_TTL) {
+        res.set({ 'Content-Type': 'text/css', 'Cache-Control': 'public, max-age=43200' });
+        return res.send(fontEmbedCache.css);
+      }
+
+      const fontsUrl = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap';
+      const cssResp = await fetch(fontsUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; ERGOBot/1.0)' }
+      });
+      if (!cssResp.ok) throw new Error('Google Fonts fetch failed');
+      let css = await cssResp.text();
+
+      // Extract all font URLs and replace with base64 data URIs
+      const urlMatches = [...css.matchAll(/url\(['"]?(https?:\/\/[^'")]+)['"]?\)/g)];
+      for (const match of urlMatches) {
+        const fontUrl = match[1];
+        try {
+          const fontResp = await fetch(fontUrl);
+          const buf = await fontResp.arrayBuffer();
+          const b64 = Buffer.from(buf).toString('base64');
+          const mime = fontUrl.includes('.woff2') ? 'font/woff2' : 'font/woff';
+          css = css.replace(match[0], `url('data:${mime};base64,${b64}')`);
+        } catch (_) { /* keep original URL on failure */ }
+      }
+
+      fontEmbedCache = { css, at: Date.now() };
+      res.set({ 'Content-Type': 'text/css', 'Cache-Control': 'public, max-age=43200' });
+      res.send(css);
+    } catch (error) {
+      console.error('Font embed error:', error);
+      res.status(500).send('/* font embed failed */');
+    }
+  });
+
   app.post("/api/instagram/generate", async (req, res) => {
     try {
       const { topicName, topicIcon, topicId } = req.body;

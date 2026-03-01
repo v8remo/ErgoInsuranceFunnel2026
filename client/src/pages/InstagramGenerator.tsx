@@ -136,25 +136,58 @@ export default function InstagramGenerator() {
     }
   };
 
+  // Module-level font CSS cache so we only fetch once per session
+  const fontCSS = useRef<string | null>(null);
+  const loadFontCSS = useCallback(async (): Promise<string> => {
+    if (fontCSS.current) return fontCSS.current;
+    try {
+      const resp = await fetch('/api/instagram/font-embed');
+      if (resp.ok) fontCSS.current = await resp.text();
+    } catch (_) { /* font embed optional */ }
+    return fontCSS.current ?? '';
+  }, []);
+
+  const downloadPng = useCallback(async (el: HTMLElement, filename: string, embeddedFontCSS: string) => {
+    let styleEl: HTMLStyleElement | null = null;
+    try {
+      if (embeddedFontCSS) {
+        styleEl = document.createElement('style');
+        styleEl.setAttribute('data-font-embed', '1');
+        styleEl.textContent = embeddedFontCSS;
+        document.head.appendChild(styleEl);
+      }
+      await document.fonts.ready;
+      const dataUrl = await toPng(el, { quality: 1, pixelRatio: 1, cacheBust: true });
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } finally {
+      if (styleEl && document.head.contains(styleEl)) {
+        document.head.removeChild(styleEl);
+      }
+    }
+  }, []);
+
   const handleDownloadSlide = useCallback(async (ref: React.RefObject<HTMLDivElement | null>, filename: string) => {
     if (!ref.current) return;
     setDownloading(true);
     try {
-      const dataUrl = await toPng(ref.current, { quality: 1, pixelRatio: 1, cacheBust: true });
-      const link = document.createElement('a');
-      link.download = filename;
-      link.href = dataUrl;
-      link.click();
+      const css = await loadFontCSS();
+      await downloadPng(ref.current, filename, css);
     } catch (err) {
       console.error('Download failed:', err);
     } finally {
       setDownloading(false);
     }
-  }, []);
+  }, [loadFontCSS, downloadPng]);
 
   const handleDownloadAllSlides = useCallback(async () => {
     if (!selectedTopic) return;
     setDownloading(true);
+    const css = await loadFontCSS();
     const container = document.createElement('div');
     container.style.position = 'fixed';
     container.style.left = '-9999px';
@@ -173,11 +206,7 @@ export default function InstagramGenerator() {
                 if (el) {
                   requestAnimationFrame(async () => {
                     try {
-                      const dataUrl = await toPng(el, { quality: 1, pixelRatio: 1, cacheBust: true });
-                      const link = document.createElement('a');
-                      link.download = `${selectedTopic.id}_slide_${i + 1}.png`;
-                      link.href = dataUrl;
-                      link.click();
+                      await downloadPng(el, `${selectedTopic.id}_slide_${i + 1}.png`, css);
                     } catch (err) {
                       console.error(`Failed to download slide ${i + 1}:`, err);
                     }
@@ -199,7 +228,7 @@ export default function InstagramGenerator() {
       document.body.removeChild(container);
       setDownloading(false);
     }
-  }, [selectedTopic, slides, format]);
+  }, [selectedTopic, slides, format, loadFontCSS, downloadPng]);
 
   const copyToClipboard = useCallback((text: string) => {
     navigator.clipboard.writeText(text);
