@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 
@@ -49,6 +49,8 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAnalysisResult, setShowAnalysisResult] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const socialProofCount = useMemo(() => Math.floor(28 + new Date().getDate() * 1.5), []);
+  const exitShownRef = useRef(typeof sessionStorage !== 'undefined' && !!sessionStorage.getItem('funnel_exit_shown'));
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   const [data, setData] = useState<FunnelData>({
@@ -72,6 +74,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
       document.body.style.overflow = 'hidden';
       setStep(1);
       setShowAnalysisResult(false);
+      setShowExitConfirm(false);
       setData({
         situation: '', concerns: [], existingContracts: '', priority: '',
         contactType: '', timePreference: '', firstName: '', lastName: '',
@@ -85,9 +88,10 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
   }, [isOpen]);
 
   const handleClose = useCallback(() => {
-    if (step >= 3 && step < 9 && !sessionStorage.getItem('funnel_exit_shown')) {
-      setShowExitConfirm(true);
+    if (step >= 3 && step < STEP_NAMES.length && !exitShownRef.current) {
+      exitShownRef.current = true;
       sessionStorage.setItem('funnel_exit_shown', '1');
+      setShowExitConfirm(true);
       return;
     }
     onClose();
@@ -119,7 +123,8 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
   // Auto-focus first input on step 7
   useEffect(() => {
     if (step === 7) {
-      setTimeout(() => firstInputRef.current?.focus(), 400);
+      const id = setTimeout(() => firstInputRef.current?.focus(), 400);
+      return () => clearTimeout(id);
     }
   }, [step]);
 
@@ -162,8 +167,9 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
       phone: data.phone
     };
 
-    try {
-      await fetch('/api/leads', {
+    // Run API save and webhook in parallel — neither should block the other
+    await Promise.allSettled([
+      fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -185,22 +191,14 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
           },
           source: 'perspective_funnel'
         })
-      });
-    } catch (e) {
-      console.error('API submission error:', e);
-    }
-
-    // TODO: Replace with your n8n or Make webhook URL
-    try {
-      await fetch('https://hook.eu2.make.com/PLACEHOLDER', {
+      }),
+      // TODO: Replace with your n8n or Make webhook URL
+      fetch('https://hook.eu2.make.com/PLACEHOLDER', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(leadPayload)
-      });
-    } catch (e) {
-      // Webhook failure should not block UX
-      console.warn('Webhook submission failed:', e);
-    }
+      })
+    ]);
 
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
@@ -304,7 +302,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                     transition={{ delay: 0.15, duration: 0.4 }}
                     className="funnel-badge-pill"
                   >
-                    ⭐ {Math.floor(28 + new Date().getDate() * 1.5)} Beratungen diesen Monat
+                    ⭐ {socialProofCount} Beratungen diesen Monat
                   </motion.div>
                   <h2 className="funnel-hook-headline">
                     {insuranceLabel
@@ -801,38 +799,43 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
       </motion.div>
 
       {/* Exit-Intent Confirmation */}
-      {showExitConfirm && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4"
-          onClick={(e) => { if (e.target === e.currentTarget) setShowExitConfirm(false); }}
-        >
+      <AnimatePresence>
+        {showExitConfirm && (
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl"
+            key="exit-confirm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4"
+            onClick={(e) => { if (e.target === e.currentTarget) setShowExitConfirm(false); }}
           >
-            <div className="text-4xl mb-3">🤔</div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Ihre Analyse ist fast fertig!</h3>
-            <p className="text-sm text-gray-600 mb-5">Wirklich abbrechen? Ihre bisherigen Angaben gehen verloren.</p>
-            <div className="flex flex-col gap-2.5">
-              <button
-                onClick={() => setShowExitConfirm(false)}
-                className="w-full py-3 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold rounded-xl shadow-lg"
-              >
-                Weiter machen
-              </button>
-              <button
-                onClick={() => { setShowExitConfirm(false); onClose(); }}
-                className="w-full py-3 text-gray-500 text-sm hover:text-gray-700 transition-colors"
-              >
-                Abbrechen
-              </button>
-            </div>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl"
+            >
+              <div className="text-4xl mb-3">🤔</div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Ihre Analyse ist fast fertig!</h3>
+              <p className="text-sm text-gray-600 mb-5">Wirklich abbrechen? Ihre bisherigen Angaben gehen verloren.</p>
+              <div className="flex flex-col gap-2.5">
+                <button
+                  onClick={() => setShowExitConfirm(false)}
+                  className="w-full py-3 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold rounded-xl shadow-lg"
+                >
+                  Weiter machen
+                </button>
+                <button
+                  onClick={() => { setShowExitConfirm(false); onClose(); }}
+                  className="w-full py-3 text-gray-500 text-sm hover:text-gray-700 transition-colors"
+                >
+                  Abbrechen
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </AnimatePresence>
   );
 }

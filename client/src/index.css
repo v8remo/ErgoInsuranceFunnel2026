@@ -187,11 +187,16 @@
 
   .animate-pulse-subtle {
     animation: pulse-subtle 2.5s ease-in-out infinite;
+    box-shadow: 0 4px 14px rgba(226, 0, 26, 0.25);
   }
 
   @keyframes pulse-subtle {
-    0%, 100% { box-shadow: 0 4px 14px rgba(226, 0, 26, 0.2); }
-    50% { box-shadow: 0 4px 20px rgba(226, 0, 26, 0.4); }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-pulse-subtle { animation: none; }
   }
 
   .section-divider {

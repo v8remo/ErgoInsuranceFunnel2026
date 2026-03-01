@@ -1,5 +1,6 @@
 import { useParams, Link } from "wouter";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import FunnelOverlay from "@/components/FunnelOverlay";
 import '@/styles/funnel.css';
 import SEO from "@/components/SEO";
@@ -47,7 +48,8 @@ export default function Insurance() {
   const { type } = useParams();
   const [funnelOpen, setFunnelOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  
+  const dynamicCustomerCount = useMemo(() => Math.floor(15 + new Date().getHours() * 0.8), []);
+
   const insurance = insuranceConfig[type as keyof typeof insuranceConfig];
 
   // Load content from database
@@ -468,20 +470,29 @@ export default function Insurance() {
                       <span className="font-semibold text-gray-900 text-sm sm:text-base pr-4">{faq.question}</span>
                       <ChevronDown className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-300 ${openFaq === index ? 'rotate-180' : ''}`} />
                     </button>
-                    {openFaq === index && (
-                      <div className="px-4 pb-4 sm:px-5 sm:pb-5">
-                        <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
-                        <button
-                          onClick={() => {
-                            handleStartFunnel();
-                            trackEvent('faq_cta_clicked', { question: faq.question, type });
-                          }}
-                          className="mt-3 text-sm font-semibold text-ergo-red hover:underline"
+                    <AnimatePresence>
+                      {openFaq === index && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                         >
-                          Weitere Fragen? Jetzt beraten lassen →
-                        </button>
-                      </div>
-                    )}
+                          <div className="px-4 pb-4 sm:px-5 sm:pb-5">
+                            <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
+                            <button
+                              onClick={() => {
+                                handleStartFunnel();
+                                trackEvent('faq_cta_clicked', { question: faq.question, type });
+                              }}
+                              className="mt-3 text-sm font-semibold text-ergo-red hover:underline"
+                            >
+                              Weitere Fragen? Jetzt beraten lassen →
+                            </button>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 ))}
               </div>
@@ -500,7 +511,7 @@ export default function Insurance() {
             </h2>
             <p className="text-sm sm:text-base lg:text-xl mb-6 sm:mb-8 px-2 text-white/90">
               <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer bestehenden {insurance.title} plus Optimierung und günstigere Alternativen.
-              <strong> 15% Bündelnachlass ab 5 Versicherungen!</strong> Bereits <span className="text-yellow-300 font-bold">{Math.floor(15 + new Date().getHours() * 0.8)} Kunden</span> haben heute gespart!
+              <strong> 15% Bündelnachlass ab 5 Versicherungen!</strong> Bereits <span className="text-yellow-300 font-bold">{dynamicCustomerCount} Kunden</span> haben heute gespart!
             </p>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">

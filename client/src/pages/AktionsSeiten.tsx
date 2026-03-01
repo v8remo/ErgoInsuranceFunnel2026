@@ -26,11 +26,13 @@ interface AktionData {
   faqs: { q: string; a: string }[];
 }
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 const aktionen: Record<string, AktionData> = {
   'kfz-wechsel': {
     title: 'Kfz-Wechselsaison November',
     subtitle: 'Jetzt wechseln und bis zu 30% bei der Kfz-Versicherung sparen',
-    seoTitle: `Kfz-Versicherung wechseln November ${new Date().getFullYear()} – Bis zu 30% sparen | ERGO`,
+    seoTitle: `Kfz-Versicherung wechseln November ${CURRENT_YEAR} – Bis zu 30% sparen | ERGO`,
     seoDesc: 'Kfz-Versicherung wechseln zum 30.11. – Stichtag nicht verpassen! Kostenloser Vergleich und persönliche Beratung bei ERGO Agentur Stübe in Ganderkesee.',
     seoKeywords: 'Kfz Versicherung wechseln, Kfz Wechselsaison, November Stichtag, Auto Versicherung vergleichen, ERGO Kfz, Kfz Ganderkesee',
     headerBg: 'from-blue-900 to-blue-700',
@@ -64,7 +66,7 @@ const aktionen: Record<string, AktionData> = {
   'fruehjahrscheck': {
     title: 'Frühjahrs-Check Wohngebäude',
     subtitle: 'Schützen Sie Ihr Zuhause vor Sturm, Starkregen und Elementarschäden',
-    seoTitle: `Wohngebäudeversicherung prüfen – Frühjahrs-Check ${new Date().getFullYear()} | ERGO`,
+    seoTitle: `Wohngebäudeversicherung prüfen – Frühjahrs-Check ${CURRENT_YEAR} | ERGO`,
     seoDesc: 'Frühjahrs-Check für Ihre Wohngebäudeversicherung. Elementarschutz, Sturmschäden, Starkregen – ist Ihr Haus ausreichend versichert? Kostenlose Analyse bei ERGO.',
     seoKeywords: 'Wohngebäudeversicherung prüfen, Elementarversicherung, Sturmschäden, Starkregen Versicherung, Haus versichern, ERGO Wohngebäude',
     headerBg: 'from-green-800 to-green-600',
@@ -98,7 +100,7 @@ const aktionen: Record<string, AktionData> = {
   'schulanfang': {
     title: 'Schulanfang – Kinder richtig absichern',
     subtitle: 'Unfallversicherung für Kinder: Rundum-Schutz für die ganze Familie',
-    seoTitle: `Unfallversicherung Kinder Schulanfang ${new Date().getFullYear()} – ERGO Agentur Stübe`,
+    seoTitle: `Unfallversicherung Kinder Schulanfang ${CURRENT_YEAR} – ERGO Agentur Stübe`,
     seoDesc: 'Schulanfang: Kinder richtig absichern mit der Unfallversicherung. Schutz auf dem Schulweg, beim Sport und in der Freizeit. Kostenlose Beratung bei ERGO.',
     seoKeywords: 'Unfallversicherung Kinder, Schulanfang Versicherung, Kinder absichern, Unfallschutz Schule, Schulweg Versicherung, ERGO Kinderversicherung',
     headerBg: 'from-purple-800 to-purple-600',

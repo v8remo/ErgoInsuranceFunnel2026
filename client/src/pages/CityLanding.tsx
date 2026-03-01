@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "wouter";
 import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight, Award, Star, Users, Home, Car, Heart, Scale, Umbrella, ChevronDown, ChevronUp, Instagram, Clock, FileCheck, TrendingUp, Building2, UserCheck, Mail } from "lucide-react";
 import SEO from "@/components/SEO";
@@ -187,11 +187,11 @@ const insuranceProducts = [
   { name: "Wohngebäudeversicherung", href: "/versicherung/wohngebaeude", price: "ab 25€/Monat", icon: Building2 },
   { name: "Rechtsschutzversicherung", href: "/versicherung/rechtsschutz", price: "ab 22€/Monat", icon: Scale },
   { name: "Zahnzusatzversicherung", href: "/versicherung/zahnzusatz", price: "ab 12€/Monat", icon: Heart },
-  { name: "Kfz-Versicherung", href: "/versicherung/leben-vorsorge", price: "individuell", icon: Car },
-  { name: "Berufsunfähigkeitsversicherung", href: "/versicherung/leben-vorsorge", price: "ab 35€/Monat", icon: UserCheck },
-  { name: "Unfallversicherung", href: "/versicherung/leben-vorsorge", price: "ab 10€/Monat", icon: Umbrella },
-  { name: "Risikolebensversicherung", href: "/versicherung/leben-vorsorge", price: "ab 5€/Monat", icon: Heart },
-  { name: "Private Krankenversicherung (DKV)", href: "/versicherung/leben-vorsorge", price: "individuell", icon: FileCheck },
+  { name: "Kfz-Versicherung", href: "/leben-vorsorge", price: "individuell", icon: Car },
+  { name: "Berufsunfähigkeitsversicherung", href: "/leben-vorsorge", price: "ab 35€/Monat", icon: UserCheck },
+  { name: "Unfallversicherung", href: "/leben-vorsorge", price: "ab 10€/Monat", icon: Umbrella },
+  { name: "Risikolebensversicherung", href: "/leben-vorsorge", price: "ab 5€/Monat", icon: Heart },
+  { name: "Private Krankenversicherung (DKV)", href: "/leben-vorsorge", price: "individuell", icon: FileCheck },
 ];
 
 const ergoAwards = [
@@ -224,6 +224,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 export default function CityLanding({ cityKey }: { cityKey: string }) {
   const data = cityData[cityKey];
   const [showFunnel, setShowFunnel] = useState(false);
+  const availableSlots = useMemo(() => 3 + (new Date().getDay() % 3), []);
 
   if (!data) {
     return (
@@ -300,7 +301,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
 
             <div className="inline-flex items-center gap-2 text-xs text-green-600 font-semibold bg-green-50 px-3 py-1.5 rounded-full mb-4">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              Heute noch {3 + (new Date().getDay() % 3)} freie Beratungstermine
+              Heute noch {availableSlots} freie Beratungstermine
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 mb-8">
