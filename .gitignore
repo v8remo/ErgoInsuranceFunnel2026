@@ -4,8 +4,3 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
-
-# Lokale Umgebungsvariablen
-.env
-.env.local
-.env.*.local
