@@ -82,10 +82,12 @@ export default function BestandskundenPage() {
   const [showFunnel, setShowFunnel] = useState(false);
   const [funnelSource, setFunnelSource] = useState('bestandskunden');
   const [funnelLabel, setFunnelLabel] = useState<string | undefined>();
+  const [funnelType, setFunnelType] = useState<string | undefined>();
 
-  const openFunnel = (source: string, label?: string) => {
+  const openFunnel = (source: string, label?: string, type?: string) => {
     setFunnelSource(source);
     setFunnelLabel(label);
+    setFunnelType(type);
     setShowFunnel(true);
     trackEvent('bestandskunden_funnel_open', { source, label: label || '' });
   };
@@ -267,7 +269,7 @@ export default function BestandskundenPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
-                  onClick={() => openFunnel('jahrescheck', 'Jahrescheck')}
+                  onClick={() => openFunnel('jahrescheck', 'Jahrescheck', 'jahrescheck')}
                   className="inline-flex items-center justify-center gap-2 bg-white text-[#003781] font-bold px-6 py-3.5 rounded-xl hover:bg-gray-100 transition-colors min-h-[48px]"
                 >
                   <ClipboardCheck className="w-4 h-4" /> Jahrescheck starten
@@ -387,6 +389,7 @@ export default function BestandskundenPage() {
         <FunnelOverlay
           isOpen={showFunnel}
           onClose={() => setShowFunnel(false)}
+          insuranceType={funnelType}
           insuranceLabel={funnelLabel}
           source={funnelSource}
         />
