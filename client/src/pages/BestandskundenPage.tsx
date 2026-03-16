@@ -173,7 +173,7 @@ export default function BestandskundenPage() {
                     <ClipboardCheck className="w-6 h-6 text-blue-600" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Dokument einreichen</h3>
-                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Wechsel, Kündigung, Upload</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Beraterwechsel, Kündigung, Upload</p>
                 </div>
               </Link>
               <Link href="/kennzeichen">
@@ -182,7 +182,7 @@ export default function BestandskundenPage() {
                     <Car className="w-6 h-6 text-amber-600" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">eVB / Kennzeichen</h3>
-                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">eVB-Nummer, Moped-Schild</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">eVB-Anfrage, Versicherungskennzeichen</p>
                 </div>
               </Link>
               <Link href="/termin">
