@@ -4,7 +4,7 @@ import SEO from '@/components/SEO';
 import BestandskundenFunnel from '@/components/BestandskundenFunnel';
 import { trackEvent } from '@/lib/analytics';
 import {
-  Shield, FileText, Calendar, MessageCircle, Phone,
+  FileText, Calendar, MessageCircle, Phone,
   Heart, Baby, Home, Truck, Briefcase, Sunset,
   CheckCircle, Users, Clock, Award, Gift, ArrowRight,
   ClipboardCheck, Star, ChevronRight, Car
@@ -117,28 +117,6 @@ export default function BestandskundenPage() {
       />
 
       <div className="min-h-screen bg-white">
-        <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
-          <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-            <Link href="/">
-              <div className="flex items-center gap-2 cursor-pointer">
-                <Shield className="w-7 h-7 text-ergo-red" />
-                <div>
-                  <span className="font-bold text-gray-900 text-sm">ERGO Agentur Stübe</span>
-                  <span className="text-[10px] text-gray-400 block leading-tight">Ihr persönlicher Berater</span>
-                </div>
-              </div>
-            </Link>
-            <a
-              href="tel:015566771019"
-              className="inline-flex items-center gap-1.5 bg-ergo-red text-white px-3 py-2 rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors"
-            >
-              <Phone className="w-4 h-4" />
-              <span className="hidden sm:inline">01556 6771019</span>
-              <span className="sm:hidden">Anrufen</span>
-            </a>
-          </div>
-        </header>
-
         <section className="bg-gradient-to-br from-[#003781] to-[#005ab4] text-white py-12 md:py-20 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-white/15 px-4 py-1.5 rounded-full text-sm font-medium mb-5">
@@ -400,13 +378,6 @@ export default function BestandskundenPage() {
           </div>
         </section>
 
-        <footer className="bg-gray-900 text-gray-400 py-6 px-4 text-center text-xs">
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/impressum" className="hover:text-white transition-colors">Impressum</Link>
-            <Link href="/datenschutz" className="hover:text-white transition-colors">Datenschutz</Link>
-          </div>
-          <p className="mt-3">&copy; 2026 ERGO Versicherung - Morino Stübe</p>
-        </footer>
       </div>
 
       {showFunnel && (

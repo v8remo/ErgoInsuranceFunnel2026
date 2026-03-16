@@ -45,14 +45,13 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [isAdmin] = useRoute("/admin");
   const [isInstagram] = useRoute("/admin/instagram");
   const [isBeratung] = useRoute("/beratung");
-  const [isBestandskunden] = useRoute("/bestandskunden");
   const [isKfz] = useRoute("/kfz");
   const [isHausrat] = useRoute("/hausrat");
   const [isHaftpflicht] = useRoute("/haftpflicht");
   const [isRechtsschutz] = useRoute("/rechtsschutz");
   const [isBU] = useRoute("/berufsunfaehigkeit");
   const [isZahn] = useRoute("/zahnzusatz");
-  const hideLayout = isAdmin || isInstagram || isBeratung || isBestandskunden || isKfz || isHausrat || isHaftpflicht || isRechtsschutz || isBU || isZahn;
+  const hideLayout = isAdmin || isInstagram || isBeratung || isKfz || isHausrat || isHaftpflicht || isRechtsschutz || isBU || isZahn;
 
   return (
     <>
