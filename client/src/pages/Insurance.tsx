@@ -238,7 +238,7 @@ export default function Insurance() {
                   <img 
                     src={insurance.image}
                     alt={insurance.title}
-                    className="w-full h-60 sm:h-80 object-cover rounded-lg shadow-xl"
+                    className="w-full h-60 sm:h-80 object-cover object-top rounded-lg shadow-xl"
                     loading="lazy"
                     decoding="async"
                   />

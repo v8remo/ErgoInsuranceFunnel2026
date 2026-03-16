@@ -200,15 +200,17 @@ export default function ProfessionalErgoLanding() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.35 }}
-              className="flex items-center justify-center md:justify-start gap-2 mb-4"
+              className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-4"
             >
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                ))}
+              <div className="flex items-center gap-2">
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                  ))}
+                </div>
+                <span className="text-sm font-semibold text-gray-700">4.9/5</span>
+                <span className="text-xs text-gray-500">(247 Bewertungen)</span>
               </div>
-              <span className="text-sm font-semibold text-gray-700">4.9/5</span>
-              <span className="text-xs text-gray-500">(247 Bewertungen)</span>
               <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-0.5 rounded-full">
                 Heute noch {getAvailableSlots()} freie Termine
               </span>
@@ -321,7 +323,7 @@ export default function ProfessionalErgoLanding() {
                   <img
                     src={ichBinDaPhoto}
                     alt="Morino Stübe – ERGO Versicherungsberater Ganderkesee stellt sich vor"
-                    className="absolute inset-0 w-full h-full object-cover opacity-70"
+                    className="absolute inset-0 w-full h-full object-cover object-top opacity-70"
                     width={640}
                     height={360}
                   />

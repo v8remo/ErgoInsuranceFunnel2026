@@ -446,7 +446,7 @@ export default function LebenVorsorge() {
                   <img
                     src={heroImage}
                     alt="Leben & Vorsorge – Ihre Zukunft gut abgesichert"
-                    className="w-full h-60 sm:h-80 object-cover rounded-lg shadow-xl"
+                    className="w-full h-60 sm:h-80 object-cover object-top rounded-lg shadow-xl"
                     loading="lazy"
                     decoding="async"
                   />

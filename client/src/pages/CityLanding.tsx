@@ -274,9 +274,9 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
       />
       <main className="min-h-screen pb-16 sm:pb-0">
         {/* Hero Section */}
-        <section className="py-10 md:py-16 bg-gradient-to-br from-blue-50 to-white">
+        <section className="py-6 sm:py-10 md:py-16 bg-gradient-to-br from-blue-50 to-white">
           <div className="max-w-4xl mx-auto px-4">
-            <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-500 mb-4">
               <MapPin className="w-4 h-4" />
               <span>{data.region}</span>
               <span className="mx-1">·</span>
@@ -285,7 +285,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               <span>{data.einwohner} Einwohner</span>
             </div>
 
-            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+            <h1 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
               Ihre ERGO Versicherungsagentur für{" "}
               <span className="text-ergo-red">{data.name}</span>
             </h1>
@@ -309,7 +309,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                   setShowFunnel(true);
                   trackEvent("city_cta_beratung", { city: data.name });
                 }}
-                className="flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold px-6 py-3.5 rounded-xl shadow-md hover:bg-red-700 transition-colors"
+                className="flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold px-6 py-3.5 min-h-[44px] rounded-xl shadow-md hover:bg-red-700 transition-colors"
               >
                 <ArrowRight className="w-5 h-5" />
                 Kostenlose Analyse starten
@@ -322,7 +322,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                   trackEvent("city_whatsapp", { city: data.name });
                   trackConversion();
                 }}
-                className="flex items-center justify-center gap-2 border-2 border-green-500 text-green-600 font-semibold px-6 py-3.5 rounded-xl hover:bg-green-50 transition-colors"
+                className="flex items-center justify-center gap-2 border-2 border-green-500 text-green-600 font-semibold px-6 py-3.5 min-h-[44px] rounded-xl hover:bg-green-50 transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
                 WhatsApp Beratung
@@ -369,7 +369,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                 <img
                   src={portraitPhoto}
                   alt="Morino Stübe - Ihr ERGO Berater"
-                  className="rounded-2xl shadow-lg max-w-[320px] w-full"
+                  className="rounded-2xl shadow-lg max-w-[320px] w-full object-cover object-top"
                   loading="lazy"
                 />
               </div>
@@ -537,7 +537,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackEvent("city_instagram_click", { city: data.name })}
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold px-8 py-4 rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-105"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold px-6 sm:px-8 py-4 min-h-[44px] rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-105"
             >
               <Instagram className="w-6 h-6" />
               @morino_stuebe folgen
@@ -591,7 +591,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               <a
                 href="tel:015566771019"
                 onClick={() => trackEvent("city_phone_click", { city: data.name })}
-                className="flex items-center justify-center gap-2 bg-[#003781] text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-blue-800 transition-colors"
+                className="flex items-center justify-center gap-2 bg-[#003781] text-white font-semibold px-6 py-3.5 min-h-[44px] rounded-xl hover:bg-blue-800 transition-colors"
               >
                 <Phone className="w-5 h-5" />
                 01556 6771019
@@ -604,7 +604,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                   trackEvent("city_whatsapp_bottom", { city: data.name });
                   trackConversion();
                 }}
-                className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-green-600 transition-colors"
+                className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold px-6 py-3.5 min-h-[44px] rounded-xl hover:bg-green-600 transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
                 WhatsApp schreiben
@@ -612,7 +612,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               <Link
                 href="/termin"
                 onClick={() => trackEvent("city_termin_click", { city: data.name })}
-                className="flex items-center justify-center gap-2 border-2 border-ergo-red text-ergo-red font-semibold px-6 py-3.5 rounded-xl hover:bg-red-50 transition-colors"
+                className="flex items-center justify-center gap-2 border-2 border-ergo-red text-ergo-red font-semibold px-6 py-3.5 min-h-[44px] rounded-xl hover:bg-red-50 transition-colors"
               >
                 <Clock className="w-5 h-5" />
                 Termin vereinbaren
