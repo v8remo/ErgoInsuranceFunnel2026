@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
 import SEO from '@/components/SEO';
-import FunnelOverlay from '@/components/FunnelOverlay';
+import BestandskundenFunnel from '@/components/BestandskundenFunnel';
 import { trackEvent } from '@/lib/analytics';
 import {
   Shield, FileText, Calendar, MessageCircle, Phone,
@@ -10,6 +10,15 @@ import {
   ClipboardCheck, Star, ChevronRight
 } from 'lucide-react';
 
+type BestandskundenContext =
+  | 'jahrescheck'
+  | 'heirat'
+  | 'nachwuchs'
+  | 'hauskauf'
+  | 'umzug'
+  | 'jobwechsel'
+  | 'ruhestand';
+
 interface Lebenslage {
   icon: typeof Heart;
   title: string;
@@ -17,6 +26,7 @@ interface Lebenslage {
   versicherungen: string[];
   color: string;
   funnelLabel: string;
+  context: BestandskundenContext;
 }
 
 const lebenslagen: Lebenslage[] = [
@@ -26,7 +36,8 @@ const lebenslagen: Lebenslage[] = [
     description: 'Zusammenziehen, heiraten oder Partnerschaft eintragen? Viele Versicherungen lassen sich zusammenlegen und sparen.',
     versicherungen: ['Haftpflicht zusammenlegen', 'Hausrat anpassen', 'Risikolebensversicherung'],
     color: 'bg-pink-50 border-pink-200 text-pink-700',
-    funnelLabel: 'Heirat / Partnerschaft'
+    funnelLabel: 'Heirat / Partnerschaft',
+    context: 'heirat',
   },
   {
     icon: Baby,
@@ -34,7 +45,8 @@ const lebenslagen: Lebenslage[] = [
     description: 'Ein Baby verändert alles – auch Ihren Versicherungsbedarf. Schützen Sie Ihre Familie richtig ab.',
     versicherungen: ['Risikolebensversicherung', 'Unfallversicherung Familie', 'Krankenversicherung Kind'],
     color: 'bg-blue-50 border-blue-200 text-blue-700',
-    funnelLabel: 'Nachwuchs / Familie'
+    funnelLabel: 'Nachwuchs / Familie',
+    context: 'nachwuchs',
   },
   {
     icon: Home,
@@ -42,7 +54,8 @@ const lebenslagen: Lebenslage[] = [
     description: 'Die größte Investition Ihres Lebens braucht den besten Schutz.',
     versicherungen: ['Wohngebäudeversicherung', 'Elementarschutz', 'Bauherrenhaftpflicht'],
     color: 'bg-green-50 border-green-200 text-green-700',
-    funnelLabel: 'Hauskauf / Immobilie'
+    funnelLabel: 'Hauskauf / Immobilie',
+    context: 'hauskauf',
   },
   {
     icon: Truck,
@@ -50,7 +63,8 @@ const lebenslagen: Lebenslage[] = [
     description: 'Neue Adresse, neuer Wohnort – prüfen Sie, ob Ihre Versicherungen noch passen.',
     versicherungen: ['Hausrat Deckungssumme', 'Wohngebäude aktualisieren', 'Kfz-Regional­klasse'],
     color: 'bg-orange-50 border-orange-200 text-orange-700',
-    funnelLabel: 'Umzug'
+    funnelLabel: 'Umzug',
+    context: 'umzug',
   },
   {
     icon: Briefcase,
@@ -58,7 +72,8 @@ const lebenslagen: Lebenslage[] = [
     description: 'Ein neuer Job oder der Schritt in die Selbstständigkeit erfordert andere Absicherungen.',
     versicherungen: ['Berufsunfähigkeit prüfen', 'Betriebshaftpflicht', 'Private Krankenversicherung'],
     color: 'bg-purple-50 border-purple-200 text-purple-700',
-    funnelLabel: 'Jobwechsel / Selbstständigkeit'
+    funnelLabel: 'Jobwechsel / Selbstständigkeit',
+    context: 'jobwechsel',
   },
   {
     icon: Sunset,
@@ -66,7 +81,8 @@ const lebenslagen: Lebenslage[] = [
     description: 'Im Ruhestand ändern sich Risiken und Bedürfnisse – optimieren Sie Ihren Schutz.',
     versicherungen: ['Sterbegeldversicherung', 'Pflegezusatz', 'Reiseversicherung'],
     color: 'bg-amber-50 border-amber-200 text-amber-700',
-    funnelLabel: 'Ruhestand'
+    funnelLabel: 'Ruhestand',
+    context: 'ruhestand',
   },
 ];
 
@@ -80,16 +96,14 @@ const jahrescheckSteps = [
 
 export default function BestandskundenPage() {
   const [showFunnel, setShowFunnel] = useState(false);
-  const [funnelSource, setFunnelSource] = useState('bestandskunden');
+  const [funnelContext, setFunnelContext] = useState<BestandskundenContext>('jahrescheck');
   const [funnelLabel, setFunnelLabel] = useState<string | undefined>();
-  const [funnelType, setFunnelType] = useState<string | undefined>();
 
-  const openFunnel = (source: string, label?: string, type?: string) => {
-    setFunnelSource(source);
+  const openFunnel = (context: BestandskundenContext, label?: string) => {
+    setFunnelContext(context);
     setFunnelLabel(label);
-    setFunnelType(type);
     setShowFunnel(true);
-    trackEvent('bestandskunden_funnel_open', { source, label: label || '' });
+    trackEvent('bestandskunden_funnel_open', { context, label: label || '' });
   };
 
   const whatsappNumber = "15566771019";
@@ -207,7 +221,7 @@ export default function BestandskundenPage() {
                     key={lage.title}
                     type="button"
                     className={`rounded-xl border-2 p-5 ${lage.color} hover:shadow-lg transition-all group cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#003781] focus:ring-offset-2`}
-                    onClick={() => openFunnel('bestandskunden_lebenslage', lage.funnelLabel)}
+                    onClick={() => openFunnel(lage.context, lage.funnelLabel)}
                   >
                     <div className="flex items-start gap-3 mb-3">
                       <Icon className="w-6 h-6 shrink-0 mt-0.5" />
@@ -269,7 +283,7 @@ export default function BestandskundenPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
-                  onClick={() => openFunnel('jahrescheck', 'Jahrescheck', 'jahrescheck')}
+                  onClick={() => openFunnel('jahrescheck', 'Jahrescheck')}
                   className="inline-flex items-center justify-center gap-2 bg-white text-[#003781] font-bold px-6 py-3.5 rounded-xl hover:bg-gray-100 transition-colors min-h-[48px]"
                 >
                   <ClipboardCheck className="w-4 h-4" /> Jahrescheck starten
@@ -386,12 +400,11 @@ export default function BestandskundenPage() {
       </div>
 
       {showFunnel && (
-        <FunnelOverlay
+        <BestandskundenFunnel
           isOpen={showFunnel}
           onClose={() => setShowFunnel(false)}
-          insuranceType={funnelType}
-          insuranceLabel={funnelLabel}
-          source={funnelSource}
+          context={funnelContext}
+          label={funnelLabel}
         />
       )}
     </>
