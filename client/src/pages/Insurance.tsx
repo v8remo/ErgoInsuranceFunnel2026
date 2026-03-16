@@ -12,7 +12,9 @@ import { insuranceConfig } from "@/lib/insurance-config";
 import { useQuery } from "@tanstack/react-query";
 import sittingPhoto from "@assets/optimized/ich_bin_da.webp";
 import beraterBranding from "@assets/optimized/unbenannt1.webp";
-import { Award, Shield, Handshake, Clock, Star, Instagram, ExternalLink, ChevronDown, Mail, Phone, MessageSquare } from "lucide-react";
+import { Award, Shield, Handshake, Clock, Star, Instagram, ExternalLink, Mail, Phone, MessageSquare } from "lucide-react";
+import TrustBar from "@/components/TrustBar";
+import FAQSection from "@/components/FAQSection";
 import type { Content } from "@shared/schema";
 
 const insuranceFAQs: Record<string, { question: string; answer: string }[]> = {
@@ -46,7 +48,6 @@ const insuranceFAQs: Record<string, { question: string; answer: string }[]> = {
 export default function Insurance() {
   const { type } = useParams();
   const [funnelOpen, setFunnelOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
   
   const insurance = insuranceConfig[type as keyof typeof insuranceConfig];
 
@@ -375,29 +376,7 @@ export default function Insurance() {
           </div>
         </section>
 
-        {/* Social Proof Section */}
-        <section className="py-8 sm:py-12 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-              <div className="bg-white rounded-lg p-4 shadow-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-ergo-red mb-1">1000+</div>
-                <div className="text-xs sm:text-sm text-gray-600">Zufriedene Kunden</div>
-              </div>
-              <div className="bg-white rounded-lg p-4 shadow-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-1">97%</div>
-                <div className="text-xs sm:text-sm text-gray-600">Weiterempfehlung</div>
-              </div>
-              <div className="bg-white rounded-lg p-4 shadow-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1">24h</div>
-                <div className="text-xs sm:text-sm text-gray-600">Schnelle Hilfe</div>
-              </div>
-              <div className="bg-white rounded-lg p-4 shadow-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-yellow-600 mb-1">30%</div>
-                <div className="text-xs sm:text-sm text-gray-600">Durchschn. Ersparnis</div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <TrustBar />
 
         {/* Berater & Testsieger Section */}
         <section className="py-10 sm:py-14 bg-white">
@@ -450,46 +429,13 @@ export default function Insurance() {
           </div>
         </section>
 
-        {/* FAQ Section – Interactive Accordion */}
         {type && insuranceFAQs[type] && (
-          <section className="py-10 sm:py-14 bg-white">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
-                Häufige Fragen zur {insurance.title}
-              </h2>
-              <div className="space-y-3">
-                {insuranceFAQs[type].map((faq, index) => (
-                  <div key={index} className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-                    <button
-                      onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                      className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-gray-50/50 transition-colors"
-                      aria-expanded={openFaq === index}
-                    >
-                      <span className="font-semibold text-gray-900 text-sm sm:text-base pr-4">{faq.question}</span>
-                      <ChevronDown className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-300 ${openFaq === index ? 'rotate-180' : ''}`} />
-                    </button>
-                    {openFaq === index && (
-                      <div className="px-4 pb-4 sm:px-5 sm:pb-5">
-                        <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
-                        <button
-                          onClick={() => {
-                            handleStartFunnel();
-                            trackEvent('faq_cta_clicked', { question: faq.question, type });
-                          }}
-                          className="mt-3 text-sm font-semibold text-ergo-red hover:underline"
-                        >
-                          Weitere Fragen? Jetzt beraten lassen →
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <p className="text-sm text-gray-500 mt-6">
-                Weitere Fragen? Kontaktieren Sie uns direkt – Morino Stübe berät Sie persönlich in Ganderkesee, Delmenhorst und Oldenburg.
-              </p>
-            </div>
-          </section>
+          <FAQSection
+            title={`Häufige Fragen zur ${insurance.title}`}
+            subtitle="Weitere Fragen? Kontaktieren Sie uns direkt – Morino Stübe berät Sie persönlich in Ganderkesee, Delmenhorst und Oldenburg."
+            faqs={insuranceFAQs[type]}
+            className="bg-white"
+          />
         )}
 
         {/* Final CTA Section with Urgency */}

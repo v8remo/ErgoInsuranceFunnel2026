@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'wouter';
 import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
+import Breadcrumb from "@/components/Breadcrumb";
 
 type KennzeichenType = 'evb' | 'kennzeichen';
 
@@ -368,6 +369,7 @@ export default function KennzeichenPage() {
         description="eVB-Nummer für Kfz-Zulassung oder Versicherungskennzeichen für Kleinkraftrad anfragen. Schnell und unkompliziert bei Ihrer ERGO Agentur Stübe in Ganderkesee."
         keywords="eVB-Nummer, Versicherungskennzeichen, Kfz-Zulassung, ERGO Ganderkesee, Kleinkraftrad Versicherung"
       />
+      <Breadcrumb items={[{ label: "eVB & Kennzeichen" }]} />
       <div className="max-w-[600px] mx-auto px-5 py-6">
         {step < 4 && (
           <>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SEO from "@/components/SEO";
+import Breadcrumb from "@/components/Breadcrumb";
 import { Calendar, Clock, MapPin, Phone, CheckCircle, Star, MessageSquare, Loader2 } from "lucide-react";
 
 const BOOKING_URL = "https://ergo-frontend.onlinetermine.com/000211325/start?intcid=1001183&childId=bookingtimeSatelliteIframe_000211325&initialWidth=918&childId=bookingtimeSatelliteIframe_000211325&parentTitle=ERGO%20Versicherung%20Morino%20St%C3%BCbe%20in%20Ganderkesee%20%7C%20Versicherung&parentUrl=https%3A%2F%2Fmorino-stuebe.ergo.de%2F";
@@ -15,6 +16,7 @@ export default function TerminPage() {
         locality="Ganderkesee"
       />
 
+      <Breadcrumb items={[{ label: "Termin buchen" }]} />
       <div className="bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 sm:pt-8 sm:pb-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10">

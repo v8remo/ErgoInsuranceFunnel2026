@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'wouter';
 import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
+import Breadcrumb from "@/components/Breadcrumb";
 
 type DamageType = 'kfz' | 'glasschaden' | 'hausrat' | 'gebaeude' | 'rechtsschutz' | 'bu' | 'sonstiges';
 
@@ -104,7 +105,7 @@ export default function SchadenPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [confirm1, setConfirm1] = useState(false);
   const [confirm2, setConfirm2] = useState(false);
-  const [fadeClass, setFadeClass] = useState('opacity-100 translate-y-0 transition-all duration-300');
+  const [fadeClass, setFadeClass] = useState('opacity-100 transition-opacity duration-300');
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -118,10 +119,10 @@ export default function SchadenPage() {
   }, []);
 
   const goToStep = useCallback((next: number) => {
-    setFadeClass('opacity-0 translate-y-2 transition-all duration-150');
+    setFadeClass('opacity-0 transition-opacity duration-150');
     setTimeout(() => {
       setStep(next);
-      setFadeClass('opacity-100 translate-y-0 transition-all duration-300');
+      setFadeClass('opacity-100 transition-opacity duration-300');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 150);
   }, []);
@@ -410,6 +411,7 @@ export default function SchadenPage() {
         description="Versicherungsschaden schnell und einfach online melden. Kfz-Schaden, Glasschaden, Hausrat oder Haftpflicht – Ihre ERGO Agentur Stübe in Ganderkesee hilft sofort."
         keywords="Schaden melden, Versicherungsschaden, ERGO Ganderkesee, Kfz-Schaden, Glasschaden melden, Schadensmeldung"
       />
+      <Breadcrumb items={[{ label: "Schaden melden" }]} />
       <div className="max-w-[600px] mx-auto px-5 py-6">
         {step < 4 && (
           <>

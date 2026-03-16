@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { Link } from 'wouter';
 import SEO from '@/components/SEO';
 import FunnelOverlay from '@/components/FunnelOverlay';
+import FAQSection from '@/components/FAQSection';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import { type SpartenConfig } from '@/data/spartenConfig';
 import {
   Phone, Shield, Star, Users, Clock, CheckCircle,
-  ChevronDown, MessageCircle, Award, ArrowRight
+  MessageCircle, Award, ArrowRight
 } from 'lucide-react';
 
 interface SpartenLandingPageProps {
@@ -15,8 +16,6 @@ interface SpartenLandingPageProps {
 
 export default function SpartenLandingPage({ config }: SpartenLandingPageProps) {
   const [showFunnel, setShowFunnel] = useState(false);
-  const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
-
   useEffect(() => {
     trackEvent('sparten_lp_view', { sparte: config.slug, source: config.source });
   }, [config.slug]);
@@ -194,31 +193,11 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
           </div>
         </section>
 
-        <section className="py-12 md:py-16 px-4">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-8">
-              Häufige Fragen
-            </h2>
-            <div className="space-y-3">
-              {config.faqs.map((faq, i) => (
-                <div key={i} className="border border-gray-200 rounded-xl overflow-hidden">
-                  <button
-                    onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
-                    className="w-full flex items-center justify-between p-4 sm:p-5 text-left font-semibold text-gray-900 text-sm sm:text-base hover:bg-gray-50 transition-colors"
-                  >
-                    <span className="pr-4">{faq.question}</span>
-                    <ChevronDown className={`w-5 h-5 shrink-0 text-gray-400 transition-transform duration-200 ${expandedFaq === i ? 'rotate-180' : ''}`} />
-                  </button>
-                  {expandedFaq === i && (
-                    <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-3">
-                      {faq.answer}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <FAQSection
+          title="Häufige Fragen"
+          faqs={config.faqs}
+          className="bg-white"
+        />
 
         <section className="py-14 md:py-20 px-4 bg-gradient-to-br from-[#003781] to-[#005ab4] text-white">
           <div className="max-w-3xl mx-auto text-center">

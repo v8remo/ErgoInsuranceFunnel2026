@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight, Award, Star, Users, Home, Car, Heart, Scale, Umbrella, ChevronDown, ChevronUp, Instagram, Clock, FileCheck, TrendingUp, Building2, UserCheck, Mail } from "lucide-react";
+import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight, Award, Star, Users, Home, Car, Heart, Scale, Umbrella, Instagram, Clock, FileCheck, TrendingUp, Building2, UserCheck, Mail } from "lucide-react";
 import SEO from "@/components/SEO";
+import Breadcrumb from "@/components/Breadcrumb";
+import TrustBar from "@/components/TrustBar";
+import FAQSection from "@/components/FAQSection";
 import { trackEvent, trackConversion } from "@/lib/analytics";
 import FunnelOverlay from "@/components/FunnelOverlay";
 import '@/styles/funnel.css';
@@ -201,26 +204,6 @@ const ergoAwards = [
   { title: "Kfz-Versicherung", source: "Franke & Bornberg", rating: "HERVORRAGEND", year: "2025", icon: Award },
 ];
 
-function FAQItem({ question, answer }: { question: string; answer: string }) {
-  const [isOpen, setIsOpen] = useState(false);
-  return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-5 text-left bg-white hover:bg-gray-50 transition-colors"
-      >
-        <span className="font-semibold text-gray-900 pr-4">{question}</span>
-        {isOpen ? <ChevronUp className="w-5 h-5 text-gray-500 flex-shrink-0" /> : <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0" />}
-      </button>
-      {isOpen && (
-        <div className="px-5 pb-5 bg-white">
-          <p className="text-gray-600 leading-relaxed">{answer}</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
 export default function CityLanding({ cityKey }: { cityKey: string }) {
   const data = cityData[cityKey];
   const [showFunnel, setShowFunnel] = useState(false);
@@ -272,10 +255,11 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
           ]
         }}
       />
+      <Breadcrumb items={[{ label: data.name }]} />
       <main className="min-h-screen pb-16 sm:pb-0">
         {/* Hero Section */}
-        <section className="py-6 sm:py-10 md:py-16 bg-gradient-to-br from-blue-50 to-white">
-          <div className="max-w-4xl mx-auto px-4">
+        <section className="py-12 sm:py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white overflow-hidden">
+          <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-500 mb-4">
               <MapPin className="w-4 h-4" />
               <span>{data.region}</span>
@@ -285,7 +269,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               <span>{data.einwohner} Einwohner</span>
             </div>
 
-            <h1 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
               Ihre ERGO Versicherungsagentur für{" "}
               <span className="text-ergo-red">{data.name}</span>
             </h1>
@@ -508,20 +492,14 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
           </div>
         </section>
 
-        {/* FAQ Section */}
-        <section className="py-10 md:py-14 bg-white">
-          <div className="max-w-4xl mx-auto px-4">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
-              Häufige Fragen zur Versicherungsberatung in {data.name}
-            </h2>
-            <p className="text-gray-500 mb-8">Hier finden Sie Antworten auf die wichtigsten Fragen</p>
-            <div className="space-y-3">
-              {data.faqs.map((faq, index) => (
-                <FAQItem key={index} question={faq.question} answer={faq.answer} />
-              ))}
-            </div>
-          </div>
-        </section>
+        <TrustBar />
+
+        <FAQSection
+          title={`Häufige Fragen zur Versicherungsberatung in ${data.name}`}
+          subtitle="Hier finden Sie Antworten auf die wichtigsten Fragen"
+          faqs={data.faqs}
+          className="bg-white"
+        />
 
         {/* Instagram Social Proof */}
         <section className="py-10 md:py-14 bg-gradient-to-br from-purple-50 to-pink-50">

@@ -16,7 +16,8 @@ The platform features a clean, professional design with a focus on user experien
 - **Color Scheme:** Utilizes ERGO's brand colors with optimized contrast ratios for WCAG compliance.
 - **Typography:** Responsive font sizes and increased line height/letter spacing for improved readability.
 - **Responsiveness:** Mobile-first CSS ensures optimal viewing and interaction across all devices. Touch-optimized buttons and larger input fields for mobile funnels.
-- **Trust Elements:** Integration of professional photos, ERGO Testsieger-Badges, and customer testimonials to build credibility.
+- **Trust Elements:** Integration of professional photos, ERGO Testsieger-Badges, and customer testimonials to build credibility. Shared `TrustBar` component (4-column: 1000+ Kunden, 4.9/5 Sterne, 97% Weiterempfehlung, 15+ Jahre Erfahrung) used across all marketing pages.
+- **Design Consistency:** Shared `Breadcrumb` component on all subpages, shared `FAQSection` accordion component, unified hero gradients (`from-ergo-red-light via-ergo-gray-light to-white`), standardized H1 sizing (`text-2xl sm:text-3xl lg:text-4xl`), and unified step-transition animations (opacity-only) across SchadenPage/KennzeichenPage/DokumentePage.
 - **Conversion Psychology:** Implementation of urgency, social proof, loss aversion, scarcity, and authority principles in CTAs and page layouts.
 
 ### Technical Implementations

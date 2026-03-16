@@ -9,6 +9,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
 import { Award, Shield, Handshake, Clock, ChevronDown, Phone, MessageCircle, Check, X, Heart, Briefcase, Users, Building2, Star, TrendingUp, Umbrella, Wallet, Mail, MessageSquare } from "lucide-react";
+import TrustBar from "@/components/TrustBar";
+import FAQSection from "@/components/FAQSection";
 import standingPhoto from "@assets/optimized/image.webp";
 import heroImage from "@assets/generated_images/LebenVorsorge_Bild.jpg";
 
@@ -269,8 +271,6 @@ export default function LebenVorsorge() {
   const [funnelOpen, setFunnelOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string>("private-rente");
   const [openProduct, setOpenProduct] = useState<string | null>(null);
-  const [openFaq, setOpenFaq] = useState<string | null>(null);
-
   useEffect(() => {
     trackEvent("leben_vorsorge_page_view", { page: "leben-vorsorge" });
   }, []);
@@ -287,10 +287,6 @@ export default function LebenVorsorge() {
 
   const toggleProduct = (id: string) => {
     setOpenProduct(openProduct === id ? null : id);
-  };
-
-  const toggleFaq = (id: string) => {
-    setOpenFaq(openFaq === id ? null : id);
   };
 
   return (
@@ -833,59 +829,14 @@ export default function LebenVorsorge() {
           </div>
         </section>
 
-        {/* Social Proof */}
-        <section className="py-8 sm:py-12 bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-              <div className="bg-gray-50 rounded-lg p-4 shadow-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-ergo-red mb-1">1000+</div>
-                <div className="text-xs sm:text-sm text-gray-600">Zufriedene Kunden</div>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-4 shadow-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-1">97%</div>
-                <div className="text-xs sm:text-sm text-gray-600">Weiterempfehlung</div>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-4 shadow-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1">FFF+</div>
-                <div className="text-xs sm:text-sm text-gray-600">Franke & Bornberg</div>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-4 shadow-sm">
-                <div className="text-2xl sm:text-3xl font-bold text-yellow-600 mb-1">30+</div>
-                <div className="text-xs sm:text-sm text-gray-600">Jahre Erfahrung</div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <TrustBar />
 
-        {/* FAQ Section */}
-        <section className="py-10 sm:py-14 bg-ergo-gray">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
-              Häufige Fragen zu Leben & Vorsorge
-            </h2>
-            <div className="space-y-3">
-              {faqs.map((faq) => (
-                <div key={faq.id} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                  <button
-                    onClick={() => toggleFaq(faq.id)}
-                    className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-gray-50 transition-colors"
-                  >
-                    <span className="font-semibold text-gray-900 text-sm sm:text-base pr-4">{faq.question}</span>
-                    <ChevronDown className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform ${openFaq === faq.id ? "rotate-180" : ""}`} />
-                  </button>
-                  <div className={`overflow-hidden transition-all duration-300 ${openFaq === faq.id ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
-                    <div className="px-4 sm:px-5 pb-4 sm:pb-5">
-                      <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="text-sm text-gray-500 mt-6">
-              Weitere Fragen? Kontaktieren Sie uns direkt – Morino Stübe berät Sie persönlich in Ganderkesee, Delmenhorst und Oldenburg.
-            </p>
-          </div>
-        </section>
+        <FAQSection
+          title="Häufige Fragen zu Leben & Vorsorge"
+          subtitle="Weitere Fragen? Kontaktieren Sie uns direkt – Morino Stübe berät Sie persönlich in Ganderkesee, Delmenhorst und Oldenburg."
+          faqs={faqs.map(f => ({ question: f.question, answer: f.answer }))}
+          className="bg-ergo-gray"
+        />
 
         {/* Final CTA Section */}
         <section className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">

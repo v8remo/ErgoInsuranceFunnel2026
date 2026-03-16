@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'wouter';
-import { ArrowLeft, Shield, Lock, ExternalLink } from 'lucide-react';
+import { Shield, Lock, ExternalLink } from 'lucide-react';
+import Breadcrumb from "@/components/Breadcrumb";
 
 export default function Datenschutz() {
   useEffect(() => {
@@ -10,15 +11,10 @@ export default function Datenschutz() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Breadcrumb items={[{ label: "Datenschutz" }]} />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-8">
-          <Link href="/">
-            <button className="inline-flex items-center text-ergo-red hover:text-red-700 font-bold mb-4 bg-white px-4 py-2 rounded-lg shadow">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Zurück
-            </button>
-          </Link>
-          <h1 className="text-2xl font-bold text-gray-800">Datenschutzerklärung</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800">Datenschutzerklärung</h1>
         </div>
 
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-8 border border-gray-200">
