@@ -205,7 +205,7 @@ export default function BestandskundenPage() {
                     key={lage.title}
                     type="button"
                     className={`rounded-xl border-2 p-5 ${lage.color} hover:shadow-lg transition-all group cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#003781] focus:ring-offset-2`}
-                    onClick={() => openFunnel(`bestandskunden_${lage.title.toLowerCase().replace(/\s+/g, '_')}`, lage.funnelLabel)}
+                    onClick={() => openFunnel('bestandskunden_lebenslage', lage.funnelLabel)}
                   >
                     <div className="flex items-start gap-3 mb-3">
                       <Icon className="w-6 h-6 shrink-0 mt-0.5" />
@@ -378,7 +378,6 @@ export default function BestandskundenPage() {
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/impressum" className="hover:text-white transition-colors">Impressum</Link>
             <Link href="/datenschutz" className="hover:text-white transition-colors">Datenschutz</Link>
-            <Link href="/erstinformation" className="hover:text-white transition-colors">Erstinformation</Link>
           </div>
           <p className="mt-3">&copy; 2026 ERGO Versicherung - Morino Stübe</p>
         </footer>
