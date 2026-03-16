@@ -7,7 +7,7 @@ import {
   Shield, FileText, Calendar, MessageCircle, Phone,
   Heart, Baby, Home, Truck, Briefcase, Sunset,
   CheckCircle, Users, Clock, Award, Gift, ArrowRight,
-  ClipboardCheck, Star, ChevronRight
+  ClipboardCheck, Star, ChevronRight, Car
 } from 'lucide-react';
 
 type BestandskundenContext =
@@ -157,45 +157,55 @@ export default function BestandskundenPage() {
 
         <section className="py-10 md:py-14 px-4 -mt-8">
           <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
               <Link href="/schaden">
-                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full">
+                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full min-h-[100px]">
                   <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-red-100 transition-colors">
                     <FileText className="w-6 h-6 text-red-600" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Schaden melden</h3>
-                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1 hidden sm:block">Schnell & unkompliziert</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Kfz, Haftpflicht, Hausrat</p>
                 </div>
               </Link>
               <Link href="/dokumente">
-                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full">
+                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full min-h-[100px]">
                   <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-100 transition-colors">
                     <ClipboardCheck className="w-6 h-6 text-blue-600" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Dokument einreichen</h3>
-                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1 hidden sm:block">Beraterwechsel, Kündigung</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Wechsel, Kündigung, Upload</p>
+                </div>
+              </Link>
+              <Link href="/kennzeichen">
+                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full min-h-[100px]">
+                  <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-amber-100 transition-colors">
+                    <Car className="w-6 h-6 text-amber-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm">eVB / Kennzeichen</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">eVB-Nummer, Moped-Schild</p>
                 </div>
               </Link>
               <Link href="/termin">
-                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full">
+                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full min-h-[100px]">
                   <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-green-100 transition-colors">
                     <Calendar className="w-6 h-6 text-green-600" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Termin buchen</h3>
-                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1 hidden sm:block">Online oder vor Ort</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Online oder vor Ort</p>
                 </div>
               </Link>
               <a
                 href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hallo Herr Stübe, ich bin Kunde bei ERGO und habe eine Frage.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="col-span-2 md:col-span-1"
               >
-                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full">
+                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full min-h-[100px]">
                   <div className="w-12 h-12 bg-[#25d366]/10 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#25d366]/20 transition-colors">
                     <MessageCircle className="w-6 h-6 text-[#25d366]" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">WhatsApp</h3>
-                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1 hidden sm:block">Direkt schreiben</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Direkt schreiben</p>
                 </div>
               </a>
             </div>
