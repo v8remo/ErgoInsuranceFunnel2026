@@ -824,67 +824,6 @@ export default function ProfessionalErgoLanding() {
         </div>
       </motion.section>
 
-      {/* ──────── FOOTER ──────── */}
-      <footer className="px-4 pb-20 sm:pb-12 max-w-4xl mx-auto">
-        <div className="border-t border-gray-200 pt-8 md:pt-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
-            {/* Spalte 1: Agentur-Info */}
-            <div>
-              <h3 className="font-bold text-gray-900 text-sm mb-3">ERGO Agentur Stübe</h3>
-              <address className="not-italic text-xs text-gray-500 leading-relaxed space-y-1">
-                <p>Morino Stübe</p>
-                <p>Friedensstr. 91A</p>
-                <p>27777 Ganderkesee</p>
-                <p className="pt-2">Vermittlerregister-Nr.: D-ABCD-12345-67</p>
-              </address>
-            </div>
-            {/* Spalte 2: Kontakt */}
-            <div>
-              <h3 className="font-bold text-gray-900 text-sm mb-3">Kontakt</h3>
-              <div className="text-xs text-gray-500 space-y-2">
-                <a href="tel:+4915566771019" className="flex items-center gap-2 hover:text-gray-700 transition-colors">
-                  <Phone className="w-3.5 h-3.5 shrink-0" />
-                  01556 677 1019
-                </a>
-                <a href="mailto:morino.stuebe@ergo.de" className="flex items-center gap-2 hover:text-gray-700 transition-colors">
-                  <Mail className="w-3.5 h-3.5 shrink-0" />
-                  morino.stuebe@ergo.de
-                </a>
-                <a href={`https://wa.me/4915566771019`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-gray-700 transition-colors">
-                  <MessageSquare className="w-3.5 h-3.5 shrink-0" />
-                  WhatsApp Chat
-                </a>
-              </div>
-              <div className="mt-3 text-xs text-gray-500">
-                <p className="font-semibold text-gray-700 mb-1">Bürozeiten</p>
-                <p>Mo – Fr: 9:00 – 18:00 Uhr</p>
-                <p>Sa: 9:00 – 12:00 Uhr</p>
-              </div>
-            </div>
-            {/* Spalte 3: Schnelllinks */}
-            <div>
-              <h3 className="font-bold text-gray-900 text-sm mb-3">Schnellzugriff</h3>
-              <div className="text-xs text-gray-500 space-y-1.5">
-                <Link href="/schaden" className="block hover:text-gray-700 transition-colors">Schaden melden</Link>
-                <Link href="/dokumente" className="block hover:text-gray-700 transition-colors">Dokumente einreichen</Link>
-                <Link href="/kennzeichen" className="block hover:text-gray-700 transition-colors">EVB & Kennzeichen</Link>
-                <Link href="/versicherungscheck" className="block hover:text-gray-700 transition-colors">Versicherungscheck</Link>
-                <Link href="/sparrechner" className="block hover:text-gray-700 transition-colors">Bündel-Sparrechner</Link>
-              </div>
-            </div>
-          </div>
-          {/* Untere Leiste */}
-          <div className="border-t border-gray-100 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-              <Link href="/impressum" className="hover:text-gray-600 transition-colors">Impressum</Link>
-              <Link href="/datenschutz" className="hover:text-gray-600 transition-colors">Datenschutz</Link>
-              <Link href="/erstinformation" className="hover:text-gray-600 transition-colors">Erstinformation</Link>
-              <button onClick={() => { import('@/lib/analytics').then(m => { m.revokeMarketingConsent(); localStorage.removeItem(m.CONSENT_KEY); window.location.reload(); }); }} className="hover:text-gray-600 cursor-pointer transition-colors">Cookie-Einstellungen</button>
-            </div>
-            <span>© {new Date().getFullYear()} ERGO Agentur Stübe</span>
-          </div>
-        </div>
-      </footer>
 
       {/* ──────── STICKY CTA BAR (Mobile) ──────── */}
       <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">

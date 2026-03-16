@@ -168,6 +168,20 @@ export default function Footer() {
                   Erstinformation
                 </Link>
               </li>
+              <li>
+                <button
+                  onClick={() => {
+                    import('@/lib/analytics').then(m => {
+                      m.revokeMarketingConsent();
+                      localStorage.removeItem(m.CONSENT_KEY);
+                      window.location.reload();
+                    });
+                  }}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  Cookie-Einstellungen
+                </button>
+              </li>
             </ul>
 
             <h3 className="text-base sm:text-lg font-semibold mt-4 mb-2">Folgen Sie uns</h3>
