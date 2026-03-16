@@ -111,6 +111,24 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
+            <h3 className="text-base sm:text-lg font-semibold mt-4 mb-2">Für Kunden</h3>
+            <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base mb-4">
+              <li>
+                <Link href="/bestandskunden" className="hover:text-white transition-colors font-medium">
+                  Kunden-Service-Hub
+                </Link>
+              </li>
+              <li>
+                <Link href="/versicherungscheck" className="hover:text-white transition-colors">
+                  Versicherungscheck
+                </Link>
+              </li>
+              <li>
+                <Link href="/sparrechner" className="hover:text-white transition-colors">
+                  Sparrechner
+                </Link>
+              </li>
+            </ul>
             <h3 className="text-base sm:text-lg font-semibold mt-4 mb-2">Regionen</h3>
             <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
               <li>

@@ -26,7 +26,8 @@ The platform features a clean, professional design with a focus on user experien
   - **Document & Claims Pages:** Multi-step flows for submitting documents (with file upload) and reporting claims.
   - **License Plate Page (`/kennzeichen`):** Flow for requesting eVB numbers (car) and insurance plates (mopeds).
   - **Appointment Page (`/termin`):** Integrates Microsoft Outlook Booking for direct online appointment scheduling.
-  - **Lead Funnel:** A consistent 9-step conversion funnel (`FunnelOverlay`) integrated across all relevant pages.
+  - **Lead Funnel:** A consistent 9-step conversion funnel (`FunnelOverlay`) integrated across all relevant pages. Supports custom `source` prop for lead tracking.
+  - **Bestandskunden-Service-Hub (`/bestandskunden`):** Dedicated landing page for existing customers with quick-access service tiles, Lebenslagen-Beratung (6 life situations with insurance recommendations), Jahrescheck CTA, customer benefits, and referral program. Own minimal header/footer, no global nav.
   - **Admin Dashboard:** Password-protected interface for content management, lead administration, and CSV export.
 - **Backend:** Developed with Express.js and PostgreSQL.
   - **API Routes:** RESTful API for managing leads and content.

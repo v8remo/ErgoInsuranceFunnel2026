@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackEvent, trackConversion } from '@/lib/analytics';
+import '@/styles/funnel.css';
 
 interface FunnelData {
   situation: string;
@@ -21,6 +22,7 @@ interface FunnelOverlayProps {
   onClose: () => void;
   insuranceType?: string;
   insuranceLabel?: string;
+  source?: string;
 }
 
 const STEP_NAMES = [
@@ -43,7 +45,7 @@ const stepVariants = {
   }),
 };
 
-export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranceLabel }: FunnelOverlayProps) {
+export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranceLabel, source }: FunnelOverlayProps) {
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -183,7 +185,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
             utm_source: leadPayload.utm_source,
             utm_medium: leadPayload.utm_medium
           },
-          source: 'perspective_funnel'
+          source: source || 'perspective_funnel'
         })
       });
     } catch (e) {
