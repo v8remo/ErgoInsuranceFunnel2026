@@ -150,7 +150,7 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
     setStep(target);
   }, [step]);
 
-  const progress = Math.round((step / (totalSteps - 1)) * 100);
+  const progress = Math.min(100, Math.round((step / (totalSteps - 1)) * 100));
 
   const selectAnswer = useCallback((questionIdx: number, answer: string) => {
     setAnswers(prev => ({ ...prev, [questionIdx]: answer }));
@@ -376,59 +376,69 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
                 >
                   <h2 className="funnel-headline">Fast geschafft! Ihre Kontaktdaten 📞</h2>
                   <p className="funnel-subtext">Wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
-                  <div className="funnel-contact-form">
-                    <div className="funnel-input-row">
-                      <div className="funnel-input-group">
+                  <div>
+                    <div className="funnel-form-row">
+                      <div className="funnel-form-field">
+                        <label>Vorname *</label>
                         <input
                           ref={firstInputRef}
                           type="text"
-                          placeholder="Vorname *"
-                          className={`funnel-input ${errors.firstName ? 'funnel-input-error' : ''}`}
+                          placeholder="Ihr Vorname"
+                          className={errors.firstName ? 'error' : ''}
                           value={contact.firstName}
-                          onChange={(e) => setContact(p => ({ ...p, firstName: e.target.value }))}
+                          onChange={(e) => { setContact(p => ({ ...p, firstName: e.target.value })); setErrors(p => ({ ...p, firstName: '' })); }}
+                          autoComplete="given-name"
                         />
-                        {errors.firstName && <span className="funnel-error-text">{errors.firstName}</span>}
+                        {errors.firstName && <span className="funnel-error">{errors.firstName}</span>}
                       </div>
-                      <div className="funnel-input-group">
+                      <div className="funnel-form-field">
+                        <label>Nachname *</label>
                         <input
                           type="text"
-                          placeholder="Nachname *"
-                          className={`funnel-input ${errors.lastName ? 'funnel-input-error' : ''}`}
+                          placeholder="Ihr Nachname"
+                          className={errors.lastName ? 'error' : ''}
                           value={contact.lastName}
-                          onChange={(e) => setContact(p => ({ ...p, lastName: e.target.value }))}
+                          onChange={(e) => { setContact(p => ({ ...p, lastName: e.target.value })); setErrors(p => ({ ...p, lastName: '' })); }}
+                          autoComplete="family-name"
                         />
-                        {errors.lastName && <span className="funnel-error-text">{errors.lastName}</span>}
+                        {errors.lastName && <span className="funnel-error">{errors.lastName}</span>}
                       </div>
                     </div>
-                    <div className="funnel-input-group">
+                    <div className="funnel-form-field">
+                      <label>Telefon *</label>
                       <input
                         type="tel"
-                        placeholder="Telefon *"
-                        className={`funnel-input ${errors.phone ? 'funnel-input-error' : ''}`}
+                        inputMode="tel"
+                        placeholder="01234 567890"
+                        className={errors.phone ? 'error' : ''}
                         value={contact.phone}
-                        onChange={(e) => setContact(p => ({ ...p, phone: e.target.value }))}
+                        onChange={(e) => { setContact(p => ({ ...p, phone: e.target.value })); setErrors(p => ({ ...p, phone: '' })); }}
+                        autoComplete="tel"
                       />
-                      {errors.phone && <span className="funnel-error-text">{errors.phone}</span>}
+                      {errors.phone && <span className="funnel-error">{errors.phone}</span>}
                     </div>
-                    <div className="funnel-input-group">
+                    <div className="funnel-form-field">
+                      <label>E-Mail *</label>
                       <input
                         type="email"
-                        placeholder="E-Mail *"
-                        className={`funnel-input ${errors.email ? 'funnel-input-error' : ''}`}
+                        inputMode="email"
+                        placeholder="ihre.email@beispiel.de"
+                        className={errors.email ? 'error' : ''}
                         value={contact.email}
-                        onChange={(e) => setContact(p => ({ ...p, email: e.target.value }))}
+                        onChange={(e) => { setContact(p => ({ ...p, email: e.target.value })); setErrors(p => ({ ...p, email: '' })); }}
+                        autoComplete="email"
                       />
-                      {errors.email && <span className="funnel-error-text">{errors.email}</span>}
+                      {errors.email && <span className="funnel-error">{errors.email}</span>}
                     </div>
-                    <label className={`funnel-checkbox-label ${errors.dsgvo ? 'funnel-checkbox-error' : ''}`}>
+                    <label className={`funnel-checkbox ${errors.dsgvo ? 'error' : ''}`}>
                       <input
                         type="checkbox"
                         checked={contact.dsgvoAccepted}
-                        onChange={(e) => setContact(p => ({ ...p, dsgvoAccepted: e.target.checked }))}
+                        onChange={(e) => { setContact(p => ({ ...p, dsgvoAccepted: e.target.checked })); setErrors(p => ({ ...p, dsgvo: '' })); }}
                       />
-                      <span>Ich stimme der Verarbeitung meiner Daten gemäß der <a href="/datenschutz" target="_blank" rel="noopener noreferrer" className="funnel-link">Datenschutzerklärung</a> zu. *</span>
+                      <span>Ich stimme der Verarbeitung meiner Daten gemäß der <a href="/datenschutz" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a> zu. *</span>
                     </label>
-                    {errors.dsgvo && <span className="funnel-error-text">{errors.dsgvo}</span>}
+                    {errors.dsgvo && <span className="funnel-error">{errors.dsgvo}</span>}
                     {errors.submit && (
                       <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '10px 14px', fontSize: '13px', color: '#b91c1c', marginTop: '8px' }}>
                         {errors.submit}
