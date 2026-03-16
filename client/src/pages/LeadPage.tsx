@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'wouter';
 import SEO from '@/components/SEO';
 import FunnelOverlay from '@/components/FunnelOverlay';
-import { trackEvent, trackConversion } from '@/lib/analytics';
+import { trackEvent } from '@/lib/analytics';
 import {
   Phone, Shield, Star, Users, Clock, CheckCircle,
   MessageCircle, Award, ArrowRight, Handshake, Percent, Monitor
