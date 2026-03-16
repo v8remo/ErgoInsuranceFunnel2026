@@ -23,6 +23,7 @@ The platform features a clean, professional design with a focus on user experien
 - **Frontend:** Built with React and TypeScript, providing a dynamic and responsive user interface.
   - **Homepage:** Overview of insurance products with trust elements.
   - **Insurance Landing Pages:** Dedicated, conversion-optimized pages for each insurance product, featuring lead funnels and direct CTAs.
+  - **Google Ads Sparten-Landing-Pages:** 6 dedicated, conversion-optimized landing pages (`/kfz`, `/hausrat`, `/haftpflicht`, `/rechtsschutz`, `/berufsunfaehigkeit`, `/zahnzusatz`) with minimal header/footer, hero with star rating, trust bar, 4 spartenspezifische benefits, customer reviews, FAQ accordion, and final CTA. Each uses FunnelOverlay with sparten-specific `source` tag (e.g. `lp_kfz`). Built with shared `SpartenLandingPage` component and typed config in `spartenConfig.ts`. Schema.org FAQPage and Service structured data included.
   - **Document & Claims Pages:** Multi-step flows for submitting documents (with file upload) and reporting claims.
   - **License Plate Page (`/kennzeichen`):** Flow for requesting eVB numbers (car) and insurance plates (mopeds).
   - **Appointment Page (`/termin`):** Integrates Microsoft Outlook Booking for direct online appointment scheduling.

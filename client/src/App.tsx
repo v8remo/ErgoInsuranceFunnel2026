@@ -30,6 +30,8 @@ const SparRechner = lazy(() => import("@/pages/SparRechner"));
 const AktionsSeiten = lazy(() => import("@/pages/AktionsSeiten"));
 const InstagramGenerator = lazy(() => import("@/pages/InstagramGenerator"));
 const BestandskundenPage = lazy(() => import("@/pages/BestandskundenPage"));
+import { spartenConfigs } from '@/data/spartenConfig';
+const SpartenLandingPage = lazy(() => import("@/pages/SpartenLandingPage"));
 
 function PageLoader() {
   return (
@@ -44,7 +46,13 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [isInstagram] = useRoute("/admin/instagram");
   const [isBeratung] = useRoute("/beratung");
   const [isBestandskunden] = useRoute("/bestandskunden");
-  const hideLayout = isAdmin || isInstagram || isBeratung || isBestandskunden;
+  const [isKfz] = useRoute("/kfz");
+  const [isHausrat] = useRoute("/hausrat");
+  const [isHaftpflicht] = useRoute("/haftpflicht");
+  const [isRechtsschutz] = useRoute("/rechtsschutz");
+  const [isBU] = useRoute("/berufsunfaehigkeit");
+  const [isZahn] = useRoute("/zahnzusatz");
+  const hideLayout = isAdmin || isInstagram || isBeratung || isBestandskunden || isKfz || isHausrat || isHaftpflicht || isRechtsschutz || isBU || isZahn;
 
   return (
     <>
@@ -83,6 +91,12 @@ function AppContent() {
           <Route path="/aktion/:slug" component={AktionsSeiten} />
           <Route path="/admin/instagram" component={InstagramGenerator} />
           <Route path="/bestandskunden" component={BestandskundenPage} />
+          <Route path="/kfz">{() => <SpartenLandingPage config={spartenConfigs.kfz} />}</Route>
+          <Route path="/hausrat">{() => <SpartenLandingPage config={spartenConfigs.hausrat} />}</Route>
+          <Route path="/haftpflicht">{() => <SpartenLandingPage config={spartenConfigs.haftpflicht} />}</Route>
+          <Route path="/rechtsschutz">{() => <SpartenLandingPage config={spartenConfigs.rechtsschutz} />}</Route>
+          <Route path="/berufsunfaehigkeit">{() => <SpartenLandingPage config={spartenConfigs.berufsunfaehigkeit} />}</Route>
+          <Route path="/zahnzusatz">{() => <SpartenLandingPage config={spartenConfigs.zahnzusatz} />}</Route>
           <Route component={NotFound} />
         </Switch>
       </Suspense>
