@@ -132,10 +132,10 @@ export default function BestandskundenPage() {
               Exklusiv für ERGO-Kunden
             </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 leading-tight">
-              Ihr persönlicher Service-Bereich
+              Ihr persönlicher Service-Bereich – Als Kunde bei ERGO Stübe
             </h1>
             <p className="text-base sm:text-lg text-blue-100 max-w-2xl mx-auto leading-relaxed">
-              Als Kunde der ERGO Agentur Stübe haben Sie Zugriff auf alle wichtigen Services –
+              Alle wichtigen Services auf einen Blick –
               schnell, einfach und direkt bei Ihrem persönlichen Berater.
             </p>
           </div>
@@ -243,7 +243,7 @@ export default function BestandskundenPage() {
                 Der kostenlose Jahrescheck
               </h2>
               <p className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">
-                Einmal im Jahr sollten Sie Ihre Versicherungen prüfen lassen. Unser 5-Schritte-Verfahren zeigt Lücken und Sparpotenziale auf.
+                Einmal im Jahr sollten Sie Ihre Versicherungen prüfen lassen. Unser systematisches 5-Schritte-Verfahren analysiert Ihre aktuelle Absicherung und deckt Lücken sowie Sparpotenziale auf.
               </p>
             </div>
 
