@@ -102,6 +102,7 @@ export default function ProfessionalErgoLanding() {
   const [funnelInsuranceType, setFunnelInsuranceType] = useState<string | undefined>(undefined);
   const [funnelInsuranceLabel, setFunnelInsuranceLabel] = useState<string | undefined>(undefined);
   const [funnelInitialStep, setFunnelInitialStep] = useState<number | undefined>(undefined);
+  const [funnelSource, setFunnelSource] = useState<string>('hero_section');
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -249,6 +250,7 @@ export default function ProfessionalErgoLanding() {
                   setFunnelInsuranceType(undefined);
                   setFunnelInsuranceLabel(undefined);
                   setFunnelInitialStep(undefined);
+                  setFunnelSource('hero_section');
                   setShowFunnel(true);
                   trackEvent('cta_beratung_clicked', { source: 'hero_section' });
                 }}
@@ -334,11 +336,13 @@ export default function ProfessionalErgoLanding() {
                     <button
                       key={opt.type}
                       onClick={() => {
-                        trackEvent('quiz_option_clicked', { option: opt.type, source: 'hero_quiz' });
                         const isAll = opt.type === 'all';
+                        trackEvent('quiz_option_selected', { option: opt.type, source: 'hero_quiz' });
+                        trackEvent('quiz_started', { option: opt.type, source: 'hero_quiz' });
                         setFunnelInsuranceType(isAll ? undefined : opt.type);
                         setFunnelInsuranceLabel(isAll ? undefined : opt.label);
                         setFunnelInitialStep(isAll ? undefined : 2);
+                        setFunnelSource('hero_quiz');
                         setShowFunnel(true);
                       }}
                       className="flex flex-col items-center justify-center gap-1 rounded-xl border-2 border-transparent bg-gray-50 hover:border-[#E2001A] hover:bg-red-50 active:scale-95 transition-all px-2 py-3 text-center group"
@@ -909,7 +913,7 @@ export default function ProfessionalErgoLanding() {
         insuranceType={funnelInsuranceType}
         insuranceLabel={funnelInsuranceLabel}
         initialStep={funnelInitialStep}
-        source="hero_quiz"
+        source={funnelSource}
       />
     </div>
   );
