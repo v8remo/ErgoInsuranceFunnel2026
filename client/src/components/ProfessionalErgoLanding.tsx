@@ -103,6 +103,15 @@ export default function ProfessionalErgoLanding() {
   const [funnelInsuranceLabel, setFunnelInsuranceLabel] = useState<string | undefined>(undefined);
   const [funnelInitialStep, setFunnelInitialStep] = useState<number | undefined>(undefined);
   const [funnelSource, setFunnelSource] = useState<string>('hero_section');
+
+  const openFunnel = useCallback((opts?: { insuranceType?: string; insuranceLabel?: string; initialStep?: number; source?: string }) => {
+    setFunnelInsuranceType(opts?.insuranceType ?? undefined);
+    setFunnelInsuranceLabel(opts?.insuranceLabel ?? undefined);
+    setFunnelInitialStep(opts?.initialStep ?? undefined);
+    setFunnelSource(opts?.source ?? 'hero_section');
+    setShowFunnel(true);
+  }, []);
+
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -247,11 +256,7 @@ export default function ProfessionalErgoLanding() {
                 whileHover={{ scale: 1.03, boxShadow: "0 8px 30px rgba(226, 0, 26, 0.3)" }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => {
-                  setFunnelInsuranceType(undefined);
-                  setFunnelInsuranceLabel(undefined);
-                  setFunnelInitialStep(undefined);
-                  setFunnelSource('hero_section');
-                  setShowFunnel(true);
+                  openFunnel({ source: 'hero_section' });
                   trackEvent('cta_beratung_clicked', { source: 'hero_section' });
                 }}
                 className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm px-5 py-3.5 rounded-xl shadow-lg shadow-red-500/20 whitespace-nowrap md:text-base md:px-6 md:py-4 transition-colors"
@@ -339,11 +344,12 @@ export default function ProfessionalErgoLanding() {
                         const isAll = opt.type === 'all';
                         trackEvent('quiz_option_selected', { option: opt.type, source: 'hero_quiz' });
                         trackEvent('quiz_started', { option: opt.type, source: 'hero_quiz' });
-                        setFunnelInsuranceType(isAll ? undefined : opt.type);
-                        setFunnelInsuranceLabel(isAll ? undefined : opt.label);
-                        setFunnelInitialStep(isAll ? undefined : 2);
-                        setFunnelSource('hero_quiz');
-                        setShowFunnel(true);
+                        openFunnel({
+                          insuranceType: isAll ? undefined : opt.type,
+                          insuranceLabel: isAll ? undefined : opt.label,
+                          initialStep: isAll ? undefined : 2,
+                          source: 'hero_quiz',
+                        });
                       }}
                       className="flex flex-col items-center justify-center gap-1 rounded-xl border-2 border-transparent bg-gray-50 hover:border-[#E2001A] hover:bg-red-50 active:scale-95 transition-all px-2 py-3 text-center group"
                     >
@@ -818,7 +824,7 @@ export default function ProfessionalErgoLanding() {
                       <p className="text-gray-600 text-sm leading-relaxed">{item.a}</p>
                       <button
                         onClick={() => {
-                          setShowFunnel(true);
+                          openFunnel({ source: 'faq_section' });
                           trackEvent('faq_cta_clicked', { question: item.q });
                         }}
                         className="mt-3 text-sm font-semibold text-ergo-red hover:underline"
@@ -857,7 +863,7 @@ export default function ProfessionalErgoLanding() {
             whileHover={{ scale: 1.03, boxShadow: "0 12px 35px rgba(226, 0, 26, 0.3)" }}
             whileTap={{ scale: 0.97 }}
             onClick={() => {
-              setShowFunnel(true);
+              openFunnel({ source: 'lead_magnet' });
               trackEvent('lead_magnet_clicked', { source: 'bedarfs_check' });
             }}
             className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm px-5 py-3.5 rounded-xl shadow-lg shadow-red-500/20 whitespace-nowrap md:text-base md:px-6 md:py-4 mx-auto relative transition-colors"
@@ -884,7 +890,7 @@ export default function ProfessionalErgoLanding() {
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={() => {
-            setShowFunnel(true);
+            openFunnel({ source: 'sticky_bar' });
             trackEvent('cta_sticky_clicked', { source: 'sticky_bar' });
           }}
           className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm min-h-[44px] py-3 rounded-xl whitespace-nowrap shadow-lg shadow-red-500/20 animate-pulse-subtle"
