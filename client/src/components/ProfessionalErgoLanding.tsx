@@ -342,6 +342,7 @@ export default function ProfessionalErgoLanding() {
                       key={opt.type}
                       onClick={() => {
                         const isAll = opt.type === 'all';
+                        trackEvent('quiz_option_clicked', { option: opt.type, source: 'hero_quiz' });
                         trackEvent('quiz_option_selected', { option: opt.type, source: 'hero_quiz' });
                         trackEvent('quiz_started', { option: opt.type, source: 'hero_quiz' });
                         openFunnel({
