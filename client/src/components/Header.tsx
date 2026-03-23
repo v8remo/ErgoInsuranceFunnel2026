@@ -62,6 +62,10 @@ export default function Header() {
             <Link href="/leben-vorsorge" className="text-sm lg:text-base text-gray-700 hover:text-ergo-red transition-colors font-medium relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-ergo-red after:transition-all after:duration-300 hover:after:w-full">
               Leben & Vorsorge
             </Link>
+            <div className="w-px h-5 bg-gray-300 mx-1" />
+            <Link href="/bestandskunden" className="text-sm lg:text-base text-[#003781] hover:text-[#002a5e] font-semibold transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-[#003781] after:transition-all after:duration-300 hover:after:w-full">
+              Mein Service
+            </Link>
           </nav>
 
           {/* Contact and Mobile Menu */}
@@ -120,6 +124,10 @@ export default function Header() {
                   </Link>
 
                   <div className="pt-4 border-t space-y-4">
+                    <Link href="/bestandskunden" className="flex items-center gap-2 text-lg font-bold text-[#003781] hover:text-[#002a5e]" onClick={handleMobileMenuClick}>
+                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#003781]/10 text-xs">✓</span>
+                      Mein Service
+                    </Link>
                     <Link href="/termin" className="block text-lg font-bold text-ergo-red hover:text-red-700" onClick={handleMobileMenuClick}>
                       Termin buchen
                     </Link>

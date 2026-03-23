@@ -7,7 +7,7 @@ import {
   FileText, Calendar, MessageCircle, Phone,
   Heart, Baby, Home, Truck, Briefcase, Sunset,
   CheckCircle, Users, Clock, Award, Gift, ArrowRight,
-  ClipboardCheck, Star, ChevronRight, Car
+  ClipboardCheck, Star, Car
 } from 'lucide-react';
 
 type BestandskundenContext =
@@ -117,56 +117,56 @@ export default function BestandskundenPage() {
       />
 
       <div className="min-h-screen bg-white">
-        <section className="bg-gradient-to-br from-[#003781] to-[#005ab4] text-white py-12 md:py-20 px-4">
+        <section className="bg-gradient-to-br from-[#003781] to-[#005ab4] text-white py-8 md:py-14 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-white/15 px-4 py-1.5 rounded-full text-sm font-medium mb-5">
+            <div className="inline-flex items-center gap-2 bg-white/15 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
               <Star className="w-4 h-4 text-yellow-300" />
               Exklusiv für ERGO-Kunden
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 leading-tight">
-              Ihr persönlicher Service-Bereich – Als Kunde bei ERGO Stübe
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 leading-tight">
+              Ihr persönlicher Service-Bereich
             </h1>
-            <p className="text-base sm:text-lg text-blue-100 max-w-2xl mx-auto leading-relaxed">
-              Alle wichtigen Services auf einen Blick –
-              schnell, einfach und direkt bei Ihrem persönlichen Berater.
+            <p className="text-sm sm:text-base text-blue-100 max-w-xl mx-auto leading-relaxed">
+              Schnell, einfach und direkt bei Ihrem persönlichen Berater Morino Stübe.
             </p>
           </div>
         </section>
 
-        <section className="py-10 md:py-14 px-4 -mt-8">
+        <section className="py-8 md:py-12 px-4 -mt-6">
           <div className="max-w-4xl mx-auto">
+            <p className="text-center text-sm font-semibold text-gray-500 uppercase tracking-widest mb-5">Was suchen Sie?</p>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
               <Link href="/schaden">
-                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full min-h-[100px]">
-                  <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-red-100 transition-colors">
-                    <FileText className="w-6 h-6 text-red-600" />
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[120px]">
+                  <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-red-100 transition-colors">
+                    <FileText className="w-7 h-7 text-red-600" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Schaden melden</h3>
                   <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Kfz, Haftpflicht, Hausrat</p>
                 </div>
               </Link>
               <Link href="/dokumente">
-                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full min-h-[100px]">
-                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-100 transition-colors">
-                    <ClipboardCheck className="w-6 h-6 text-blue-600" />
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[120px]">
+                  <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-100 transition-colors">
+                    <ClipboardCheck className="w-7 h-7 text-blue-600" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Dokument einreichen</h3>
-                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Beraterwechsel, Kündigung, Upload</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Kündigung, Upload, Beraterwechsel</p>
                 </div>
               </Link>
               <Link href="/kennzeichen">
-                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full min-h-[100px]">
-                  <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-amber-100 transition-colors">
-                    <Car className="w-6 h-6 text-amber-600" />
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[120px]">
+                  <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-amber-100 transition-colors">
+                    <Car className="w-7 h-7 text-amber-600" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">eVB / Kennzeichen</h3>
                   <p className="text-[10px] sm:text-xs text-gray-500 mt-1">eVB-Anfrage, Versicherungskennzeichen</p>
                 </div>
               </Link>
               <Link href="/termin">
-                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full min-h-[100px]">
-                  <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-green-100 transition-colors">
-                    <Calendar className="w-6 h-6 text-green-600" />
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[120px]">
+                  <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-green-100 transition-colors">
+                    <Calendar className="w-7 h-7 text-green-600" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Termin buchen</h3>
                   <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Online oder vor Ort</p>
@@ -178,9 +178,9 @@ export default function BestandskundenPage() {
                 rel="noopener noreferrer"
                 className="col-span-2 md:col-span-1"
               >
-                <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-5 text-center hover:shadow-xl transition-shadow cursor-pointer group h-full min-h-[100px]">
-                  <div className="w-12 h-12 bg-[#25d366]/10 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#25d366]/20 transition-colors">
-                    <MessageCircle className="w-6 h-6 text-[#25d366]" />
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[120px]">
+                  <div className="w-14 h-14 bg-[#25d366]/10 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#25d366]/20 transition-colors">
+                    <MessageCircle className="w-7 h-7 text-[#25d366]" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">WhatsApp</h3>
                   <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Direkt schreiben</p>
@@ -211,19 +211,18 @@ export default function BestandskundenPage() {
                     className={`rounded-xl border-2 p-5 ${lage.color} hover:shadow-lg transition-all group cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#003781] focus:ring-offset-2`}
                     onClick={() => openFunnel(lage.context, lage.funnelLabel)}
                   >
-                    <div className="flex items-start gap-3 mb-3">
+                    <div className="flex items-start gap-3 mb-2">
                       <Icon className="w-6 h-6 shrink-0 mt-0.5" />
                       <h3 className="font-bold text-gray-900 text-sm sm:text-base">{lage.title}</h3>
                     </div>
                     <p className="text-xs sm:text-sm text-gray-600 mb-3 leading-relaxed">{lage.description}</p>
-                    <ul className="space-y-1 mb-4">
+                    <div className="flex flex-wrap gap-1.5 mb-4">
                       {lage.versicherungen.map((v) => (
-                        <li key={v} className="flex items-center gap-1.5 text-xs text-gray-700">
-                          <ChevronRight className="w-3 h-3 shrink-0" />
+                        <span key={v} className="inline-block bg-white/60 text-gray-700 text-[10px] sm:text-xs font-medium px-2.5 py-1 rounded-full border border-current/10 leading-tight">
                           {v}
-                        </li>
+                        </span>
                       ))}
-                    </ul>
+                    </div>
                     <span className="inline-flex items-center gap-1 text-xs font-semibold group-hover:gap-2 transition-all">
                       Jetzt prüfen <ArrowRight className="w-3.5 h-3.5" />
                     </span>
