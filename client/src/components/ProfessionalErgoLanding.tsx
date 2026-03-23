@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Link } from 'wouter';
 import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
-import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, FileText, AlertTriangle, Award, Trophy, Instagram, ExternalLink, ChevronRight, ChevronDown } from 'lucide-react';
+import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, Award, Trophy, Instagram, ExternalLink, ChevronRight, ChevronDown } from 'lucide-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import FunnelOverlay from './FunnelOverlay';
 import '@/styles/funnel.css';
@@ -162,41 +162,6 @@ export default function ProfessionalErgoLanding() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden">
 
-      {/* ──────── QUIZ CARD – direkt nach dem Header ──────── */}
-      <div className="w-full bg-white border-b border-gray-200 shadow-sm px-4 py-3 sm:py-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <p className="text-xs sm:text-sm font-semibold text-gray-600 whitespace-nowrap shrink-0">
-              Was möchten Sie versichern?
-            </p>
-            <div className="flex flex-wrap gap-2 flex-1">
-              {QUIZ_OPTIONS.map((opt) => (
-                <button
-                  key={opt.type}
-                  onClick={() => {
-                    const isAll = opt.type === 'all';
-                    trackEvent('quiz_option_clicked', { option: opt.type, source: 'hero_quiz' });
-                    trackEvent('quiz_option_selected', { option: opt.type, source: 'hero_quiz' });
-                    trackEvent('quiz_started', { option: opt.type, source: 'hero_quiz' });
-                    openFunnel({
-                      insuranceType: isAll ? undefined : opt.type,
-                      insuranceLabel: isAll ? undefined : opt.label,
-                      initialStep: isAll ? undefined : 2,
-                      source: 'hero_quiz',
-                    });
-                  }}
-                  className="flex items-center gap-1.5 bg-gray-50 hover:bg-red-50 hover:border-[#E2001A] hover:text-[#E2001A] border border-gray-200 text-gray-700 font-semibold text-xs sm:text-sm px-3 py-2 rounded-full active:scale-95 transition-all group"
-                >
-                  <span className="text-base leading-none">{opt.icon}</span>
-                  <span>{opt.label}</span>
-                </button>
-              ))}
-            </div>
-            <p className="text-[10px] text-gray-400 whitespace-nowrap hidden lg:block">kostenlos & unverbindlich</p>
-          </div>
-        </div>
-      </div>
-
       {/* ──────── E-SCOOTER KENNZEICHEN BANNER ──────── */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -281,81 +246,62 @@ export default function ProfessionalErgoLanding() {
               Ob Kfz, Zahnzusatz, Wohngebäude oder Haftpflicht – wir beraten Sie individuell und transparent.
             </motion.p>
 
+            {/* ── QUIZ CARD – embedded in hero ── */}
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center md:justify-start sm:gap-3"
+              transition={{ duration: 0.55, delay: 0.5 }}
+              className="w-full"
             >
-              <motion.button
-                whileHover={{ scale: 1.03, boxShadow: "0 8px 30px rgba(226, 0, 26, 0.3)" }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => {
-                  openFunnel({ source: 'hero_section' });
-                  trackEvent('cta_beratung_clicked', { source: 'hero_section' });
-                }}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm px-5 py-3.5 rounded-xl shadow-lg shadow-red-500/20 whitespace-nowrap md:text-base md:px-6 md:py-4 transition-colors"
-              >
-                <Mail className="w-4 h-4 shrink-0 md:w-5 md:h-5" />
-                Kostenlose Analyse starten
-              </motion.button>
-
-              <motion.a
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => {
-                  trackEvent('whatsapp_clicked', { source: 'hero_section' });
-                  trackConversion();
-                }}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-green-500 text-green-600 font-semibold text-sm px-5 py-3.5 rounded-xl whitespace-nowrap md:text-base md:px-6 md:py-4 hover:bg-green-50 transition-colors"
-              >
-                <MessageSquare className="w-4 h-4 shrink-0 md:w-5 md:h-5" />
-                Direkt über WhatsApp
-              </motion.a>
-            </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.65 }}
-              className="text-xs text-gray-400 mt-2 text-center md:text-left"
-            >
-              In nur 2 Minuten – 100% kostenlos & unverbindlich
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="flex flex-col gap-2 mt-3 sm:flex-row sm:flex-wrap sm:justify-center md:justify-start sm:gap-3"
-            >
-              <div className="grid grid-cols-2 gap-2 sm:contents">
-                <Link
-                  href="/dokumente"
-                  className="flex items-center justify-center gap-1.5 border-2 border-[#003781] text-[#003781] font-semibold text-[13px] px-3 py-3 min-h-[44px] rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-[#003781]/5"
-                >
-                  <FileText className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
-                  Dokument einreichen
-                </Link>
-
-                <Link
-                  href="/schaden"
-                  className="flex items-center justify-center gap-1.5 border-2 border-[#E2001A] text-[#E2001A] font-semibold text-[13px] px-3 py-3 min-h-[44px] rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:w-auto sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-red-50"
-                >
-                  <AlertTriangle className="w-4 h-4 shrink-0 hidden sm:block md:w-5 md:h-5" />
-                  Schaden melden
-                </Link>
+              <div className="rounded-2xl border-2 border-gray-100 bg-white shadow-xl shadow-gray-200/60 p-4 sm:p-5 md:p-6">
+                <p className="text-[11px] font-bold uppercase tracking-widest text-[#E2001A] mb-1">Kostenlose Analyse – In 2 Minuten</p>
+                <p className="text-sm sm:text-base font-bold text-gray-900 mb-4 leading-snug">
+                  Was möchten Sie versichern?
+                </p>
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
+                  {QUIZ_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.type}
+                      onClick={() => {
+                        const isAll = opt.type === 'all';
+                        trackEvent('quiz_option_clicked', { option: opt.type, source: 'hero_quiz' });
+                        trackEvent('quiz_option_selected', { option: opt.type, source: 'hero_quiz' });
+                        trackEvent('quiz_started', { option: opt.type, source: 'hero_quiz' });
+                        openFunnel({
+                          insuranceType: isAll ? undefined : opt.type,
+                          insuranceLabel: isAll ? undefined : opt.label,
+                          initialStep: isAll ? undefined : 2,
+                          source: 'hero_quiz',
+                        });
+                      }}
+                      className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all active:scale-[0.98] group
+                        ${opt.type === 'all'
+                          ? 'border-[#E2001A] bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white hover:shadow-lg hover:shadow-red-500/25 sm:col-span-2 md:col-span-1 lg:col-span-2'
+                          : 'border-gray-200 bg-gray-50 hover:border-[#E2001A] hover:bg-red-50 hover:text-[#E2001A]'
+                        }`}
+                    >
+                      <span className="text-2xl leading-none shrink-0">{opt.icon}</span>
+                      <span className={`font-semibold text-sm ${opt.type === 'all' ? 'text-white' : 'text-gray-800 group-hover:text-[#E2001A]'}`}>
+                        {opt.label}
+                      </span>
+                      <ChevronRight className={`w-4 h-4 ml-auto shrink-0 group-hover:translate-x-0.5 transition-transform ${opt.type === 'all' ? 'text-white/80' : 'text-gray-400 group-hover:text-[#E2001A]'}`} />
+                    </button>
+                  ))}
+                </div>
+                <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
+                  <p className="text-[10px] sm:text-xs text-gray-400">🔒 100% kostenlos & unverbindlich · DSGVO-konform</p>
+                  <a
+                    href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => { trackEvent('whatsapp_clicked', { source: 'hero_quiz' }); trackConversion(); }}
+                    className="flex items-center gap-1.5 text-[#25d366] hover:text-[#1da851] transition-colors text-xs font-semibold whitespace-nowrap shrink-0"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    Lieber WhatsApp
+                  </a>
+                </div>
               </div>
-
-              <Link
-                href="/kennzeichen"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-[#003781] text-[#003781] font-semibold text-[13px] px-3 py-3 min-h-[44px] rounded-xl active:scale-[0.97] transition-all text-center leading-tight sm:text-sm sm:px-5 sm:py-3.5 sm:gap-2 md:text-base md:px-6 md:py-4 hover:bg-[#003781]/5"
-              >
-                EVB & Kennzeichen anfordern
-              </Link>
             </motion.div>
 
           </div>
