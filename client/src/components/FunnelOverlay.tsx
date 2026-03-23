@@ -23,6 +23,7 @@ interface FunnelOverlayProps {
   insuranceType?: string;
   insuranceLabel?: string;
   source?: string;
+  initialStep?: number;
 }
 
 const STEP_NAMES = [
@@ -45,7 +46,7 @@ const stepVariants = {
   }),
 };
 
-export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranceLabel, source }: FunnelOverlayProps) {
+export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranceLabel, source, initialStep }: FunnelOverlayProps) {
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -72,7 +73,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      setStep(1);
+      setStep(initialStep && initialStep > 1 ? initialStep : 1);
       setShowAnalysisResult(false);
       setData({
         situation: '', concerns: [], existingContracts: '', priority: '',
@@ -84,7 +85,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
       document.body.style.overflow = '';
     }
     return () => { document.body.style.overflow = ''; };
-  }, [isOpen]);
+  }, [isOpen, initialStep]);
 
   const handleClose = useCallback(() => {
     if (step >= 3 && step < 9 && !sessionStorage.getItem('funnel_exit_shown')) {

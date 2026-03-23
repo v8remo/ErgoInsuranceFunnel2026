@@ -89,8 +89,19 @@ const faqItems = [
 
 /* ═══════ Component ═══════ */
 
+const QUIZ_OPTIONS = [
+  { label: 'Kfz-Versicherung', icon: '🚗', type: 'kfz' },
+  { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat' },
+  { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz' },
+  { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu' },
+  { label: 'Alle prüfen', icon: '✅', type: 'all' },
+];
+
 export default function ProfessionalErgoLanding() {
   const [showFunnel, setShowFunnel] = useState(false);
+  const [funnelInsuranceType, setFunnelInsuranceType] = useState<string | undefined>(undefined);
+  const [funnelInsuranceLabel, setFunnelInsuranceLabel] = useState<string | undefined>(undefined);
+  const [funnelInitialStep, setFunnelInitialStep] = useState<number | undefined>(undefined);
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -235,6 +246,9 @@ export default function ProfessionalErgoLanding() {
                 whileHover={{ scale: 1.03, boxShadow: "0 8px 30px rgba(226, 0, 26, 0.3)" }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => {
+                  setFunnelInsuranceType(undefined);
+                  setFunnelInsuranceLabel(undefined);
+                  setFunnelInitialStep(undefined);
                   setShowFunnel(true);
                   trackEvent('cta_beratung_clicked', { source: 'hero_section' });
                 }}
@@ -300,6 +314,42 @@ export default function ProfessionalErgoLanding() {
               >
                 EVB & Kennzeichen anfordern
               </Link>
+            </motion.div>
+
+            {/* ── INLINE QUIZ CARD ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.75 }}
+              className="mt-5 w-full"
+              onViewportEnter={() => trackEvent('quiz_card_shown', { source: 'hero' })}
+            >
+              <div className="rounded-2xl border border-gray-200 bg-white/80 backdrop-blur-sm shadow-md p-4 sm:p-5">
+                <p className="text-xs font-semibold uppercase tracking-widest text-[#E2001A] mb-1">Sofort-Analyse</p>
+                <p className="text-sm font-semibold text-gray-800 mb-3 leading-snug">
+                  Was möchten Sie versichern? <span className="font-normal text-gray-500">(wählen & direkt starten)</span>
+                </p>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
+                  {QUIZ_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.type}
+                      onClick={() => {
+                        trackEvent('quiz_option_clicked', { option: opt.type, source: 'hero_quiz' });
+                        const isAll = opt.type === 'all';
+                        setFunnelInsuranceType(isAll ? undefined : opt.type);
+                        setFunnelInsuranceLabel(isAll ? undefined : opt.label);
+                        setFunnelInitialStep(isAll ? undefined : 2);
+                        setShowFunnel(true);
+                      }}
+                      className="flex flex-col items-center justify-center gap-1 rounded-xl border-2 border-transparent bg-gray-50 hover:border-[#E2001A] hover:bg-red-50 active:scale-95 transition-all px-2 py-3 text-center group"
+                    >
+                      <span className="text-xl leading-none">{opt.icon}</span>
+                      <span className="text-[11px] sm:text-xs font-semibold text-gray-700 group-hover:text-[#E2001A] leading-tight">{opt.label}</span>
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-2.5 text-[10px] text-gray-400 text-center">In 2 Min. zum persönlichen Angebot · kostenlos & unverbindlich</p>
+              </div>
             </motion.div>
           </div>
 
@@ -853,7 +903,14 @@ export default function ProfessionalErgoLanding() {
         </a>
       </div>
 
-      <FunnelOverlay isOpen={showFunnel} onClose={() => setShowFunnel(false)} />
+      <FunnelOverlay
+        isOpen={showFunnel}
+        onClose={() => setShowFunnel(false)}
+        insuranceType={funnelInsuranceType}
+        insuranceLabel={funnelInsuranceLabel}
+        initialStep={funnelInitialStep}
+        source="hero_quiz"
+      />
     </div>
   );
 }
