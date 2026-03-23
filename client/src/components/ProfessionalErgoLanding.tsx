@@ -162,6 +162,41 @@ export default function ProfessionalErgoLanding() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden">
 
+      {/* ──────── QUIZ CARD – direkt nach dem Header ──────── */}
+      <div className="w-full bg-white border-b border-gray-200 shadow-sm px-4 py-3 sm:py-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <p className="text-xs sm:text-sm font-semibold text-gray-600 whitespace-nowrap shrink-0">
+              Was möchten Sie versichern?
+            </p>
+            <div className="flex flex-wrap gap-2 flex-1">
+              {QUIZ_OPTIONS.map((opt) => (
+                <button
+                  key={opt.type}
+                  onClick={() => {
+                    const isAll = opt.type === 'all';
+                    trackEvent('quiz_option_clicked', { option: opt.type, source: 'hero_quiz' });
+                    trackEvent('quiz_option_selected', { option: opt.type, source: 'hero_quiz' });
+                    trackEvent('quiz_started', { option: opt.type, source: 'hero_quiz' });
+                    openFunnel({
+                      insuranceType: isAll ? undefined : opt.type,
+                      insuranceLabel: isAll ? undefined : opt.label,
+                      initialStep: isAll ? undefined : 2,
+                      source: 'hero_quiz',
+                    });
+                  }}
+                  className="flex items-center gap-1.5 bg-gray-50 hover:bg-red-50 hover:border-[#E2001A] hover:text-[#E2001A] border border-gray-200 text-gray-700 font-semibold text-xs sm:text-sm px-3 py-2 rounded-full active:scale-95 transition-all group"
+                >
+                  <span className="text-base leading-none">{opt.icon}</span>
+                  <span>{opt.label}</span>
+                </button>
+              ))}
+            </div>
+            <p className="text-[10px] text-gray-400 whitespace-nowrap hidden lg:block">kostenlos & unverbindlich</p>
+          </div>
+        </div>
+      </div>
+
       {/* ──────── E-SCOOTER KENNZEICHEN BANNER ──────── */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -323,45 +358,6 @@ export default function ProfessionalErgoLanding() {
               </Link>
             </motion.div>
 
-            {/* ── INLINE QUIZ CARD ── */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.75 }}
-              className="mt-5 w-full"
-              onViewportEnter={() => trackEvent('quiz_card_shown', { source: 'hero' })}
-            >
-              <div className="rounded-2xl border border-gray-200 bg-white/80 backdrop-blur-sm shadow-md p-4 sm:p-5">
-                <p className="text-xs font-semibold uppercase tracking-widest text-[#E2001A] mb-1">Sofort-Analyse</p>
-                <p className="text-sm font-semibold text-gray-800 mb-3 leading-snug">
-                  Was möchten Sie versichern? <span className="font-normal text-gray-500">(wählen & direkt starten)</span>
-                </p>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
-                  {QUIZ_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.type}
-                      onClick={() => {
-                        const isAll = opt.type === 'all';
-                        trackEvent('quiz_option_clicked', { option: opt.type, source: 'hero_quiz' });
-                        trackEvent('quiz_option_selected', { option: opt.type, source: 'hero_quiz' });
-                        trackEvent('quiz_started', { option: opt.type, source: 'hero_quiz' });
-                        openFunnel({
-                          insuranceType: isAll ? undefined : opt.type,
-                          insuranceLabel: isAll ? undefined : opt.label,
-                          initialStep: isAll ? undefined : 2,
-                          source: 'hero_quiz',
-                        });
-                      }}
-                      className="flex flex-col items-center justify-center gap-1 rounded-xl border-2 border-transparent bg-gray-50 hover:border-[#E2001A] hover:bg-red-50 active:scale-95 transition-all px-2 py-3 text-center group"
-                    >
-                      <span className="text-xl leading-none">{opt.icon}</span>
-                      <span className="text-[11px] sm:text-xs font-semibold text-gray-700 group-hover:text-[#E2001A] leading-tight">{opt.label}</span>
-                    </button>
-                  ))}
-                </div>
-                <p className="mt-2.5 text-[10px] text-gray-400 text-center">In 2 Min. zum persönlichen Angebot · kostenlos & unverbindlich</p>
-              </div>
-            </motion.div>
           </div>
 
           {/* RIGHT: Video with parallax */}
