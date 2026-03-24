@@ -90,12 +90,12 @@ const faqItems = [
 /* ═══════ Component ═══════ */
 
 const QUIZ_OPTIONS = [
-  { label: 'Kfz-Versicherung', icon: '🚗', type: 'kfz' },
-  { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat' },
-  { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz' },
-  { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu' },
-  { label: 'Gewerbe & Betrieb', icon: '🏢', type: 'gewerbe' },
-  { label: 'Alle prüfen', icon: '✅', type: 'all' },
+  { label: 'Kfz-Versicherung', icon: '🚗', type: 'kfz', source: 'hero_quiz' },
+  { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat', source: 'hero_quiz' },
+  { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz', source: 'hero_quiz' },
+  { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu', source: 'hero_quiz' },
+  { label: 'Gewerbe & Betrieb', icon: '🏢', type: 'gewerbe', source: 'lp_gewerbe' },
+  { label: 'Alle prüfen', icon: '✅', type: 'all', source: 'hero_quiz' },
 ];
 
 export default function ProfessionalErgoLanding() {
@@ -265,14 +265,14 @@ export default function ProfessionalErgoLanding() {
                       key={opt.type}
                       onClick={() => {
                         const isAll = opt.type === 'all';
-                        trackEvent('quiz_option_clicked', { option: opt.type, source: 'hero_quiz' });
-                        trackEvent('quiz_option_selected', { option: opt.type, source: 'hero_quiz' });
-                        trackEvent('quiz_started', { option: opt.type, source: 'hero_quiz' });
+                        trackEvent('quiz_option_clicked', { option: opt.type, source: opt.source });
+                        trackEvent('quiz_option_selected', { option: opt.type, source: opt.source });
+                        trackEvent('quiz_started', { option: opt.type, source: opt.source });
                         openFunnel({
                           insuranceType: isAll ? undefined : opt.type,
                           insuranceLabel: isAll ? undefined : opt.label,
                           initialStep: isAll ? undefined : 2,
-                          source: 'hero_quiz',
+                          source: opt.source,
                         });
                       }}
                       className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all active:scale-[0.98] group
