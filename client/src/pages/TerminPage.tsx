@@ -58,11 +58,11 @@ export default function TerminPage() {
         <div className="border-t border-gray-100" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+          <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm" style={{ minHeight: 620 }}>
             <Cal
               namespace="erstberatung"
               calLink="morino-stuebe-ergo/erstberatung"
-              style={{ width: "100%", height: "100%", overflow: "scroll" }}
+              style={{ width: "100%", minHeight: 620 }}
               config={{ layout: "month_view", useSlotsViewOnSmallScreen: "true" }}
             />
           </div>

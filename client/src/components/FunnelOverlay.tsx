@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getCalApi } from '@calcom/embed-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import '@/styles/funnel.css';
 
@@ -123,6 +124,16 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
   useEffect(() => {
     if (step === 7) {
       setTimeout(() => firstInputRef.current?.focus(), 400);
+    }
+  }, [step]);
+
+  // Initialize Cal.com popup for step 9 thank-you screen
+  useEffect(() => {
+    if (step === 9) {
+      (async () => {
+        const cal = await getCalApi({ namespace: "funnel-termin" });
+        cal("ui", { layout: "month_view", hideEventTypeDetails: false });
+      })();
     }
   }, [step]);
 
@@ -774,28 +785,30 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                     </div>
                   </div>
 
+                  <motion.button
+                    data-cal-namespace="funnel-termin"
+                    data-cal-link="morino-stuebe-ergo/erstberatung"
+                    data-cal-config='{"layout":"month_view"}'
+                    className="funnel-cta-btn"
+                    onClick={() => trackEvent('booking_from_funnel_clicked')}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    📅 Jetzt Termin auswählen & buchen
+                  </motion.button>
+
                   <motion.a
                     href="https://wa.me/4915566771019"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="funnel-cta-btn funnel-btn-whatsapp"
+                    className="funnel-outline-btn"
                     onClick={() => trackEvent('whatsapp_thankyou_clicked')}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
                   >
-                    💬 Per WhatsApp schreiben
+                    💬 Lieber per WhatsApp
                   </motion.a>
-                  <a
-                    href="/termin"
-                    className="funnel-outline-btn"
-                    onClick={() => {
-                      trackEvent('booking_from_funnel_clicked');
-                      onClose();
-                    }}
-                  >
-                    📅 Direkt Termin buchen
-                  </a>
-                  <p className="funnel-small-text">Sie erhalten gleich eine Bestätigung per E-Mail.</p>
+                  <p className="funnel-small-text">Sie erhalten eine Bestätigung per E-Mail.</p>
                 </motion.div>
               )}
             </AnimatePresence>
