@@ -27,7 +27,7 @@ The platform features a clean, professional design with a focus on user experien
   - **Google Ads Sparten-Landing-Pages:** 7 dedicated, conversion-optimized landing pages (`/kfz`, `/hausrat`, `/haftpflicht`, `/rechtsschutz`, `/berufsunfaehigkeit`, `/zahnzusatz`, `/unternehmensversicherung`) with minimal header/footer, hero with star rating, trust bar, 4 spartenspezifische benefits, customer reviews, FAQ accordion, and final CTA. Each uses FunnelOverlay with sparten-specific `source` tag (e.g. `lp_kfz`, `lp_gewerbe`). Built with shared `SpartenLandingPage` component and typed config in `spartenConfig.ts`. Schema.org FAQPage and Service structured data included.
   - **Document & Claims Pages:** Multi-step flows for submitting documents (with file upload) and reporting claims.
   - **License Plate Page (`/kennzeichen`):** Flow for requesting eVB numbers (car) and insurance plates (mopeds).
-  - **Appointment Page (`/termin`):** Integrates Microsoft Outlook Booking for direct online appointment scheduling.
+  - **Appointment Page (`/termin`):** Integrates Cal.com embed (`@calcom/embed-react`, calLink: `morino-stuebe-ergo/erstberatung`, month_view layout) for direct online appointment scheduling.
   - **Lead Funnel:** A consistent 9-step conversion funnel (`FunnelOverlay`) integrated across all relevant pages. Supports custom `source` prop for lead tracking.
   - **Bestandskunden-Service-Hub (`/bestandskunden`):** Dedicated landing page for existing customers with quick-access service tiles, Lebenslagen-Beratung (6 life situations with insurance recommendations), Jahrescheck CTA, customer benefits, and referral program. Own minimal header/footer, no global nav.
   - **Admin Dashboard:** Password-protected interface for content management, lead administration, and CSV export.
@@ -56,7 +56,7 @@ The platform features a clean, professional design with a focus on user experien
 - **Google Analytics 4:** For website analytics and user behavior tracking.
 - **Meta Pixel:** For tracking marketing campaign performance and retargeting.
 - **Google Ads Conversion Tracking:** Integrated for measuring the effectiveness of Google Ads campaigns.
-- **Microsoft Outlook Booking:** Embedded for online appointment scheduling.
+- **Cal.com (`@calcom/embed-react`):** Embedded for online appointment scheduling at `/termin` (namespace: `erstberatung`, calLink: `morino-stuebe-ergo/erstberatung`).
 - **IHK (Industrie- und Handelskammer):** Registration number and details included in legal disclosures.
 - **LfD Niedersachsen (Landesbeauftragte für den Datenschutz):** Referenced for data protection compliance.
 - **OpenAI (via Replit AI Integrations):** Used for Instagram content generation (gpt-5.2, POST /api/instagram/generate). No own API key needed – billed to Replit credits.

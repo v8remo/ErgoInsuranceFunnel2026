@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import Cal, { getCalApi } from "@calcom/embed-react";
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
-import { Calendar, Clock, MapPin, Phone, CheckCircle, Star, MessageSquare, Loader2 } from "lucide-react";
-
-const BOOKING_URL = "https://ergo-frontend.onlinetermine.com/000211325/start?intcid=1001183&childId=bookingtimeSatelliteIframe_000211325&initialWidth=918&childId=bookingtimeSatelliteIframe_000211325&parentTitle=ERGO%20Versicherung%20Morino%20St%C3%BCbe%20in%20Ganderkesee%20%7C%20Versicherung&parentUrl=https%3A%2F%2Fmorino-stuebe.ergo.de%2F";
+import { Calendar, Clock, MapPin, Phone, CheckCircle, Star, MessageSquare } from "lucide-react";
 
 export default function TerminPage() {
-  const [iframeLoaded, setIframeLoaded] = useState(false);
+  useEffect(() => {
+    (async function () {
+      const cal = await getCalApi({ namespace: "erstberatung" });
+      cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
+    })();
+  }, []);
 
   return (
     <>
@@ -54,21 +58,12 @@ export default function TerminPage() {
         <div className="border-t border-gray-100" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm relative">
-            {!iframeLoaded && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 z-10">
-                <Loader2 className="w-8 h-8 text-ergo-red animate-spin mb-3" />
-                <p className="text-sm text-gray-500">Terminkalender wird geladen...</p>
-              </div>
-            )}
-            <iframe
-              src={BOOKING_URL}
-              title="Termin buchen bei ERGO Agentur Stübe"
-              className="w-full border-0"
-              style={{ minHeight: '680px', height: '80vh', maxHeight: '900px' }}
-              allow="geolocation; microphone; camera"
-              loading="lazy"
-              onLoad={() => setIframeLoaded(true)}
+          <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+            <Cal
+              namespace="erstberatung"
+              calLink="morino-stuebe-ergo/erstberatung"
+              style={{ width: "100%", height: "100%", overflow: "scroll" }}
+              config={{ layout: "month_view", useSlotsViewOnSmallScreen: "true" }}
             />
           </div>
 
