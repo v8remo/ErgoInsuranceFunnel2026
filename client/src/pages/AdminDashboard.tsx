@@ -511,7 +511,11 @@ export default function AdminDashboard() {
       haftpflicht: "bg-green-100 text-green-800", 
       wohngebaeude: "bg-purple-100 text-purple-800",
       rechtsschutz: "bg-orange-100 text-orange-800",
-      zahnzusatz: "bg-pink-100 text-pink-800"
+      zahnzusatz: "bg-pink-100 text-pink-800",
+      kfz: "bg-sky-100 text-sky-800",
+      bu: "bg-amber-100 text-amber-800",
+      berufsunfaehigkeit: "bg-amber-100 text-amber-800",
+      gewerbe: "bg-violet-100 text-violet-800",
     };
     
     const typeNames = {
@@ -519,7 +523,11 @@ export default function AdminDashboard() {
       haftpflicht: "Haftpflicht",
       wohngebaeude: "Wohngebäude", 
       rechtsschutz: "Rechtsschutz",
-      zahnzusatz: "Zahnzusatz"
+      zahnzusatz: "Zahnzusatz",
+      kfz: "Kfz",
+      bu: "Berufsunfähigkeit",
+      berufsunfaehigkeit: "Berufsunfähigkeit",
+      gewerbe: "Gewerbe & Betrieb",
     };
     
     return (
@@ -727,6 +735,9 @@ export default function AdminDashboard() {
                 <SelectItem value="wohngebaeude">Wohngebäudeversicherung</SelectItem>
                 <SelectItem value="rechtsschutz">Rechtsschutzversicherung</SelectItem>
                 <SelectItem value="zahnzusatz">Zahnzusatzversicherung</SelectItem>
+                <SelectItem value="kfz">Kfz-Versicherung</SelectItem>
+                <SelectItem value="bu">Berufsunfähigkeit</SelectItem>
+                <SelectItem value="gewerbe">Gewerbe & Betrieb</SelectItem>
               </SelectContent>
             </Select>
             <Button 

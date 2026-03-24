@@ -96,6 +96,7 @@ function AppContent() {
           <Route path="/rechtsschutz">{() => <SpartenLandingPage config={spartenConfigs.rechtsschutz} />}</Route>
           <Route path="/berufsunfaehigkeit">{() => <SpartenLandingPage config={spartenConfigs.berufsunfaehigkeit} />}</Route>
           <Route path="/zahnzusatz">{() => <SpartenLandingPage config={spartenConfigs.zahnzusatz} />}</Route>
+          <Route path="/unternehmensversicherung">{() => <SpartenLandingPage config={spartenConfigs.gewerbe} />}</Route>
           <Route component={NotFound} />
         </Switch>
       </Suspense>

@@ -94,6 +94,7 @@ const QUIZ_OPTIONS = [
   { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat' },
   { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz' },
   { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu' },
+  { label: 'Gewerbe & Betrieb', icon: '🏢', type: 'gewerbe' },
   { label: 'Alle prüfen', icon: '✅', type: 'all' },
 ];
 

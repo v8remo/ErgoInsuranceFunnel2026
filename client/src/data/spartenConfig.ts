@@ -1,4 +1,4 @@
-import { Car, Home, Users, Scale, ShieldAlert, Smile, Clock, Phone, Shield, Heart, FileCheck, Zap, Building, Umbrella, Briefcase, DollarSign, BadgeCheck, Stethoscope, Baby, Glasses } from 'lucide-react';
+import { Car, Home, Users, Scale, ShieldAlert, Smile, Clock, Phone, Shield, Heart, FileCheck, Zap, Building, Umbrella, Briefcase, DollarSign, BadgeCheck, Stethoscope, Baby, Glasses, Lock } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface SpartenReview {
@@ -257,6 +257,42 @@ export const spartenConfigs: Record<string, SpartenConfig> = {
     urgency: {
       text: 'Zahnschutz sichern – bevor es teuer wird',
       subtext: 'Ein Implantat kostet durchschnittlich 3.000€ – sind Sie abgesichert?',
+    },
+  },
+  gewerbe: {
+    slug: 'gewerbe',
+    insuranceType: 'gewerbe',
+    source: 'lp_gewerbe',
+    seo: {
+      title: 'Unternehmensversicherung Ganderkesee – Ihr Betrieb rundum geschützt | ERGO',
+      description: 'Gewerbeversicherung bei ERGO Agentur Stübe in Ganderkesee. Betriebshaftpflicht, Inhaltsversicherung, Cyber-Schutz und mehr. Persönliche Beratung für Selbstständige, Handwerker und KMU. Jetzt kostenlos anfragen!',
+      keywords: 'Unternehmensversicherung, Gewerbeversicherung, Betriebshaftpflicht, Betriebsinhaltsversicherung, Cyberversicherung, Selbstständige versichern, KMU Versicherung, Ganderkesee',
+    },
+    hero: {
+      headline: 'Unternehmensversicherung – Ihr Betrieb ist geschützt',
+      subheadline: 'Von der Betriebshaftpflicht bis zum Cyber-Schutz – wir sichern Ihr Unternehmen ab. Persönliche Beratung für Selbstständige, Handwerker und kleine Betriebe.',
+      ctaText: 'Kostenlose Gewerbeberatung anfragen',
+      gradient: 'from-violet-900 to-violet-700',
+    },
+    benefits: [
+      { icon: Shield, title: 'Betriebshaftpflicht', description: 'Die wichtigste Gewerbeversicherung: Schutz vor Schadenersatzansprüchen Dritter – ob Personen-, Sach- oder Vermögensschaden.' },
+      { icon: Building, title: 'Betriebsinhaltsversicherung', description: 'Ihr Inventar, Maschinen, Waren und Einrichtung sind gegen Feuer, Einbruch, Leitungswasser und Sturm abgesichert.' },
+      { icon: Lock, title: 'Cyber-Versicherung', description: 'Schutz vor Hackerangriffen, Datenverlust und Betriebsstillstand durch Cyberkriminalität – ein wachsendes Risiko für jeden Betrieb.' },
+      { icon: Clock, title: 'Betriebsunterbrechungsversicherung', description: 'Falls Ihr Betrieb durch einen Schaden stillsteht, sichert die Betriebsunterbrechungsversicherung Ihre laufenden Kosten und entgangenen Gewinn.' },
+    ],
+    reviews: [
+      { name: 'Klaus H., Handwerksbetrieb', text: 'Herr Stübe hat meine gesamte Gewerbeabsicherung auf den Prüfstand gestellt. Ich spare jetzt über 600€ im Jahr und bin gleichzeitig besser abgesichert als vorher.', rating: 5 },
+      { name: 'Petra M., Freiberuflerin', text: 'Als Selbstständige hatte ich keine Ahnung, welche Versicherungen ich wirklich brauche. Herr Stübe hat das klar erklärt und ein passendes Paket zusammengestellt.', rating: 5 },
+    ],
+    faqs: [
+      { question: 'Welche Versicherungen braucht ein Kleinbetrieb oder Selbstständiger unbedingt?', answer: 'Die Betriebshaftpflichtversicherung ist für nahezu jeden Gewerbebetrieb unverzichtbar – sie schützt vor Schadenersatzansprüchen, die im Betrieb entstehen. Je nach Branche kommen Betriebsinhaltsversicherung, Berufshaftpflicht und Cyber-Versicherung hinzu. Wir analysieren Ihren Bedarf individuell.' },
+      { question: 'Was deckt die Betriebshaftpflichtversicherung ab?', answer: 'Die Betriebshaftpflicht übernimmt berechtigte Schadenersatzansprüche Dritter, die durch Ihren Betrieb entstehen – z.B. Personenschäden bei Kunden, Sachschäden an fremden Gegenständen oder Vermögensfolgeschäden. Sie wehrt auch unberechtigte Ansprüche ab.' },
+      { question: 'Wie hoch ist das Risiko von Cyberangriffen für kleine Betriebe?', answer: 'Sehr hoch. Laut Gesamtverband der Deutschen Versicherungswirtschaft (GDV) ist jedes vierte kleine Unternehmen bereits Opfer eines Cyberangriffs geworden. Die Kosten durch Datenverlust, Betriebsstillstand und Wiederherstellung können schnell in die Zehntausende gehen.' },
+      { question: 'Kann ich meine Gewerbeversicherungen bündeln?', answer: 'Ja! ERGO bietet Gewerbepakete, die mehrere Bausteine kombinieren. Als Bestandskunde mit mehreren Verträgen profitieren Sie zusätzlich vom ERGO Bündelnachlass von bis zu 15%. Wir stellen Ihnen ein maßgeschneidertes Paket zusammen.' },
+    ],
+    urgency: {
+      text: 'Schützen Sie Ihren Betrieb – jetzt Analyse starten',
+      subtext: 'Kostenlose Gewerbeberatung für Selbstständige und KMU in der Region',
     },
   },
 };
