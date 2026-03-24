@@ -67,7 +67,10 @@ export default function Header() {
           <Link href="/" className="flex items-center group shrink-0">
             <div className="text-left">
               <div className="text-xl sm:text-2xl font-bold text-ergo-red group-hover:opacity-80 transition-opacity">ERGO</div>
-              <div className="text-[11px] sm:text-xs text-gray-500 leading-tight">Agentur Stübe · Ganderkesee</div>
+              <div className="text-[10px] sm:text-xs text-gray-500 leading-tight">
+                <span className="hidden sm:inline">Agentur Stübe · Ganderkesee</span>
+                <span className="sm:hidden">Agentur Stübe</span>
+              </div>
             </div>
           </Link>
 
@@ -89,7 +92,7 @@ export default function Header() {
               </button>
 
               {dropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-[480px] bg-white rounded-2xl shadow-xl border border-gray-100 p-3 grid grid-cols-2 gap-1">
+                <div className="absolute top-full left-0 mt-2 w-[480px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-gray-100 p-3 grid grid-cols-2 gap-1">
                   {INSURANCE_LINKS.map(({ href, label, icon: Icon, desc }) => (
                     <Link
                       key={href}

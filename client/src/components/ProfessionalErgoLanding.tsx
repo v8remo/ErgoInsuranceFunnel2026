@@ -161,7 +161,7 @@ export default function ProfessionalErgoLanding() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden pb-24 sm:pb-0">
 
       {/* ──────── E-SCOOTER KENNZEICHEN BANNER ──────── */}
       <motion.div
@@ -369,12 +369,12 @@ export default function ProfessionalErgoLanding() {
         {...fadeInUp}
         className="px-4 pt-6 md:pt-8 pb-10 md:pb-16 max-w-4xl mx-auto"
       >
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-6 md:p-8 relative overflow-hidden">
+        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-4 sm:p-6 md:p-8 relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
-          <div className="grid grid-cols-3 gap-4 md:gap-8 divide-x divide-gray-200/60">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 divide-x divide-gray-200/60">
           {[
             { value: 3500, suffix: '+', label: 'Zufriedene Kunden' },
-            { value: 15, suffix: '+', label: 'Versicherungsprodukte' },
+            { value: 15, suffix: '+', label: 'Produkte' },
             { value: 24, suffix: 'h', label: 'Reaktionszeit' },
           ].map((stat, i) => (
             <motion.div
@@ -385,7 +385,7 @@ export default function ProfessionalErgoLanding() {
               transition={{ duration: 0.5, delay: i * 0.15 }}
               className="text-center"
             >
-              <div className="text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
+              <div className="text-2xl sm:text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
                 <AnimatedCounter target={stat.value} suffix={stat.suffix} />
               </div>
               <p className="text-xs md:text-sm text-gray-500 mt-1.5 font-medium">{stat.label}</p>
