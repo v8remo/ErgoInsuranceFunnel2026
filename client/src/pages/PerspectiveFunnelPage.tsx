@@ -30,7 +30,16 @@ const insuranceOptions = [
   { icon: '🏛️', label: 'Rechtsschutz', value: 'rechtsschutz' },
   { icon: '💼', label: 'Berufsunfähigkeit', value: 'berufsunfaehigkeit' },
   { icon: '🦷', label: 'Zahnzusatz', value: 'zahnzusatz' },
-  { icon: '🛡️', label: 'Mehrere / Alle', value: 'general_consultation' },
+  { icon: '🏠', label: 'Wohngebäude', value: 'wohngebaeude' },
+  { icon: '🚑', label: 'Unfallversicherung', value: 'unfall' },
+  { icon: '✈️', label: 'Reiseversicherung', value: 'reise' },
+  { icon: '💰', label: 'Altersvorsorge / Rente', value: 'altersvorsorge' },
+  { icon: '❤️', label: 'Risikolebensversicherung', value: 'risikoleben' },
+  { icon: '🐾', label: 'Tierversicherung', value: 'tier' },
+  { icon: '🏢', label: 'Gewerbe / Betrieb', value: 'gewerbe' },
+  { icon: '🏥', label: 'Krankenzusatz / PKV', value: 'kranken' },
+  { icon: '🧓', label: 'Pflegeversicherung', value: 'pflege' },
+  { icon: '📋', label: 'Sonstiges / Anderes', value: 'sonstiges' },
 ];
 
 const testimonials = [
@@ -189,6 +198,7 @@ function AnimatedCounter({ end, suffix = '', decimals = 0, label }: {
 export default function PerspectiveFunnelPage() {
   const [selectedInsurance, setSelectedInsurance] = useState('');
   const [selectedInsuranceLabel, setSelectedInsuranceLabel] = useState('');
+  const [sonstigesText, setSonstigesText] = useState('');
   const [hasExisting, setHasExisting] = useState('');
   const [timingPreference, setTimingPreference] = useState('');
   const [currentSection, setCurrentSection] = useState(0);
@@ -313,6 +323,7 @@ export default function PerspectiveFunnelPage() {
             utm_medium: getURLParam('utm_medium') || '',
             utm_campaign: getURLParam('utm_campaign') || '',
             gclid: getURLParam('gclid') || '',
+            ...(selectedInsurance === 'sonstiges' && sonstigesText ? { sonstiges_text: sonstigesText } : {}),
           },
           source: 'lp_beratung_perspective',
           status: 'new',
@@ -410,26 +421,27 @@ export default function PerspectiveFunnelPage() {
               <p className="text-sm font-semibold text-white/70 uppercase tracking-widest mb-4">
                 Frage 1 von 3 · Was möchten Sie absichern?
               </p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 max-w-4xl mx-auto">
                 {insuranceOptions.map((opt, i) => (
                   <motion.button
                     key={opt.value}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + i * 0.06 }}
+                    transition={{ delay: 0.1 + i * 0.04 }}
                     whileHover={{ scale: 1.03, y: -2 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => {
                       setSelectedInsurance(opt.value);
                       setSelectedInsuranceLabel(opt.label);
                       trackEvent('perspective_q1_selected', { event_label: opt.value });
-                      scrollTo(1);
+                      if (opt.value !== 'sonstiges') {
+                        scrollTo(1);
+                      }
                     }}
                     className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all cursor-pointer
                       ${selectedInsurance === opt.value
                         ? 'border-yellow-400 bg-yellow-400/20 shadow-lg'
                         : 'border-white/20 bg-white/10 hover:border-white/50 hover:bg-white/20'}
-                      ${opt.value === 'general_consultation' ? 'sm:col-span-2' : ''}
                     `}
                   >
                     <span className="text-3xl">{opt.icon}</span>
@@ -437,6 +449,33 @@ export default function PerspectiveFunnelPage() {
                   </motion.button>
                 ))}
               </div>
+
+              {selectedInsurance === 'sonstiges' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-4 max-w-md mx-auto"
+                >
+                  <input
+                    type="text"
+                    value={sonstigesText}
+                    onChange={e => setSonstigesText(e.target.value)}
+                    placeholder="Welche Versicherung interessiert Sie?"
+                    className="w-full bg-white/15 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-white/50 text-sm focus:outline-none focus:border-yellow-400 focus:bg-white/20"
+                    autoFocus
+                  />
+                  <motion.button
+                    onClick={() => scrollTo(1)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="mt-3 w-full bg-yellow-400 text-gray-900 font-bold py-3 rounded-xl text-sm hover:bg-yellow-300 transition-colors"
+                  >
+                    Weiter →
+                  </motion.button>
+                </motion.div>
+              )}
+
               <p className="mt-5 text-xs text-white/50">🔒 Unverbindlich & kostenlos · DSGVO-konform</p>
             </motion.div>
           </div>

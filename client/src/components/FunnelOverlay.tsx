@@ -397,15 +397,23 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                   className="funnel-step"
                 >
                   <h2 className="funnel-headline">Wo sehen Sie den größten Bedarf? 🔍</h2>
-                  <p className="funnel-subtext">Mehrfachauswahl möglich (max. 2)</p>
+                  <p className="funnel-subtext">Mehrfachauswahl möglich (max. 3)</p>
                   <div className="funnel-grid-2x2 funnel-grid-3col">
                     {[
                       { icon: '🚗', label: 'Kfz & Mobilität' },
                       { icon: '🏡', label: 'Haus & Hausrat' },
+                      { icon: '🏠', label: 'Wohngebäude' },
                       { icon: '⚖️', label: 'Rechtsschutz' },
                       { icon: '💼', label: 'Berufsunfähigkeit' },
                       { icon: '👨‍👩‍👧', label: 'Familie & Vorsorge' },
-                      { icon: '💊', label: 'Krankenversicherung' }
+                      { icon: '💊', label: 'Krankenversicherung' },
+                      { icon: '🚑', label: 'Unfallversicherung' },
+                      { icon: '✈️', label: 'Reise & Ausland' },
+                      { icon: '💰', label: 'Leben & Rente' },
+                      { icon: '🏢', label: 'Gewerbe & Betrieb' },
+                      { icon: '🐾', label: 'Tierversicherung' },
+                      { icon: '🧓', label: 'Pflegeversicherung' },
+                      { icon: '📋', label: 'Sonstiges' },
                     ].map((opt, i) => {
                       const isSelected = data.concerns.includes(opt.label);
                       return (
@@ -413,7 +421,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                           key={opt.label}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.06 }}
+                          transition={{ delay: i * 0.04 }}
                           whileHover={{ y: -2 }}
                           whileTap={{ scale: 0.97 }}
                           className={`funnel-option-card funnel-multi ${isSelected ? 'selected' : ''}`}
@@ -421,7 +429,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                             setData(prev => {
                               const concerns = isSelected
                                 ? prev.concerns.filter(c => c !== opt.label)
-                                : prev.concerns.length < 2
+                                : prev.concerns.length < 3
                                   ? [...prev.concerns, opt.label]
                                   : prev.concerns;
                               return { ...prev, concerns };
