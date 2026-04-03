@@ -202,6 +202,7 @@ export default function PerspectiveFunnelPage() {
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [showMobileCTA, setShowMobileCTA] = useState(false);
 
   const heroRef = useRef<HTMLElement>(null);
@@ -214,17 +215,28 @@ export default function PerspectiveFunnelPage() {
 
   const sectionRefs = [heroRef, section2Ref, section3Ref, section4Ref, section5Ref, section6Ref, formRef];
 
-  // IntersectionObserver: update currentSection based on actual scroll position
+  // IntersectionObserver: update currentSection bidirectionally based on scroll position
   useEffect(() => {
+    const visibleSections = new Set<number>();
     const observers: IntersectionObserver[] = [];
+
+    const updateSection = () => {
+      if (visibleSections.size === 0) return;
+      const maxVisible = Math.max(...Array.from(visibleSections));
+      setCurrentSection(maxVisible);
+      if (maxVisible >= 1) setShowMobileCTA(true);
+    };
+
     sectionRefs.forEach((ref, idx) => {
       if (!ref.current) return;
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
-            setCurrentSection(prev => Math.max(prev, idx));
-            if (idx >= 1) setShowMobileCTA(true);
+            visibleSections.add(idx);
+          } else {
+            visibleSections.delete(idx);
           }
+          updateSection();
         },
         { threshold: 0.25, rootMargin: '-60px 0px 0px 0px' }
       );
@@ -281,8 +293,9 @@ export default function PerspectiveFunnelPage() {
   const submitLead = async () => {
     if (!validateForm()) return;
     setIsSubmitting(true);
+    setSubmitError('');
     try {
-      await fetch('/api/leads', {
+      const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -305,8 +318,17 @@ export default function PerspectiveFunnelPage() {
           status: 'new',
         }),
       });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        setSubmitError(err.message || 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.');
+        setIsSubmitting(false);
+        return;
+      }
     } catch (e) {
       console.error('Lead submission error:', e);
+      setSubmitError('Netzwerkfehler. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut.');
+      setIsSubmitting(false);
+      return;
     }
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event: 'perspective_funnel_lead_submitted', insurance_type: selectedInsurance });
@@ -766,6 +788,11 @@ export default function PerspectiveFunnelPage() {
                       {formErrors.dsgvo && <p className="text-red-500 text-xs mt-1 ml-7">{formErrors.dsgvo}</p>}
                     </div>
 
+                    {submitError && (
+                      <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                        {submitError}
+                      </div>
+                    )}
                     <button
                       onClick={submitLead}
                       disabled={isSubmitting}
