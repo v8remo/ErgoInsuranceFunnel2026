@@ -463,15 +463,18 @@ export default function PerspectiveFunnelPage() {
                     onChange={e => setSonstigesText(e.target.value)}
                     placeholder="Welche Versicherung interessiert Sie?"
                     className="w-full bg-white/15 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-white/50 text-sm focus:outline-none focus:border-yellow-400 focus:bg-white/20"
-                    autoFocus
                   />
                   <motion.button
-                    onClick={() => scrollTo(1)}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="mt-3 w-full bg-yellow-400 text-gray-900 font-bold py-3 rounded-xl text-sm hover:bg-yellow-300 transition-colors"
+                    onClick={() => { if (sonstigesText.trim()) scrollTo(1); }}
+                    whileHover={sonstigesText.trim() ? { scale: 1.02 } : {}}
+                    whileTap={sonstigesText.trim() ? { scale: 0.97 } : {}}
+                    className={`mt-3 w-full font-bold py-3 rounded-xl text-sm transition-colors ${
+                      sonstigesText.trim()
+                        ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300 cursor-pointer'
+                        : 'bg-white/20 text-white/40 cursor-not-allowed'
+                    }`}
                   >
-                    Weiter →
+                    {sonstigesText.trim() ? 'Weiter →' : 'Bitte zuerst eingeben'}
                   </motion.button>
                 </motion.div>
               )}
