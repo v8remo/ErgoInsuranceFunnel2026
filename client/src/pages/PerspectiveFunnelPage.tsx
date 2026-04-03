@@ -1,15 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { getCalApi } from '@calcom/embed-react';
 import { Link } from 'wouter';
 import SEO from '@/components/SEO';
 import { trackEvent, trackConversion } from '@/lib/analytics';
-import {
-  Phone, Shield, Star, ChevronDown, ChevronUp, Check, ArrowRight, X
-} from 'lucide-react';
-import advisorPhoto from '@assets/optimized/image.webp';
-
-// ─── Types ───────────────────────────────────────────────────────────────────
+import { Phone, Shield, Star, ChevronDown, ChevronUp, Check, ArrowRight, X } from 'lucide-react';
+import advisorPhoto from '@assets/optimized/ich_bin_da.webp';
 
 interface FormData {
   firstName: string;
@@ -27,8 +23,6 @@ interface FormErrors {
   dsgvo?: string;
 }
 
-// ─── Data ────────────────────────────────────────────────────────────────────
-
 const insuranceOptions = [
   { icon: '🚗', label: 'Kfz-Versicherung', value: 'kfz' },
   { icon: '🏡', label: 'Hausrat', value: 'hausrat' },
@@ -44,19 +38,22 @@ const testimonials = [
     name: 'Thomas M.',
     location: 'Ganderkesee',
     text: 'Herr Stübe hat meine komplette Versicherungssituation analysiert und mir gezeigt, wo ich überversichert war. Jetzt spare ich 40 € im Monat!',
-    rating: 5,
+    initials: 'TM',
+    color: 'bg-blue-500',
   },
   {
     name: 'Sandra K.',
     location: 'Delmenhorst',
     text: 'Endlich ein Berater, der sich wirklich Zeit nimmt. Die kostenlose Analyse war super ausführlich – ich fühle mich jetzt rundherum gut abgesichert.',
-    rating: 5,
+    initials: 'SK',
+    color: 'bg-purple-500',
   },
   {
     name: 'Markus B.',
     location: 'Oldenburg',
     text: 'Schnell, unkompliziert und ehrlich. Herr Stübe hat mir sogar von einer Versicherung abgeraten, die ich nicht brauche. So muss Beratung sein!',
-    rating: 5,
+    initials: 'MB',
+    color: 'bg-green-600',
   },
 ];
 
@@ -96,7 +93,12 @@ const comparisonRows = [
   { feature: 'Vor Ort in Ganderkesee', ergo: true, others: false },
 ];
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+const ADVISOR_STATS = [
+  { end: 3500, suffix: '+', label: 'Kunden' },
+  { end: 4.9, decimals: 1, suffix: '/5', label: 'Sterne' },
+  { end: 15, suffix: '+', label: 'Jahre Erfahrung' },
+  { end: 97, suffix: '%', label: 'Weiterempfehlung' },
+];
 
 function StarRating({ count = 5, size = 'sm' }: { count?: number; size?: 'sm' | 'md' }) {
   const cls = size === 'md' ? 'w-5 h-5' : 'w-4 h-4';
@@ -141,13 +143,54 @@ function FAQItem({ q, a }: { q: string; a: string }) {
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+function AnimatedCounter({ end, suffix = '', decimals = 0, label }: {
+  end: number;
+  suffix?: string;
+  decimals?: number;
+  label: string;
+}) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: '-50px' });
+
+  useEffect(() => {
+    if (!inView) return;
+    const duration = 1200;
+    const steps = 40;
+    const step = duration / steps;
+    let current = 0;
+    const timer = setInterval(() => {
+      current += 1;
+      const progress = current / steps;
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(parseFloat((eased * end).toFixed(decimals)));
+      if (current >= steps) {
+        clearInterval(timer);
+        setCount(end);
+      }
+    }, step);
+    return () => clearInterval(timer);
+  }, [inView, end, decimals]);
+
+  const formatted = decimals > 0
+    ? count.toFixed(decimals).replace('.', ',')
+    : Math.round(count).toLocaleString('de-DE');
+
+  return (
+    <div ref={ref} className="text-center">
+      <div className="text-xl sm:text-2xl font-bold text-ergo-red">
+        {formatted}{suffix}
+      </div>
+      <div className="text-xs text-gray-500">{label}</div>
+    </div>
+  );
+}
 
 export default function PerspectiveFunnelPage() {
-  const [selectedInsurance, setSelectedInsurance] = useState<string>('');
-  const [selectedInsuranceLabel, setSelectedInsuranceLabel] = useState<string>('');
-  const [hasExisting, setHasExisting] = useState<string>('');
-  const [timingPreference, setTimingPreference] = useState<string>('');
+  const [selectedInsurance, setSelectedInsurance] = useState('');
+  const [selectedInsuranceLabel, setSelectedInsuranceLabel] = useState('');
+  const [hasExisting, setHasExisting] = useState('');
+  const [timingPreference, setTimingPreference] = useState('');
   const [currentSection, setCurrentSection] = useState(0);
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -161,19 +204,38 @@ export default function PerspectiveFunnelPage() {
   const [submitted, setSubmitted] = useState(false);
   const [showMobileCTA, setShowMobileCTA] = useState(false);
 
-  const heroRef = useRef<HTMLDivElement>(null);
-  const section2Ref = useRef<HTMLDivElement>(null);
-  const section3Ref = useRef<HTMLDivElement>(null);
-  const section4Ref = useRef<HTMLDivElement>(null);
-  const section5Ref = useRef<HTMLDivElement>(null);
-  const section6Ref = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
+  const section2Ref = useRef<HTMLElement>(null);
+  const section3Ref = useRef<HTMLElement>(null);
+  const section4Ref = useRef<HTMLElement>(null);
+  const section5Ref = useRef<HTMLElement>(null);
+  const section6Ref = useRef<HTMLElement>(null);
+  const formRef = useRef<HTMLElement>(null);
 
   const sectionRefs = [heroRef, section2Ref, section3Ref, section4Ref, section5Ref, section6Ref, formRef];
-  const TOTAL_QUIZ_SECTIONS = 3; // Q1 (sec0), Q2 (sec1), Q3 (sec2)
+
+  // IntersectionObserver: update currentSection based on actual scroll position
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    sectionRefs.forEach((ref, idx) => {
+      if (!ref.current) return;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setCurrentSection(prev => Math.max(prev, idx));
+            if (idx >= 1) setShowMobileCTA(true);
+          }
+        },
+        { threshold: 0.25, rootMargin: '-60px 0px 0px 0px' }
+      );
+      observer.observe(ref.current);
+      observers.push(observer);
+    });
+    return () => observers.forEach(o => o.disconnect());
+  }, []);
+
   const progress = Math.min(100, Math.round((currentSection / 6) * 100));
 
-  // Track section changes
   useEffect(() => {
     trackEvent('perspective_funnel_section', {
       event_category: 'Funnel',
@@ -181,12 +243,6 @@ export default function PerspectiveFunnelPage() {
     });
   }, [currentSection]);
 
-  // Show mobile CTA after section 1
-  useEffect(() => {
-    setShowMobileCTA(currentSection >= 1);
-  }, [currentSection]);
-
-  // Cal.com init on success
   useEffect(() => {
     if (!submitted) return;
     (async () => {
@@ -196,10 +252,9 @@ export default function PerspectiveFunnelPage() {
   }, [submitted]);
 
   const scrollTo = useCallback((idx: number) => {
-    setCurrentSection(idx);
     const ref = sectionRefs[idx];
     if (ref?.current) {
-      const yOffset = -72; // sticky header height
+      const yOffset = -72;
       const y = ref.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
@@ -226,7 +281,6 @@ export default function PerspectiveFunnelPage() {
   const submitLead = async () => {
     if (!validateForm()) return;
     setIsSubmitting(true);
-
     try {
       await fetch('/api/leads', {
         method: 'POST',
@@ -254,18 +308,13 @@ export default function PerspectiveFunnelPage() {
     } catch (e) {
       console.error('Lead submission error:', e);
     }
-
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: 'perspective_funnel_lead_submitted',
-      insurance_type: selectedInsurance,
-    });
+    window.dataLayer.push({ event: 'perspective_funnel_lead_submitted', insurance_type: selectedInsurance });
     trackConversion();
     trackEvent('funnel_lead_submitted', {
       event_category: 'Conversion',
       event_label: selectedInsurance || 'general_consultation',
     });
-
     setIsSubmitting(false);
     setSubmitted(true);
   };
@@ -278,7 +327,7 @@ export default function PerspectiveFunnelPage() {
         keywords="Versicherungsberatung kostenlos, ERGO Beratung Ganderkesee, Versicherungsvergleich, kostenlose Analyse"
       />
 
-      {/* ─── Sticky Header ─────────────────────────────────────────────── */}
+      {/* Sticky header with animated progress bar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
           <Link href="/">
@@ -290,7 +339,6 @@ export default function PerspectiveFunnelPage() {
               </span>
             </span>
           </Link>
-          {/* Progress bar (desktop) */}
           <div className="hidden sm:flex flex-1 max-w-xs items-center gap-2">
             <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
               <motion.div
@@ -310,7 +358,6 @@ export default function PerspectiveFunnelPage() {
             <span className="sm:hidden">Anrufen</span>
           </a>
         </div>
-        {/* Mobile progress bar */}
         <div className="sm:hidden h-1 bg-gray-200">
           <motion.div
             className="h-full bg-ergo-red"
@@ -320,16 +367,12 @@ export default function PerspectiveFunnelPage() {
         </div>
       </header>
 
-      <div className="pt-14 sm:pt-14 min-h-screen bg-white">
+      <div className="pt-14 min-h-screen bg-white">
 
-        {/* ═══ SECTION 1 – Hero + Q1: Welche Versicherung? ════════════════ */}
+        {/* Section 1 – Hero + Q1 */}
         <section ref={heroRef} className="bg-gradient-to-br from-[#003781] via-[#004299] to-[#005ab4] text-white pt-12 pb-16 sm:pt-20 sm:pb-24 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <div className="inline-flex items-center gap-1.5 bg-white/15 px-3 py-1.5 rounded-full text-xs font-medium mb-5">
                 <StarRating size="sm" />
                 <span>4,9/5 · über 3.500 zufriedene Kunden</span>
@@ -341,13 +384,7 @@ export default function PerspectiveFunnelPage() {
                 Beantworten Sie 3 kurze Fragen und erhalten Sie eine persönliche, kostenlose Versicherungsanalyse von Morino Stübe – Ihrem ERGO Berater vor Ort.
               </p>
             </motion.div>
-
-            {/* Q1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5 }}>
               <p className="text-sm font-semibold text-white/70 uppercase tracking-widest mb-4">
                 Frage 1 von 3 · Was möchten Sie absichern?
               </p>
@@ -383,14 +420,14 @@ export default function PerspectiveFunnelPage() {
           </div>
         </section>
 
-        {/* ═══ SECTION 2 – Trust + Q2: Bestehende Verträge? ═══════════════ */}
+        {/* Section 2 – Trust + stacked avatars + Q2 */}
         <section ref={section2Ref} className="py-14 sm:py-20 px-4 bg-white">
           <div className="max-w-4xl mx-auto">
-            {/* Trust badges row */}
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-8 mb-14">
+            {/* Trust badges */}
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-8 mb-10">
               {[
                 { emoji: '🏆', label: 'ERGO Testsieger', sub: '2024' },
-                { emoji: '⭐', label: '4,9 / 5 Sterne', sub: 'über 3.500 Kunden' },
+                { emoji: '⭐', label: '4,9 / 5 Sterne', sub: 'Kundenbewertung' },
                 { emoji: '🤝', label: '100% kostenlos', sub: 'Keine Verpflichtung' },
                 { emoji: '📍', label: 'Vor Ort', sub: 'Ganderkesee' },
               ].map(b => (
@@ -400,6 +437,29 @@ export default function PerspectiveFunnelPage() {
                   <span className="text-[10px] text-gray-500 text-center">{b.sub}</span>
                 </div>
               ))}
+            </div>
+
+            {/* Stacked avatars social proof */}
+            <div className="flex justify-center items-center gap-3 mb-12">
+              <div className="flex -space-x-3">
+                {['TM', 'SK', 'MB', 'JF', 'RK'].map((initials, i) => (
+                  <div
+                    key={i}
+                    className={`w-10 h-10 rounded-full border-2 border-white flex items-center justify-center text-white text-xs font-bold flex-shrink-0
+                      ${['bg-blue-500', 'bg-purple-500', 'bg-green-600', 'bg-orange-500', 'bg-pink-500'][i]}
+                    `}
+                  >
+                    {initials}
+                  </div>
+                ))}
+              </div>
+              <div>
+                <p className="text-sm font-bold text-gray-900">3.500+ zufriedene Kunden</p>
+                <div className="flex items-center gap-1">
+                  <StarRating size="sm" />
+                  <span className="text-xs text-gray-500">aus der Region</span>
+                </div>
+              </div>
             </div>
 
             {/* Q2 */}
@@ -438,10 +498,9 @@ export default function PerspectiveFunnelPage() {
           </div>
         </section>
 
-        {/* ═══ SECTION 3 – Benefits + Testimonials + Q3 ════════════════════ */}
+        {/* Section 3 – Benefits + Testimonials + Q3 */}
         <section ref={section3Ref} className="py-14 sm:py-20 px-4 bg-gray-50">
           <div className="max-w-4xl mx-auto">
-            {/* Benefits */}
             <div className="grid sm:grid-cols-2 gap-3 mb-14">
               {[
                 { icon: '💰', text: 'Bis zu 15% Bündelrabatt ab 5 Versicherungen' },
@@ -458,13 +517,20 @@ export default function PerspectiveFunnelPage() {
               ))}
             </div>
 
-            {/* Testimonials */}
             <div className="grid sm:grid-cols-3 gap-4 mb-14">
               {testimonials.map(t => (
                 <div key={t.name} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
-                  <StarRating />
-                  <p className="mt-3 text-sm text-gray-700 leading-relaxed italic">"{t.text}"</p>
-                  <p className="mt-3 text-xs font-semibold text-gray-500">{t.name} · {t.location}</p>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 ${t.color}`}>
+                      {t.initials}
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-gray-800">{t.name}</p>
+                      <p className="text-[10px] text-gray-400">{t.location}</p>
+                    </div>
+                    <StarRating size="sm" />
+                  </div>
+                  <p className="text-sm text-gray-700 leading-relaxed italic">"{t.text}"</p>
                 </div>
               ))}
             </div>
@@ -507,7 +573,7 @@ export default function PerspectiveFunnelPage() {
           </div>
         </section>
 
-        {/* ═══ SECTION 4 – Comparison Table ════════════════════════════════ */}
+        {/* Section 4 – Comparison Table */}
         <section ref={section4Ref} className="py-14 sm:py-20 px-4 bg-white">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-10">
@@ -553,11 +619,10 @@ export default function PerspectiveFunnelPage() {
           </div>
         </section>
 
-        {/* ═══ SECTION 5 – Advisor + Stats ══════════════════════════════════ */}
+        {/* Section 5 – Advisor + Animated Stats */}
         <section ref={section5Ref} className="py-14 sm:py-20 px-4 bg-gray-50">
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-col sm:flex-row items-center gap-8 sm:gap-12">
-              {/* Photo */}
               <div className="flex-shrink-0">
                 <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full overflow-hidden border-4 border-white shadow-xl">
                   <img
@@ -567,24 +632,21 @@ export default function PerspectiveFunnelPage() {
                   />
                 </div>
               </div>
-              {/* Bio */}
               <div className="flex-1 text-center sm:text-left">
                 <p className="text-xs font-semibold text-ergo-red uppercase tracking-widest mb-2">Ihr persönlicher Berater</p>
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Morino Stübe</h2>
-                <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-5">
+                <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6">
                   Ich bin seit über 15 Jahren selbstständiger ERGO Agenturinhaber in Ganderkesee. Mein Ziel ist es, Sie wirklich optimal abzusichern – ehrlich, transparent und ohne Druck.
                 </p>
                 <div className="flex flex-wrap justify-center sm:justify-start gap-6">
-                  {[
-                    { value: '3.500+', label: 'Kunden' },
-                    { value: '4,9/5', label: 'Sterne' },
-                    { value: '15+', label: 'Jahre Erfahrung' },
-                    { value: '97%', label: 'Weiterempfehlung' },
-                  ].map(s => (
-                    <div key={s.label} className="text-center">
-                      <div className="text-xl sm:text-2xl font-bold text-ergo-red">{s.value}</div>
-                      <div className="text-xs text-gray-500">{s.label}</div>
-                    </div>
+                  {ADVISOR_STATS.map(s => (
+                    <AnimatedCounter
+                      key={s.label}
+                      end={s.end}
+                      suffix={s.suffix}
+                      decimals={s.decimals}
+                      label={s.label}
+                    />
                   ))}
                 </div>
               </div>
@@ -592,7 +654,7 @@ export default function PerspectiveFunnelPage() {
           </div>
         </section>
 
-        {/* ═══ SECTION 6 – FAQ ══════════════════════════════════════════════ */}
+        {/* Section 6 – FAQ */}
         <section ref={section6Ref} className="py-14 sm:py-20 px-4 bg-white">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-10">
@@ -615,7 +677,7 @@ export default function PerspectiveFunnelPage() {
           </div>
         </section>
 
-        {/* ═══ SECTION 7 – Lead Form ════════════════════════════════════════ */}
+        {/* Section 7 – Lead Form */}
         <section ref={formRef} className="py-14 sm:py-20 px-4 bg-gradient-to-br from-[#003781] to-[#005ab4]">
           <div className="max-w-xl mx-auto">
             <AnimatePresence mode="wait">
@@ -686,7 +748,6 @@ export default function PerspectiveFunnelPage() {
                       {formErrors.phone && <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>}
                     </div>
 
-                    {/* DSGVO */}
                     <div className="mb-6">
                       <label className={`flex items-start gap-3 cursor-pointer ${formErrors.dsgvo ? 'text-red-500' : 'text-gray-600'}`}>
                         <input
@@ -725,7 +786,6 @@ export default function PerspectiveFunnelPage() {
                   </div>
                 </motion.div>
               ) : (
-                /* ─── Success State ─── */
                 <motion.div
                   key="success"
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -756,7 +816,6 @@ export default function PerspectiveFunnelPage() {
                       01556 677 1019
                     </a>
                   </p>
-                  {/* Social proof */}
                   <div className="mt-10 bg-white/10 rounded-2xl p-5 max-w-sm mx-auto border border-white/20">
                     <StarRating size="md" />
                     <p className="mt-2 text-white/85 text-sm italic">"Schnelle Rückmeldung, top Beratung. Sehr empfehlenswert!"</p>
@@ -768,7 +827,7 @@ export default function PerspectiveFunnelPage() {
           </div>
         </section>
 
-        {/* ─── Footer mini ───────────────────────────────────────────────── */}
+        {/* Footer mini */}
         <footer className="bg-[#002560] py-6 px-4 text-center">
           <div className="flex flex-wrap justify-center gap-4 text-xs text-white/50 mb-2">
             <Link href="/impressum"><span className="hover:text-white cursor-pointer">Impressum</span></Link>
@@ -780,7 +839,7 @@ export default function PerspectiveFunnelPage() {
         </footer>
       </div>
 
-      {/* ─── Mobile Sticky CTA (appears after Q1 answered) ──────────────── */}
+      {/* Mobile sticky CTA */}
       <AnimatePresence>
         {showMobileCTA && !submitted && (
           <motion.div
