@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { getCalApi } from '@calcom/embed-react';
+import Cal, { getCalApi } from '@calcom/embed-react';
 import { Link } from 'wouter';
 import SEO from '@/components/SEO';
 import { trackEvent, trackConversion } from '@/lib/analytics';
@@ -255,26 +255,12 @@ export default function PerspectiveFunnelPage() {
     });
   }, [currentSection]);
 
-  const calInlineRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     if (!submitted) return;
-    let timer: ReturnType<typeof setTimeout>;
     (async () => {
       const cal = await getCalApi({ namespace: 'beratung-termin' });
-      cal('ui', { hideEventTypeDetails: false, styles: { branding: { brandColor: '#E30613' } } });
-      // Wait for AnimatePresence exit animation + mount of the success panel
-      timer = setTimeout(() => {
-        if (calInlineRef.current) {
-          cal('inline', {
-            elementOrSelector: calInlineRef.current,
-            calLink: 'morino-stuebe-ergo/erstberatung',
-            layout: 'month_view',
-          });
-        }
-      }, 600);
+      cal('ui', { hideEventTypeDetails: false });
     })();
-    return () => clearTimeout(timer);
   }, [submitted]);
 
   const scrollTo = useCallback((idx: number) => {
@@ -845,11 +831,14 @@ export default function PerspectiveFunnelPage() {
                     </p>
                   </div>
 
-                  <div
-                    ref={calInlineRef}
-                    className="rounded-2xl overflow-hidden shadow-2xl bg-white"
-                    style={{ minHeight: '600px' }}
-                  />
+                  <div className="rounded-2xl overflow-hidden shadow-2xl bg-white">
+                    <Cal
+                      namespace="beratung-termin"
+                      calLink="morino-stuebe-ergo/erstberatung"
+                      style={{ width: '100%', minHeight: 620 }}
+                      config={{ layout: 'month_view' }}
+                    />
+                  </div>
 
                   <p className="text-center text-white/50 text-xs mt-4">
                     Kein passender Termin? Rufen Sie uns an:{' '}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getCalApi } from '@calcom/embed-react';
+import Cal, { getCalApi } from '@calcom/embed-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import '@/styles/funnel.css';
 
@@ -747,7 +747,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                 </motion.div>
               )}
 
-              {/* STEP 9 – Thank You */}
+              {/* STEP 9 – Thank You + Direct Calendar */}
               {step === 9 && (
                 <motion.div
                   key="step9"
@@ -759,43 +759,34 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   className="funnel-step funnel-step-thankyou"
                 >
-                  <motion.div
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.1 }}
-                    className="funnel-check-animation"
-                  >
-                    <svg viewBox="0 0 52 52" className="funnel-checkmark-svg">
-                      <circle className="funnel-checkmark-circle" cx="26" cy="26" r="25" fill="none" />
-                      <path className="funnel-checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                    </svg>
-                  </motion.div>
-                  <h2 className="funnel-headline">🎉 Vielen Dank, Ihre Anfrage ist eingegangen!</h2>
-                  <p className="funnel-subtext">Morino Stübe meldet sich innerhalb von 24 Stunden persönlich bei Ihnen.</p>
-
-                  <div className="funnel-advisor-mini">
-                    <img
-                      src="/attached_assets/089-Ti9r4yWZjrM_1756458595368.jpeg"
-                      alt="Morino Stübe"
-                      className="funnel-advisor-img"
-                    />
-                    <div>
-                      <strong>Morino Stübe</strong>
-                      <span>ERGO Versicherungsfachmann · Ganderkesee</span>
-                    </div>
+                  <div className="flex items-center justify-center gap-3 mb-2">
+                    <motion.div
+                      initial={{ scale: 0.5, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.1 }}
+                      className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0"
+                    >
+                      <svg viewBox="0 0 52 52" className="w-6 h-6">
+                        <circle className="funnel-checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+                        <path className="funnel-checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                      </svg>
+                    </motion.div>
+                    <h2 className="funnel-headline" style={{ margin: 0 }}>
+                      🎉 Anfrage eingegangen – Termin wählen:
+                    </h2>
                   </div>
+                  <p className="funnel-subtext" style={{ marginBottom: '12px' }}>
+                    Wählen Sie direkt Ihren Wunschtermin für die kostenlose Beratung:
+                  </p>
 
-                  <motion.button
-                    data-cal-namespace="funnel-termin"
-                    data-cal-link="morino-stuebe-ergo/erstberatung"
-                    data-cal-config='{"layout":"month_view"}'
-                    className="funnel-cta-btn"
-                    onClick={() => trackEvent('booking_from_funnel_clicked')}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.97 }}
-                  >
-                    📅 Jetzt Termin auswählen & buchen
-                  </motion.button>
+                  <div style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: '12px' }}>
+                    <Cal
+                      namespace="funnel-termin"
+                      calLink="morino-stuebe-ergo/erstberatung"
+                      style={{ width: '100%', minHeight: 500 }}
+                      config={{ layout: 'month_view' }}
+                    />
+                  </div>
 
                   <motion.a
                     href="https://wa.me/4915566771019"
