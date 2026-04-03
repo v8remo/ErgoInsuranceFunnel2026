@@ -23,6 +23,7 @@ const Erstinformation = lazy(() => import("@/pages/Erstinformation"));
 const Insurance = lazy(() => import("@/pages/Insurance"));
 const CityLanding = lazy(() => import("@/pages/CityLanding"));
 const LeadPage = lazy(() => import("@/pages/LeadPage"));
+const PerspectiveFunnelPage = lazy(() => import("@/pages/PerspectiveFunnelPage"));
 const LebenVorsorge = lazy(() => import("@/pages/LebenVorsorge"));
 const TerminPage = lazy(() => import("@/pages/TerminPage"));
 const VersicherungsCheck = lazy(() => import("@/pages/VersicherungsCheck"));
@@ -83,7 +84,7 @@ function AppContent() {
           <Route path="/versicherung-delmenhorst">{() => <CityLanding cityKey="delmenhorst" />}</Route>
           <Route path="/versicherung-oldenburg">{() => <CityLanding cityKey="oldenburg" />}</Route>
           <Route path="/leben-vorsorge" component={LebenVorsorge} />
-          <Route path="/beratung" component={LeadPage} />
+          <Route path="/beratung" component={PerspectiveFunnelPage} />
           <Route path="/termin" component={TerminPage} />
           <Route path="/versicherungscheck" component={VersicherungsCheck} />
           <Route path="/sparrechner" component={SparRechner} />
