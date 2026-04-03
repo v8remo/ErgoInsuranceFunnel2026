@@ -255,12 +255,26 @@ export default function PerspectiveFunnelPage() {
     });
   }, [currentSection]);
 
+  const calInlineRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!submitted) return;
+    let timer: ReturnType<typeof setTimeout>;
     (async () => {
       const cal = await getCalApi({ namespace: 'beratung-termin' });
-      cal('ui', { layout: 'month_view', hideEventTypeDetails: false });
+      cal('ui', { hideEventTypeDetails: false, styles: { branding: { brandColor: '#E30613' } } });
+      // Wait for AnimatePresence exit animation + mount of the success panel
+      timer = setTimeout(() => {
+        if (calInlineRef.current) {
+          cal('inline', {
+            elementOrSelector: calInlineRef.current,
+            calLink: 'morino-stuebe-ergo/erstberatung',
+            layout: 'month_view',
+          });
+        }
+      }, 600);
     })();
+    return () => clearTimeout(timer);
   }, [submitted]);
 
   const scrollTo = useCallback((idx: number) => {
@@ -701,7 +715,7 @@ export default function PerspectiveFunnelPage() {
 
         {/* Section 7 – Lead Form */}
         <section ref={formRef} className="py-14 sm:py-20 px-4 bg-gradient-to-br from-[#003781] to-[#005ab4]">
-          <div className="max-w-xl mx-auto">
+          <div className={`mx-auto transition-all duration-500 ${submitted ? 'max-w-3xl' : 'max-w-xl'}`}>
             <AnimatePresence mode="wait">
               {!submitted ? (
                 <motion.div
@@ -815,39 +829,34 @@ export default function PerspectiveFunnelPage() {
               ) : (
                 <motion.div
                   key="success"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="text-center"
                 >
-                  <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
-                    <Check className="w-10 h-10 text-white" />
+                  <div className="text-center mb-6">
+                    <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
+                      <Check className="w-8 h-8 text-white" />
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                      Super, {formData.firstName}! 🎉
+                    </h2>
+                    <p className="text-white/80 text-sm max-w-sm mx-auto">
+                      Ihre Anfrage ist eingegangen. Wählen Sie jetzt direkt Ihren Wunschtermin:
+                    </p>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-                    Anfrage erfolgreich! 🎉
-                  </h2>
-                  <p className="text-white/80 text-base mb-8 max-w-sm mx-auto">
-                    Vielen Dank, {formData.firstName}! Ich melde mich innerhalb von 24 Stunden bei Ihnen – oder buchen Sie direkt einen Termin:
-                  </p>
-                  <button
-                    data-cal-namespace="beratung-termin"
-                    data-cal-link="morino-stuebe-ergo/erstberatung"
-                    data-cal-config='{"layout":"month_view"}'
-                    className="inline-flex items-center gap-2 bg-white text-ergo-red font-bold px-8 py-4 rounded-xl text-base hover:bg-gray-100 transition-colors shadow-lg cursor-pointer mb-6"
-                  >
-                    📅 Jetzt Termin auswählen &amp; buchen
-                  </button>
-                  <p className="text-white/60 text-sm">
-                    Oder rufen Sie mich an:{' '}
-                    <a href="tel:015566771019" className="underline text-white/90 font-medium">
+
+                  <div
+                    ref={calInlineRef}
+                    className="rounded-2xl overflow-hidden shadow-2xl bg-white"
+                    style={{ minHeight: '600px' }}
+                  />
+
+                  <p className="text-center text-white/50 text-xs mt-4">
+                    Kein passender Termin? Rufen Sie uns an:{' '}
+                    <a href="tel:015566771019" className="underline text-white/70">
                       01556 677 1019
                     </a>
                   </p>
-                  <div className="mt-10 bg-white/10 rounded-2xl p-5 max-w-sm mx-auto border border-white/20">
-                    <StarRating size="md" />
-                    <p className="mt-2 text-white/85 text-sm italic">"Schnelle Rückmeldung, top Beratung. Sehr empfehlenswert!"</p>
-                    <p className="text-white/50 text-xs mt-1">Julia F. · Ganderkesee</p>
-                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
