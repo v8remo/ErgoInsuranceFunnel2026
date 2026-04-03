@@ -22,7 +22,6 @@ const KennzeichenPage = lazy(() => import("@/pages/KennzeichenPage"));
 const Erstinformation = lazy(() => import("@/pages/Erstinformation"));
 const Insurance = lazy(() => import("@/pages/Insurance"));
 const CityLanding = lazy(() => import("@/pages/CityLanding"));
-const LeadPage = lazy(() => import("@/pages/LeadPage"));
 const PerspectiveFunnelPage = lazy(() => import("@/pages/PerspectiveFunnelPage"));
 const LebenVorsorge = lazy(() => import("@/pages/LebenVorsorge"));
 const TerminPage = lazy(() => import("@/pages/TerminPage"));
