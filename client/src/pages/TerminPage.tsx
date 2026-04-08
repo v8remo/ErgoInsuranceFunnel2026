@@ -9,6 +9,18 @@ export default function TerminPage() {
     (async function () {
       const cal = await getCalApi({ namespace: "erstberatung" });
       cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
+      cal("on", {
+        action: "bookingSuccessful",
+        callback: () => {
+          if (typeof window.gtag === "function") {
+            window.gtag("event", "conversion", {
+              send_to: "AW-17132012984/AEwRCLKWlZgcELiLl-k_",
+              value: 1.0,
+              currency: "EUR",
+            });
+          }
+        },
+      });
     })();
   }, []);
 

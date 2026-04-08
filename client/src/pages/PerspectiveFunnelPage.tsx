@@ -270,6 +270,18 @@ export default function PerspectiveFunnelPage() {
     (async () => {
       const cal = await getCalApi({ namespace: 'beratung-termin' });
       cal('ui', { hideEventTypeDetails: false });
+      cal('on', {
+        action: 'bookingSuccessful',
+        callback: () => {
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', 'conversion', {
+              send_to: 'AW-17132012984/AEwRCLKWlZgcELiLl-k_',
+              value: 1.0,
+              currency: 'EUR',
+            });
+          }
+        },
+      });
     })();
   }, [submitted]);
 

@@ -133,6 +133,18 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
       (async () => {
         const cal = await getCalApi({ namespace: "funnel-termin" });
         cal("ui", { layout: "month_view", hideEventTypeDetails: false });
+        cal("on", {
+          action: "bookingSuccessful",
+          callback: () => {
+            if (typeof window.gtag === "function") {
+              window.gtag("event", "conversion", {
+                send_to: "AW-17132012984/AEwRCLKWlZgcELiLl-k_",
+                value: 1.0,
+                currency: "EUR",
+              });
+            }
+          },
+        });
       })();
     }
   }, [step]);
