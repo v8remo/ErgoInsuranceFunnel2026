@@ -277,6 +277,7 @@ export default function PerspectiveFunnelPage() {
       const nearForm = formTop - window.innerHeight < 200;
       setShowMobileCTA(heroPassed && !nearForm);
     };
+    checkCTA();
     window.addEventListener('scroll', checkCTA, { passive: true });
     return () => window.removeEventListener('scroll', checkCTA);
   }, [submitted]);
@@ -951,12 +952,12 @@ export default function PerspectiveFunnelPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-white border-t border-gray-200 px-4 py-3 shadow-xl"
+            className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-ergo-red px-4 py-3 shadow-2xl"
             style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom, 12px))' }}
           >
             <button
               onClick={() => scrollTo(6)}
-              className="w-full bg-ergo-red text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2"
+              className="w-full bg-white text-ergo-red font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm"
             >
               Jetzt kostenlos beraten lassen <ArrowRight className="w-4 h-4" />
             </button>
