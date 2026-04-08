@@ -34,14 +34,29 @@ export async function sendLeadNotification(lead: Lead): Promise<boolean> {
             <p><strong>Eingegangen:</strong> ${new Date(lead.createdAt).toLocaleString('de-DE')}</p>
           </div>
           
-          ${lead.specificData && Object.keys(lead.specificData).length > 0 ? `
-          <div style="background-color: white; padding: 15px; border-radius: 8px;">
+          ${lead.specificData && Object.keys(lead.specificData).length > 0 ? (() => {
+            const data = lead.specificData as Record<string, any>;
+            const utm = data.utm as Record<string, string> | undefined;
+            const otherEntries = Object.entries(data).filter(([k]) => k !== 'utm');
+            const hasUTM = utm && Object.values(utm).some(v => v && v !== 'direct');
+            return `
+          <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
             <h3 style="color: #e53e3e; margin-top: 0;">Weitere Angaben</h3>
-            ${Object.entries(lead.specificData).map(([key, value]) => 
+            ${otherEntries.map(([key, value]) => 
               `<p><strong>${getFieldName(key)}:</strong> ${value}</p>`
             ).join('')}
           </div>
-          ` : ''}
+          ${hasUTM ? `
+          <div style="background-color: #fffbeb; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+            <h3 style="color: #92400e; margin-top: 0;">📊 Google Ads Tracking</h3>
+            ${utm!.gclid ? `<p><strong>GCLID:</strong> <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:12px;">${utm!.gclid}</code></p>` : ''}
+            ${utm!.source ? `<p><strong>Quelle:</strong> ${utm!.source}</p>` : ''}
+            ${utm!.medium ? `<p><strong>Medium:</strong> ${utm!.medium}</p>` : ''}
+            ${utm!.campaign ? `<p><strong>Kampagne:</strong> ${utm!.campaign}</p>` : ''}
+            ${utm!.term ? `<p><strong>Suchbegriff:</strong> ${utm!.term}</p>` : ''}
+            ${utm!.content ? `<p><strong>Anzeige:</strong> ${utm!.content}</p>` : ''}
+          </div>` : ''}`;
+          })() : ''}
         </div>
         
         <div style="background-color: #e53e3e; color: white; padding: 15px; text-align: center;">
@@ -90,7 +105,10 @@ function getFieldName(key: string): string {
     'property_value': 'Immobilienwert',
     'building_type': 'Gebäudetyp',
     'legal_area': 'Rechtsbereich',
-    'family_status': 'Familienstand'
+    'family_status': 'Familienstand',
+    'has_existing': 'Bestehende Verträge',
+    'timing_preference': 'Gewünschter Zeitpunkt',
+    'sonstiges_text': 'Sonstiges (Freitext)',
   };
   return fieldNames[key] || key;
 }

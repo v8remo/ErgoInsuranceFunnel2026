@@ -234,7 +234,7 @@ export default function PerspectiveFunnelPage() {
       if (visibleSections.size === 0) return;
       const maxVisible = Math.max(...Array.from(visibleSections));
       setCurrentSection(maxVisible);
-      if (maxVisible >= 1) setShowMobileCTA(true);
+      setShowMobileCTA(maxVisible >= 1 && !visibleSections.has(6));
     };
 
     sectionRefs.forEach((ref, idx) => {
@@ -331,11 +331,15 @@ export default function PerspectiveFunnelPage() {
           specificData: {
             has_existing: hasExisting,
             timing_preference: timingPreference,
-            utm_source: getURLParam('utm_source') || 'direct',
-            utm_medium: getURLParam('utm_medium') || '',
-            utm_campaign: getURLParam('utm_campaign') || '',
-            gclid: getURLParam('gclid') || '',
             ...(selectedInsurance === 'sonstiges' && sonstigesText ? { sonstiges_text: sonstigesText } : {}),
+            utm: {
+              source: getURLParam('utm_source') || 'direct',
+              medium: getURLParam('utm_medium') || '',
+              campaign: getURLParam('utm_campaign') || '',
+              term: getURLParam('utm_term') || '',
+              content: getURLParam('utm_content') || '',
+              gclid: getURLParam('gclid') || '',
+            },
           },
           source: 'lp_beratung_perspective',
           status: 'new',
@@ -352,6 +356,13 @@ export default function PerspectiveFunnelPage() {
       setSubmitError('Netzwerkfehler. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut.');
       setIsSubmitting(false);
       return;
+    }
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'conversion', {
+        send_to: 'AW-17132012984/AEwRCLKWlZgcELiLl-k_',
+        value: 1.0,
+        currency: 'EUR',
+      });
     }
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event: 'perspective_funnel_lead_submitted', insurance_type: selectedInsurance });
