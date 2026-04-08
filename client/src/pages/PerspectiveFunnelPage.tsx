@@ -214,6 +214,17 @@ export default function PerspectiveFunnelPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [showMobileCTA, setShowMobileCTA] = useState(false);
+  const [utmData] = useState(() => {
+    const url = new URL(window.location.href);
+    return {
+      source: url.searchParams.get('utm_source') || 'direct',
+      medium: url.searchParams.get('utm_medium') || '',
+      campaign: url.searchParams.get('utm_campaign') || '',
+      term: url.searchParams.get('utm_term') || '',
+      content: url.searchParams.get('utm_content') || '',
+      gclid: url.searchParams.get('gclid') || '',
+    };
+  });
 
   const heroRef = useRef<HTMLElement>(null);
   const section2Ref = useRef<HTMLElement>(null);
@@ -234,7 +245,6 @@ export default function PerspectiveFunnelPage() {
       if (visibleSections.size === 0) return;
       const maxVisible = Math.max(...Array.from(visibleSections));
       setCurrentSection(maxVisible);
-      setShowMobileCTA(maxVisible >= 1 && !visibleSections.has(6));
     };
 
     sectionRefs.forEach((ref, idx) => {
@@ -255,6 +265,21 @@ export default function PerspectiveFunnelPage() {
     });
     return () => observers.forEach(o => o.disconnect());
   }, []);
+
+  useEffect(() => {
+    const checkCTA = () => {
+      if (submitted) return;
+      const heroEl = heroRef.current;
+      const formEl = formRef.current;
+      if (!heroEl || !formEl) return;
+      const heroPassed = heroEl.getBoundingClientRect().bottom < 0;
+      const formTop = formEl.getBoundingClientRect().top;
+      const nearForm = formTop - window.innerHeight < 200;
+      setShowMobileCTA(heroPassed && !nearForm);
+    };
+    window.addEventListener('scroll', checkCTA, { passive: true });
+    return () => window.removeEventListener('scroll', checkCTA);
+  }, [submitted]);
 
   const progress = Math.min(100, Math.round((currentSection / 6) * 100));
 
@@ -294,11 +319,6 @@ export default function PerspectiveFunnelPage() {
     }
   }, []);
 
-  const getURLParam = (param: string) => {
-    const url = new URL(window.location.href);
-    return url.searchParams.get(param) || '';
-  };
-
   const validateForm = () => {
     const errors: FormErrors = {};
     if (!formData.firstName.trim()) errors.firstName = 'Bitte Vornamen eingeben';
@@ -332,14 +352,7 @@ export default function PerspectiveFunnelPage() {
             has_existing: hasExisting,
             timing_preference: timingPreference,
             ...(selectedInsurance === 'sonstiges' && sonstigesText ? { sonstiges_text: sonstigesText } : {}),
-            utm: {
-              source: getURLParam('utm_source') || 'direct',
-              medium: getURLParam('utm_medium') || '',
-              campaign: getURLParam('utm_campaign') || '',
-              term: getURLParam('utm_term') || '',
-              content: getURLParam('utm_content') || '',
-              gclid: getURLParam('gclid') || '',
-            },
+            utm: utmData,
           },
           source: 'lp_beratung_perspective',
           status: 'new',
@@ -945,7 +958,7 @@ export default function PerspectiveFunnelPage() {
               onClick={() => scrollTo(6)}
               className="w-full bg-ergo-red text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2"
             >
-              Jetzt kostenlose Analyse starten <ArrowRight className="w-4 h-4" />
+              Jetzt kostenlos beraten lassen <ArrowRight className="w-4 h-4" />
             </button>
           </motion.div>
         )}

@@ -1,6 +1,23 @@
 import { Resend } from 'resend';
 import { Lead } from '@shared/schema';
 
+interface UtmData {
+  source?: string;
+  medium?: string;
+  campaign?: string;
+  term?: string;
+  content?: string;
+  gclid?: string;
+}
+
+interface LeadSpecificData {
+  utm?: UtmData;
+  has_existing?: string;
+  timing_preference?: string;
+  sonstiges_text?: string;
+  [key: string]: string | UtmData | undefined;
+}
+
 if (!process.env.RESEND_API_KEY) {
   console.warn('RESEND_API_KEY not found - Email notifications will be disabled');
 }
@@ -34,29 +51,7 @@ export async function sendLeadNotification(lead: Lead): Promise<boolean> {
             <p><strong>Eingegangen:</strong> ${new Date(lead.createdAt).toLocaleString('de-DE')}</p>
           </div>
           
-          ${lead.specificData && Object.keys(lead.specificData).length > 0 ? (() => {
-            const data = lead.specificData as Record<string, any>;
-            const utm = data.utm as Record<string, string> | undefined;
-            const otherEntries = Object.entries(data).filter(([k]) => k !== 'utm');
-            const hasUTM = utm && Object.values(utm).some(v => v && v !== 'direct');
-            return `
-          <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <h3 style="color: #e53e3e; margin-top: 0;">Weitere Angaben</h3>
-            ${otherEntries.map(([key, value]) => 
-              `<p><strong>${getFieldName(key)}:</strong> ${value}</p>`
-            ).join('')}
-          </div>
-          ${hasUTM ? `
-          <div style="background-color: #fffbeb; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b;">
-            <h3 style="color: #92400e; margin-top: 0;">📊 Google Ads Tracking</h3>
-            ${utm!.gclid ? `<p><strong>GCLID:</strong> <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:12px;">${utm!.gclid}</code></p>` : ''}
-            ${utm!.source ? `<p><strong>Quelle:</strong> ${utm!.source}</p>` : ''}
-            ${utm!.medium ? `<p><strong>Medium:</strong> ${utm!.medium}</p>` : ''}
-            ${utm!.campaign ? `<p><strong>Kampagne:</strong> ${utm!.campaign}</p>` : ''}
-            ${utm!.term ? `<p><strong>Suchbegriff:</strong> ${utm!.term}</p>` : ''}
-            ${utm!.content ? `<p><strong>Anzeige:</strong> ${utm!.content}</p>` : ''}
-          </div>` : ''}`;
-          })() : ''}
+          ${renderSpecificData(lead.specificData)}
         </div>
         
         <div style="background-color: #e53e3e; color: white; padding: 15px; text-align: center;">
@@ -83,6 +78,40 @@ export async function sendLeadNotification(lead: Lead): Promise<boolean> {
     console.error('Error sending lead notification:', error);
     return false;
   }
+}
+
+function renderSpecificData(specificData: unknown): string {
+  if (!specificData || typeof specificData !== 'object') return '';
+  const data = specificData as LeadSpecificData;
+  const keys = Object.keys(data);
+  if (keys.length === 0) return '';
+
+  const otherEntries = Object.entries(data).filter(
+    ([k, v]) => k !== 'utm' && typeof v === 'string' && v !== ''
+  ) as [string, string][];
+
+  const utm = data.utm;
+  const hasUTM =
+    utm !== undefined &&
+    typeof utm === 'object' &&
+    Object.values(utm).some((v) => v && v !== 'direct');
+
+  return `
+  ${otherEntries.length > 0 ? `
+  <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+    <h3 style="color: #e53e3e; margin-top: 0;">Weitere Angaben</h3>
+    ${otherEntries.map(([key, value]) => `<p><strong>${getFieldName(key)}:</strong> ${value}</p>`).join('')}
+  </div>` : ''}
+  ${hasUTM && utm ? `
+  <div style="background-color: #fffbeb; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; margin-bottom: 15px;">
+    <h3 style="color: #92400e; margin-top: 0;">📊 Google Ads Tracking</h3>
+    ${utm.gclid ? `<p><strong>GCLID:</strong> <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:12px;">${utm.gclid}</code></p>` : ''}
+    ${utm.source ? `<p><strong>Quelle:</strong> ${utm.source}</p>` : ''}
+    ${utm.medium ? `<p><strong>Medium:</strong> ${utm.medium}</p>` : ''}
+    ${utm.campaign ? `<p><strong>Kampagne:</strong> ${utm.campaign}</p>` : ''}
+    ${utm.term ? `<p><strong>Suchbegriff:</strong> ${utm.term}</p>` : ''}
+    ${utm.content ? `<p><strong>Anzeige:</strong> ${utm.content}</p>` : ''}
+  </div>` : ''}`;
 }
 
 function getInsuranceName(type: string): string {
