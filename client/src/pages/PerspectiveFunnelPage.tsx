@@ -1054,8 +1054,8 @@ export default function PerspectiveFunnelPage() {
                     <Cal
                       namespace="beratung-termin"
                       calLink="morino-stuebe-ergo/erstberatung"
-                      style={{ width: '100%', minHeight: 620 }}
-                      config={{ layout: 'month_view' }}
+                      style={{ width: '100%', minHeight: 'clamp(480px, 72vh, 660px)' }}
+                      config={{ layout: 'month_view', useSlotsViewOnSmallScreen: 'true' }}
                     />
                   </div>
                   <p className="text-center text-white/50 text-xs mt-4">

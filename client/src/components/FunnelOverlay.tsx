@@ -803,8 +803,8 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                     <Cal
                       namespace="funnel-termin"
                       calLink="morino-stuebe-ergo/erstberatung"
-                      style={{ width: '100%', minHeight: 500 }}
-                      config={{ layout: 'month_view' }}
+                      style={{ width: '100%', minHeight: 'clamp(460px, 70vh, 640px)' }}
+                      config={{ layout: 'month_view', useSlotsViewOnSmallScreen: 'true' }}
                     />
                   </div>
 
