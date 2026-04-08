@@ -4,7 +4,7 @@ import Cal, { getCalApi } from '@calcom/embed-react';
 import { Link } from 'wouter';
 import SEO from '@/components/SEO';
 import { trackEvent, trackConversion } from '@/lib/analytics';
-import { Phone, Shield, Star, ChevronDown, ChevronUp, Check, ArrowRight, X } from 'lucide-react';
+import { Phone, Shield, Star, ChevronDown, ChevronUp, Check, ArrowRight, X, ChevronLeft } from 'lucide-react';
 import advisorPhoto from '@assets/optimized/ich_bin_da.webp';
 
 interface FormData {
@@ -34,12 +34,12 @@ const insuranceOptions = [
   { icon: '🚑', label: 'Unfallversicherung', value: 'unfall' },
   { icon: '✈️', label: 'Reiseversicherung', value: 'reise' },
   { icon: '💰', label: 'Altersvorsorge / Rente', value: 'altersvorsorge' },
-  { icon: '❤️', label: 'Risikolebensversicherung', value: 'risikoleben' },
+  { icon: '❤️', label: 'Risikoleben', value: 'risikoleben' },
   { icon: '🐾', label: 'Tierversicherung', value: 'tier' },
   { icon: '🏢', label: 'Gewerbe / Betrieb', value: 'gewerbe' },
   { icon: '🏥', label: 'Krankenzusatz / PKV', value: 'kranken' },
-  { icon: '🧓', label: 'Pflegeversicherung', value: 'pflege' },
-  { icon: '📋', label: 'Sonstiges / Anderes', value: 'sonstiges' },
+  { icon: '🧓', label: 'Pflege', value: 'pflege' },
+  { icon: '📋', label: 'Sonstiges', value: 'sonstiges' },
 ];
 
 const testimonials = [
@@ -196,12 +196,20 @@ function AnimatedCounter({ end, suffix = '', decimals = 0, label }: {
 }
 
 export default function PerspectiveFunnelPage() {
-  const [selectedInsurance, setSelectedInsurance] = useState('');
-  const [selectedInsuranceLabel, setSelectedInsuranceLabel] = useState('');
+  // Quiz state
+  const [quizStep, setQuizStep] = useState(0); // 0=Q1, 1=Q2, 2=Q3
+  const [quizDone, setQuizDone] = useState(false);
+  const [slideDir, setSlideDir] = useState(1); // 1=forward, -1=back
+
+  // Q1 multi-select
+  const [selectedInsurances, setSelectedInsurances] = useState<string[]>([]);
   const [sonstigesText, setSonstigesText] = useState('');
+
+  // Q2 & Q3
   const [hasExisting, setHasExisting] = useState('');
   const [timingPreference, setTimingPreference] = useState('');
-  const [currentSection, setCurrentSection] = useState(0);
+
+  // Form
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -214,6 +222,7 @@ export default function PerspectiveFunnelPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [showMobileCTA, setShowMobileCTA] = useState(false);
+
   const [utmData] = useState(() => {
     const url = new URL(window.location.href);
     return {
@@ -227,45 +236,9 @@ export default function PerspectiveFunnelPage() {
   });
 
   const heroRef = useRef<HTMLElement>(null);
-  const section2Ref = useRef<HTMLElement>(null);
-  const section3Ref = useRef<HTMLElement>(null);
-  const section4Ref = useRef<HTMLElement>(null);
-  const section5Ref = useRef<HTMLElement>(null);
-  const section6Ref = useRef<HTMLElement>(null);
   const formRef = useRef<HTMLElement>(null);
 
-  const sectionRefs = [heroRef, section2Ref, section3Ref, section4Ref, section5Ref, section6Ref, formRef];
-
-  // IntersectionObserver: update currentSection bidirectionally based on scroll position
-  useEffect(() => {
-    const visibleSections = new Set<number>();
-    const observers: IntersectionObserver[] = [];
-
-    const updateSection = () => {
-      if (visibleSections.size === 0) return;
-      const maxVisible = Math.max(...Array.from(visibleSections));
-      setCurrentSection(maxVisible);
-    };
-
-    sectionRefs.forEach((ref, idx) => {
-      if (!ref.current) return;
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            visibleSections.add(idx);
-          } else {
-            visibleSections.delete(idx);
-          }
-          updateSection();
-        },
-        { threshold: 0.25, rootMargin: '-60px 0px 0px 0px' }
-      );
-      observer.observe(ref.current);
-      observers.push(observer);
-    });
-    return () => observers.forEach(o => o.disconnect());
-  }, []);
-
+  // Mobile sticky CTA: show after hero, hide near form
   useEffect(() => {
     const checkCTA = () => {
       if (submitted) return;
@@ -273,8 +246,7 @@ export default function PerspectiveFunnelPage() {
       const formEl = formRef.current;
       if (!heroEl || !formEl) return;
       const heroPassed = heroEl.getBoundingClientRect().bottom < 0;
-      const formTop = formEl.getBoundingClientRect().top;
-      const nearForm = formTop - window.innerHeight < 200;
+      const nearForm = formEl.getBoundingClientRect().top - window.innerHeight < 200;
       setShowMobileCTA(heroPassed && !nearForm);
     };
     checkCTA();
@@ -282,15 +254,7 @@ export default function PerspectiveFunnelPage() {
     return () => window.removeEventListener('scroll', checkCTA);
   }, [submitted]);
 
-  const progress = Math.min(100, Math.round((currentSection / 6) * 100));
-
-  useEffect(() => {
-    trackEvent('perspective_funnel_section', {
-      event_category: 'Funnel',
-      event_label: `section_${currentSection}`,
-    });
-  }, [currentSection]);
-
+  // Cal.com init when submitted
   useEffect(() => {
     if (!submitted) return;
     (async () => {
@@ -311,14 +275,33 @@ export default function PerspectiveFunnelPage() {
     })();
   }, [submitted]);
 
-  const scrollTo = useCallback((idx: number) => {
-    const ref = sectionRefs[idx];
-    if (ref?.current) {
-      const yOffset = -72;
-      const y = ref.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+  const scrollToForm = useCallback(() => {
+    if (formRef.current) {
+      const y = formRef.current.getBoundingClientRect().top + window.pageYOffset - 72;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   }, []);
+
+  const advanceQuiz = (nextStep: number) => {
+    setSlideDir(1);
+    if (nextStep > 2) {
+      setQuizDone(true);
+      setTimeout(scrollToForm, 100);
+    } else {
+      setQuizStep(nextStep);
+    }
+  };
+
+  const backQuiz = () => {
+    setSlideDir(-1);
+    setQuizStep(s => Math.max(0, s - 1));
+  };
+
+  const toggleInsurance = (value: string) => {
+    setSelectedInsurances(prev =>
+      prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]
+    );
+  };
 
   const validateForm = () => {
     const errors: FormErrors = {};
@@ -337,12 +320,16 @@ export default function PerspectiveFunnelPage() {
     if (!validateForm()) return;
     setIsSubmitting(true);
     setSubmitError('');
+    const insuranceLabel = selectedInsurances
+      .map(v => insuranceOptions.find(o => o.value === v)?.label ?? v)
+      .join(', ');
+
     try {
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          insuranceType: selectedInsurance || 'general_consultation',
+          insuranceType: selectedInsurances.join(', ') || 'general_consultation',
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
@@ -352,7 +339,9 @@ export default function PerspectiveFunnelPage() {
           specificData: {
             has_existing: hasExisting,
             timing_preference: timingPreference,
-            ...(selectedInsurance === 'sonstiges' && sonstigesText ? { sonstiges_text: sonstigesText } : {}),
+            ...(selectedInsurances.includes('sonstiges') && sonstigesText
+              ? { sonstiges_text: sonstigesText }
+              : {}),
             utm: utmData,
           },
           source: 'lp_beratung_perspective',
@@ -379,15 +368,30 @@ export default function PerspectiveFunnelPage() {
       });
     }
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event: 'perspective_funnel_lead_submitted', insurance_type: selectedInsurance });
+    window.dataLayer.push({ event: 'perspective_funnel_lead_submitted', insurance_type: selectedInsurances.join(',') });
     trackConversion();
     trackEvent('funnel_lead_submitted', {
       event_category: 'Conversion',
-      event_label: selectedInsurance || 'general_consultation',
+      event_label: selectedInsurances.join(',') || 'general_consultation',
     });
     setIsSubmitting(false);
     setSubmitted(true);
+
+    void insuranceLabel;
   };
+
+  // Progress bar: quiz = 0..2 → 33/66/100%, after quiz = 100%
+  const progress = quizDone || submitted ? 100 : Math.round(((quizStep + 1) / 3) * 100);
+
+  const slideVariants = {
+    enter: (dir: number) => ({ x: dir * 60, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir: number) => ({ x: dir * -60, opacity: 0 }),
+  };
+
+  const q1CanContinue =
+    selectedInsurances.length > 0 &&
+    (!selectedInsurances.includes('sonstiges') || sonstigesText.trim().length > 0);
 
   return (
     <>
@@ -397,38 +401,35 @@ export default function PerspectiveFunnelPage() {
         keywords="Versicherungsberatung kostenlos, ERGO Beratung Ganderkesee, Versicherungsvergleich, kostenlose Analyse"
       />
 
-      {/* Sticky header with animated progress bar */}
+      {/* Sticky header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
           <Link href="/">
             <span className="flex items-center gap-2 cursor-pointer">
               <Shield className="w-6 h-6 text-ergo-red flex-shrink-0" />
-              <span className="font-bold text-gray-900 text-sm leading-tight">
-                ERGO Agentur Stübe
-                <span className="block text-[10px] font-normal text-gray-400 leading-tight">Ihr Berater in Ganderkesee</span>
-              </span>
+              <span className="font-bold text-gray-900 text-sm">ERGO Stübe</span>
             </span>
           </Link>
-          <div className="hidden sm:flex flex-1 max-w-xs items-center gap-2">
-            <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+          <div className="hidden sm:flex flex-1 items-center gap-3 max-w-xs">
+            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-ergo-red rounded-full"
                 animate={{ width: `${progress}%` }}
                 transition={{ type: 'spring', stiffness: 80, damping: 20 }}
               />
             </div>
-            <span className="text-xs text-gray-400 tabular-nums w-8">{progress}%</span>
+            <span className="text-xs text-gray-500 font-medium whitespace-nowrap">{progress}%</span>
           </div>
           <a
             href="tel:015566771019"
-            className="inline-flex items-center gap-1.5 bg-ergo-red text-white px-3 py-2 rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors flex-shrink-0"
+            className="flex items-center gap-1.5 text-ergo-red text-sm font-semibold hover:text-red-700 transition-colors"
           >
             <Phone className="w-4 h-4" />
             <span className="hidden sm:inline">01556 677 1019</span>
             <span className="sm:hidden">Anrufen</span>
           </a>
         </div>
-        <div className="sm:hidden h-1 bg-gray-200">
+        <div className="sm:hidden h-1 bg-gray-100">
           <motion.div
             className="h-full bg-ergo-red"
             animate={{ width: `${progress}%` }}
@@ -437,118 +438,330 @@ export default function PerspectiveFunnelPage() {
         </div>
       </header>
 
-      <div className="pt-14 min-h-screen bg-white">
+      <div className="pt-14 bg-white">
 
-        {/* Section 1 – Hero + Q1 */}
-        <section ref={heroRef} className="bg-gradient-to-br from-[#003781] via-[#004299] to-[#005ab4] text-white pt-12 pb-16 sm:pt-20 sm:pb-24 px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <div className="inline-flex items-center gap-1.5 bg-white/15 px-3 py-1.5 rounded-full text-xs font-medium mb-5">
-                <StarRating size="sm" />
-                <span>4,9/5 · über 3.500 zufriedene Kunden</span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 leading-tight">
-                Sind Sie wirklich <span className="text-yellow-300">optimal abgesichert?</span>
-              </h1>
-              <p className="text-white/85 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-                Beantworten Sie 3 kurze Fragen und erhalten Sie eine persönliche, kostenlose Versicherungsanalyse von Morino Stübe – Ihrem ERGO Berater vor Ort.
-              </p>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5 }}>
-              <p className="text-sm font-semibold text-white/70 uppercase tracking-widest mb-4">
-                Frage 1 von 3 · Was möchten Sie absichern?
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 max-w-4xl mx-auto">
-                {insuranceOptions.map((opt, i) => (
-                  <motion.button
-                    key={opt.value}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + i * 0.04 }}
-                    whileHover={{ scale: 1.03, y: -2 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => {
-                      setSelectedInsurance(opt.value);
-                      setSelectedInsuranceLabel(opt.label);
-                      trackEvent('perspective_q1_selected', { event_label: opt.value });
-                      if (opt.value !== 'sonstiges') {
-                        scrollTo(1);
-                      }
-                    }}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all cursor-pointer
-                      ${selectedInsurance === opt.value
-                        ? 'border-yellow-400 bg-yellow-400/20 shadow-lg'
-                        : 'border-white/20 bg-white/10 hover:border-white/50 hover:bg-white/20'}
-                    `}
-                  >
-                    <span className="text-3xl">{opt.icon}</span>
-                    <span className="text-sm font-semibold text-white leading-tight text-center">{opt.label}</span>
-                  </motion.button>
+        {/* ── QUIZ SECTION ── */}
+        <section
+          ref={heroRef}
+          className="bg-gradient-to-br from-[#003781] via-[#004299] to-[#005ab4] text-white px-4 pt-8 pb-12 sm:pt-12 sm:pb-16"
+        >
+          <div className="max-w-3xl mx-auto">
+
+            {/* Step dots indicator */}
+            {!quizDone && (
+              <div className="flex items-center justify-center gap-3 mb-8">
+                {[0, 1, 2].map(i => (
+                  <div key={i} className="flex items-center gap-3">
+                    <motion.div
+                      animate={{
+                        scale: i === quizStep ? 1.15 : 1,
+                        backgroundColor: i < quizStep ? '#4ade80' : i === quizStep ? '#facc15' : 'rgba(255,255,255,0.25)',
+                      }}
+                      transition={{ duration: 0.3 }}
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
+                      style={{ color: i <= quizStep ? '#1a1a1a' : 'rgba(255,255,255,0.6)' }}
+                    >
+                      {i < quizStep ? <Check className="w-4 h-4" /> : i + 1}
+                    </motion.div>
+                    {i < 2 && (
+                      <motion.div
+                        className="h-0.5 w-8 sm:w-14 rounded-full"
+                        animate={{ backgroundColor: i < quizStep ? '#4ade80' : 'rgba(255,255,255,0.25)' }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    )}
+                  </div>
                 ))}
               </div>
+            )}
 
-              {selectedInsurance === 'sonstiges' && (
+            {/* Animated step content */}
+            <AnimatePresence mode="wait" custom={slideDir}>
+              {/* ── Q1: Multi-select ── */}
+              {quizStep === 0 && !quizDone && (
                 <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="mt-4 max-w-md mx-auto"
+                  key="q1"
+                  custom={slideDir}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
                 >
-                  <input
-                    type="text"
-                    value={sonstigesText}
-                    onChange={e => setSonstigesText(e.target.value)}
-                    placeholder="Welche Versicherung interessiert Sie?"
-                    className="w-full bg-white/15 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-white/50 text-sm focus:outline-none focus:border-yellow-400 focus:bg-white/20"
-                  />
-                  <motion.button
-                    onClick={() => { if (sonstigesText.trim()) scrollTo(1); }}
-                    whileHover={sonstigesText.trim() ? { scale: 1.02 } : {}}
-                    whileTap={sonstigesText.trim() ? { scale: 0.97 } : {}}
-                    className={`mt-3 w-full font-bold py-3 rounded-xl text-sm transition-colors ${
-                      sonstigesText.trim()
-                        ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300 cursor-pointer'
-                        : 'bg-white/20 text-white/40 cursor-not-allowed'
-                    }`}
-                  >
-                    {sonstigesText.trim() ? 'Weiter →' : 'Bitte zuerst eingeben'}
-                  </motion.button>
+                  <div className="text-center mb-6">
+                    <p className="text-xs font-semibold text-yellow-300 uppercase tracking-widest mb-2">
+                      Schritt 1 von 3
+                    </p>
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 leading-tight">
+                      Was möchten Sie <span className="text-yellow-300">absichern?</span>
+                    </h1>
+                    <p className="text-white/75 text-sm">
+                      Mehrfachauswahl möglich – wählen Sie alles was passt
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 mb-5">
+                    {insuranceOptions.map((opt, i) => {
+                      const selected = selectedInsurances.includes(opt.value);
+                      return (
+                        <motion.button
+                          key={opt.value}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.03 }}
+                          whileHover={{ scale: 1.03, y: -1 }}
+                          whileTap={{ scale: 0.97 }}
+                          onClick={() => {
+                            toggleInsurance(opt.value);
+                            trackEvent('perspective_q1_selected', { event_label: opt.value });
+                          }}
+                          className={`relative flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all cursor-pointer
+                            ${selected
+                              ? 'border-yellow-400 bg-yellow-400/20 shadow-lg'
+                              : 'border-white/20 bg-white/10 hover:border-white/50 hover:bg-white/20'}
+                          `}
+                        >
+                          {selected && (
+                            <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
+                              <Check className="w-3 h-3 text-gray-900" />
+                            </span>
+                          )}
+                          <span className="text-2xl">{opt.icon}</span>
+                          <span className="text-xs font-semibold text-white leading-tight text-center">{opt.label}</span>
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Sonstiges text input */}
+                  {selectedInsurances.includes('sonstiges') && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mb-4 max-w-md mx-auto"
+                    >
+                      <input
+                        type="text"
+                        value={sonstigesText}
+                        onChange={e => setSonstigesText(e.target.value)}
+                        placeholder="Was interessiert Sie?"
+                        className="w-full bg-white/15 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-white/50 text-sm focus:outline-none focus:border-yellow-400"
+                      />
+                    </motion.div>
+                  )}
+
+                  {/* Selection summary */}
+                  {selectedInsurances.length > 0 && (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-center text-xs text-yellow-300 mb-3"
+                    >
+                      {selectedInsurances.length === 1
+                        ? '1 Versicherung ausgewählt'
+                        : `${selectedInsurances.length} Versicherungen ausgewählt`}
+                    </motion.p>
+                  )}
+
+                  <div className="flex justify-center">
+                    <motion.button
+                      onClick={() => q1CanContinue && advanceQuiz(1)}
+                      whileHover={q1CanContinue ? { scale: 1.03 } : {}}
+                      whileTap={q1CanContinue ? { scale: 0.97 } : {}}
+                      className={`flex items-center gap-2 font-bold px-8 py-4 rounded-xl text-base transition-all shadow-lg ${
+                        q1CanContinue
+                          ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300 cursor-pointer'
+                          : 'bg-white/15 text-white/40 cursor-not-allowed'
+                      }`}
+                    >
+                      {q1CanContinue ? (
+                        <>Weiter <ArrowRight className="w-5 h-5" /></>
+                      ) : (
+                        'Bitte mindestens eine Auswahl treffen'
+                      )}
+                    </motion.button>
+                  </div>
+                  <p className="mt-4 text-center text-xs text-white/40">
+                    🔒 Unverbindlich & kostenlos · DSGVO-konform
+                  </p>
                 </motion.div>
               )}
 
-              <p className="mt-5 text-xs text-white/50">🔒 Unverbindlich & kostenlos · DSGVO-konform</p>
-            </motion.div>
+              {/* ── Q2: Existing contracts ── */}
+              {quizStep === 1 && !quizDone && (
+                <motion.div
+                  key="q2"
+                  custom={slideDir}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                >
+                  <div className="text-center mb-8">
+                    <p className="text-xs font-semibold text-yellow-300 uppercase tracking-widest mb-2">
+                      Schritt 2 von 3
+                    </p>
+                    <h2 className="text-2xl sm:text-3xl font-bold mb-2 leading-tight">
+                      Haben Sie bereits <span className="text-yellow-300">bestehende Verträge?</span>
+                    </h2>
+                    <p className="text-white/75 text-sm">Kein Problem – ich schaue mir alles an.</p>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto mb-6">
+                    {[
+                      { icon: '✅', label: 'Ja – Verträge prüfen lassen', sub: 'Ich prüfe ob Sie zu viel zahlen', value: 'ja' },
+                      { icon: '🆕', label: 'Nein – ich starte neu', sub: 'Ich baue Ihren Schutz von Grund auf', value: 'nein' },
+                    ].map(opt => (
+                      <motion.button
+                        key={opt.value}
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => {
+                          setHasExisting(opt.value);
+                          trackEvent('perspective_q2_selected', { event_label: opt.value });
+                          setTimeout(() => advanceQuiz(2), 250);
+                        }}
+                        className={`flex-1 flex flex-col items-start gap-1 p-5 rounded-2xl border-2 cursor-pointer transition-all text-left
+                          ${hasExisting === opt.value
+                            ? 'border-yellow-400 bg-yellow-400/20 shadow-lg'
+                            : 'border-white/25 bg-white/10 hover:border-white/60 hover:bg-white/20'}
+                        `}
+                      >
+                        <span className="text-3xl mb-1">{opt.icon}</span>
+                        <span className="font-bold text-white text-sm sm:text-base">{opt.label}</span>
+                        <span className="text-white/60 text-xs">{opt.sub}</span>
+                      </motion.button>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-center">
+                    <button
+                      onClick={backQuiz}
+                      className="flex items-center gap-1.5 text-white/50 text-sm hover:text-white/80 transition-colors"
+                    >
+                      <ChevronLeft className="w-4 h-4" /> Zurück
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ── Q3: Timing ── */}
+              {quizStep === 2 && !quizDone && (
+                <motion.div
+                  key="q3"
+                  custom={slideDir}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                >
+                  <div className="text-center mb-8">
+                    <p className="text-xs font-semibold text-yellow-300 uppercase tracking-widest mb-2">
+                      Schritt 3 von 3 – Fast geschafft!
+                    </p>
+                    <h2 className="text-2xl sm:text-3xl font-bold mb-2 leading-tight">
+                      Wann möchten Sie <span className="text-yellow-300">beraten werden?</span>
+                    </h2>
+                    <p className="text-white/75 text-sm">Ich richte mich nach Ihren Wünschen.</p>
+                  </div>
+
+                  <div className="flex flex-col gap-3 max-w-lg mx-auto mb-6">
+                    {[
+                      { icon: '⚡', label: 'So schnell wie möglich', sub: 'Ich melde mich innerhalb von 24h', value: 'sofort' },
+                      { icon: '📅', label: 'Diese Woche (Mo–Sa)', sub: 'Termin noch diese Woche', value: 'diese_woche' },
+                      { icon: '🗓️', label: 'Flexibel – kein Stress', sub: 'Ich wähle einen passenden Termin', value: 'flexibel' },
+                    ].map(opt => (
+                      <motion.button
+                        key={opt.value}
+                        whileHover={{ scale: 1.01, x: 4 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => {
+                          setTimingPreference(opt.value);
+                          trackEvent('perspective_q3_selected', { event_label: opt.value });
+                          setTimeout(() => advanceQuiz(3), 250);
+                        }}
+                        className={`flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all text-left
+                          ${timingPreference === opt.value
+                            ? 'border-yellow-400 bg-yellow-400/20 shadow-lg'
+                            : 'border-white/25 bg-white/10 hover:border-white/60 hover:bg-white/20'}
+                        `}
+                      >
+                        <span className="text-2xl flex-shrink-0">{opt.icon}</span>
+                        <div className="flex-1">
+                          <p className="font-bold text-white text-sm sm:text-base">{opt.label}</p>
+                          <p className="text-white/60 text-xs mt-0.5">{opt.sub}</p>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-white/40 flex-shrink-0" />
+                      </motion.button>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-center">
+                    <button
+                      onClick={backQuiz}
+                      className="flex items-center gap-1.5 text-white/50 text-sm hover:text-white/80 transition-colors"
+                    >
+                      <ChevronLeft className="w-4 h-4" /> Zurück
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ── Quiz done: scroll hint ── */}
+              {quizDone && (
+                <motion.div
+                  key="done"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4 }}
+                  className="text-center py-6"
+                >
+                  <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
+                    <Check className="w-8 h-8 text-white" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white mb-2">Perfekt! Ihre Angaben sind gespeichert.</h2>
+                  <p className="text-white/75 text-sm mb-6">Füllen Sie jetzt das Formular aus – die Beratung ist kostenlos.</p>
+                  <button
+                    onClick={scrollToForm}
+                    className="inline-flex items-center gap-2 bg-yellow-400 text-gray-900 font-bold px-8 py-4 rounded-xl hover:bg-yellow-300 transition-colors shadow-lg text-base"
+                  >
+                    Zum Formular <ArrowRight className="w-5 h-5" />
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Trust bar below quiz */}
+            {!quizDone && (
+              <div className="mt-8 flex flex-wrap justify-center gap-5 sm:gap-8">
+                {[
+                  { emoji: '🏆', label: 'ERGO Testsieger 2024' },
+                  { emoji: '⭐', label: '4,9/5 Sterne' },
+                  { emoji: '🤝', label: '100% kostenlos' },
+                  { emoji: '📍', label: 'Vor Ort Ganderkesee' },
+                ].map(b => (
+                  <div key={b.label} className="flex items-center gap-1.5 text-white/70 text-xs font-medium">
+                    <span className="text-base">{b.emoji}</span>
+                    {b.label}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
-        {/* Section 2 – Trust + stacked avatars + Q2 */}
-        <section ref={section2Ref} className="py-14 sm:py-20 px-4 bg-white">
+        {/* ── Social proof + Benefits ── */}
+        <section className="py-14 sm:py-20 px-4 bg-white">
           <div className="max-w-4xl mx-auto">
-            {/* Trust badges */}
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-8 mb-10">
-              {[
-                { emoji: '🏆', label: 'ERGO Testsieger', sub: '2024' },
-                { emoji: '⭐', label: '4,9 / 5 Sterne', sub: 'Kundenbewertung' },
-                { emoji: '🤝', label: '100% kostenlos', sub: 'Keine Verpflichtung' },
-                { emoji: '📍', label: 'Vor Ort', sub: 'Ganderkesee' },
-              ].map(b => (
-                <div key={b.label} className="flex flex-col items-center gap-1 min-w-[80px]">
-                  <span className="text-3xl">{b.emoji}</span>
-                  <span className="text-xs font-bold text-gray-900 text-center">{b.label}</span>
-                  <span className="text-[10px] text-gray-500 text-center">{b.sub}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Stacked avatars social proof */}
-            <div className="flex justify-center items-center gap-3 mb-12">
+            <div className="flex justify-center items-center gap-3 mb-10">
               <div className="flex -space-x-3">
                 {['TM', 'SK', 'MB', 'JF', 'RK'].map((initials, i) => (
                   <div
                     key={i}
                     className={`w-10 h-10 rounded-full border-2 border-white flex items-center justify-center text-white text-xs font-bold flex-shrink-0
-                      ${['bg-blue-500', 'bg-purple-500', 'bg-green-600', 'bg-orange-500', 'bg-pink-500'][i]}
-                    `}
+                      ${['bg-blue-500', 'bg-purple-500', 'bg-green-600', 'bg-orange-500', 'bg-pink-500'][i]}`}
                   >
                     {initials}
                   </div>
@@ -563,64 +776,25 @@ export default function PerspectiveFunnelPage() {
               </div>
             </div>
 
-            {/* Q2 */}
-            <div className="max-w-xl mx-auto text-center">
-              <p className="text-xs font-semibold text-ergo-red uppercase tracking-widest mb-3">Frage 2 von 3</p>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-                Haben Sie bereits Versicherungen, die geprüft werden sollen?
-              </h2>
-              <p className="text-gray-500 text-sm mb-8">Kein Problem – ich schaue mir alles an, was Sie haben.</p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                {[
-                  { icon: '✅', label: 'Ja, bestehende Verträge prüfen', value: 'ja' },
-                  { icon: '🆕', label: 'Nein, ich starte neu', value: 'nein' },
-                ].map(opt => (
-                  <motion.button
-                    key={opt.value}
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => {
-                      setHasExisting(opt.value);
-                      trackEvent('perspective_q2_selected', { event_label: opt.value });
-                      scrollTo(2);
-                    }}
-                    className={`flex-1 flex items-center gap-3 p-5 rounded-2xl border-2 cursor-pointer transition-all text-left font-semibold text-gray-800
-                      ${hasExisting === opt.value
-                        ? 'border-ergo-red bg-red-50 shadow-md'
-                        : 'border-gray-200 bg-white hover:border-ergo-red/50 hover:bg-red-50/30'}
-                    `}
-                  >
-                    <span className="text-2xl">{opt.icon}</span>
-                    <span className="text-sm sm:text-base">{opt.label}</span>
-                  </motion.button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 3 – Benefits + Testimonials + Q3 */}
-        <section ref={section3Ref} className="py-14 sm:py-20 px-4 bg-gray-50">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid sm:grid-cols-2 gap-3 mb-14">
+            <div className="grid sm:grid-cols-2 gap-3 mb-12">
               {[
                 { icon: '💰', text: 'Bis zu 15% Bündelrabatt ab 5 Versicherungen' },
                 { icon: '⚡', text: 'Antwort innerhalb von 24 Stunden garantiert' },
-                { icon: '🎯', text: 'Lücken erkennen – keine Doppelversicherungen mehr' },
+                { icon: '🎯', text: 'Lücken erkennen – keine Doppelversicherungen' },
                 { icon: '🤝', text: 'Persönliche Beratung – kein anonymes Call-Center' },
                 { icon: '📱', text: 'Vor Ort, per Video oder WhatsApp – Sie wählen' },
                 { icon: '🛡️', text: 'ERGO – eine der größten deutschen Versicherungen' },
               ].map(b => (
-                <div key={b.text} className="flex items-start gap-3 bg-white rounded-xl p-4 border border-gray-100">
+                <div key={b.text} className="flex items-start gap-3 bg-gray-50 rounded-xl p-4 border border-gray-100">
                   <span className="text-2xl flex-shrink-0">{b.icon}</span>
                   <span className="text-sm text-gray-700 font-medium leading-snug">{b.text}</span>
                 </div>
               ))}
             </div>
 
-            <div className="grid sm:grid-cols-3 gap-4 mb-14">
+            <div className="grid sm:grid-cols-3 gap-4">
               {testimonials.map(t => (
-                <div key={t.name} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+                <div key={t.name} className="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 ${t.color}`}>
                       {t.initials}
@@ -635,47 +809,11 @@ export default function PerspectiveFunnelPage() {
                 </div>
               ))}
             </div>
-
-            {/* Q3 */}
-            <div className="max-w-xl mx-auto text-center">
-              <p className="text-xs font-semibold text-ergo-red uppercase tracking-widest mb-3">Frage 3 von 3</p>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-                Wann möchten Sie beraten werden?
-              </h2>
-              <p className="text-gray-500 text-sm mb-8">Ich richte mich nach Ihren Wünschen.</p>
-              <div className="flex flex-col gap-3">
-                {[
-                  { icon: '⚡', label: 'So schnell wie möglich', value: 'sofort' },
-                  { icon: '📅', label: 'Diese Woche (Mo–Sa)', value: 'diese_woche' },
-                  { icon: '🗓️', label: 'Flexibel – kein Stress', value: 'flexibel' },
-                ].map(opt => (
-                  <motion.button
-                    key={opt.value}
-                    whileHover={{ scale: 1.01, x: 4 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => {
-                      setTimingPreference(opt.value);
-                      trackEvent('perspective_q3_selected', { event_label: opt.value });
-                      scrollTo(3);
-                    }}
-                    className={`flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all text-left font-semibold text-gray-800
-                      ${timingPreference === opt.value
-                        ? 'border-ergo-red bg-red-50 shadow-md'
-                        : 'border-gray-200 bg-white hover:border-ergo-red/50'}
-                    `}
-                  >
-                    <span className="text-2xl">{opt.icon}</span>
-                    <span className="text-sm sm:text-base">{opt.label}</span>
-                    <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
-                  </motion.button>
-                ))}
-              </div>
-            </div>
           </div>
         </section>
 
-        {/* Section 4 – Comparison Table */}
-        <section ref={section4Ref} className="py-14 sm:py-20 px-4 bg-white">
+        {/* ── Comparison table ── */}
+        <section className="py-14 sm:py-20 px-4 bg-gray-50">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-10">
               <p className="text-xs font-semibold text-ergo-red uppercase tracking-widest mb-2">Warum ERGO Stübe?</p>
@@ -684,10 +822,10 @@ export default function PerspectiveFunnelPage() {
               </h2>
             </div>
             <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-              <div className="grid grid-cols-3 bg-gray-50 border-b border-gray-200">
+              <div className="grid grid-cols-3 bg-white border-b border-gray-200">
                 <div className="p-4 text-sm font-semibold text-gray-500">Leistung</div>
                 <div className="p-4 text-center text-sm font-bold text-ergo-red">ERGO Stübe</div>
-                <div className="p-4 text-center text-sm font-semibold text-gray-400">Andere Anbieter</div>
+                <div className="p-4 text-center text-sm font-semibold text-gray-400">Andere</div>
               </div>
               {comparisonRows.map((row, i) => (
                 <div key={i} className={`grid grid-cols-3 border-b border-gray-100 last:border-0 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
@@ -711,7 +849,7 @@ export default function PerspectiveFunnelPage() {
             </div>
             <div className="mt-8 text-center">
               <button
-                onClick={() => scrollTo(6)}
+                onClick={scrollToForm}
                 className="inline-flex items-center gap-2 bg-ergo-red text-white font-bold px-8 py-4 rounded-xl hover:bg-red-700 transition-colors text-base shadow-md"
               >
                 Jetzt kostenlos beraten lassen <ArrowRight className="w-5 h-5" />
@@ -720,12 +858,12 @@ export default function PerspectiveFunnelPage() {
           </div>
         </section>
 
-        {/* Section 5 – Advisor + Animated Stats */}
-        <section ref={section5Ref} className="py-14 sm:py-20 px-4 bg-gray-50">
+        {/* ── Advisor ── */}
+        <section className="py-14 sm:py-20 px-4 bg-white">
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-col sm:flex-row items-center gap-8 sm:gap-12">
               <div className="flex-shrink-0">
-                <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full overflow-hidden border-4 border-gray-100 shadow-xl">
                   <img
                     src={advisorPhoto}
                     alt="Morino Stübe – Ihr ERGO Berater"
@@ -755,8 +893,8 @@ export default function PerspectiveFunnelPage() {
           </div>
         </section>
 
-        {/* Section 6 – FAQ */}
-        <section ref={section6Ref} className="py-14 sm:py-20 px-4 bg-white">
+        {/* ── FAQ ── */}
+        <section className="py-14 sm:py-20 px-4 bg-gray-50">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-10">
               <p className="text-xs font-semibold text-ergo-red uppercase tracking-widest mb-2">Häufige Fragen</p>
@@ -769,7 +907,7 @@ export default function PerspectiveFunnelPage() {
             </div>
             <div className="mt-10 text-center">
               <button
-                onClick={() => scrollTo(6)}
+                onClick={scrollToForm}
                 className="inline-flex items-center gap-2 bg-ergo-red text-white font-bold px-8 py-4 rounded-xl hover:bg-red-700 transition-colors text-base shadow-md"
               >
                 Jetzt Analyse starten <ArrowRight className="w-5 h-5" />
@@ -778,7 +916,7 @@ export default function PerspectiveFunnelPage() {
           </div>
         </section>
 
-        {/* Section 7 – Lead Form */}
+        {/* ── Lead Form ── */}
         <section ref={formRef} className="py-14 sm:py-20 px-4 bg-gradient-to-br from-[#003781] to-[#005ab4]">
           <div className={`mx-auto transition-all duration-500 ${submitted ? 'max-w-3xl' : 'max-w-xl'}`}>
             <AnimatePresence mode="wait">
@@ -796,8 +934,12 @@ export default function PerspectiveFunnelPage() {
                       Wohin soll ich Ihre Analyse senden?
                     </h2>
                     <p className="text-white/75 text-sm">
-                      {selectedInsuranceLabel ? `Thema: ${selectedInsuranceLabel} · ` : ''}
-                      Ich melde mich innerhalb von 24 Stunden bei Ihnen.
+                      {selectedInsurances.length > 0
+                        ? `Thema: ${selectedInsurances
+                            .map(v => insuranceOptions.find(o => o.value === v)?.label ?? v)
+                            .join(', ')} · `
+                        : ''}
+                      Ich melde mich innerhalb von 24 Stunden.
                     </p>
                   </div>
 
@@ -848,7 +990,6 @@ export default function PerspectiveFunnelPage() {
                       />
                       {formErrors.phone && <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>}
                     </div>
-
                     <div className="mb-6">
                       <label className={`flex items-start gap-3 cursor-pointer ${formErrors.dsgvo ? 'text-red-500' : 'text-gray-600'}`}>
                         <input
@@ -909,7 +1050,6 @@ export default function PerspectiveFunnelPage() {
                       Ihre Anfrage ist eingegangen. Wählen Sie jetzt direkt Ihren Wunschtermin:
                     </p>
                   </div>
-
                   <div className="rounded-2xl overflow-hidden shadow-2xl bg-white">
                     <Cal
                       namespace="beratung-termin"
@@ -918,7 +1058,6 @@ export default function PerspectiveFunnelPage() {
                       config={{ layout: 'month_view' }}
                     />
                   </div>
-
                   <p className="text-center text-white/50 text-xs mt-4">
                     Kein passender Termin? Rufen Sie uns an:{' '}
                     <a href="tel:015566771019" className="underline text-white/70">
@@ -956,7 +1095,7 @@ export default function PerspectiveFunnelPage() {
             style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom, 12px))' }}
           >
             <button
-              onClick={() => scrollTo(6)}
+              onClick={scrollToForm}
               className="w-full bg-white text-ergo-red font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm"
             >
               Jetzt kostenlos beraten lassen <ArrowRight className="w-4 h-4" />
