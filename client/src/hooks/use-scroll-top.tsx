@@ -7,7 +7,7 @@ export const useScrollTop = () => {
   useEffect(() => {
     // Small delay to ensure page is fully loaded before scrolling
     setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }, 50);
   }, [location]);
 };

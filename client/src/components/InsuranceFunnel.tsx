@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, getLeadValue } from "@/lib/analytics";
 import { insuranceConfig } from "@/lib/insurance-config";
 import { X, CheckCircle, Phone, Clock, Calculator, Handshake, Shield } from "lucide-react";
 import type { InsertLead } from "@shared/schema";
@@ -48,7 +48,7 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
   // Submit lead mutation
   const submitMutation = useMutation({
     mutationFn: async (leadData: InsertLead) => {
-      console.log("Submitting lead data:", leadData);
+      if (import.meta.env.DEV) console.log("Submitting lead data:", leadData);
       const response = await apiRequest("POST", "/api/leads", leadData);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -56,7 +56,7 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
       return response.json();
     },
     onSuccess: (data) => {
-      console.log("Lead successfully created:", data);
+      if (import.meta.env.DEV) console.log("Lead successfully created:", data);
       trackEvent("lead_generated", {
         insurance_type: insuranceType,
         lead_value: getLeadValue(insuranceType)
@@ -74,7 +74,7 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
       }, 8000);
     },
     onError: (error) => {
-      console.error("Lead submission error:", error);
+      if (import.meta.env.DEV) console.error("Lead submission error:", error);
       toast({
         title: "Fehler beim Senden",
         description: "Ihre Anfrage konnte nicht übermittelt werden. Bitte versuchen Sie es erneut.",
@@ -140,7 +140,7 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
   };
 
   const submitForm = () => {
-    console.log("submitForm called with formData:", formData);
+    if (import.meta.env.DEV) console.log("submitForm called with formData:", formData);
     
     const leadData: InsertLead = {
       insuranceType,
@@ -155,19 +155,8 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
       source: "website_funnel"
     };
 
-    console.log("About to submit leadData:", leadData);
+    if (import.meta.env.DEV) console.log("About to submit leadData:", leadData);
     submitMutation.mutate(leadData);
-  };
-
-  const getLeadValue = (type: string) => {
-    const values = {
-      hausrat: 50,
-      haftpflicht: 40,
-      wohngebaeude: 100,
-      rechtsschutz: 60,
-      zahnzusatz: 45
-    };
-    return values[type as keyof typeof values] || 50;
   };
 
   const updateFormData = (updates: Partial<FormData>) => {
@@ -201,7 +190,7 @@ export default function InsuranceFunnel({ insuranceType, onClose }: InsuranceFun
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-white rounded-lg sm:rounded-xl shadow-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-white rounded-lg sm:rounded-xl shadow-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
         
         {/* Header */}
         <div className="sticky top-0 bg-white border-b p-4 sm:p-6 rounded-t-lg sm:rounded-t-xl">

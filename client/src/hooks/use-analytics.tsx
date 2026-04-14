@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
-import { trackPageView, initAnalytics, trackScrollDepth } from '@/lib/analytics';
+import { trackPageView, initAnalytics, trackScrollDepth, getLeadValue } from '@/lib/analytics';
 
 export const useAnalytics = () => {
   const [location] = useLocation();
@@ -209,16 +209,3 @@ export const useInsuranceTracking = () => {
   };
 };
 
-// Helper function to get lead value
-const getLeadValue = (insuranceType: string): number => {
-  const leadValues: Record<string, number> = {
-    hausrat: 50,
-    haftpflicht: 40,
-    wohngebaeude: 100,
-    rechtsschutz: 60,
-    zahnzusatz: 45,
-    kombi: 150
-  };
-  
-  return leadValues[insuranceType] || 50;
-};

@@ -51,7 +51,8 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [isRechtsschutz] = useRoute("/rechtsschutz");
   const [isBU] = useRoute("/berufsunfaehigkeit");
   const [isZahn] = useRoute("/zahnzusatz");
-  const hideLayout = isAdmin || isInstagram || isBeratung || isKfz || isHausrat || isHaftpflicht || isRechtsschutz || isBU || isZahn;
+  const [isUnternehmen] = useRoute("/unternehmensversicherung");
+  const hideLayout = isAdmin || isInstagram || isBeratung || isKfz || isHausrat || isHaftpflicht || isRechtsschutz || isBU || isZahn || isUnternehmen;
 
   return (
     <>

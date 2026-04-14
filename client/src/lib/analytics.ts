@@ -60,10 +60,11 @@ export const revokeMarketingConsent = () => {
 export const initGA = () => {
   if (!hasMarketingConsent()) return;
 
-  const measurementId = 'AW-17132012984';
-
-  if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-    console.log('Google Analytics (Google Ads) initialized with ID:', measurementId);
+  if (import.meta.env.DEV) {
+    const measurementId = 'AW-17132012984';
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      console.log('Google Analytics (Google Ads) initialized with ID:', measurementId);
+    }
   }
 };
 
@@ -73,7 +74,6 @@ export const initMetaPixel = () => {
   const pixelId = import.meta.env.VITE_META_PIXEL_ID;
 
   if (!pixelId) {
-    console.warn('Missing Meta Pixel ID: VITE_META_PIXEL_ID');
     return;
   }
 
@@ -280,7 +280,7 @@ export const trackLeadGeneration = (leadData: {
   }
 };
 
-const getLeadValue = (insuranceType: string): number => {
+export const getLeadValue = (insuranceType: string): number => {
   const leadValues: Record<string, number> = {
     hausrat: 50,
     haftpflicht: 40,
