@@ -222,6 +222,7 @@ export default function PerspectiveFunnelPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [showMobileCTA, setShowMobileCTA] = useState(false);
+  const [calKey, setCalKey] = useState('initial');
 
   const [utmData] = useState(() => {
     const url = new URL(window.location.href);
@@ -254,9 +255,8 @@ export default function PerspectiveFunnelPage() {
     return () => window.removeEventListener('scroll', checkCTA);
   }, [submitted]);
 
-  // Cal.com init when submitted
+  // Cal.com init on mount
   useEffect(() => {
-    if (!submitted) return;
     (async () => {
       const cal = await getCalApi({ namespace: 'beratung-termin' });
       cal('ui', { hideEventTypeDetails: false });
@@ -273,7 +273,7 @@ export default function PerspectiveFunnelPage() {
         },
       });
     })();
-  }, [submitted]);
+  }, []);
 
   const scrollToForm = useCallback(() => {
     if (formRef.current) {
@@ -376,6 +376,7 @@ export default function PerspectiveFunnelPage() {
     });
     setIsSubmitting(false);
     setSubmitted(true);
+    setCalKey(`prefilled-${Date.now()}`);
 
     void insuranceLabel;
   };
@@ -916,157 +917,210 @@ export default function PerspectiveFunnelPage() {
           </div>
         </section>
 
-        {/* ── Lead Form ── */}
+        {/* ── Lead Form + Calendar combined ── */}
         <section ref={formRef} className="py-14 sm:py-20 px-4 bg-gradient-to-br from-[#003781] to-[#005ab4]">
-          <div className={`mx-auto transition-all duration-500 ${submitted ? 'max-w-3xl' : 'max-w-xl'}`}>
-            <AnimatePresence mode="wait">
-              {!submitted ? (
-                <motion.div
-                  key="form"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <div className="text-center mb-8">
-                    <p className="text-xs font-semibold text-yellow-300 uppercase tracking-widest mb-2">Fast geschafft!</p>
-                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
-                      Wohin soll ich Ihre Analyse senden?
-                    </h2>
-                    <p className="text-white/75 text-sm">
-                      {selectedInsurances.length > 0
-                        ? `Thema: ${selectedInsurances
-                            .map(v => insuranceOptions.find(o => o.value === v)?.label ?? v)
-                            .join(', ')} · `
-                        : ''}
-                      Ich melde mich innerhalb von 24 Stunden.
-                    </p>
-                  </div>
+          <div className="max-w-5xl mx-auto">
 
-                  <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl">
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div>
-                        <label className="block text-xs font-semibold text-gray-700 mb-1">Vorname *</label>
-                        <input
-                          type="text"
-                          value={formData.firstName}
-                          onChange={e => setFormData(p => ({ ...p, firstName: e.target.value }))}
-                          placeholder="Max"
-                          className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ergo-red/40 ${formErrors.firstName ? 'border-red-400' : 'border-gray-300'}`}
-                        />
-                        {formErrors.firstName && <p className="text-red-500 text-xs mt-1">{formErrors.firstName}</p>}
-                      </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-gray-700 mb-1">Nachname *</label>
-                        <input
-                          type="text"
-                          value={formData.lastName}
-                          onChange={e => setFormData(p => ({ ...p, lastName: e.target.value }))}
-                          placeholder="Mustermann"
-                          className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ergo-red/40 ${formErrors.lastName ? 'border-red-400' : 'border-gray-300'}`}
-                        />
-                        {formErrors.lastName && <p className="text-red-500 text-xs mt-1">{formErrors.lastName}</p>}
-                      </div>
-                    </div>
-                    <div className="mb-4">
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">E-Mail *</label>
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
-                        placeholder="max@beispiel.de"
-                        className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ergo-red/40 ${formErrors.email ? 'border-red-400' : 'border-gray-300'}`}
-                      />
-                      {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
-                    </div>
-                    <div className="mb-5">
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">Telefon *</label>
-                      <input
-                        type="tel"
-                        value={formData.phone}
-                        onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))}
-                        placeholder="+49 15566 771019"
-                        className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ergo-red/40 ${formErrors.phone ? 'border-red-400' : 'border-gray-300'}`}
-                      />
-                      {formErrors.phone && <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>}
-                    </div>
-                    <div className="mb-6">
-                      <label className={`flex items-start gap-3 cursor-pointer ${formErrors.dsgvo ? 'text-red-500' : 'text-gray-600'}`}>
-                        <input
-                          type="checkbox"
-                          checked={formData.dsgvo}
-                          onChange={e => setFormData(p => ({ ...p, dsgvo: e.target.checked }))}
-                          className="mt-0.5 w-4 h-4 flex-shrink-0 accent-ergo-red"
-                        />
-                        <span className="text-xs leading-relaxed">
-                          Ich stimme der Verarbeitung meiner Daten zur Kontaktaufnahme zu. Details in der{' '}
-                          <Link href="/datenschutz">
-                            <span className="underline hover:text-ergo-red cursor-pointer">Datenschutzerklärung</span>
-                          </Link>.
-                        </span>
-                      </label>
-                      {formErrors.dsgvo && <p className="text-red-500 text-xs mt-1 ml-7">{formErrors.dsgvo}</p>}
-                    </div>
+            {/* Header */}
+            <div className="text-center mb-8 sm:mb-10">
+              <p className="text-xs font-semibold text-yellow-300 uppercase tracking-widest mb-2">Letzter Schritt</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                Kontaktdaten eingeben &amp; Termin wählen
+              </h2>
+              <p className="text-white/70 text-sm max-w-md mx-auto">
+                {selectedInsurances.length > 0
+                  ? `Thema: ${selectedInsurances.map(v => insuranceOptions.find(o => o.value === v)?.label ?? v).join(', ')} · `
+                  : ''}
+                Alles in einem Schritt – kein Hin und Her.
+              </p>
+            </div>
 
-                    {submitError && (
-                      <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                        {submitError}
+            {/* Two-column grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+
+              {/* ── Left: Form / Success ── */}
+              <AnimatePresence mode="wait">
+                {!submitted ? (
+                  <motion.div
+                    key="form"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.35 }}
+                  >
+                    <div className="bg-white rounded-2xl p-6 sm:p-7 shadow-xl">
+                      <p className="text-xs font-semibold text-ergo-red uppercase tracking-widest mb-4">
+                        1. Ihre Kontaktdaten
+                      </p>
+                      <div className="grid grid-cols-2 gap-3 mb-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-700 mb-1">Vorname *</label>
+                          <input
+                            type="text"
+                            value={formData.firstName}
+                            onChange={e => setFormData(p => ({ ...p, firstName: e.target.value }))}
+                            placeholder="Max"
+                            className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ergo-red/40 ${formErrors.firstName ? 'border-red-400' : 'border-gray-300'}`}
+                          />
+                          {formErrors.firstName && <p className="text-red-500 text-xs mt-1">{formErrors.firstName}</p>}
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-700 mb-1">Nachname *</label>
+                          <input
+                            type="text"
+                            value={formData.lastName}
+                            onChange={e => setFormData(p => ({ ...p, lastName: e.target.value }))}
+                            placeholder="Mustermann"
+                            className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ergo-red/40 ${formErrors.lastName ? 'border-red-400' : 'border-gray-300'}`}
+                          />
+                          {formErrors.lastName && <p className="text-red-500 text-xs mt-1">{formErrors.lastName}</p>}
+                        </div>
                       </div>
-                    )}
-                    <button
-                      onClick={submitLead}
-                      disabled={isSubmitting}
-                      className="w-full bg-ergo-red text-white font-bold py-4 rounded-xl text-base hover:bg-red-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
-                    >
-                      {isSubmitting ? (
-                        <span className="flex items-center justify-center gap-2">
-                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Wird gesendet…
-                        </span>
-                      ) : (
-                        'Kostenlose Analyse anfordern →'
+                      <div className="mb-3">
+                        <label className="block text-xs font-semibold text-gray-700 mb-1">E-Mail *</label>
+                        <input
+                          type="email"
+                          value={formData.email}
+                          onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
+                          placeholder="max@beispiel.de"
+                          className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ergo-red/40 ${formErrors.email ? 'border-red-400' : 'border-gray-300'}`}
+                        />
+                        {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
+                      </div>
+                      <div className="mb-4">
+                        <label className="block text-xs font-semibold text-gray-700 mb-1">Telefon *</label>
+                        <input
+                          type="tel"
+                          value={formData.phone}
+                          onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))}
+                          placeholder="+49 15566 771019"
+                          className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ergo-red/40 ${formErrors.phone ? 'border-red-400' : 'border-gray-300'}`}
+                        />
+                        {formErrors.phone && <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>}
+                      </div>
+                      <div className="mb-5">
+                        <label className={`flex items-start gap-3 cursor-pointer ${formErrors.dsgvo ? 'text-red-500' : 'text-gray-600'}`}>
+                          <input
+                            type="checkbox"
+                            checked={formData.dsgvo}
+                            onChange={e => setFormData(p => ({ ...p, dsgvo: e.target.checked }))}
+                            className="mt-0.5 w-4 h-4 flex-shrink-0 accent-ergo-red"
+                          />
+                          <span className="text-xs leading-relaxed">
+                            Ich stimme der Verarbeitung meiner Daten zur Kontaktaufnahme zu.{' '}
+                            <Link href="/datenschutz">
+                              <span className="underline hover:text-ergo-red cursor-pointer">Datenschutzerklärung</span>
+                            </Link>
+                          </span>
+                        </label>
+                        {formErrors.dsgvo && <p className="text-red-500 text-xs mt-1 ml-7">{formErrors.dsgvo}</p>}
+                      </div>
+                      {submitError && (
+                        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                          {submitError}
+                        </div>
                       )}
-                    </button>
-                    <p className="text-center text-xs text-gray-400 mt-3">
-                      🔒 Ihre Daten sind sicher · DSGVO-konform · Keine Werbung
-                    </p>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <div className="text-center mb-6">
-                    <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
-                      <Check className="w-8 h-8 text-white" />
+                      <button
+                        onClick={submitLead}
+                        disabled={isSubmitting}
+                        className="w-full bg-ergo-red text-white font-bold py-4 rounded-xl text-base hover:bg-red-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
+                      >
+                        {isSubmitting ? (
+                          <span className="flex items-center justify-center gap-2">
+                            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Wird gesendet…
+                          </span>
+                        ) : (
+                          'Anfrage senden & Termin wählen →'
+                        )}
+                      </button>
+                      <p className="text-center text-xs text-gray-400 mt-3">
+                        🔒 DSGVO-konform · Kostenlos · Keine Werbung
+                      </p>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                      Super, {formData.firstName}! 🎉
-                    </h2>
-                    <p className="text-white/80 text-sm max-w-sm mx-auto">
-                      Ihre Anfrage ist eingegangen. Wählen Sie jetzt direkt Ihren Wunschtermin:
-                    </p>
-                  </div>
-                  <div className="rounded-2xl overflow-hidden shadow-2xl bg-white">
-                    <Cal
-                      namespace="beratung-termin"
-                      calLink="morino-stuebe-ergo/erstberatung"
-                      style={{ width: '100%', minHeight: 'clamp(480px, 72vh, 660px)' }}
-                      config={{ layout: 'month_view', useSlotsViewOnSmallScreen: 'true' }}
-                    />
-                  </div>
-                  <p className="text-center text-white/50 text-xs mt-4">
-                    Kein passender Termin? Rufen Sie uns an:{' '}
-                    <a href="tel:015566771019" className="underline text-white/70">
-                      01556 677 1019
-                    </a>
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
+
+                    {/* Arrow hint on desktop */}
+                    <div className="hidden lg:flex items-center justify-center gap-2 mt-4 text-white/50 text-xs">
+                      <span>Nach dem Absenden Termin rechts wählen</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <div className="bg-white/10 border border-white/20 rounded-2xl p-6 sm:p-7 text-center">
+                      <div className="w-14 h-14 bg-green-400 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <Check className="w-7 h-7 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-2">
+                        Super, {formData.firstName}! 🎉
+                      </h3>
+                      <p className="text-white/80 text-sm mb-5 leading-relaxed">
+                        Ihre Anfrage ist eingegangen. Wählen Sie jetzt Ihren Wunschtermin im Kalender.
+                      </p>
+                      <div className="space-y-2 text-left">
+                        {[
+                          { label: 'Name', value: `${formData.firstName} ${formData.lastName}` },
+                          { label: 'E-Mail', value: formData.email },
+                          { label: 'Telefon', value: formData.phone },
+                        ].map(item => (
+                          <div key={item.label} className="flex gap-2 text-sm">
+                            <span className="text-white/50 w-14 flex-shrink-0">{item.label}</span>
+                            <span className="text-white font-medium">{item.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-5 pt-4 border-t border-white/20">
+                        <p className="text-white/60 text-xs">
+                          Kein passender Termin?{' '}
+                          <a href="tel:015566771019" className="underline text-white/80 font-semibold">
+                            01556 677 1019
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                    {/* Arrow pointing right on desktop */}
+                    <div className="hidden lg:flex items-center justify-center gap-2 mt-4 text-yellow-300 text-xs font-semibold">
+                      <span>Jetzt Termin im Kalender wählen</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* ── Right: Calendar (always visible) ── */}
+              <div className="rounded-2xl overflow-hidden shadow-2xl bg-white">
+                <div className="bg-gray-50 border-b border-gray-100 px-4 py-3 flex items-center gap-2">
+                  <span className="text-sm font-semibold text-gray-700">
+                    {submitted ? '2. Wunschtermin wählen' : '2. Direkt Termin wählen (optional)'}
+                  </span>
+                  {submitted && (
+                    <span className="ml-auto bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+                      Daten vorausgefüllt
+                    </span>
+                  )}
+                </div>
+                <Cal
+                  key={calKey}
+                  namespace="beratung-termin"
+                  calLink="morino-stuebe-ergo/erstberatung"
+                  style={{ width: '100%', minHeight: 'clamp(480px, 72vh, 660px)' }}
+                  config={{
+                    layout: 'month_view',
+                    useSlotsViewOnSmallScreen: 'true',
+                    ...(submitted ? {
+                      name: `${formData.firstName} ${formData.lastName}`,
+                      email: formData.email,
+                    } : {}),
+                  }}
+                />
+              </div>
+
+            </div>
           </div>
         </section>
 
