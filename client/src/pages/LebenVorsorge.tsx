@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
+import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
 import FunnelOverlay from "@/components/FunnelOverlay";
@@ -8,11 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
-import { Award, Shield, Handshake, Clock, ChevronDown, Phone, MessageCircle, Check, X, Heart, Briefcase, Users, Building2, Star, TrendingUp, Umbrella, Wallet, Mail, MessageSquare } from "lucide-react";
+import { Award, Shield, Handshake, Clock, ChevronDown, Phone, MessageCircle, Check, X, Heart, Briefcase, Users, Building2, Star, TrendingUp, Umbrella, Wallet, Mail, MessageSquare, ChevronRight } from "lucide-react";
 import TrustBar from "@/components/TrustBar";
 import FAQSection from "@/components/FAQSection";
-import standingPhoto from "@assets/optimized/image.webp";
-import heroImage from "@assets/generated_images/LebenVorsorge_Bild.jpg";
+import beraterPhoto from "@assets/optimized/ich_bin_da.webp";
 
 const products = [
   {
@@ -267,22 +267,81 @@ const faqs = [
   }
 ];
 
+const fadeInUp = {
+  initial: { opacity: 0, y: 40 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' as const },
+  transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as const },
+};
+
+function AnimatedCounter({ target, suffix = '', duration = 2 }: { target: number; suffix?: string; duration?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true });
+  const motionVal = useMotionValue(0);
+  const springVal = useSpring(motionVal, { duration: duration * 1000 });
+  useEffect(() => {
+    if (isInView) motionVal.set(target);
+  }, [isInView, target, motionVal]);
+  useEffect(() => {
+    const unsubscribe = springVal.on('change', (v) => {
+      if (ref.current) ref.current.textContent = Math.round(v) + suffix;
+    });
+    return unsubscribe;
+  }, [springVal, suffix]);
+  return <span ref={ref}>0{suffix}</span>;
+}
+
+const QUIZ_OPTIONS = [
+  { label: 'Kfz-Versicherung', icon: '🚗', type: 'kfz', source: 'hero_quiz' },
+  { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat', source: 'hero_quiz' },
+  { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz', source: 'hero_quiz' },
+  { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu', source: 'hero_quiz' },
+  { label: 'Gewerbe & Betrieb', icon: '🏢', type: 'gewerbe', source: 'lp_gewerbe' },
+  { label: 'Alle prüfen', icon: '✅', type: 'all', source: 'hero_quiz' },
+];
+
+const QUIZ_TO_PRODUCT: Record<string, string> = {
+  kfz: 'kfz',
+  hausrat: 'hausrat',
+  zahnzusatz: 'zahnzusatz',
+  bu: 'bu-versicherung',
+  gewerbe: 'gewerbe',
+};
+
+const PRODUCT_TO_FUNNEL_TYPE: Record<string, string> = {
+  'bu-versicherung': 'berufsunfaehigkeit',
+};
+
+const QUIZ_PRODUCT_TO_LABEL: Record<string, string> = {
+  kfz: 'Kfz-Versicherung',
+  hausrat: 'Hausrat & Haftpflicht',
+  zahnzusatz: 'Zahnzusatz',
+  'bu-versicherung': 'Berufsunfähigkeit',
+  berufsunfaehigkeit: 'Berufsunfähigkeit',
+  gewerbe: 'Gewerbe & Betrieb',
+};
+
 export default function LebenVorsorge() {
   const [funnelOpen, setFunnelOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<string>("private-rente");
+  const [selectedProduct, setSelectedProduct] = useState<string | undefined>("private-rente");
   const [openProduct, setOpenProduct] = useState<string | null>(null);
   useEffect(() => {
     trackEvent("leben_vorsorge_page_view", { page: "leben-vorsorge" });
   }, []);
 
-  const handleStartFunnel = (productId?: string) => {
-    if (productId) setSelectedProduct(productId);
+  const handleStartFunnel = (productId?: string | null) => {
+    if (productId === null) {
+      setSelectedProduct(undefined);
+    } else if (productId !== undefined) {
+      setSelectedProduct(productId);
+    }
     setFunnelOpen(true);
     trackEvent("funnel_started", { insurance_type: "leben-vorsorge", product: productId || "general" });
   };
 
   const closeFunnel = () => {
     setFunnelOpen(false);
+    setSelectedProduct("private-rente");
   };
 
   const toggleProduct = (id: string) => {
@@ -344,116 +403,152 @@ export default function LebenVorsorge() {
       ]} />
       <main className="min-h-screen pb-16 sm:pb-0">
         {/* Hero Section */}
-        <section className="py-6 sm:py-8 lg:py-12 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white overflow-hidden">
-          <div className="w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
-            <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-              <div className="text-center lg:text-left">
-                <div className="mb-6 sm:mb-8">
-                  <Heart className="w-12 h-12 sm:w-16 sm:h-16 text-ergo-red mx-auto lg:mx-0 mb-4 sm:mb-6" />
-                  <Badge className="bg-ergo-red text-white mb-4">Altersvorsorge & Absicherung</Badge>
-                  <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold text-sm sm:text-base mb-4">
-                    Ihr persönlicher ERGO-Berater - Kostenlose Analyse
+        <section className="py-12 md:py-20 px-4 bg-gradient-to-br from-[#003781] via-[#004fa0] to-[#001f5c] text-white relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+          <div className="max-w-5xl mx-auto relative">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
+              <div className="flex-1 text-center lg:text-left mb-10 lg:mb-0">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="inline-flex items-center gap-1.5 bg-white/15 px-3 py-1.5 rounded-full text-xs font-medium mb-5"
+                >
+                  <div className="flex gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3 h-3 text-yellow-300 fill-yellow-300" />
+                    ))}
                   </div>
+                  <span>4,9/5 · über 3.500 zufriedene Kunden</span>
+                </motion.div>
 
-                  <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-ergo-dark mb-3 sm:mb-4 leading-tight break-words">
-                    <span className="text-ergo-red">Leben & Vorsorge</span>
-                    <br /><span className="text-ergo-dark">Ihre Zukunft. Gut abgesichert.</span>
-                    <span className="block text-lg sm:text-xl text-ergo-red font-bold mt-2">
-                      Persönliche Beratung vom Experten
-                    </span>
-                  </h1>
-                  <p className="text-sm sm:text-base lg:text-lg text-ergo-dark mb-4 sm:mb-6">
-                    <strong>Kostenloser Service:</strong> Von der privaten Altersvorsorge über Berufsunfähigkeit bis zur Risikolebensversicherung – ich analysiere Ihre Situation und finde die passende Absicherung.
-                    <span className="block mt-2 text-ergo-red font-bold">Jetzt kostenlose Analyse Ihrer bestehenden Verträge anfordern!</span>
-                  </p>
-                </div>
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
+                >
+                  Leben & Vorsorge –{' '}
+                  <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                    Ihre Zukunft gut abgesichert
+                  </span>
+                </motion.h1>
 
-                <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
-                  <Badge className="bg-green-100 text-green-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
-                    7 Produktlinien
-                  </Badge>
-                  <Badge className="bg-blue-100 text-blue-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
-                    FFF+ Bestnote
-                  </Badge>
-                  <Badge className="bg-yellow-100 text-yellow-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
-                    Steuervorteile sichern
-                  </Badge>
-                </div>
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.35 }}
+                  className="text-base sm:text-lg text-white/90 max-w-xl mx-auto lg:mx-0 mb-3 leading-relaxed"
+                >
+                  Von der privaten Altersvorsorge über Berufsunfähigkeit bis zur Risikolebensversicherung – persönliche Beratung vom Experten.
+                </motion.p>
 
-                <div className="bg-white rounded-xl p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 border-2 border-blue-200 shadow-xl">
-                  <h3 className="text-center text-base sm:text-lg font-bold text-ergo-red mb-3">Ihr kostenloser ERGO-Service umfasst:</h3>
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center text-sm text-gray-900">
-                      <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
-                      <span>Vollständige Analyse Ihrer Altersvorsorge</span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-900">
-                      <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
-                      <span>Persönliche Beratung zu allen ERGO Leben-Produkten</span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-900">
-                      <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
-                      <span>Steueroptimierung Ihrer Vorsorgeverträge</span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-900">
-                      <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
-                      <span>Optimierung bestehender Verträge & Steuervorteile</span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-900">
-                      <span className="text-green-600 mr-2 flex-shrink-0"><Check className="w-4 h-4" /></span>
-                      <span>Lebenslange Betreuung durch Ihre ERGO-Agentur</span>
-                    </div>
-                    <div className="border-t pt-2 text-center font-bold text-ergo-red">
-                      <span>Unverbindlich & kostenlos - Ihr ERGO-Versprechen!</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <Button
-                      size="lg"
-                      className="bg-ergo-red hover:bg-ergo-red-hover text-white px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base lg:text-lg font-bold w-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                      onClick={() => {
-                        trackEvent('leben_cta_clicked', { source: 'hero_section', value: 15 });
-                        handleStartFunnel();
-                      }}
-                    >
-                      KOSTENLOSE BERATUNG STARTEN
-                    </Button>
-                    <Button
-                      size="lg"
-                      className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full"
-                      onClick={() => {
-                        trackEvent('leben_whatsapp_clicked', { source: 'hero_section' });
-                        const whatsappUrl = 'https://wa.me/4915566771019?text=' + encodeURIComponent('Hallo Herr Stübe, ich interessiere mich für das Thema Leben & Vorsorge und möchte mich kostenlos beraten lassen.');
-                        trackAppointmentConversion(whatsappUrl);
-                      }}
-                    >
-                      <MessageCircle className="w-5 h-5 mr-2" />
-                      WhatsApp Beratung
-                    </Button>
-                  </div>
-                  <p className="text-xs text-center text-gray-700 mt-3 font-medium">
-                    Immer kostenlos - Analyse bestehender Verträge - Persönliche Beratung vom Experten
-                  </p>
-                </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.45 }}
+                  className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs text-white/80 mb-2"
+                >
+                  <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-green-300" /> 7 Produktlinien</span>
+                  <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-green-300" /> FFF+ Bestnote</span>
+                  <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-green-300" /> Steuervorteile sichern</span>
+                </motion.div>
               </div>
 
-              <div className="flex justify-center lg:justify-end mt-8 lg:mt-0">
-                <div className="w-full max-w-md">
-                  <img
-                    src={heroImage}
-                    alt="Leben & Vorsorge – Ihre Zukunft gut abgesichert"
-                    className="w-full h-60 sm:h-80 object-cover object-top rounded-lg shadow-xl"
-                    loading="lazy"
-                    decoding="async"
-                  />
+              {/* Quiz Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.5 }}
+                className="w-full lg:w-[420px] lg:flex-shrink-0"
+              >
+                <div className="rounded-2xl border-2 border-white/20 bg-white shadow-2xl shadow-black/20 p-4 sm:p-5">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#E2001A] mb-1">Kostenlose Analyse – In 2 Minuten</p>
+                  <p className="text-sm sm:text-base font-bold text-gray-900 mb-4 leading-snug">
+                    Was möchten Sie versichern?
+                  </p>
+                  <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                    {QUIZ_OPTIONS.map((opt) => {
+                      const isPreSelected = opt.type === 'bu';
+                      const isAll = opt.type === 'all';
+                      return (
+                        <button
+                          key={opt.type}
+                          onClick={() => {
+                            trackEvent('quiz_option_clicked', { option: opt.type, source: opt.source, page: 'leben-vorsorge' });
+                            handleStartFunnel(isAll ? null : QUIZ_TO_PRODUCT[opt.type]);
+                          }}
+                          className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all active:scale-[0.98] group relative
+                            ${isAll
+                              ? 'border-[#E2001A] bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white hover:shadow-lg hover:shadow-red-500/25 sm:col-span-2'
+                              : isPreSelected
+                                ? 'border-[#E2001A] bg-red-50 shadow-sm'
+                                : 'border-gray-200 bg-gray-50 hover:border-[#E2001A] hover:bg-red-50'
+                            }`}
+                        >
+                          {isPreSelected && !isAll && (
+                            <span className="absolute -top-1.5 -right-1.5 bg-[#E2001A] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+                              Empfohlen
+                            </span>
+                          )}
+                          <span className="text-2xl leading-none shrink-0">{opt.icon}</span>
+                          <span className={`font-semibold text-sm ${isAll ? 'text-white' : isPreSelected ? 'text-[#E2001A]' : 'text-gray-800 group-hover:text-[#E2001A]'}`}>
+                            {opt.label}
+                          </span>
+                          <ChevronRight className={`w-4 h-4 ml-auto shrink-0 group-hover:translate-x-0.5 transition-transform ${isAll ? 'text-white/80' : isPreSelected ? 'text-[#E2001A]' : 'text-gray-400 group-hover:text-[#E2001A]'}`} />
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
+                    <p className="text-[10px] sm:text-xs text-gray-400">🔒 100% kostenlos & unverbindlich · DSGVO-konform</p>
+                    <a
+                      href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20m%C3%B6chte%20mich%20zum%20Thema%20Leben%20%26%20Vorsorge%20kostenlos%20beraten%20lassen."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => { trackEvent('whatsapp_clicked', { source: 'leben_hero_quiz' }); trackConversion(); }}
+                      className="flex items-center gap-1.5 text-[#25d366] hover:text-[#1da851] transition-colors text-xs font-semibold whitespace-nowrap shrink-0"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      Lieber WhatsApp
+                    </a>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
+        {/* Glassmorphism Stats Band */}
+        <motion.section {...fadeInUp} className="px-4 py-8 max-w-4xl mx-auto">
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-4 sm:p-6 md:p-8 relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 divide-x divide-gray-200/60">
+              {[
+                { value: 3500, suffix: '+', label: 'Zufriedene Kunden' },
+                { value: 15, suffix: '+', label: 'Produkte' },
+                { value: 24, suffix: 'h', label: 'Reaktionszeit' },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.15 }}
+                  className="text-center"
+                >
+                  <div className="text-2xl sm:text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
+                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                  </div>
+                  <p className="text-xs md:text-sm text-gray-500 mt-1.5 font-medium">{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+
         {/* Products Overview */}
-        <section className="py-12 sm:py-16 bg-white">
+        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-high-contrast mb-3 sm:mb-4 px-2 leading-tight">
@@ -608,10 +703,10 @@ export default function LebenVorsorge() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Comparison Table - Renten-Produktfamilien */}
-        <section className="py-12 sm:py-16 bg-ergo-gray">
+        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-ergo-gray">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 leading-tight">
@@ -700,10 +795,10 @@ export default function LebenVorsorge() {
               </Button>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Steuervorteile Section */}
-        <section className="py-12 sm:py-16 bg-white">
+        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 leading-tight">
@@ -760,74 +855,49 @@ export default function LebenVorsorge() {
               </Card>
             </div>
           </div>
-        </section>
+        </motion.section>
 
-        {/* Expert Section */}
-        <section className="py-12 sm:py-16 bg-ergo-gray">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 leading-tight">
-                Ihr Versicherungsexperte
-              </h2>
-              <p className="text-sm sm:text-base lg:text-xl text-gray-700 px-2">
-                Persönliche Beratung für Ihre Altersvorsorge und Absicherung
-              </p>
-            </div>
-
-            <Card className="bg-white shadow-lg">
-              <CardContent className="p-4 sm:p-6 lg:p-8">
-                <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-6 lg:gap-8">
-                  <div className="flex-shrink-0">
-                    <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-2xl overflow-hidden shadow-lg">
-                      <img
-                        src={standingPhoto}
-                        alt="Morino Stübe - Ihr Versicherungsexperte"
-                        className="w-full h-full object-contain bg-white"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-1 text-center lg:text-left">
-                    <h3 className="text-xl sm:text-2xl font-bold text-ergo-dark mb-2">
-                      Morino Stübe
-                    </h3>
-                    <p className="text-base sm:text-lg font-semibold text-ergo-red mb-3 sm:mb-4">
-                      Versicherungsfachmann nach § 84 HGB
-                    </p>
-                    <div className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
-                      <p className="mb-2">
-                        <span className="font-semibold">ERGO Ganderkesee</span><br />
-                        Friedensstraße 91 A, 27777 Ganderkesee
-                      </p>
-                      <p className="text-xs sm:text-sm">
-                        Tel: 01556 6771019 | E-Mail: morino.stuebe@ergo.de
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
-                      <div className="flex items-center gap-2">
-                        <Award className="w-4 h-4 text-ergo-red" />
-                        <span>Zertifizierter Experte</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Shield className="w-4 h-4 text-ergo-red" />
-                        <span>Vorsorge-Spezialist</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Handshake className="w-4 h-4 text-ergo-red" />
-                        <span>Persönliche Beratung</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-ergo-red" />
-                        <span>Schnelle Abwicklung</span>
-                      </div>
-                    </div>
-                  </div>
+        {/* Expert Section – Glassmorphism */}
+        <motion.section {...fadeInUp} className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-6">Ihr Versicherungsexperte</h2>
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-5 md:p-8 relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
+            <div className="flex flex-col items-center text-center gap-5 md:flex-row md:text-left md:items-start">
+              <motion.img
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.3 }}
+                src={beraterPhoto}
+                alt="Morino Stübe - ERGO Versicherungsfachmann in Ganderkesee"
+                className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-lg shrink-0 bg-white"
+                loading="lazy"
+              />
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-gray-900 mb-1 md:text-2xl">Morino Stübe</h3>
+                <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann · Leben & Vorsorge Spezialist</p>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4 md:text-base">
+                  Ich berate Sie persönlich und transparent zu allen Fragen rund um Altersvorsorge und Absicherung – von der privaten Rente über Berufsunfähigkeit bis zur Risikolebensversicherung.
+                </p>
+                <div className="flex flex-col gap-2 text-xs text-gray-500 md:text-sm">
+                  <span className="flex items-center justify-center md:justify-start gap-1.5">
+                    <Shield className="w-4 h-4 text-ergo-red shrink-0" />
+                    Vermittlerregister-Nr. D-5H7J-7DUI1-10
+                  </span>
+                  <span className="flex items-center justify-center md:justify-start gap-1.5">
+                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500 shrink-0" />
+                    ERGO als starker Partner seit 1906
+                  </span>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              <img
+                src="/attached_assets/ergo-logo-hq.svg"
+                alt="ERGO Logo"
+                className="h-10 md:h-14 w-auto shrink-0 hidden md:block"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
           </div>
-        </section>
+        </motion.section>
 
         <TrustBar />
 
@@ -839,7 +909,7 @@ export default function LebenVorsorge() {
         />
 
         {/* Final CTA Section */}
-        <section className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">
+        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight">
               Kostenlose Analyse Ihrer Altersvorsorge!
@@ -890,7 +960,7 @@ export default function LebenVorsorge() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Sticky Mobile CTA Bar */}
         <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
@@ -919,8 +989,8 @@ export default function LebenVorsorge() {
         <FunnelOverlay
           isOpen={funnelOpen}
           onClose={closeFunnel}
-          insuranceType={selectedProduct || 'leben-vorsorge'}
-          insuranceLabel={selectedProduct ? (products.find(p => p.id === selectedProduct)?.name || 'Leben & Vorsorge') : 'Leben & Vorsorge'}
+          insuranceType={(selectedProduct && (PRODUCT_TO_FUNNEL_TYPE[selectedProduct] ?? selectedProduct)) || 'leben-vorsorge'}
+          insuranceLabel={selectedProduct ? (products.find(p => p.id === selectedProduct)?.name ?? QUIZ_PRODUCT_TO_LABEL[selectedProduct] ?? 'Leben & Vorsorge') : 'Leben & Vorsorge'}
         />
       </main>
     </>

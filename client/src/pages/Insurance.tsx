@@ -1,18 +1,19 @@
 import { useParams, Link } from "wouter";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import FunnelOverlay from "@/components/FunnelOverlay";
 import '@/styles/funnel.css';
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
 import { insuranceConfig } from "@/lib/insurance-config";
 import { useQuery } from "@tanstack/react-query";
 import sittingPhoto from "@assets/optimized/ich_bin_da.webp";
 import beraterBranding from "@assets/optimized/unbenannt1.webp";
-import { Award, Shield, Handshake, Clock, Star, Instagram, ExternalLink, Mail, Phone, MessageSquare } from "lucide-react";
+import { Award, Shield, Handshake, Clock, Star, Instagram, ExternalLink, Mail, Phone, MessageSquare, ChevronRight } from "lucide-react";
 import TrustBar from "@/components/TrustBar";
 import FAQSection from "@/components/FAQSection";
 import type { Content } from "@shared/schema";
@@ -45,11 +46,66 @@ const insuranceFAQs: Record<string, { question: string; answer: string }[]> = {
   ],
 };
 
+const fadeInUp = {
+  initial: { opacity: 0, y: 40 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' as const },
+  transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as const },
+};
+
+function AnimatedCounter({ target, suffix = '', duration = 2 }: { target: number; suffix?: string; duration?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true });
+  const motionVal = useMotionValue(0);
+  const springVal = useSpring(motionVal, { duration: duration * 1000 });
+  useEffect(() => {
+    if (isInView) motionVal.set(target);
+  }, [isInView, target, motionVal]);
+  useEffect(() => {
+    const unsubscribe = springVal.on('change', (v) => {
+      if (ref.current) ref.current.textContent = Math.round(v) + suffix;
+    });
+    return unsubscribe;
+  }, [springVal, suffix]);
+  return <span ref={ref}>0{suffix}</span>;
+}
+
+const QUIZ_OPTIONS = [
+  { label: 'Kfz-Versicherung', icon: '🚗', type: 'kfz', source: 'hero_quiz' },
+  { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat', source: 'hero_quiz' },
+  { label: 'Wohngebäude', icon: '🏘️', type: 'wohngebaeude', source: 'hero_quiz' },
+  { label: 'Rechtsschutz', icon: '⚖️', type: 'rechtsschutz', source: 'hero_quiz' },
+  { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz', source: 'hero_quiz' },
+  { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu', source: 'hero_quiz' },
+  { label: 'Gewerbe & Betrieb', icon: '🏢', type: 'gewerbe', source: 'lp_gewerbe' },
+  { label: 'Alle prüfen', icon: '✅', type: 'all', source: 'hero_quiz' },
+];
+
+const TYPE_TO_QUIZ: Record<string, string> = {
+  kfz: 'kfz',
+  hausrat: 'hausrat',
+  haftpflicht: 'hausrat',
+  wohngebaeude: 'wohngebaeude',
+  rechtsschutz: 'rechtsschutz',
+  zahnzusatz: 'zahnzusatz',
+};
+
+const QUIZ_TO_FUNNEL: Record<string, { type: string; label: string }> = {
+  kfz: { type: 'kfz', label: 'Kfz-Versicherung' },
+  hausrat: { type: 'hausrat', label: 'Hausrat & Haftpflicht' },
+  wohngebaeude: { type: 'wohngebaeude', label: 'Wohngebäude' },
+  rechtsschutz: { type: 'rechtsschutz', label: 'Rechtsschutz' },
+  zahnzusatz: { type: 'zahnzusatz', label: 'Zahnzusatz' },
+  bu: { type: 'berufsunfaehigkeit', label: 'Berufsunfähigkeit' },
+  gewerbe: { type: 'gewerbe', label: 'Gewerbe & Betrieb' },
+};
+
 export default function Insurance() {
   const { type } = useParams();
   const [funnelOpen, setFunnelOpen] = useState(false);
-  
+  const [funnelInsuranceType, setFunnelInsuranceType] = useState<string | undefined>(type);
   const insurance = insuranceConfig[type as keyof typeof insuranceConfig];
+  const [funnelInsuranceLabel, setFunnelInsuranceLabel] = useState<string | undefined>(insurance?.title);
 
   // Load content from database
   const { data: content } = useQuery<Content>({
@@ -66,6 +122,11 @@ export default function Insurance() {
       trackEvent("insurance_page_view", { insurance_type: type });
     }
   }, [type]);
+
+  useEffect(() => {
+    setFunnelInsuranceType(type);
+    setFunnelInsuranceLabel(insurance?.title);
+  }, [type, insurance?.title]);
 
   if (!insurance) {
     return (
@@ -85,6 +146,8 @@ export default function Insurance() {
 
   const closeFunnel = () => {
     setFunnelOpen(false);
+    setFunnelInsuranceType(type);
+    setFunnelInsuranceLabel(insurance?.title);
   };
 
   return (
@@ -139,118 +202,166 @@ export default function Insurance() {
       <Breadcrumb />
       <main className="min-h-screen pb-16 sm:pb-0">
         {/* Hero Section */}
-        <section className="py-6 sm:py-8 lg:py-12 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white overflow-hidden">
-          <div className="w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
-            <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-              <div className="text-center lg:text-left">
-                <div className="mb-6 sm:mb-8">
-                  <insurance.icon className="w-12 h-12 sm:w-16 sm:h-16 text-ergo-red mx-auto lg:mx-0 mb-4 sm:mb-6" />
-                  <Badge className="bg-ergo-red text-white mb-4">✓ Sofortiger Schutz</Badge>
-                  {/* Service Banner */}
-                  <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold text-sm sm:text-base mb-4">
-                    ✅ Ihr persönlicher ERGO-Berater - Kostenlose Analyse
+        <section className="py-12 md:py-20 px-4 bg-gradient-to-br from-[#E2001A] via-[#c5001a] to-[#8b0011] text-white relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+          <div className="max-w-5xl mx-auto relative">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
+              <div className="flex-1 text-center lg:text-left mb-10 lg:mb-0">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="inline-flex items-center gap-1.5 bg-white/15 px-3 py-1.5 rounded-full text-xs font-medium mb-5"
+                >
+                  <div className="flex gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3 h-3 text-yellow-300 fill-yellow-300" />
+                    ))}
                   </div>
-                  
-                  <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-ergo-dark mb-3 sm:mb-4 leading-tight break-words">
-                    <span className="text-ergo-red">{insurance.title}</span>
-                    <br /><span className="text-gray-700">Optimal versichert mit ERGO</span>
-                    <span className="block text-lg sm:text-xl text-ergo-red font-bold mt-2">
-                      Persönliche Beratung vom Experten
-                    </span>
-                  </h1>
-                  <p className="text-sm sm:text-base lg:text-lg text-gray-800 mb-4 sm:mb-6">
-                    <strong>Kostenloser Service:</strong> Als Ihr ERGO-Berater analysiere ich Ihre bestehende {insurance.title} und zeige Ihnen Optimierungsmöglichkeiten.
-                    <span className="block mt-2 text-ergo-red font-bold">Profitieren Sie vom 15% Bündelnachlass ab 5 ERGO-Versicherungen!</span>
-                  </p>
-                </div>
+                  <span>4,9/5 · über 3.500 zufriedene Kunden</span>
+                </motion.div>
 
-                <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
-                  <Badge className="bg-green-100 text-green-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base animate-pulse">
-                    🚀 Ohne Wartezeit
-                  </Badge>
-                  <Badge className="bg-blue-100 text-blue-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base animate-pulse">
-                    ⚡ Sofortige Deckung
-                  </Badge>
-                  <Badge className="bg-yellow-100 text-yellow-800 px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base animate-pulse">
-                    💰 30% günstiger
-                  </Badge>
-                </div>
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
+                >
+                  {insurance.title} –{' '}
+                  <span className="bg-gradient-to-r from-yellow-200 to-white bg-clip-text text-transparent">
+                    Optimal versichert mit ERGO
+                  </span>
+                </motion.h1>
 
-                {/* ERGO Service Benefits */}
-                <div className="bg-white rounded-xl p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 border-2 border-blue-200 shadow-xl">
-                  <h3 className="text-center text-base sm:text-lg font-bold text-ergo-red mb-3">Ihr kostenloser ERGO-Service umfasst:</h3>
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center text-sm">
-                      <span className="text-green-500 mr-2">✅</span>
-                      <span>Vollständige Analyse Ihrer {insurance.title}</span>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <span className="text-green-500 mr-2">✅</span>
-                      <span>Persönliche Beratung zu ERGO-Produkten</span>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <span className="text-green-500 mr-2">✅</span>
-                      <span>Optimierung Ihrer Versicherungsverträge</span>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <span className="text-green-500 mr-2">✅</span>
-                      <span>15% Bündelnachlass ab 5 ERGO-Versicherungen</span>
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <span className="text-green-500 mr-2">✅</span>
-                      <span>Lebenslange Betreuung durch Ihre ERGO-Agentur</span>
-                    </div>
-                    <div className="border-t pt-2 text-center font-bold text-ergo-red">
-                      <span>Unverbindlich & kostenlos - Ihr ERGO-Versprechen!</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <Button 
-                      size="lg" 
-                      className="bg-ergo-red hover:bg-ergo-red-hover text-white px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base lg:text-lg font-bold w-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                      onClick={() => {
-                        trackEvent('insurance_cta_clicked', { insurance_type: type, source: 'hero_section', value: 15 });
-                        handleStartFunnel();
-                      }}
-                    >
-                      🚀 KOSTENLOSE BERATUNG STARTEN
-                    </Button>
-                    <Button 
-                      size="lg" 
-                      className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full"
-                      onClick={() => {
-                        trackEvent('insurance_whatsapp_clicked', { insurance_type: type, source: 'hero_section' });
-                        const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Informationen zum 15% Bündelnachlass ab 5 Versicherungen!';
-                        trackAppointmentConversion(whatsappUrl);
-                      }}
-                    >
-                      💬 WhatsApp Beratung
-                    </Button>
-                  </div>
-                  <p className="text-xs text-center text-gray-500 mt-3">
-                    ✅ Immer kostenlos • Analyse bestehender Verträge • 15% Bündelnachlass ab 5 Versicherungen
-                  </p>
-                </div>
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.35 }}
+                  className="text-base sm:text-lg text-white/90 max-w-xl mx-auto lg:mx-0 mb-3 leading-relaxed"
+                >
+                  Persönliche Beratung, kostenlose Analyse und 15% Bündelnachlass ab 5 ERGO-Versicherungen.
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.45 }}
+                  className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs text-white/80 mb-2"
+                >
+                  <span className="flex items-center gap-1"><span className="text-green-300">✓</span> Ohne Wartezeit</span>
+                  <span className="flex items-center gap-1"><span className="text-green-300">✓</span> Sofortige Deckung</span>
+                  <span className="flex items-center gap-1"><span className="text-green-300">✓</span> 15% Bündelnachlass</span>
+                </motion.div>
               </div>
 
-              {/* Hero Image */}
-              <div className="flex justify-center lg:justify-end mt-8 lg:mt-0">
-                <div className="w-full max-w-md">
-                  <img 
-                    src={insurance.image}
-                    alt={insurance.title}
-                    className="w-full h-60 sm:h-80 object-cover object-top rounded-lg shadow-xl"
-                    loading="lazy"
-                    decoding="async"
-                  />
+              {/* Quiz Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.5 }}
+                className="w-full lg:w-[420px] lg:flex-shrink-0"
+              >
+                <div className="rounded-2xl border-2 border-white/20 bg-white shadow-2xl shadow-black/20 p-4 sm:p-5">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#E2001A] mb-1">Kostenlose Analyse – In 2 Minuten</p>
+                  <p className="text-sm sm:text-base font-bold text-gray-900 mb-4 leading-snug">
+                    Was möchten Sie versichern?
+                  </p>
+                  <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                    {QUIZ_OPTIONS.map((opt) => {
+                      const preSelectedType = type ? (TYPE_TO_QUIZ[type] ?? 'all') : 'all';
+                      const isPreSelected = opt.type === preSelectedType && preSelectedType !== 'all';
+                      const isAll = opt.type === 'all';
+                      return (
+                        <button
+                          key={opt.type}
+                          onClick={() => {
+                            trackEvent('quiz_option_clicked', { option: opt.type, source: opt.source, page: `insurance_${type}` });
+                            if (isAll) {
+                              // "Alle prüfen" = generic consultation, no type (maps to general_consultation)
+                              setFunnelInsuranceType(undefined);
+                              setFunnelInsuranceLabel(undefined);
+                            } else if (isPreSelected) {
+                              // Pre-selected tile = current page's canonical URL type
+                              setFunnelInsuranceType(type);
+                              setFunnelInsuranceLabel(insurance.title);
+                            } else {
+                              const mapping = QUIZ_TO_FUNNEL[opt.type] ?? { type: type || '', label: insurance.title };
+                              setFunnelInsuranceType(mapping.type);
+                              setFunnelInsuranceLabel(mapping.label);
+                            }
+                            handleStartFunnel();
+                          }}
+                          className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all active:scale-[0.98] group relative
+                            ${isAll
+                              ? 'border-[#E2001A] bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white hover:shadow-lg hover:shadow-red-500/25 sm:col-span-2'
+                              : isPreSelected
+                                ? 'border-[#E2001A] bg-red-50 shadow-sm'
+                                : 'border-gray-200 bg-gray-50 hover:border-[#E2001A] hover:bg-red-50'
+                            }`}
+                        >
+                          {isPreSelected && !isAll && (
+                            <span className="absolute -top-1.5 -right-1.5 bg-[#E2001A] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+                              Aktuell
+                            </span>
+                          )}
+                          <span className="text-2xl leading-none shrink-0">{opt.icon}</span>
+                          <span className={`font-semibold text-sm ${isAll ? 'text-white' : isPreSelected ? 'text-[#E2001A]' : 'text-gray-800 group-hover:text-[#E2001A]'}`}>
+                            {opt.label}
+                          </span>
+                          <ChevronRight className={`w-4 h-4 ml-auto shrink-0 ${isAll ? 'text-white/80' : isPreSelected ? 'text-[#E2001A]' : 'text-gray-400 group-hover:text-[#E2001A]'}`} />
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
+                    <p className="text-[10px] sm:text-xs text-gray-400">🔒 100% kostenlos & unverbindlich · DSGVO-konform</p>
+                    <a
+                      href={`https://wa.me/4915566771019?text=${encodeURIComponent('Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Informationen zum 15% Bündelnachlass!')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => { trackEvent('whatsapp_clicked', { source: 'insurance_hero_quiz', insurance_type: type }); trackConversion(); }}
+                      className="flex items-center gap-1.5 text-[#25d366] hover:text-[#1da851] transition-colors text-xs font-semibold whitespace-nowrap shrink-0"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      Lieber WhatsApp
+                    </a>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
+        {/* Glassmorphism Stats Band */}
+        <motion.section {...fadeInUp} className="px-4 py-8 max-w-4xl mx-auto">
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-4 sm:p-6 md:p-8 relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 divide-x divide-gray-200/60">
+              {[
+                { value: 3500, suffix: '+', label: 'Zufriedene Kunden' },
+                { value: 15, suffix: '+', label: 'Produkte' },
+                { value: 24, suffix: 'h', label: 'Reaktionszeit' },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.15 }}
+                  className="text-center"
+                >
+                  <div className="text-2xl sm:text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
+                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                  </div>
+                  <p className="text-xs md:text-sm text-gray-500 mt-1.5 font-medium">{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+
         {/* Features Section */}
-        <section className="py-12 sm:py-16 bg-white">
+        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-high-contrast mb-3 sm:mb-4 px-2 leading-tight text-center">
@@ -279,10 +390,10 @@ export default function Insurance() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Benefits Section */}
-        <section className="py-12 sm:py-16 bg-ergo-gray">
+        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-ergo-gray">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 leading-tight text-center">
@@ -307,10 +418,10 @@ export default function Insurance() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Expert Section */}
-        <section className="py-12 sm:py-16 bg-white">
+        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 leading-tight text-center">
@@ -374,12 +485,12 @@ export default function Insurance() {
               </CardContent>
             </Card>
           </div>
-        </section>
+        </motion.section>
 
         <TrustBar />
 
         {/* Berater & Testsieger Section */}
-        <section className="py-10 sm:py-14 bg-white">
+        <motion.section {...fadeInUp} className="py-10 sm:py-14 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="flex flex-col md:flex-row gap-6 items-start">
               <div className="flex-shrink-0">
@@ -427,7 +538,7 @@ export default function Insurance() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {type && insuranceFAQs[type] && (
           <FAQSection
@@ -439,7 +550,7 @@ export default function Insurance() {
         )}
 
         {/* Final CTA Section with Urgency */}
-        <section className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">
+        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight text-white">
               Kostenlose Analyse & 15% Bündelnachlass
@@ -499,7 +610,7 @@ export default function Insurance() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Sticky Mobile CTA Bar */}
         <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
@@ -531,8 +642,8 @@ export default function Insurance() {
         <FunnelOverlay
           isOpen={funnelOpen}
           onClose={closeFunnel}
-          insuranceType={type}
-          insuranceLabel={insurance.title}
+          insuranceType={funnelInsuranceType}
+          insuranceLabel={funnelInsuranceLabel}
         />
       </main>
     </>

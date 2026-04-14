@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "wouter";
-import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight, Award, Star, Users, Home, Car, Heart, Scale, Umbrella, Instagram, Clock, FileCheck, TrendingUp, Building2, UserCheck, Mail } from "lucide-react";
+import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
+import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight, Award, Star, Users, Home, Car, Heart, Scale, Umbrella, Instagram, Clock, FileCheck, TrendingUp, Building2, UserCheck, Mail, ChevronRight } from "lucide-react";
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
 import TrustBar from "@/components/TrustBar";
@@ -8,8 +9,7 @@ import FAQSection from "@/components/FAQSection";
 import { trackEvent, trackConversion } from "@/lib/analytics";
 import FunnelOverlay from "@/components/FunnelOverlay";
 import '@/styles/funnel.css';
-import standingPhoto from "@assets/optimized/image.webp";
-import portraitPhoto from "@assets/optimized/image_1.webp";
+import beraterPhoto from "@assets/optimized/ich_bin_da.webp";
 
 const cityData: Record<string, {
   name: string;
@@ -204,9 +204,58 @@ const ergoAwards = [
   { title: "Kfz-Versicherung", source: "Franke & Bornberg", rating: "HERVORRAGEND", year: "2025", icon: Award },
 ];
 
+const fadeInUp = {
+  initial: { opacity: 0, y: 40 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' as const },
+  transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as const },
+};
+
+function AnimatedCounter({ target, suffix = '', duration = 2 }: { target: number; suffix?: string; duration?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true });
+  const motionVal = useMotionValue(0);
+  const springVal = useSpring(motionVal, { duration: duration * 1000 });
+  useEffect(() => {
+    if (isInView) motionVal.set(target);
+  }, [isInView, target, motionVal]);
+  useEffect(() => {
+    const unsubscribe = springVal.on('change', (v) => {
+      if (ref.current) ref.current.textContent = Math.round(v) + suffix;
+    });
+    return unsubscribe;
+  }, [springVal, suffix]);
+  return <span ref={ref}>0{suffix}</span>;
+}
+
+const QUIZ_OPTIONS = [
+  { label: 'Kfz-Versicherung', icon: '🚗', type: 'kfz' },
+  { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat' },
+  { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz' },
+  { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu' },
+  { label: 'Gewerbe & Betrieb', icon: '🏢', type: 'gewerbe' },
+  { label: 'Alle prüfen', icon: '✅', type: 'all' },
+];
+
+const QUIZ_TO_FUNNEL: Record<string, { type: string; label: string }> = {
+  kfz: { type: 'kfz', label: 'Kfz-Versicherung' },
+  hausrat: { type: 'hausrat', label: 'Hausrat & Haftpflicht' },
+  zahnzusatz: { type: 'zahnzusatz', label: 'Zahnzusatz' },
+  bu: { type: 'berufsunfaehigkeit', label: 'Berufsunfähigkeit' },
+  gewerbe: { type: 'gewerbe', label: 'Gewerbe & Betrieb' },
+};
+
 export default function CityLanding({ cityKey }: { cityKey: string }) {
   const data = cityData[cityKey];
   const [showFunnel, setShowFunnel] = useState(false);
+  const [funnelInsuranceType, setFunnelInsuranceType] = useState<string | undefined>(undefined);
+  const [funnelInsuranceLabel, setFunnelInsuranceLabel] = useState<string | undefined>(undefined);
+
+  const closeFunnel = useCallback(() => {
+    setShowFunnel(false);
+    setFunnelInsuranceType(undefined);
+    setFunnelInsuranceLabel(undefined);
+  }, []);
 
   if (!data) {
     return (
@@ -258,86 +307,166 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
       <Breadcrumb items={[{ label: data.name }]} />
       <main className="min-h-screen pb-16 sm:pb-0">
         {/* Hero Section */}
-        <section className="py-12 sm:py-16 bg-gradient-to-br from-ergo-red-light via-ergo-gray-light to-white overflow-hidden">
-          <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-500 mb-4">
-              <MapPin className="w-4 h-4" />
-              <span>{data.region}</span>
-              <span className="mx-1">·</span>
-              <span className="text-ergo-red font-medium">{data.distance}</span>
-              <span className="mx-1">·</span>
-              <span>{data.einwohner} Einwohner</span>
-            </div>
+        <section className="py-12 md:py-20 px-4 bg-gradient-to-br from-[#003781] via-[#004fa0] to-[#001f5c] text-white relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+          <div className="max-w-5xl mx-auto relative">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
+              <div className="flex-1 text-center lg:text-left mb-10 lg:mb-0">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="inline-flex items-center gap-1.5 bg-white/15 px-3 py-1.5 rounded-full text-xs font-medium mb-5"
+                >
+                  <MapPin className="w-3.5 h-3.5" />
+                  <span>{data.region} · {data.distance} · {data.einwohner} Einwohner</span>
+                </motion.div>
 
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
-              Ihre ERGO Versicherungsagentur für{" "}
-              <span className="text-ergo-red">{data.name}</span>
-            </h1>
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
+                >
+                  Ihre ERGO Agentur für{' '}
+                  <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                    {data.name}
+                  </span>
+                </motion.h1>
 
-            <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-4">
-              {data.intro}
-            </p>
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.35 }}
+                  className="text-base sm:text-lg text-white/90 max-w-xl mx-auto lg:mx-0 mb-3 leading-relaxed"
+                >
+                  {data.intro}
+                </motion.p>
 
-            <p className="text-sm text-gray-500 mb-6">
-              Ortsteile: {data.ortsteile.join(", ")}
-            </p>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.45 }}
+                  className="inline-flex items-center gap-2 bg-green-500/20 border border-green-400/30 px-3 py-1.5 rounded-full text-xs text-green-200 font-semibold mb-2"
+                >
+                  <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  Heute noch {3 + (new Date().getDay() % 3)} freie Beratungstermine
+                </motion.div>
+              </div>
 
-            <div className="inline-flex items-center gap-2 text-xs text-green-600 font-semibold bg-green-50 px-3 py-1.5 rounded-full mb-4">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              Heute noch {3 + (new Date().getDay() % 3)} freie Beratungstermine
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3 mb-8">
-              <button
-                onClick={() => {
-                  setShowFunnel(true);
-                  trackEvent("city_cta_beratung", { city: data.name });
-                }}
-                className="flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold px-6 py-3.5 min-h-[44px] rounded-xl shadow-md hover:bg-red-700 transition-colors"
+              {/* Quiz Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.5 }}
+                className="w-full lg:w-[420px] lg:flex-shrink-0"
               >
-                <ArrowRight className="w-5 h-5" />
-                Kostenlose Analyse starten
-              </button>
-              <a
-                href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => {
-                  trackEvent("city_whatsapp", { city: data.name });
-                  trackConversion();
-                }}
-                className="flex items-center justify-center gap-2 border-2 border-green-500 text-green-600 font-semibold px-6 py-3.5 min-h-[44px] rounded-xl hover:bg-green-50 transition-colors"
-              >
-                <MessageSquare className="w-5 h-5" />
-                WhatsApp Beratung
-              </a>
+                <div className="rounded-2xl border-2 border-white/20 bg-white shadow-2xl shadow-black/20 p-4 sm:p-5">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#E2001A] mb-1">Kostenlose Analyse – In 2 Minuten</p>
+                  <p className="text-sm sm:text-base font-bold text-gray-900 mb-4 leading-snug">
+                    Was möchten Sie versichern?
+                  </p>
+                  <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                    {QUIZ_OPTIONS.map((opt) => {
+                      const isAll = opt.type === 'all';
+                      return (
+                        <button
+                          key={opt.type}
+                          onClick={() => {
+                            trackEvent('quiz_option_clicked', { option: opt.type, source: 'city_hero_quiz', city: data.name });
+                            if (!isAll) {
+                              const mapping = QUIZ_TO_FUNNEL[opt.type];
+                              setFunnelInsuranceType(mapping?.type);
+                              setFunnelInsuranceLabel(mapping?.label);
+                            } else {
+                              setFunnelInsuranceType(undefined);
+                              setFunnelInsuranceLabel(undefined);
+                            }
+                            setShowFunnel(true);
+                          }}
+                          className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all active:scale-[0.98] group
+                            ${isAll
+                              ? 'border-[#E2001A] bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white hover:shadow-lg hover:shadow-red-500/25 sm:col-span-2'
+                              : 'border-gray-200 bg-gray-50 hover:border-[#E2001A] hover:bg-red-50'
+                            }`}
+                        >
+                          <span className="text-2xl leading-none shrink-0">{opt.icon}</span>
+                          <span className={`font-semibold text-sm ${isAll ? 'text-white' : 'text-gray-800 group-hover:text-[#E2001A]'}`}>
+                            {opt.label}
+                          </span>
+                          <ChevronRight className={`w-4 h-4 ml-auto shrink-0 ${isAll ? 'text-white/80' : 'text-gray-400 group-hover:text-[#E2001A]'}`} />
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
+                    <p className="text-[10px] sm:text-xs text-gray-400">🔒 100% kostenlos & unverbindlich · DSGVO-konform</p>
+                    <a
+                      href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => { trackEvent("city_whatsapp", { city: data.name }); trackConversion(); }}
+                      className="flex items-center gap-1.5 text-[#25d366] hover:text-[#1da851] transition-colors text-xs font-semibold whitespace-nowrap shrink-0"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      Lieber WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* Berater-Vorstellung Section */}
-        <section className="py-10 md:py-14 bg-white">
-          <div className="max-w-4xl mx-auto px-4">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-8">
-              Ihr persönlicher Berater für {data.name}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 mb-4">
-                  <img
-                    src={standingPhoto}
-                    alt="Morino Stübe - ERGO Versicherungsberater"
-                    className="w-20 h-20 rounded-full object-contain border-2 border-ergo-red shadow-md bg-white"
-                    loading="lazy"
-                  />
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900">Morino Stübe</h3>
-                    <p className="text-sm text-gray-500">ERGO Versicherungsberater</p>
-                    <p className="text-sm text-ergo-red font-medium">Ganderkesee & Region</p>
+        {/* Glassmorphism Stats Band */}
+        <motion.section {...fadeInUp} className="px-4 py-8 max-w-4xl mx-auto">
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-4 sm:p-6 md:p-8 relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 divide-x divide-gray-200/60">
+              {[
+                { value: 3500, suffix: '+', label: 'Zufriedene Kunden' },
+                { value: 15, suffix: '+', label: 'Produkte' },
+                { value: 24, suffix: 'h', label: 'Reaktionszeit' },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.15 }}
+                  className="text-center"
+                >
+                  <div className="text-2xl sm:text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
+                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
                   </div>
-                </div>
-                <p className="text-gray-600 leading-relaxed">{data.beraterIntro}</p>
-                <div className="flex flex-wrap gap-2 pt-2">
+                  <p className="text-xs md:text-sm text-gray-500 mt-1.5 font-medium">{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Berater-Vorstellung Section – Glassmorphism */}
+        <motion.section {...fadeInUp} className="px-4 py-10 md:py-14 max-w-3xl mx-auto">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 text-center">
+            Ihr persönlicher Berater für {data.name}
+          </h2>
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-5 md:p-8 relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
+            <div className="flex flex-col items-center text-center gap-5 md:flex-row md:text-left md:items-start">
+              <motion.img
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.3 }}
+                src={beraterPhoto}
+                alt="Morino Stübe - ERGO Versicherungsfachmann in Ganderkesee"
+                className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-lg shrink-0 bg-white"
+                loading="lazy"
+              />
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-gray-900 mb-1 md:text-2xl">Morino Stübe</h3>
+                <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann · Ganderkesee & Region</p>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4 md:text-base">{data.beraterIntro}</p>
+                <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                   <span className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full">
                     <Clock className="w-3 h-3" /> Flexible Termine
                   </span>
@@ -349,20 +478,12 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                   </span>
                 </div>
               </div>
-              <div className="flex justify-center">
-                <img
-                  src={portraitPhoto}
-                  alt="Morino Stübe - Ihr ERGO Berater"
-                  className="rounded-2xl shadow-lg max-w-[320px] w-full object-cover object-top"
-                  loading="lazy"
-                />
-              </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* ERGO Testsieger Badges */}
-        <section className="py-10 md:py-14 bg-gradient-to-br from-yellow-50 to-orange-50">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-gradient-to-br from-yellow-50 to-orange-50">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-center">
               ERGO – Ausgezeichnete Qualität
@@ -382,10 +503,10 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Detailed Service Descriptions */}
-        <section className="py-10 md:py-14 bg-white">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-white">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
               Versicherungsberatung speziell für {data.name}
@@ -409,10 +530,10 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               </div>
             )}
           </div>
-        </section>
+        </motion.section>
 
         {/* Insurance Products */}
-        <section className="py-10 md:py-14 bg-gray-50">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-gray-50">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
               Versicherungen für {data.name} im Überblick
@@ -441,10 +562,10 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               })}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Why ERGO Agentur Stübe */}
-        <section className="py-10 md:py-14 bg-white">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-white">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
               Warum ERGO Agentur Stübe für {data.name}?
@@ -467,10 +588,10 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Local Testimonials / Trust Section */}
-        <section className="py-10 md:py-14 bg-gray-50">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-gray-50">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-center">
               Das sagen Kunden aus {data.name}
@@ -490,7 +611,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         <TrustBar />
 
@@ -502,7 +623,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         />
 
         {/* Instagram Social Proof */}
-        <section className="py-10 md:py-14 bg-gradient-to-br from-purple-50 to-pink-50">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-gradient-to-br from-purple-50 to-pink-50">
           <div className="max-w-4xl mx-auto px-4 text-center">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
               Folgen Sie uns auf Instagram
@@ -524,10 +645,10 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               Regelmäßige Tipps zu Versicherungen, Vorsorge und Absicherung für {data.name} und Umgebung
             </p>
           </div>
-        </section>
+        </motion.section>
 
         {/* Local SEO Text */}
-        <section className="py-10 md:py-14 bg-white">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-white">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
               Versicherungsschutz in {data.name} – Was Sie wissen sollten
@@ -551,10 +672,10 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Contact CTA */}
-        <section className="py-10 md:py-14 bg-gray-50">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-gray-50">
           <div className="max-w-4xl mx-auto px-4 text-center">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
               Kontakt für {data.name}
@@ -597,7 +718,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               </Link>
             </div>
           </div>
-        </section>
+        </motion.section>
         {/* Sticky Mobile CTA Bar */}
         <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
           <button
@@ -625,7 +746,12 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
           </a>
         </div>
 
-        <FunnelOverlay isOpen={showFunnel} onClose={() => setShowFunnel(false)} />
+        <FunnelOverlay
+          isOpen={showFunnel}
+          onClose={closeFunnel}
+          insuranceType={funnelInsuranceType}
+          insuranceLabel={funnelInsuranceLabel}
+        />
       </main>
     </>
   );
