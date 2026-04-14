@@ -4,7 +4,7 @@ import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
 
-type DamageType = 'kfz' | 'glasschaden' | 'hausrat' | 'gebaeude' | 'rechtsschutz' | 'bu' | 'sonstiges';
+type DamageType = 'kfz' | 'glasschaden' | 'hausrat' | 'gebaeude' | 'rechtsschutz' | 'bu' | 'haftpflicht' | 'sonstiges';
 
 interface FormData {
   vorname: string;
@@ -80,6 +80,7 @@ const damageTypes: { type: DamageType; icon: string; title: string; subtitle?: s
   { type: 'hausrat', icon: '🏠', title: 'Hausrat-Schaden' },
   { type: 'gebaeude', icon: '🏚️', title: 'Gebäudeschaden' },
   { type: 'rechtsschutz', icon: '⚖️', title: 'Rechtsschutz-Fall' },
+  { type: 'haftpflicht', icon: '🛡️', title: 'Haftpflicht-Schaden' },
   { type: 'bu', icon: '💼', title: 'Berufsunfähigkeit' },
   { type: 'sonstiges', icon: '📋', title: 'Sonstiger Schaden' },
 ];
@@ -90,6 +91,7 @@ const damageTypeLabels: Record<DamageType, { icon: string; title: string }> = {
   hausrat: { icon: '🏠', title: 'Hausrat-Schaden' },
   gebaeude: { icon: '🏚️', title: 'Gebäudeschaden' },
   rechtsschutz: { icon: '⚖️', title: 'Rechtsschutz-Fall' },
+  haftpflicht: { icon: '🛡️', title: 'Haftpflicht-Schaden' },
   bu: { icon: '💼', title: 'Berufsunfähigkeit' },
   sonstiges: { icon: '📋', title: 'Sonstiger Schaden' },
 };
@@ -111,8 +113,9 @@ export default function SchadenPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const typeParam = params.get('type') as DamageType | null;
-    if (typeParam && ['kfz', 'glasschaden', 'hausrat', 'gebaeude', 'rechtsschutz', 'bu', 'sonstiges'].includes(typeParam)) {
+    const validTypes: DamageType[] = ['kfz', 'glasschaden', 'hausrat', 'gebaeude', 'rechtsschutz', 'haftpflicht', 'bu', 'sonstiges'];
+    const typeParam = (params.get('typ') || params.get('type')) as DamageType | null;
+    if (typeParam && validTypes.includes(typeParam)) {
       setSelectedType(typeParam);
       setStep(2);
     }
@@ -197,7 +200,7 @@ export default function SchadenPage() {
         if (!formData.erkrankung.trim()) e.erkrankung = 'Pflichtfeld';
         if (!formData.arbeitsunfaehigSeit) e.arbeitsunfaehigSeit = 'Pflichtfeld';
       }
-      if (selectedType === 'sonstiges') {
+      if (selectedType === 'sonstiges' || selectedType === 'haftpflicht') {
         if (!formData.weitereDetails.trim() || formData.weitereDetails.trim().length < 10) e.weitereDetails = 'Mindestens 10 Zeichen erforderlich';
       }
     }
@@ -286,7 +289,7 @@ export default function SchadenPage() {
       lines.push(`Arbeitsunfähig seit: ${formData.arbeitsunfaehigSeit}`);
       lines.push(`Arzt aufgesucht: ${formData.arztAufgesucht}`);
     }
-    if (selectedType === 'sonstiges') {
+    if (selectedType === 'sonstiges' || selectedType === 'haftpflicht') {
       lines.push(`Weitere Details: ${formData.weitereDetails}`);
     }
     return lines.join('\n');
@@ -802,6 +805,20 @@ export default function SchadenPage() {
                         { value: 'ja', label: 'Ja' },
                         { value: 'nein', label: 'Nein' },
                       ])}
+                    </div>
+                  </>
+                )}
+
+                {selectedType === 'haftpflicht' && (
+                  <>
+                    <div className="border-t border-gray-200 pt-4 mt-2">
+                      <h3 className="text-base font-bold text-gray-900 mb-3">🛡️ Haftpflicht-Angaben</h3>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-semibold text-gray-700">Bitte beschreiben Sie den Haftpflichtfall *</label>
+                      <p className="text-xs text-gray-500 mb-1">z.B. wem gegenüber ein Schaden entstanden ist, wie es dazu kam, geschätzter Schadenbetrag</p>
+                      <textarea value={formData.weitereDetails} onChange={e => updateField('weitereDetails', e.target.value)} rows={4} className={inputCls('weitereDetails')} />
+                      {errors.weitereDetails && <span className="text-xs text-red-500">{errors.weitereDetails}</span>}
                     </div>
                   </>
                 )}

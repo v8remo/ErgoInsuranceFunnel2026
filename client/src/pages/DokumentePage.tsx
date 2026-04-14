@@ -154,9 +154,13 @@ export default function DokumentePage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const typeParam = params.get('type') as DocType | null;
-    if (typeParam && ['kuendigung', 'beraterwechsel', 'aenderung', 'vollmacht', 'upload'].includes(typeParam)) {
-      setSelectedType(typeParam);
+    const validTypes: DocType[] = ['kuendigung', 'beraterwechsel', 'aenderung', 'vollmacht', 'upload'];
+    const formularParam = params.get('formular');
+    const typeParam = params.get('type');
+    const rawParam = formularParam || typeParam;
+    const resolved = rawParam as DocType | null;
+    if (resolved && validTypes.includes(resolved)) {
+      setSelectedType(resolved);
       setStep(2);
     }
   }, []);
