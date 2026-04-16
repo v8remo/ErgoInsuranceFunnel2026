@@ -52,13 +52,16 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [isBU] = useRoute("/berufsunfaehigkeit");
   const [isZahn] = useRoute("/zahnzusatz");
   const [isUnternehmen] = useRoute("/unternehmensversicherung");
-  const hideLayout = isAdmin || isInstagram || isBeratung || isKfz || isHausrat || isHaftpflicht || isRechtsschutz || isBU || isZahn || isUnternehmen;
+
+  const isSparten = isKfz || isHausrat || isHaftpflicht || isRechtsschutz || isBU || isZahn || isUnternehmen;
+  const hideHeader = isAdmin || isInstagram || isBeratung;
+  const hideFooter = isAdmin || isInstagram || isBeratung || isSparten;
 
   return (
     <>
-      {!hideLayout && <Header />}
+      {!hideHeader && <Header />}
       <main>{children}</main>
-      {!hideLayout && <Footer />}
+      {!hideFooter && <Footer />}
     </>
   );
 }
