@@ -40,6 +40,7 @@ export interface SpartenConfig {
     text: string;
     subtext: string;
   };
+  explainerVideo?: string;
 }
 
 export const spartenConfigs: Record<string, SpartenConfig> = {
@@ -258,6 +259,7 @@ export const spartenConfigs: Record<string, SpartenConfig> = {
       text: 'Zahnschutz sichern – bevor es teuer wird',
       subtext: 'Ein Implantat kostet durchschnittlich 3.000€ – sind Sie abgesichert?',
     },
+    explainerVideo: '/videos/leitfaden-zahnzusatz.mp4',
   },
   gewerbe: {
     slug: 'gewerbe',

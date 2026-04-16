@@ -91,6 +91,71 @@ const ergoAwards = [
   { label: 'Service', rating: '11x Champion', source: 'ServiceValue \'25' },
 ];
 
+function ExplainerVideo({ src }: { src: string }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+
+  return (
+    <motion.section
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+      className="py-10 md:py-14 px-4"
+    >
+      <div className="max-w-3xl mx-auto">
+        <div className="text-center mb-6">
+          <p className="text-xs font-semibold text-ergo-red uppercase tracking-widest mb-2">Erklärvideo</p>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+            Zahnzusatz einfach erklärt
+          </h2>
+          <p className="text-gray-500 text-sm mt-2">In wenigen Minuten verstehen Sie, worauf es bei der Zahnzusatzversicherung ankommt.</p>
+        </div>
+
+        <div className="relative rounded-2xl overflow-hidden shadow-xl bg-gray-900 aspect-video">
+          {!isPlaying ? (
+            <button
+              onClick={() => setIsPlaying(true)}
+              className="absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-4 group"
+              aria-label="Video abspielen"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/90 to-cyan-700/80" />
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-7 h-7 sm:w-9 sm:h-9 text-ergo-red ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+                <div className="text-center">
+                  <p className="text-white font-bold text-base sm:text-lg">Video abspielen</p>
+                  <p className="text-white/70 text-xs sm:text-sm mt-0.5">Zahnzusatz-Leitfaden · ERGO Stübe</p>
+                </div>
+              </div>
+              <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5 bg-black/40 text-white/70 text-xs px-2 py-1 rounded-full">
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm-1 14.5v-9l6 4.5-6 4.5z" /></svg>
+                Wird erst bei Klick geladen
+              </div>
+            </button>
+          ) : (
+            <video
+              src={src}
+              className="w-full h-full object-cover"
+              controls
+              autoPlay
+              preload="auto"
+            />
+          )}
+        </div>
+
+        <p className="text-center text-xs text-gray-400 mt-3">
+          🔒 Das Video wird nur bei Klick geladen – keine Auswirkung auf die Ladezeit der Seite.
+        </p>
+      </div>
+    </motion.section>
+  );
+}
+
 export default function SpartenLandingPage({ config }: SpartenLandingPageProps) {
   const [showFunnel, setShowFunnel] = useState(false);
   const [funnelType, setFunnelType] = useState<string | undefined>(config.insuranceType);
@@ -369,6 +434,9 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
             </motion.div>
           </div>
         </motion.section>
+
+        {/* Explainer Video (only when config provides one) */}
+        {config.explainerVideo && <ExplainerVideo src={config.explainerVideo} />}
 
         {/* Advisor Profile Section */}
         <motion.section {...fadeInUp} className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
