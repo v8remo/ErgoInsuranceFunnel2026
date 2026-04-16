@@ -49,28 +49,38 @@ export default function Footer() {
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Unsere Versicherungen</h3>
             <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
               <li>
-                <Link href="/versicherung/hausrat" className="hover:text-white transition-colors">
+                <Link href="/kfz" className="hover:text-white transition-colors">
+                  KFZ-Versicherung
+                </Link>
+              </li>
+              <li>
+                <Link href="/hausrat" className="hover:text-white transition-colors">
                   Hausratversicherung
                 </Link>
               </li>
               <li>
-                <Link href="/versicherung/haftpflicht" className="hover:text-white transition-colors">
+                <Link href="/haftpflicht" className="hover:text-white transition-colors">
                   Haftpflichtversicherung
                 </Link>
               </li>
               <li>
-                <Link href="/versicherung/wohngebaeude" className="hover:text-white transition-colors">
-                  Wohngebäudeversicherung
-                </Link>
-              </li>
-              <li>
-                <Link href="/versicherung/rechtsschutz" className="hover:text-white transition-colors">
+                <Link href="/rechtsschutz" className="hover:text-white transition-colors">
                   Rechtsschutzversicherung
                 </Link>
               </li>
               <li>
-                <Link href="/versicherung/zahnzusatz" className="hover:text-white transition-colors">
+                <Link href="/zahnzusatz" className="hover:text-white transition-colors">
                   Zahnzusatzversicherung
+                </Link>
+              </li>
+              <li>
+                <Link href="/berufsunfaehigkeit" className="hover:text-white transition-colors">
+                  Berufsunfähigkeit
+                </Link>
+              </li>
+              <li>
+                <Link href="/unternehmensversicherung" className="hover:text-white transition-colors">
+                  Gewerbeversicherung
                 </Link>
               </li>
               <li>

@@ -2,15 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Phone, Calendar, ChevronDown, X, Shield, Home, Scale, Smile, Car, Briefcase, HeartHandshake, FileText, AlertTriangle, Tag, LayoutGrid } from "lucide-react";
+import { Menu, Phone, Calendar, ChevronDown, Home, Scale, Smile, Car, Briefcase, HeartHandshake, FileText, AlertTriangle, Tag, LayoutGrid, Activity } from "lucide-react";
 
 const INSURANCE_LINKS = [
-  { href: "/versicherung/hausrat", label: "Hausrat", icon: Home, desc: "Schutz für Ihr Hab & Gut" },
-  { href: "/versicherung/haftpflicht", label: "Haftpflicht", icon: Scale, desc: "Absicherung gegen Schadensersatz" },
-  { href: "/versicherung/wohngebaeude", label: "Wohngebäude", icon: Shield, desc: "Für Haus & Immobilie" },
-  { href: "/versicherung/rechtsschutz", label: "Rechtsschutz", icon: Briefcase, desc: "Ihr Recht durchsetzen" },
-  { href: "/versicherung/zahnzusatz", label: "Zahnzusatz", icon: Smile, desc: "Mehr Leistung beim Zahnarzt" },
+  { href: "/hausrat", label: "Hausrat", icon: Home, desc: "Schutz für Ihr Hab & Gut" },
+  { href: "/haftpflicht", label: "Haftpflicht", icon: Scale, desc: "Absicherung gegen Schadensersatz" },
+  { href: "/rechtsschutz", label: "Rechtsschutz", icon: Briefcase, desc: "Ihr Recht durchsetzen" },
+  { href: "/zahnzusatz", label: "Zahnzusatz", icon: Smile, desc: "Mehr Leistung beim Zahnarzt" },
   { href: "/kfz", label: "KFZ", icon: Car, desc: "Auto & Mobilität" },
+  { href: "/berufsunfaehigkeit", label: "Berufsunfähigkeit", icon: Activity, desc: "Absicherung bei Berufsunfähigkeit" },
   { href: "/unternehmensversicherung", label: "Gewerbe", icon: LayoutGrid, desc: "Schutz für Ihr Unternehmen" },
 ];
 
@@ -20,6 +20,8 @@ const SERVICE_LINKS = [
   { href: "/schaden", label: "Schaden melden", icon: AlertTriangle },
   { href: "/kennzeichen", label: "Kennzeichen / eVB", icon: Tag },
 ];
+
+const SPARTEN_PATHS = INSURANCE_LINKS.map(l => l.href);
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,8 +51,7 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const navLink = "text-sm text-gray-700 hover:text-ergo-red transition-colors font-medium";
-  const isInsurancePage = INSURANCE_LINKS.some(l => location === l.href) || location.startsWith("/versicherung");
+  const isInsurancePage = SPARTEN_PATHS.some(p => location === p) || location === "/leben-vorsorge";
 
   return (
     <header
