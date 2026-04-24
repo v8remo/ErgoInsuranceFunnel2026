@@ -116,6 +116,7 @@ export default function ProfessionalErgoLanding() {
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [showMobileSticky, setShowMobileSticky] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -146,6 +147,13 @@ export default function ProfessionalErgoLanding() {
       setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 5000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Mobile sticky CTA: show after 300px scroll
+  useEffect(() => {
+    const onScroll = () => setShowMobileSticky(window.scrollY > 300);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const whatsappNumber = "15566771019";
@@ -829,33 +837,40 @@ export default function ProfessionalErgoLanding() {
       </motion.section>
 
 
-      {/* ──────── STICKY CTA BAR (Mobile) ──────── */}
-      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
-        <motion.button
-          whileTap={{ scale: 0.97 }}
-          onClick={() => {
-            openFunnel({ source: 'sticky_bar' });
-            trackEvent('cta_sticky_clicked', { source: 'sticky_bar' });
-          }}
-          className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm min-h-[44px] py-3 rounded-xl whitespace-nowrap shadow-lg shadow-red-500/20 animate-pulse-subtle"
-        >
-          <Mail className="w-4 h-4 shrink-0" />
-          Kostenlose Analyse
-        </motion.button>
-        <a
-          href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => {
-            trackEvent('whatsapp_sticky_clicked', { source: 'sticky_bar' });
-            trackConversion();
-          }}
-          className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 min-h-[44px] py-3 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap"
-        >
-          <Phone className="w-4 h-4 shrink-0" />
-          WhatsApp
-        </a>
-      </div>
+      {/* ──────── STICKY CTA BAR (Mobile, ab 300px Scroll) ──────── */}
+      <AnimatePresence>
+        {showMobileSticky && (
+          <motion.div
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 80, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+            className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] px-3 py-2 flex gap-2 md:hidden safe-area-bottom"
+          >
+            <Link
+              href="/beratung"
+              onClick={() => trackEvent('cta_sticky_clicked', { source: 'home_sticky_bar' })}
+              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm min-h-[44px] py-3 rounded-xl whitespace-nowrap shadow-lg shadow-red-500/20"
+            >
+              <ChevronRight className="w-4 h-4 shrink-0" />
+              Jetzt beraten lassen
+            </Link>
+            <a
+              href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => {
+                trackEvent('whatsapp_sticky_clicked', { source: 'home_sticky_bar' });
+                trackConversion();
+              }}
+              className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 min-h-[44px] py-3 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap"
+            >
+              <MessageSquare className="w-4 h-4 shrink-0" />
+              WhatsApp
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <FunnelOverlay
         isOpen={showFunnel}

@@ -156,6 +156,21 @@ export default function Footer() {
                   Versicherung Oldenburg
                 </Link>
               </li>
+              <li>
+                <Link href="/versicherung-stuhr" className="hover:text-white transition-colors">
+                  Versicherung Stuhr
+                </Link>
+              </li>
+              <li>
+                <Link href="/versicherung-achim" className="hover:text-white transition-colors">
+                  Versicherung Achim
+                </Link>
+              </li>
+              <li>
+                <Link href="/versicherung-syke" className="hover:text-white transition-colors">
+                  Versicherung Syke
+                </Link>
+              </li>
             </ul>
           </div>
 

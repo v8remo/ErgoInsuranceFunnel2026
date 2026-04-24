@@ -86,6 +86,9 @@ function AppContent() {
           <Route path="/versicherung-ganderkesee">{() => <CityLanding cityKey="ganderkesee" />}</Route>
           <Route path="/versicherung-delmenhorst">{() => <CityLanding cityKey="delmenhorst" />}</Route>
           <Route path="/versicherung-oldenburg">{() => <CityLanding cityKey="oldenburg" />}</Route>
+          <Route path="/versicherung-stuhr">{() => <CityLanding cityKey="stuhr" />}</Route>
+          <Route path="/versicherung-achim">{() => <CityLanding cityKey="achim" />}</Route>
+          <Route path="/versicherung-syke">{() => <CityLanding cityKey="syke" />}</Route>
           <Route path="/leben-vorsorge" component={LebenVorsorge} />
           <Route path="/beratung" component={PerspectiveFunnelPage} />
           <Route path="/termin" component={TerminPage} />

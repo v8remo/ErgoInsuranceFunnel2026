@@ -441,6 +441,31 @@ export default function PerspectiveFunnelPage() {
 
       <div className="pt-14 bg-white">
 
+        {/* ── TRUST BANNER ── */}
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100 px-4 py-2.5">
+          <div className="max-w-3xl mx-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs sm:text-sm text-gray-700">
+            <span className="flex items-center gap-1.5 font-medium">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+              </span>
+              Morino Stübe ist heute verfügbar
+            </span>
+            <span className="hidden sm:block text-gray-300">·</span>
+            <span className="flex items-center gap-1 text-gray-600">
+              <span className="flex gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                ))}
+              </span>
+              <strong className="text-gray-800">4,9</strong>
+              <span className="text-gray-500">aus 247 Bewertungen</span>
+            </span>
+            <span className="hidden sm:block text-gray-300">·</span>
+            <span className="text-gray-600">⌀ Antwortzeit: <strong className="text-gray-800">24 Std.</strong></span>
+          </div>
+        </div>
+
         {/* ── QUIZ SECTION ── */}
         <section
           ref={heroRef}

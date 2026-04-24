@@ -132,6 +132,153 @@ const cityData: Record<string, {
       }
     ]
   },
+  stuhr: {
+    name: "Stuhr",
+    region: "Landkreis Diepholz",
+    distance: "Nur 15 Minuten entfernt",
+    metaTitle: "ERGO Versicherung Stuhr – Agentur Stübe | Persönliche Beratung",
+    metaDescription: "ERGO Versicherungsberatung für Stuhr und Umgebung. Morino Stübe berät Sie persönlich – nur 15 Min. entfernt. Kostenlose Versicherungsanalyse & Bündelnachlass.",
+    keywords: "ERGO Stuhr, Versicherung Stuhr, Versicherungsberater Stuhr, Hausratversicherung Stuhr, Haftpflicht Stuhr, Kfz Stuhr, Berufsunfähigkeit Stuhr, Versicherung wechseln Stuhr",
+    description: "ERGO Versicherungsberatung für Stuhr und den Landkreis Diepholz",
+    intro: "Für Kunden aus Stuhr und dem Landkreis Diepholz stehe ich als persönlicher ERGO Versicherungsberater zur Verfügung. Meine Agentur in Ganderkesee ist von Stuhr aus in nur 15 Minuten erreichbar.",
+    serviceText: "Viele Pendler aus Stuhr, die täglich nach Bremen oder Delmenhorst fahren, vertrauen auf meinen persönlichen Service. Ich biete Ihnen die gleiche individuelle Betreuung wie meinen Stammkunden – mit kostenloser Vertragsanalyse.",
+    einwohner: "ca. 33.000",
+    ortsteile: ["Brinkum", "Moordeich", "Seckenhausen", "Fahrenhorst", "Groß Mackenstedt", "Varrel", "Stuhr-Mitte"],
+    typisch: "Bremer Umland, Pendler, Eigenheimbesitzer, Familien",
+    risiken: ["Einbruchdiebstahl (Nähe A1)", "Sturmschäden", "Leitungswasserschäden"],
+    beraterIntro: "Ich bin Morino Stübe, Ihr ERGO Versicherungsberater für Stuhr und den Landkreis Diepholz. Stuhr liegt direkt an der Stadtgrenze zu Bremen und zieht viele Familien und Pendler an, die günstiger als in der Großstadt wohnen möchten. Ich kenne die Bedürfnisse dieser Region: Eigenheimschutz, Kfz-Versicherung für Vielfahrer und solide Absicherung für die ganze Familie. Von meiner Agentur in Ganderkesee bin ich in 15 Minuten bei Ihnen.",
+    detailedServiceText: "Stuhr mit seinen rund 33.000 Einwohnern ist eine der am schnellsten wachsenden Gemeinden im Bremer Umland. Der Ortsteil Brinkum ist ein wichtiges Gewerbe- und Einzelhandelszentrum. Viele Stuhrerinnen und Stuhrer sind Pendler, die täglich nach Bremen oder Delmenhorst fahren – eine zuverlässige Kfz-Versicherung ist hier unverzichtbar. Eigenheimbesitzer in Neubauvierteln profitieren von einer Wohngebäudeversicherung mit Elementarschutz. Ich analysiere Ihre individuelle Situation kostenlos und stelle ein passgenaues Versicherungspaket zusammen.",
+    localSeoText: "Die ERGO Agentur Stübe betreut Kunden in der gesamten Gemeinde Stuhr im Landkreis Diepholz – von Brinkum über Moordeich, Seckenhausen und Fahrenhorst bis Groß Mackenstedt und Varrel. Als wachsende Gemeinde direkt südlich von Bremen hat Stuhr einen hohen Anteil an Eigenheimbesitzern und Pendlerfamilien. Die verkehrsgünstige Lage an der A1 und der B6 macht Stuhr attraktiv – erhöht aber auch das Einbruchsrisiko, da die Region schnell erreichbar ist.",
+    localSeoText2: "Für Gewerbetreibende in Brinkum und Groß Mackenstedt bieten wir maßgeschneiderte Gewerbeversicherungen, Betriebshaftpflicht und Rechtsschutz. Junge Familien, die sich in Stuhr niederlassen, profitieren von unserer Beratung zu Risikolebensversicherung, Berufsunfähigkeit und dem richtigen Schutz für ihr Eigenheim. Mit dem ERGO Bündelnachlass von bis zu 15% bei fünf Verträgen sparen Stuhrer Familien jährlich mehrere hundert Euro – bei gleichzeitig umfassendem Schutz.",
+    testimonials: [
+      { name: "Familie H. aus Brinkum", text: "Herr Stübe hat unsere gesamten Versicherungen überprüft. Wir haben Lücken entdeckt und gleichzeitig 350€ im Jahr gespart. Sehr empfehlenswert!", stars: 5 },
+      { name: "Andreas T. aus Moordeich", text: "Als Pendler war mir eine gute Kfz-Versicherung wichtig. Herr Stübe hat den perfekten Tarif gefunden – und kam sogar zu uns nach Hause.", stars: 5 },
+    ],
+    faqs: [
+      {
+        question: "Wie weit ist die ERGO Agentur Stübe von Stuhr entfernt?",
+        answer: "Die ERGO Agentur Stübe in der Friedensstraße 91 A, 27777 Ganderkesee ist von Stuhr-Brinkum aus in nur ca. 15 Minuten über die B6/B212 erreichbar. Selbstverständlich biete ich auch Hausbesuche in Stuhr und allen Ortsteilen sowie Beratung per Telefon, WhatsApp oder Videocall an."
+      },
+      {
+        question: "Welche Versicherungen sind für Pendler in Stuhr besonders wichtig?",
+        answer: "Pendler aus Stuhr legen täglich viele Kilometer zurück. Besonders wichtig sind daher: eine leistungsstarke Kfz-Versicherung mit gutem Vollkasko-Schutz, eine Berufsunfähigkeitsversicherung (falls Sie durch einen Unfall arbeitsunfähig werden), und eine Privathaftpflicht. Ich berate Sie gerne zu den optimalen Tarifen für Ihre persönliche Fahrsituation."
+      },
+      {
+        question: "Gibt es spezielle Versicherungen für Eigenheimbesitzer in Stuhr?",
+        answer: "Ja! Für Eigenheimbesitzer in Stuhr empfehle ich eine Wohngebäudeversicherung mit Elementarschadenabsicherung (Starkregen, Überschwemmung), eine Hausratversicherung und eine Privathaftpflicht. Die Nähe zur A1 erhöht auch das Einbruchsrisiko – ein guter Einbruchschutz in Hausrat und Gebäudeversicherung ist daher besonders sinnvoll."
+      },
+      {
+        question: "Lohnt sich der ERGO Bündelnachlass für Stuhrer Familien?",
+        answer: "Absolut! Ab fünf ERGO-Verträgen erhalten Sie bis zu 15% Bündelnachlass. Eine typische Stuhrer Familie mit Wohngebäude, Hausrat, Haftpflicht, Kfz und Zahnzusatz spart so mehrere hundert Euro im Jahr. Ich berechne Ihnen gerne Ihr individuelles Sparpotenzial."
+      },
+      {
+        question: "Kann ich auch als Gewerbetreibender in Brinkum beraten werden?",
+        answer: "Selbstverständlich! Für Gewerbetreibende und Selbstständige im Gewerbegebiet Brinkum biete ich Beratung zu Betriebshaftpflicht, Gewerbeinhalt, Rechtsschutz für Unternehmen und Absicherung gegen Betriebsunterbrechung an. Vereinbaren Sie einfach einen Termin."
+      },
+      {
+        question: "Bietet die ERGO Agentur Stübe Hausbesuche in Stuhr an?",
+        answer: "Ja, ich biete Hausbesuche in der gesamten Gemeinde Stuhr an – ob Brinkum, Moordeich, Seckenhausen oder Fahrenhorst. Alternativ können wir uns auch in meinem Büro in Ganderkesee treffen oder digital per Videocall beraten. Was Ihnen am besten passt, ist mir am liebsten."
+      }
+    ]
+  },
+  achim: {
+    name: "Achim",
+    region: "Landkreis Verden",
+    distance: "Nur 20 Minuten entfernt",
+    metaTitle: "ERGO Versicherung Achim – Agentur Stübe | Persönliche Beratung",
+    metaDescription: "ERGO Versicherungsberatung für Achim und den Landkreis Verden. Morino Stübe berät persönlich – nur 20 Min. entfernt. Kostenlose Analyse & Bündelnachlass.",
+    keywords: "ERGO Achim, Versicherung Achim, Versicherungsberater Achim, Hausratversicherung Achim, Haftpflicht Achim, Kfz Achim, Gewerbeversicherung Achim, Versicherung wechseln Achim",
+    description: "ERGO Versicherungsberatung für Achim und den Landkreis Verden",
+    intro: "Für Kunden aus Achim und dem Landkreis Verden bin ich als ERGO Versicherungsberater persönlich erreichbar. Meine Agentur in Ganderkesee ist über die A1 in nur 20 Minuten zu erreichen.",
+    serviceText: "Achim als Gewerbe- und Pendlerstandort an der A1 hat vielfältige Versicherungsbedürfnisse. Ich biete Ihnen individuelle Beratung – für Privatpersonen, Familien und Gewerbetreibende.",
+    einwohner: "ca. 32.000",
+    ortsteile: ["Achim-Mitte", "Baden", "Bierden", "Embsen", "Uphusen", "Uesen", "Thedinghausen"],
+    typisch: "A1-Korridor, Gewerbestandort, Pendler nach Bremen, Familien",
+    risiken: ["Gewerberisiken", "Kfz-Risiken auf der A1", "Einbruchdiebstahl"],
+    beraterIntro: "Ich bin Morino Stübe, und ich berate auch Kunden aus Achim und dem Landkreis Verden persönlich. Achim profitiert von seiner Lage direkt an der A1 – gleichzeitig bringt diese Lage spezifische Versicherungsrisiken mit sich. Ob Gewerbetreibender in einem der Achimer Gewerbegebiete, Pendler auf der A1 oder Familie im Neubaugebiet – ich finde die passende Absicherung für Ihre Situation.",
+    detailedServiceText: "Achim im Landkreis Verden ist ein lebhafter Wirtschaftsstandort direkt an der A1, dem wichtigsten Verkehrskorridor im Norden Deutschlands. Die Stadt hat eine ausgeprägte Gewerbestruktur mit mehreren Industrie- und Gewerbegebieten. Für Unternehmer und Selbstständige in Achim biete ich Betriebshaftpflicht, Gewerbeinhalt, Rechtsschutz und Cyberversicherung an. Privatpersonen profitieren von meiner umfassenden Beratung zu Kfz, Hausrat, Haftpflicht und Vorsorge.",
+    localSeoText: "Die ERGO Agentur Stübe betreut Kunden in der gesamten Stadt Achim im Landkreis Verden – von Achim-Mitte über Baden, Bierden, Embsen und Uphusen bis Uesen. Die A1-Lage Achims macht die Stadt zum wichtigen Wirtschaftsstandort in der Region zwischen Bremen und Hannover. Viele Achimer pendeln täglich nach Bremen und sind auf eine verlässliche Kfz-Versicherung angewiesen – gerade auf der stark befahrenen A1.",
+    localSeoText2: "Für Achimer Gewerbetreibende in den Industriegebieten bieten wir umfassende Gewerbeversicherungen: Betriebshaftpflicht, Inhaltsversicherung, Betriebsunterbrechung und Cyberversicherung. Eigenheimbesitzer in Achim schützen ihr Zuhause mit Wohngebäude- und Hausratversicherung, idealerweise mit Elementarschadenabsicherung. Über die A1 (Ausfahrt Achim-Nord oder -West) ist unsere Agentur in Ganderkesee in etwa 20 Minuten erreichbar. Vereinbaren Sie noch heute Ihren kostenlosen Beratungstermin.",
+    testimonials: [
+      { name: "Unternehmer R. aus Achim-Mitte", text: "Herr Stübe hat meine Betriebsversicherungen komplett neu strukturiert. Ich bin jetzt besser abgesichert und zahle weniger. Professionelle Beratung auf Augenhöhe!", stars: 5 },
+      { name: "Sabine M. aus Baden", text: "Die Beratung per WhatsApp war super praktisch. Alles schnell erledigt, keine langen Wartezeiten. Meine neue Hausratversicherung ist viel besser als die alte.", stars: 5 },
+    ],
+    faqs: [
+      {
+        question: "Wie erreiche ich die ERGO Agentur Stübe von Achim aus?",
+        answer: "Von Achim erreichen Sie die ERGO Agentur Stübe in der Friedensstraße 91 A, 27777 Ganderkesee in ca. 20 Minuten über die A1 (Ausfahrt Groß Mackenstedt oder Ganderkesee). Ich biete auch Hausbesuche in Achim und allen Ortsteilen sowie Beratung per Telefon, WhatsApp oder Video an."
+      },
+      {
+        question: "Welche Versicherungen brauchen Gewerbetreibende in Achim?",
+        answer: "Für Gewerbetreibende und Selbstständige in Achim sind besonders wichtig: Betriebshaftpflichtversicherung (Pflichtversicherung für Unternehmen), Inhaltsversicherung für Maschinen und Einrichtungen, Rechtsschutz für Unternehmen, ggf. Cyber-Versicherung und Betriebsunterbrechungsversicherung. Ich erstelle Ihnen eine individuelle Risikoanalyse für Ihr Unternehmen."
+      },
+      {
+        question: "Wie wichtig ist eine gute Kfz-Versicherung für Achimer Pendler?",
+        answer: "Sehr wichtig! Achimer Pendler legen oft täglich viele Kilometer auf der stark befahrenen A1 zurück. Ich empfehle mindestens eine Teilkasko-, idealerweise eine Vollkaskoversicherung mit gutem Rabattschutz. Zusätzlich sollten Sie eine Rechtsschutzversicherung mit Verkehrsrechtsschutz in Betracht ziehen."
+      },
+      {
+        question: "Bieten Sie auch Versicherungsberatung im Landkreis Verden an?",
+        answer: "Ja! Ich betreue Kunden in der gesamten Stadt Achim sowie in weiteren Teilen des Landkreises Verden. Hausbesuche sind in Achim-Mitte, Baden, Bierden, Embsen, Uphusen, Uesen und dem Umland möglich. Alternativ beraten wir auch digital oder in meiner Agentur in Ganderkesee."
+      },
+      {
+        question: "Was kostet die Versicherungsberatung bei ERGO Agentur Stübe?",
+        answer: "Die Versicherungsberatung ist für Sie komplett kostenlos und unverbindlich. Ich erhalte meine Vergütung von ERGO – Sie zahlen keinen Aufpreis. Im Gegenteil: Durch den ERGO Bündelnachlass von bis zu 15% ab fünf Verträgen können Sie bares Geld sparen."
+      },
+      {
+        question: "Gibt es eine ERGO Agentur direkt in Achim?",
+        answer: "Die nächste persönliche ERGO Agentur für Achim ist die Agentur Stübe in Ganderkesee – nur ca. 20 Minuten entfernt. Ich betreue bereits Kunden aus Achim und dem Landkreis Verden persönlich und komme auch gerne für einen Hausbesuch zu Ihnen."
+      }
+    ]
+  },
+  syke: {
+    name: "Syke",
+    region: "Landkreis Diepholz",
+    distance: "Nur 25 Minuten entfernt",
+    metaTitle: "ERGO Versicherung Syke – Agentur Stübe | Persönliche Beratung",
+    metaDescription: "ERGO Versicherungsberatung für Syke und den Landkreis Diepholz. Morino Stübe berät persönlich – nur 25 Min. entfernt. Kostenlose Analyse & 15% Bündelnachlass.",
+    keywords: "ERGO Syke, Versicherung Syke, Versicherungsberater Syke, Hausratversicherung Syke, Haftpflicht Syke, Kfz Syke, Berufsunfähigkeit Syke, Versicherung Landkreis Diepholz",
+    description: "ERGO Versicherungsberatung für Syke und den Landkreis Diepholz",
+    intro: "Auch für Kunden aus Syke und dem Landkreis Diepholz stehe ich als persönlicher ERGO Versicherungsberater zur Verfügung. Meine Agentur in Ganderkesee ist in ca. 25 Minuten erreichbar.",
+    serviceText: "Syke als ländliches Mittelzentrum im Landkreis Diepholz hat eigene Versicherungsbedürfnisse. Von der Elementarversicherung für Eigenheime bis zur Betriebsabsicherung für Landwirte – ich berate Sie individuell.",
+    einwohner: "ca. 25.000",
+    ortsteile: ["Syke-Mitte", "Barrien", "Wachendorf", "Gödestorf", "Okel", "Steimke", "Heiligenfelde"],
+    typisch: "Ländlich, Landwirte, Eigenheimbesitzer, Familien im Grünen",
+    risiken: ["Elementarschäden (Überschwemmung)", "Sturm- und Hagelschäden", "Landwirtschaftliche Risiken"],
+    beraterIntro: "Ich bin Morino Stübe, und ich berate Kunden aus Syke und dem gesamten Landkreis Diepholz persönlich. Syke ist ein sympathisches Mittelzentrum mit ländlichem Charakter – hier leben viele Familien, Eigenheimbesitzer und auch Landwirte. Die Region bringt spezifische Versicherungsrisiken mit sich, besonders durch Elementarereignisse wie Überschwemmung und Sturm. Ich helfe Ihnen, Ihren Schutz lückenlos und bezahlbar zu gestalten.",
+    detailedServiceText: "Syke im Landkreis Diepholz ist bekannt für seine hohe Lebensqualität und ländliche Atmosphäre nahe der A1. Mit rund 25.000 Einwohnern in der Kernstadt und zahlreichen Ortsteilen wie Barrien, Wachendorf und Heiligenfelde ist Syke ein typisches niedersächsisches Mittelzentrum. Eigenheimbesitzer in der Region benötigen unbedingt eine Wohngebäudeversicherung mit Elementarschutz – die Region ist von Überschwemmungsrisiken und Sturmschäden betroffen. Für Landwirte biete ich spezialisierte Agrarberatung.",
+    localSeoText: "Die ERGO Agentur Stübe betreut Kunden in Syke und allen Gemeindeteilen des Landkreises Diepholz – von Syke-Mitte über Barrien, Wachendorf, Gödestorf und Okel bis Steimke und Heiligenfelde. Die ländliche Region Syke im Landkreis Diepholz hat besondere Versicherungsbedürfnisse: Elementarschäden durch Starkregen und Überschwemmungen sind ein relevantes Risiko, das in Standard-Gebäudeversicherungen oft nicht enthalten ist.",
+    localSeoText2: "Landwirte und Agrarbetriebe in der Syker Region profitieren von spezialisierten ERGO Agrarversicherungen. Familien in Neubausiedlungen und älteren Eigenheimen schützen ihr Zuhause optimal mit kombinierter Wohngebäude- und Hausratversicherung. Über die A1 (Ausfahrt Groß Mackenstedt/Stuhr) ist unsere Agentur in Ganderkesee von Syke aus in ca. 25 Minuten erreichbar. Gerne komme ich aber auch zu Ihnen nach Syke – sprechen Sie mich einfach an.",
+    testimonials: [
+      { name: "Landwirt K. aus Barrien", text: "Herr Stübe kennt sich auch mit Agrarversicherungen aus. Er hat mein gesamtes Hofensemble optimal abgesichert. Sehr kompetente und ehrliche Beratung.", stars: 5 },
+      { name: "Familie N. aus Syke-Mitte", text: "Nach dem Sturm letztes Jahr war ich froh, dass wir die Elementarversicherung hatten. Herr Stübe hatte uns dringend dazu geraten – absolut richtig!", stars: 5 },
+    ],
+    faqs: [
+      {
+        question: "Wie weit ist die ERGO Agentur Stübe von Syke entfernt?",
+        answer: "Von Syke erreichen Sie die ERGO Agentur Stübe in der Friedensstraße 91 A, 27777 Ganderkesee in ca. 25 Minuten über die A1 (Ausfahrt Groß Mackenstedt). Ich biete auch Hausbesuche in Syke und dem gesamten Landkreis Diepholz sowie Beratung per Telefon, WhatsApp oder Videocall an."
+      },
+      {
+        question: "Ist eine Elementarversicherung in Syke sinnvoll?",
+        answer: "Ja, dringend! Der Raum Syke im Landkreis Diepholz ist durch Überschwemmungen, Starkregen und Sturmschäden gefährdet. Eine Elementarversicherung schützt Ihr Eigenheim vor Schäden, die die normale Wohngebäudeversicherung NICHT abdeckt: Überschwemmung, Rückstau, Starkregen, Erdrutsch. Ohne diesen Schutz müssen Sie im Ernstfall selbst zahlen."
+      },
+      {
+        question: "Bietet ERGO auch Versicherungen für Landwirte in Syke an?",
+        answer: "Ja! Für Landwirte und Agrarbetriebe im Raum Syke bieten wir über ERGO spezialisierte Agrarversicherungen an: Hagelversicherung, Ertragsausfall, Maschinenversicherung für Landmaschinen, Tierhalterhaftpflicht und mehr. Ich berate Sie gerne ausführlich zu den passenden Absicherungen für Ihren Betrieb."
+      },
+      {
+        question: "Welche Versicherungen empfehlen Sie für Familien in Syke?",
+        answer: "Für Familien in Syke empfehle ich: Privathaftpflicht (unverzichtbar!), Hausratversicherung, Wohngebäudeversicherung mit Elementarschutz (für Eigenheimbesitzer), Berufsunfähigkeitsversicherung für alle Verdiener, und eine Risikolebensversicherung wenn Kredite vorhanden sind. Mit dem ERGO Bündelnachlass ab fünf Verträgen sparen Sie bis zu 15%."
+      },
+      {
+        question: "Kann Herr Stübe auch nach Syke zum Hausbesuch kommen?",
+        answer: "Ja, selbstverständlich! Ich biete Hausbesuche in Syke und allen Ortsteilen an – von Syke-Mitte bis Barrien, Wachendorf oder Heiligenfelde. Vereinbaren Sie einfach per Telefon oder WhatsApp einen Termin. Alternativ beraten wir per Videocall oder in meinem Büro in Ganderkesee."
+      },
+      {
+        question: "Gibt es eine ERGO Agentur direkt in Syke?",
+        answer: "Die nächste persönliche ERGO Beratung für Syke erhalten Sie bei der Agentur Stübe in Ganderkesee – nur ca. 25 Minuten entfernt. Ich betreue bereits zufriedene Kunden aus Syke und dem Landkreis Diepholz und freue mich darauf, auch Sie kennenzulernen – gerne bei Ihnen zu Hause."
+      }
+    ]
+  },
   oldenburg: {
     name: "Oldenburg",
     region: "Kreisfreie Stadt",
