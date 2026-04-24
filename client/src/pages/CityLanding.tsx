@@ -31,6 +31,7 @@ const cityData: Record<string, {
   localSeoText2: string;
   testimonials: { name: string; text: string; stars: number }[];
   faqs: { question: string; answer: string }[];
+  nearbyLinks: { name: string; href: string; region: string }[];
 }> = {
   ganderkesee: {
     name: "Ganderkesee",
@@ -80,6 +81,10 @@ const cityData: Record<string, {
         question: "Ist eine Elementarversicherung in Ganderkesee sinnvoll?",
         answer: "Ja, unbedingt! Ganderkesee im Landkreis Oldenburg war in den letzten Jahren mehrfach von Starkregenereignissen betroffen. Eine Elementarversicherung schützt Ihr Eigenheim vor Schäden durch Überschwemmung, Starkregen, Rückstau und weitere Naturgefahren. Ohne diesen Zusatzschutz bleiben Sie im Schadensfall auf den Kosten sitzen."
       }
+    ],
+    nearbyLinks: [
+      { name: "Delmenhorst", href: "/versicherung-delmenhorst", region: "Kreisfreie Stadt" },
+      { name: "Oldenburg", href: "/versicherung-oldenburg", region: "Kreisfreie Stadt" },
     ]
   },
   delmenhorst: {
@@ -130,6 +135,10 @@ const cityData: Record<string, {
         question: "Welche Vorteile hat ERGO gegenüber Online-Versicherungen für Delmenhorster?",
         answer: "Mit der ERGO Agentur Stübe haben Sie einen persönlichen Ansprechpartner vor Ort, der Sie kennt und Ihre Situation versteht. Im Schadenfall bin ich direkt für Sie da und unterstütze bei der Abwicklung. Online-Versicherer bieten zwar günstige Tarife, aber im Ernstfall fehlt der persönliche Kontakt. Zudem profitieren Sie bei ERGO von Testsieger-Produkten und dem Bündelnachlass."
       }
+    ],
+    nearbyLinks: [
+      { name: "Ganderkesee", href: "/versicherung-ganderkesee", region: "Landkreis Oldenburg" },
+      { name: "Oldenburg", href: "/versicherung-oldenburg", region: "Kreisfreie Stadt" },
     ]
   },
   stuhr: {
@@ -179,6 +188,10 @@ const cityData: Record<string, {
         question: "Bietet die ERGO Agentur Stübe Hausbesuche in Stuhr an?",
         answer: "Ja, ich biete Hausbesuche in der gesamten Gemeinde Stuhr an – ob Brinkum, Moordeich, Seckenhausen oder Fahrenhorst. Alternativ können wir uns auch in meinem Büro in Ganderkesee treffen oder digital per Videocall beraten. Was Ihnen am besten passt, ist mir am liebsten."
       }
+    ],
+    nearbyLinks: [
+      { name: "Achim", href: "/versicherung-achim", region: "Landkreis Verden" },
+      { name: "Syke", href: "/versicherung-syke", region: "Landkreis Diepholz" },
     ]
   },
   achim: {
@@ -228,6 +241,10 @@ const cityData: Record<string, {
         question: "Gibt es eine ERGO Agentur direkt in Achim?",
         answer: "Die nächste persönliche ERGO Agentur für Achim ist die Agentur Stübe in Ganderkesee – nur ca. 20 Minuten entfernt. Ich betreue bereits Kunden aus Achim und dem Landkreis Verden persönlich und komme auch gerne für einen Hausbesuch zu Ihnen."
       }
+    ],
+    nearbyLinks: [
+      { name: "Stuhr", href: "/versicherung-stuhr", region: "Landkreis Diepholz" },
+      { name: "Syke", href: "/versicherung-syke", region: "Landkreis Diepholz" },
     ]
   },
   syke: {
@@ -277,6 +294,10 @@ const cityData: Record<string, {
         question: "Gibt es eine ERGO Agentur direkt in Syke?",
         answer: "Die nächste persönliche ERGO Beratung für Syke erhalten Sie bei der Agentur Stübe in Ganderkesee – nur ca. 25 Minuten entfernt. Ich betreue bereits zufriedene Kunden aus Syke und dem Landkreis Diepholz und freue mich darauf, auch Sie kennenzulernen – gerne bei Ihnen zu Hause."
       }
+    ],
+    nearbyLinks: [
+      { name: "Stuhr", href: "/versicherung-stuhr", region: "Landkreis Diepholz" },
+      { name: "Achim", href: "/versicherung-achim", region: "Landkreis Verden" },
     ]
   },
   oldenburg: {
@@ -327,6 +348,10 @@ const cityData: Record<string, {
         question: "Lohnt sich eine Berufsunfähigkeitsversicherung für junge Berufstätige in Oldenburg?",
         answer: "Unbedingt! Gerade für junge Berufstätige in Oldenburg ist der frühe Abschluss einer BU-Versicherung besonders sinnvoll: Die Beiträge sind im jungen Alter deutlich günstiger, und der Gesundheitszustand ist in der Regel noch optimal. Die ERGO BU wurde von Finanztest mit SEHR GUT bewertet (2024). Ich berechne Ihnen gerne Ihr individuelles Angebot."
       }
+    ],
+    nearbyLinks: [
+      { name: "Ganderkesee", href: "/versicherung-ganderkesee", region: "Landkreis Oldenburg" },
+      { name: "Delmenhorst", href: "/versicherung-delmenhorst", region: "Kreisfreie Stadt" },
     ]
   }
 };
@@ -817,6 +842,35 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                   </span>
                 ))}
               </div>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Nearby Cities */}
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-blue-50">
+          <div className="max-w-4xl mx-auto px-4">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-center">
+              Auch in Ihrer Nähe
+            </h2>
+            <p className="text-gray-600 text-center mb-8 text-sm">
+              Persönliche ERGO Versicherungsberatung auch in benachbarten Städten und Gemeinden
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              {data.nearbyLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="flex items-center justify-between gap-4 bg-white border border-blue-200 rounded-xl px-5 py-4 hover:border-[#003781] hover:shadow-md transition-all group flex-1 max-w-xs mx-auto sm:mx-0"
+                >
+                  <div>
+                    <p className="font-semibold text-gray-900 group-hover:text-[#003781] transition-colors">
+                      ERGO Beratung {link.name}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5">{link.region}</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#003781] shrink-0 transition-colors" />
+                </Link>
+              ))}
             </div>
           </div>
         </motion.section>
