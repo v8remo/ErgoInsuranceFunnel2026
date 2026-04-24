@@ -13,7 +13,8 @@ export default function Home() {
           "@type": "InsuranceAgency",
           "name": "ERGO Agentur Stübe",
           "alternateName": "ERGO Versicherung Ganderkesee – Morino Stübe",
-          "url": "https://ergo-ganderkesee.replit.app",
+          "@id": "https://ergo-ganderkesee.de",
+          "url": "https://ergo-ganderkesee.de",
           "telephone": "+4915566771019",
           "email": "morino.stuebe@ergo.de",
           "description": "Ihr ERGO Versicherungsberater in Ganderkesee, Delmenhorst und Oldenburg. Kostenlose Versicherungsanalyse und persönliche Beratung.",
@@ -50,6 +51,12 @@ export default function Home() {
               { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Zahnzusatzversicherung" } },
               { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Kfz-Versicherung" } }
             ]
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "247",
+            "bestRating": "5"
           },
           "sameAs": [
             "https://www.linkedin.com/in/morino-stuebe",

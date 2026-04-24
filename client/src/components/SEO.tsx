@@ -23,7 +23,7 @@ export default function SEO({
   locality = "Ganderkesee"
 }: SEOProps) {
   const [location] = useLocation();
-  const baseUrl = "https://ergo-ganderkesee.replit.app";
+  const baseUrl = "https://ergo-ganderkesee.de";
   const fullUrl = `${baseUrl}${location}`;
 
   useEffect(() => {

@@ -202,19 +202,27 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
     "@context": "https://schema.org",
     "@type": "Service",
     "name": config.seo.title.split(' – ')[0],
+    "url": `https://ergo-ganderkesee.de/${config.slug}`,
+    "description": config.seo.description,
     "provider": {
-      "@type": "LocalBusiness",
+      "@type": "InsuranceAgency",
       "name": "ERGO Versicherung Morino Stübe",
+      "@id": "https://ergo-ganderkesee.de",
+      "url": "https://ergo-ganderkesee.de",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Bergedorfer Str. 11",
+        "streetAddress": "Friedensstraße 91 A",
         "addressLocality": "Ganderkesee",
         "postalCode": "27777",
         "addressCountry": "DE"
       },
       "telephone": "+4915566771019"
     },
-    "areaServed": { "@type": "City", "name": "Ganderkesee" }
+    "areaServed": [
+      { "@type": "City", "name": "Ganderkesee" },
+      { "@type": "City", "name": "Delmenhorst" },
+      { "@type": "City", "name": "Oldenburg" }
+    ]
   };
 
   return (
