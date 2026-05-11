@@ -18,6 +18,7 @@ const SERVICE_LINKS = [
   { href: "/termin", label: "Termin buchen", icon: Calendar },
   { href: "/dokumente", label: "Dokument einreichen", icon: FileText },
   { href: "/schaden", label: "Schaden melden", icon: AlertTriangle },
+  { href: "/schaden-unfall", label: "Unfall melden", icon: AlertTriangle },
   { href: "/kennzeichen", label: "Kennzeichen / eVB", icon: Tag },
 ];
 

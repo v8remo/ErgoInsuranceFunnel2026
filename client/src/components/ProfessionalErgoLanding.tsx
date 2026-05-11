@@ -710,7 +710,8 @@ export default function ProfessionalErgoLanding() {
           className="grid grid-cols-2 gap-3"
         >
           {[
-            { href: '/schaden', icon: '🛡️', label: 'Schaden melden', sub: 'Mit Foto-Upload', bg: 'bg-red-50', tracking: 'schaden' },
+            { href: '/schaden', icon: '🛡️', label: 'Schaden melden', sub: 'KFZ, Hausrat & mehr', bg: 'bg-red-50', tracking: 'schaden' },
+            { href: '/schaden-unfall', icon: '🚑', label: 'Unfall melden', sub: 'Unfallversicherung', bg: 'bg-amber-50', tracking: 'schaden_unfall' },
             { href: '/kennzeichen', icon: '🚗', label: 'eVB & Kennzeichen', sub: 'eVB & Versicherungskennzeichen', bg: 'bg-amber-50', tracking: 'kennzeichen' },
             { href: '/dokumente', icon: '📄', label: 'Dokumente', sub: 'Einreichen & unterschreiben', bg: 'bg-blue-50', tracking: 'dokumente' },
             { href: '/termin', icon: '📅', label: 'Termin buchen', sub: 'Online-Terminvereinbarung', bg: 'bg-green-50', tracking: 'termin' },

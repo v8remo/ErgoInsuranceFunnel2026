@@ -464,6 +464,14 @@ export default function SchadenPage() {
                     {card.subtitle && <span className="text-xs text-gray-500 -mt-1">{card.subtitle}</span>}
                   </button>
                 ))}
+                <Link
+                  href="/schaden-unfall"
+                  className="bg-amber-50 border-2 border-amber-200 rounded-xl p-4 text-center flex flex-col items-center gap-2 transition-colors hover:border-amber-400 active:border-amber-500"
+                >
+                  <span className="text-3xl">🚑</span>
+                  <span className="font-bold text-gray-900 text-sm">Unfall</span>
+                  <span className="text-xs text-gray-500 -mt-1">Unfallversicherung</span>
+                </Link>
               </div>
               <div className="mt-6 text-center">
                 <Link href="/" className="text-sm text-[#003781] font-medium">← Zurück zur Startseite</Link>

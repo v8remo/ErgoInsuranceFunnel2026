@@ -116,6 +116,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/schaden-unfall" className="hover:text-white transition-colors">
+                  Unfall melden
+                </Link>
+              </li>
+              <li>
                 <Link href="/kennzeichen" className="hover:text-white transition-colors">
                   Kennzeichen / eVB
                 </Link>
