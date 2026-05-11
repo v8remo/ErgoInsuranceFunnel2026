@@ -460,14 +460,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(400).json({ message: "Maximal 5 Dateien erlaubt" });
         }
         const totalSize = fileAttachments.reduce((sum: number, f: any) => sum + (f.content?.length || 0), 0);
-        if (totalSize > 25 * 1024 * 1024) {
-          return res.status(400).json({ message: "Dateien zu groß. Maximal 25 MB insgesamt." });
+        if (totalSize > 75 * 1024 * 1024) {
+          return res.status(400).json({ message: "Dateien zu groß. Maximal 75 MB insgesamt (base64)." });
         }
       }
 
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
 
-      const emailHtml = isGlasschaden ? `
+      const isUnfall = damageType === 'unfall';
+
+      const emailHtml = isUnfall ? `
+        <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 0 auto;">
+          <div style="background-color: #003781; color: white; padding: 20px; text-align: center;">
+            <h1 style="margin: 0;">🚑 Neue Unfallschadensmeldung</h1>
+            <p style="margin: 10px 0 0 0;">ergo-stuebe.de · Unfallversicherung</p>
+          </div>
+          <div style="padding: 20px; background-color: #f7f7f7;">
+
+            <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0; border-bottom: 2px solid #003781; padding-bottom: 6px;">Kontakt & Vertragsinfo</h3>
+              <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                <tr><td style="padding: 4px 0; color: #555; width: 45%;">Name:</td><td style="padding: 4px 0; font-weight: bold;">${customerName}</td></tr>
+                <tr><td style="padding: 4px 0; color: #555;">E-Mail:</td><td style="padding: 4px 0;"><a href="mailto:${customerEmail}">${customerEmail}</a></td></tr>
+                <tr><td style="padding: 4px 0; color: #555;">Telefon:</td><td style="padding: 4px 0;">${customerPhone || '-'}</td></tr>
+                <tr><td style="padding: 4px 0; color: #555;">Versicherungsnummer:</td><td style="padding: 4px 0;">${insuranceNumber || '-'}</td></tr>
+              </table>
+            </div>
+
+            <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0; border-bottom: 2px solid #003781; padding-bottom: 6px;">Unfalldaten</h3>
+              <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                <tr><td style="padding: 4px 0; color: #555; width: 45%;">Unfalldatum/-zeitraum:</td><td style="padding: 4px 0;">${damageDate || '-'}</td></tr>
+                <tr><td style="padding: 4px 0; color: #555;">Unfallort:</td><td style="padding: 4px 0;">${damageLocation || '-'}</td></tr>
+                <tr><td style="padding: 4px 0; color: #555;">Polizei gemeldet:</td><td style="padding: 4px 0;">${policeReport || '-'}</td></tr>
+              </table>
+              <p style="margin: 12px 0 4px 0; color: #555; font-size: 14px;"><strong>Unfallhergang:</strong></p>
+              <p style="margin: 0; font-size: 14px; background-color: #f9f9f9; padding: 10px; border-radius: 6px; white-space: pre-wrap;">${damageDescription || '-'}</p>
+            </div>
+
+            ${extraFields ? `<div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+              <h3 style="color: #003781; margin-top: 0; border-bottom: 2px solid #003781; padding-bottom: 6px;">Alle Angaben (vollständige Zusammenfassung)</h3>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 13px; margin: 0; line-height: 1.6;">${extraFields}</pre>
+            </div>` : ''}
+
+            ${attachmentsCount ? `<div style="background-color: #fff3cd; padding: 12px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 15px;">
+              📎 <strong>${attachmentsCount} Datei(en) angehängt</strong> – Arztberichte, Atteste und weitere Dokumente liegen dieser E-Mail bei.
+            </div>` : ''}
+
+            <div style="background-color: #e8f5e9; padding: 12px 15px; border-radius: 8px; font-size: 14px;">
+              📋 <strong>Nächste Schritte:</strong> Angaben aus dem Formular in ERGO EASY übertragen und ggf. Schweigepflichtentbindung anfordern.
+            </div>
+          </div>
+          <div style="padding: 10px 20px; font-size: 12px; color: #666; text-align: center;">
+            Eingereicht am ${now} über ergo-stuebe.de
+          </div>
+        </div>
+      ` : isGlasschaden ? `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background-color: #003781; color: white; padding: 20px; text-align: center;">
             <h1 style="margin: 0;">🔲 Kfz-Glasschaden</h1>

@@ -122,8 +122,10 @@ export default function SchadenUnfallPage() {
   const inputCls = (field: string) =>
     `w-full p-3 border-2 rounded-xl text-base outline-none transition-colors ${errors[field] ? 'border-red-500 bg-red-50' : 'border-gray-200 focus:border-[#003781]'}`;
 
+  type StringFormKey = { [K in keyof FormData]: FormData[K] extends string ? K : never }[keyof FormData];
+
   const renderRadio = (
-    field: keyof FormData,
+    field: StringFormKey,
     options: { value: string; label: string }[],
     inline = true
   ) => (
@@ -132,7 +134,7 @@ export default function SchadenUnfallPage() {
         <button
           key={opt.value}
           type="button"
-          onClick={() => updateField(field, opt.value as any)}
+          onClick={() => updateField(field, opt.value)}
           className={`px-4 py-2 rounded-xl border-2 text-sm font-semibold transition-colors min-h-[44px] ${
             formData[field] === opt.value
               ? 'bg-[#003781] text-white border-[#003781]'
@@ -314,8 +316,8 @@ export default function SchadenUnfallPage() {
       });
 
       goToStep(6);
-    } catch (err: any) {
-      setSubmitError(err.message || 'Fehler beim Senden. Bitte versuchen Sie es erneut.');
+    } catch (err: unknown) {
+      setSubmitError(err instanceof Error ? err.message : 'Fehler beim Senden. Bitte versuchen Sie es erneut.');
     } finally {
       setIsSubmitting(false);
     }
