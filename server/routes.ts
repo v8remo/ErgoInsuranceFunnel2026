@@ -459,10 +459,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (fileAttachments.length > 5) {
           return res.status(400).json({ message: "Maximal 5 Dateien erlaubt" });
         }
-        const allowedExtensions = /\.(pdf|jpg|jpeg|png)$/i;
+        const allowedExtensions = /\.(pdf|jpg|jpeg|png|webp|heic|heif|gif|tiff|tif)$/i;
         for (const f of fileAttachments as { filename: string; content: string }[]) {
           if (!allowedExtensions.test(f.filename)) {
-            return res.status(400).json({ message: `Dateityp nicht erlaubt: ${f.filename}. Erlaubt: PDF, JPG, PNG.` });
+            return res.status(400).json({ message: `Dateityp nicht erlaubt: ${f.filename}. Erlaubt: PDF, JPG, PNG, WebP.` });
           }
           const fileSizeBytes = (f.content?.length || 0) * 0.75;
           if (fileSizeBytes > 10 * 1024 * 1024) {
