@@ -30,6 +30,7 @@ const SparRechner = lazy(() => import("@/pages/SparRechner"));
 const AktionsSeiten = lazy(() => import("@/pages/AktionsSeiten"));
 const InstagramGenerator = lazy(() => import("@/pages/InstagramGenerator"));
 const BestandskundenPage = lazy(() => import("@/pages/BestandskundenPage"));
+const SchadenUnfallPage = lazy(() => import("@/pages/SchadenUnfallPage"));
 import { spartenConfigs } from '@/data/spartenConfig';
 const SpartenLandingPage = lazy(() => import("@/pages/SpartenLandingPage"));
 
@@ -80,6 +81,7 @@ function AppContent() {
           <Route path="/impressum" component={Impressum} />
           <Route path="/datenschutz" component={Datenschutz} />
           <Route path="/schaden" component={SchadenPage} />
+          <Route path="/schaden-unfall" component={SchadenUnfallPage} />
           <Route path="/kennzeichen" component={KennzeichenPage} />
           <Route path="/erstinformation" component={Erstinformation} />
           <Route path="/versicherung/:type" component={Insurance} />
