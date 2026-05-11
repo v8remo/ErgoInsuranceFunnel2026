@@ -470,8 +470,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
         const totalBase64Size = fileAttachments.reduce((sum: number, f: any) => sum + (f.content?.length || 0), 0);
-        if (totalBase64Size > 70 * 1024 * 1024) {
-          return res.status(400).json({ message: "Dateien zu groß. Maximal 50 MB Gesamtgröße." });
+        if (totalBase64Size > 67 * 1024 * 1024) {
+          return res.status(400).json({ message: "Dateien zu groß. Maximal 50 MB Gesamtgröße (5 Dateien × 10 MB)." });
         }
       }
 
@@ -595,7 +595,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { data, error } = await resendClient.emails.send({
           from: 'ERGO Schadensmeldung <schaden@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
-          subject: isGlasschaden
+          subject: isUnfall
+            ? `🚑 Unfallversicherung Schaden: ${customerName} – ${now}`
+            : isGlasschaden
             ? `🔲 Kfz-Glasschaden: ${customerName} – ${glasScheibe || 'Scheibe'} – ${now}`
             : `🚨 Schadensmeldung: ${damageType} – ${customerName} – ${now}`,
           html: emailHtml,
