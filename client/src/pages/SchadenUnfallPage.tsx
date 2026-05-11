@@ -4,6 +4,28 @@ import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
 
+function Field({
+  label, field, required, hint, children, errors
+}: {
+  label: string;
+  field?: string;
+  required?: boolean;
+  hint?: string;
+  children: React.ReactNode;
+  errors?: Record<string, string>;
+}) {
+  return (
+    <div className="flex flex-col gap-1">
+      <label className="text-sm font-semibold text-gray-700">
+        {label}{required && <span className="text-red-500 ml-0.5">*</span>}
+      </label>
+      {hint && <p className="text-xs text-gray-400 -mt-0.5">{hint}</p>}
+      {children}
+      {field && errors?.[field] && <span className="text-xs text-red-500">{errors[field]}</span>}
+    </div>
+  );
+}
+
 interface FormData {
   vorname: string;
   nachname: string;
@@ -144,25 +166,6 @@ export default function SchadenUnfallPage() {
           {opt.label}
         </button>
       ))}
-    </div>
-  );
-
-  const Field = ({
-    label, field, required, hint, children
-  }: {
-    label: string;
-    field?: string;
-    required?: boolean;
-    hint?: string;
-    children: React.ReactNode;
-  }) => (
-    <div className="flex flex-col gap-1">
-      <label className="text-sm font-semibold text-gray-700">
-        {label}{required && <span className="text-red-500 ml-0.5">*</span>}
-      </label>
-      {hint && <p className="text-xs text-gray-400 -mt-0.5">{hint}</p>}
-      {children}
-      {field && errors[field] && <span className="text-xs text-red-500">{errors[field]}</span>}
     </div>
   );
 
@@ -402,31 +405,27 @@ export default function SchadenUnfallPage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Field label="Vorname" field="vorname" required>
+                <Field errors={errors} label="Vorname" field="vorname" required>
                   <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} autoComplete="given-name" />
-                  {errors.vorname && <span className="text-xs text-red-500">{errors.vorname}</span>}
                 </Field>
-                <Field label="Nachname" field="nachname" required>
+                <Field errors={errors} label="Nachname" field="nachname" required>
                   <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} autoComplete="family-name" />
-                  {errors.nachname && <span className="text-xs text-red-500">{errors.nachname}</span>}
                 </Field>
               </div>
 
-              <Field label="Telefonnummer" field="telefon" required>
+              <Field errors={errors} label="Telefonnummer" field="telefon" required>
                 <input type="tel" inputMode="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} autoComplete="tel" placeholder="z.B. 01234 567890" />
-                {errors.telefon && <span className="text-xs text-red-500">{errors.telefon}</span>}
               </Field>
 
-              <Field label="E-Mail-Adresse" field="email" required>
+              <Field errors={errors} label="E-Mail-Adresse" field="email" required>
                 <input type="email" inputMode="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} autoComplete="email" />
-                {errors.email && <span className="text-xs text-red-500">{errors.email}</span>}
               </Field>
 
-              <Field label="ERGO Versicherungsnummer" field="versicherungsnummer" hint="Falls bekannt – steht auf Ihrem Versicherungsschein">
+              <Field errors={errors} label="ERGO Versicherungsnummer" field="versicherungsnummer" hint="Falls bekannt – steht auf Ihrem Versicherungsschein">
                 <input type="text" value={formData.versicherungsnummer} onChange={e => updateField('versicherungsnummer', e.target.value)} className={inputCls('versicherungsnummer')} placeholder="z.B. 12345678" />
               </Field>
 
-              <Field label="Wer wurde verletzt?" field="verletzterPersonenkreis" required>
+              <Field errors={errors} label="Wer wurde verletzt?" field="verletzterPersonenkreis" required>
                 <div className="flex flex-col gap-2">
                   {[
                     { value: 'selbst', label: 'Ich selbst (Versicherungsnehmer)' },
@@ -451,13 +450,13 @@ export default function SchadenUnfallPage() {
               </Field>
 
               {formData.verletzterPersonenkreis === 'andere' && (
-                <Field label="Name der verletzten Person" field="verletzterName" required>
+                <Field errors={errors} label="Name der verletzten Person" field="verletzterName" required>
                   <input type="text" value={formData.verletzterName} onChange={e => updateField('verletzterName', e.target.value)} className={inputCls('verletzterName')} placeholder="Vor- und Nachname" />
                   {errors.verletzterName && <span className="text-xs text-red-500">{errors.verletzterName}</span>}
                 </Field>
               )}
 
-              <Field label="Ansprechpartner für Rückfragen">
+              <Field errors={errors} label="Ansprechpartner für Rückfragen">
                 {renderRadio('ansprechpartner', [
                   { value: 'versicherungsnehmer', label: 'Versicherungsnehmer' },
                   { value: 'bevollmaechtigter', label: 'Bevollmächtigte Person' },
@@ -482,7 +481,7 @@ export default function SchadenUnfallPage() {
                 <p className="text-sm text-gray-500">Bitte schildern Sie den Unfall so genau wie möglich.</p>
               </div>
 
-              <Field label="Wann ist der Unfall passiert?" field="unfalldatum">
+              <Field errors={errors} label="Wann ist der Unfall passiert?" field="unfalldatum">
                 {renderRadio('datumBekannt', [
                   { value: 'ja', label: 'Genaues Datum bekannt' },
                   { value: 'nein', label: 'Datum nicht genau bekannt' },
@@ -502,7 +501,7 @@ export default function SchadenUnfallPage() {
                 </div>
               </Field>
 
-              <Field label="Wo ist der Unfall passiert?">
+              <Field errors={errors} label="Wo ist der Unfall passiert?">
                 {renderRadio('ortBekannt', [
                   { value: 'ja', label: 'Genaue Adresse bekannt' },
                   { value: 'nein', label: 'Ungefährer Ort' },
@@ -522,12 +521,12 @@ export default function SchadenUnfallPage() {
               </Field>
 
               {formData.ortBekannt === 'ja' && (
-                <Field label="Kurze Ortsbeschreibung" hint="z.B. Treppenhaus, Gartenweg, Sportplatz">
+                <Field errors={errors} label="Kurze Ortsbeschreibung" hint="z.B. Treppenhaus, Gartenweg, Sportplatz">
                   <input type="text" value={formData.unfallortBeschreibung} onChange={e => updateField('unfallortBeschreibung', e.target.value)} className={inputCls('unfallortBeschreibung')} placeholder="z.B. Treppe im Eigenheim" />
                 </Field>
               )}
 
-              <Field label="Art des Unfalls" field="unfallArt" required>
+              <Field errors={errors} label="Art des Unfalls" field="unfallArt" required>
                 <select value={formData.unfallArt} onChange={e => updateField('unfallArt', e.target.value)} className={inputCls('unfallArt')}>
                   <option value="">Bitte auswählen …</option>
                   <option value="Sturz">Sturz</option>
@@ -540,7 +539,7 @@ export default function SchadenUnfallPage() {
                 {errors.unfallArt && <span className="text-xs text-red-500">{errors.unfallArt}</span>}
               </Field>
 
-              <Field label="Hauptursache des Unfalls" field="unfallUrsache" required>
+              <Field errors={errors} label="Hauptursache des Unfalls" field="unfallUrsache" required>
                 <select value={formData.unfallUrsache} onChange={e => updateField('unfallUrsache', e.target.value)} className={inputCls('unfallUrsache')}>
                   <option value="">Bitte auswählen …</option>
                   <option value="Ausrutschen/Stolpern">Ausrutschen / Stolpern</option>
@@ -553,7 +552,7 @@ export default function SchadenUnfallPage() {
                 {errors.unfallUrsache && <span className="text-xs text-red-500">{errors.unfallUrsache}</span>}
               </Field>
 
-              <Field label="Schilderung des Unfallhergangs" field="unfallhergang" required>
+              <Field errors={errors} label="Schilderung des Unfallhergangs" field="unfallhergang" required>
                 <textarea
                   value={formData.unfallhergang}
                   onChange={e => updateField('unfallhergang', e.target.value)}
@@ -562,10 +561,9 @@ export default function SchadenUnfallPage() {
                   placeholder="Bitte beschreiben Sie genau, wie es zu dem Unfall kam und welche Verletzungen entstanden sind …"
                 />
                 <div className="text-xs text-gray-400 text-right">{formData.unfallhergang.length} Zeichen (mind. 30)</div>
-                {errors.unfallhergang && <span className="text-xs text-red-500">{errors.unfallhergang}</span>}
               </Field>
 
-              <Field label="Wurde der Unfall bei der Polizei gemeldet?">
+              <Field errors={errors} label="Wurde der Unfall bei der Polizei gemeldet?">
                 {renderRadio('polizeiGemeldet', [
                   { value: 'ja', label: 'Ja' },
                   { value: 'nein', label: 'Nein' },
@@ -589,7 +587,7 @@ export default function SchadenUnfallPage() {
                 <p className="text-sm text-gray-500">Diese Angaben werden für die Schadenbearbeitung benötigt. Alle Felder sind freiwillig, aber hilfreich.</p>
               </div>
 
-              <Field label="Hat die verletzte Person einen anerkannten Pflegegrad?">
+              <Field errors={errors} label="Hat die verletzte Person einen anerkannten Pflegegrad?">
                 {renderRadio('pflegegrad', [
                   { value: 'nein', label: 'Nein' },
                   { value: 'ja', label: 'Ja' },
@@ -597,18 +595,18 @@ export default function SchadenUnfallPage() {
                 ])}
               </Field>
 
-              <Field label="Liegt ein ICD-Diagnoseschlüssel (ärztliche Diagnose) vor?" hint="z.B. S52.0 für Radiusfraktur">
+              <Field errors={errors} label="Liegt ein ICD-Diagnoseschlüssel (ärztliche Diagnose) vor?" hint="z.B. S52.0 für Radiusfraktur">
                 {renderRadio('icdDiagnose', [
                   { value: 'nein', label: 'Nein' },
                   { value: 'ja', label: 'Ja' },
                 ])}
               </Field>
 
-              <Field label="Datum der Erstbehandlung" hint="Wann wurde der Arzt / das Krankenhaus zuerst aufgesucht?">
+              <Field errors={errors} label="Datum der Erstbehandlung" hint="Wann wurde der Arzt / das Krankenhaus zuerst aufgesucht?">
                 <input type="date" value={formData.erstbehandlungDatum} onChange={e => updateField('erstbehandlungDatum', e.target.value)} max={new Date().toISOString().split('T')[0]} className={inputCls('erstbehandlungDatum')} />
               </Field>
 
-              <Field label="Hat eine stationäre Krankenhausbehandlung stattgefunden?">
+              <Field errors={errors} label="Hat eine stationäre Krankenhausbehandlung stattgefunden?">
                 {renderRadio('stationaer', [
                   { value: 'nein', label: 'Nein' },
                   { value: 'ja', label: 'Ja' },
@@ -616,14 +614,14 @@ export default function SchadenUnfallPage() {
                 ])}
               </Field>
 
-              <Field label="Hat eine ambulante Operation stattgefunden?">
+              <Field errors={errors} label="Hat eine ambulante Operation stattgefunden?">
                 {renderRadio('ambulanteOp', [
                   { value: 'nein', label: 'Nein' },
                   { value: 'ja', label: 'Ja' },
                 ])}
               </Field>
 
-              <Field label="War oder ist die verletzte Person arbeitsunfähig krankgeschrieben?">
+              <Field errors={errors} label="War oder ist die verletzte Person arbeitsunfähig krankgeschrieben?">
                 {renderRadio('arbeitsunfaehig', [
                   { value: 'nein', label: 'Nein' },
                   { value: 'ja', label: 'Ja' },
@@ -654,14 +652,14 @@ export default function SchadenUnfallPage() {
                 )}
               </Field>
 
-              <Field label="Wurde eine Tagegeldbescheinigung ausgestellt und eingereicht?">
+              <Field errors={errors} label="Wurde eine Tagegeldbescheinigung ausgestellt und eingereicht?">
                 {renderRadio('tagegeldbescheinigung', [
                   { value: 'nein', label: 'Nein' },
                   { value: 'ja', label: 'Ja' },
                 ])}
               </Field>
 
-              <Field label="Wer hat die Erstbehandlung durchgeführt?">
+              <Field errors={errors} label="Wer hat die Erstbehandlung durchgeführt?">
                 {renderRadio('erstbehandler', [
                   { value: 'Hausarzt/Facharzt', label: 'Hausarzt / Facharzt' },
                   { value: 'Krankenhaus', label: 'Krankenhaus' },
@@ -672,7 +670,7 @@ export default function SchadenUnfallPage() {
                 )}
               </Field>
 
-              <Field label="Wird die Behandlung weiterhin durch diesen Erstbehandler fortgesetzt?">
+              <Field errors={errors} label="Wird die Behandlung weiterhin durch diesen Erstbehandler fortgesetzt?">
                 {renderRadio('weiterbehandlung', [
                   { value: 'ja', label: 'Ja' },
                   { value: 'nein', label: 'Nein' },
@@ -680,7 +678,7 @@ export default function SchadenUnfallPage() {
                 ])}
               </Field>
 
-              <Field label="Befindet sich die verletzte Person noch in Behandlung?">
+              <Field errors={errors} label="Befindet sich die verletzte Person noch in Behandlung?">
                 {renderRadio('nochInBehandlung', [
                   { value: 'ja', label: 'Ja' },
                   { value: 'nein', label: 'Nein' },
@@ -705,7 +703,7 @@ export default function SchadenUnfallPage() {
                 <p className="text-sm text-gray-500">Fast geschafft! Nur noch wenige Angaben.</p>
               </div>
 
-              <Field label="Sind Ihnen Kosten für ärztliche Nachweise entstanden?" hint="z.B. für Atteste, Bescheinigungen oder Befundberichte">
+              <Field errors={errors} label="Sind Ihnen Kosten für ärztliche Nachweise entstanden?" hint="z.B. für Atteste, Bescheinigungen oder Befundberichte">
                 {renderRadio('kostenaerztlicheNachweise', [
                   { value: 'nein', label: 'Nein' },
                   { value: 'ja', label: 'Ja' },
@@ -713,7 +711,7 @@ export default function SchadenUnfallPage() {
                 ])}
               </Field>
 
-              <Field label="Besteht eine weitere Unfallversicherung bei einem anderen Unternehmen?">
+              <Field errors={errors} label="Besteht eine weitere Unfallversicherung bei einem anderen Unternehmen?">
                 {renderRadio('weitereUnfallversicherung', [
                   { value: 'nein', label: 'Nein' },
                   { value: 'ja', label: 'Ja' },
