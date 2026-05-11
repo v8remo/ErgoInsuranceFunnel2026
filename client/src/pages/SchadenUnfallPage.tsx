@@ -298,7 +298,7 @@ export default function SchadenUnfallPage() {
       const summary = buildSummary();
 
       await apiRequest('POST', '/api/schaden/submit', {
-        damageType: 'Unfallversicherung',
+        damageType: 'unfall',
         customerName: `${formData.vorname} ${formData.nachname}`,
         customerEmail: formData.email,
         customerPhone: formData.telefon,
@@ -503,7 +503,7 @@ export default function SchadenUnfallPage() {
                   { value: 'ja', label: 'Genaue Adresse bekannt' },
                   { value: 'nein', label: 'Ungefährer Ort' },
                 ])}
-                {formData.ortBekannt === 'ja' && (
+                {formData.ortBekannt === 'ja' ? (
                   <div className="flex flex-col gap-2 mt-2">
                     <input type="text" value={formData.unfallStrasse} onChange={e => updateField('unfallStrasse', e.target.value)} className={inputCls('unfallStrasse')} placeholder="Straße und Hausnummer" />
                     <div className="grid grid-cols-2 gap-2">
@@ -512,12 +512,16 @@ export default function SchadenUnfallPage() {
                     </div>
                     <input type="text" value={formData.unfallLand} onChange={e => updateField('unfallLand', e.target.value)} className={inputCls('unfallLand')} placeholder="Land" />
                   </div>
+                ) : (
+                  <input type="text" value={formData.unfallortBeschreibung} onChange={e => updateField('unfallortBeschreibung', e.target.value)} className={`${inputCls('unfallortBeschreibung')} mt-2`} placeholder="z.B. Fußgängerzone Oldenburg, Sportplatz Ganderkesee" />
                 )}
               </Field>
 
-              <Field label="Kurze Ortsbeschreibung" hint="z.B. Treppenhaus, Gartenweg, Sportplatz">
-                <input type="text" value={formData.unfallortBeschreibung} onChange={e => updateField('unfallortBeschreibung', e.target.value)} className={inputCls('unfallortBeschreibung')} placeholder="z.B. Treppe im Eigenheim" />
-              </Field>
+              {formData.ortBekannt === 'ja' && (
+                <Field label="Kurze Ortsbeschreibung" hint="z.B. Treppenhaus, Gartenweg, Sportplatz">
+                  <input type="text" value={formData.unfallortBeschreibung} onChange={e => updateField('unfallortBeschreibung', e.target.value)} className={inputCls('unfallortBeschreibung')} placeholder="z.B. Treppe im Eigenheim" />
+                </Field>
+              )}
 
               <Field label="Art des Unfalls" field="unfallArt" required>
                 <select value={formData.unfallArt} onChange={e => updateField('unfallArt', e.target.value)} className={inputCls('unfallArt')}>
@@ -822,8 +826,16 @@ export default function SchadenUnfallPage() {
               </div>
 
               <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800">
-                <strong>Schweigepflichtentbindung:</strong> Für die Schadenbearbeitung benötigt ERGO ggf. ärztliche Auskünfte.
-                Das Formular zur Schweigepflichtentbindung erhalten Sie von Ihrem Berater Morino Stübe.
+                <strong>Schweigepflichtentbindung:</strong> Für die Schadenbearbeitung benötigt ERGO ggf. ärztliche Auskünfte.{' '}
+                <a
+                  href="https://www.ergo.de/de/Service/Schaden/Unfallversicherung"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline font-semibold"
+                >
+                  Das offizielle ERGO-Formular zur Schweigepflichtentbindung
+                </a>{' '}
+                können Sie vorab herunterladen oder Ihr Berater Morino Stübe schickt es Ihnen zu.
               </div>
 
               <div>

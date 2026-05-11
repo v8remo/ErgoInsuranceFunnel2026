@@ -101,7 +101,14 @@ const jahrescheckSteps = [
   { step: '5', title: 'Empfehlung', desc: 'Sie erhalten eine persönliche, unverbindliche Handlungsempfehlung.' },
 ];
 
-const schadenTypen = [
+interface SchadenTyp {
+  label: string;
+  typ: string;
+  icon: string;
+  href?: string;
+}
+
+const schadenTypen: SchadenTyp[] = [
   { label: 'Kfz-Schaden', typ: 'kfz', icon: '🚗' },
   { label: 'Glasschaden', typ: 'glasschaden', icon: '🔲' },
   { label: 'Hausrat', typ: 'hausrat', icon: '🏠' },
@@ -250,7 +257,7 @@ export default function BestandskundenPage() {
                 {schadenExpanded && (
                   <div className="absolute top-full left-0 right-0 z-20 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
                     {schadenTypen.map((t) => (
-                      <Link key={t.typ + t.label} href={(t as any).href || `/schaden?typ=${t.typ}`}>
+                      <Link key={t.typ + t.label} href={t.href ?? `/schaden?typ=${t.typ}`}>
                         <div
                           onClick={() => setSchadenExpanded(false)}
                           className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-50 cursor-pointer text-sm font-medium text-gray-800 border-b border-gray-100 last:border-0"
