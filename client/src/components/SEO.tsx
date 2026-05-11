@@ -10,6 +10,7 @@ interface SEOProps {
   structuredData?: any;
   additionalStructuredData?: any[];
   locality?: string;
+  noIndex?: boolean;
 }
 
 export default function SEO({ 
@@ -20,7 +21,8 @@ export default function SEO({
   ogType = "website",
   structuredData,
   additionalStructuredData,
-  locality = "Ganderkesee"
+  locality = "Ganderkesee",
+  noIndex = false,
 }: SEOProps) {
   const [location] = useLocation();
   const baseUrl = "https://ergo-ganderkesee.de";
@@ -52,6 +54,8 @@ export default function SEO({
     updateMetaTag("google", "notranslate");
     updateMetaTag("format-detection", "telephone=no");
 
+    updateMetaTag("robots", noIndex ? "noindex,nofollow" : "index,follow");
+
     document.querySelectorAll('script[data-seo-schema]').forEach(el => el.remove());
 
     const allSchemas = [
@@ -70,7 +74,7 @@ export default function SEO({
     return () => {
       document.querySelectorAll('script[data-seo-schema]').forEach(el => el.remove());
     };
-  }, [title, description, keywords, location, fullUrl, ogImage, ogType, structuredData, additionalStructuredData, locality]);
+  }, [title, description, keywords, location, fullUrl, ogImage, ogType, structuredData, additionalStructuredData, locality, noIndex]);
 
   return null;
 }
