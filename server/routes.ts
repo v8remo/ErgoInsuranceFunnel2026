@@ -459,9 +459,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (fileAttachments.length > 5) {
           return res.status(400).json({ message: "Maximal 5 Dateien erlaubt" });
         }
-        const totalSize = fileAttachments.reduce((sum: number, f: any) => sum + (f.content?.length || 0), 0);
-        if (totalSize > 75 * 1024 * 1024) {
-          return res.status(400).json({ message: "Dateien zu groß. Maximal 75 MB insgesamt (base64)." });
+        const allowedExtensions = /\.(pdf|jpg|jpeg|png)$/i;
+        for (const f of fileAttachments as { filename: string; content: string }[]) {
+          if (!allowedExtensions.test(f.filename)) {
+            return res.status(400).json({ message: `Dateityp nicht erlaubt: ${f.filename}. Erlaubt: PDF, JPG, PNG.` });
+          }
+          const fileSizeBytes = (f.content?.length || 0) * 0.75;
+          if (fileSizeBytes > 10 * 1024 * 1024) {
+            return res.status(400).json({ message: `Datei zu groß: ${f.filename}. Maximal 10 MB je Datei.` });
+          }
+        }
+        const totalBase64Size = fileAttachments.reduce((sum: number, f: any) => sum + (f.content?.length || 0), 0);
+        if (totalBase64Size > 70 * 1024 * 1024) {
+          return res.status(400).json({ message: "Dateien zu groß. Maximal 50 MB Gesamtgröße." });
         }
       }
 
