@@ -3,9 +3,15 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
+const UPLOAD_ROUTES = new Set([
+  '/api/schaden/submit',
+  '/api/documents/submit',
+  '/api/documents/upload',
+  '/api/kennzeichen/submit',
+]);
 app.use((req, res, next) => {
-  const isUploadRoute = req.path === '/api/schaden/submit' || req.path === '/api/documents/upload';
-  express.json({ limit: isUploadRoute ? '75mb' : '5mb' })(req, res, next);
+  const limit = UPLOAD_ROUTES.has(req.path) ? '75mb' : '5mb';
+  express.json({ limit })(req, res, next);
 });
 app.use(express.urlencoded({ extended: false }));
 
