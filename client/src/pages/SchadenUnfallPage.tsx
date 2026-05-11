@@ -306,7 +306,9 @@ export default function SchadenUnfallPage() {
         customerPhone: formData.telefon,
         insuranceNumber: formData.versicherungsnummer || undefined,
         damageDate: formData.datumBekannt === 'ja' ? formData.unfalldatum : formData.unfalldatumUngefaehr,
-        damageLocation: formData.ortBekannt === 'ja' ? `${formData.unfallStrasse ? formData.unfallStrasse + ', ' : ''}${formData.unfallPlz} ${formData.unfallOrt}, ${formData.unfallLand}`.trim() : 'Ungefährer Ort',
+        damageLocation: formData.ortBekannt === 'ja'
+          ? `${formData.unfallStrasse ? formData.unfallStrasse + ', ' : ''}${formData.unfallPlz} ${formData.unfallOrt}, ${formData.unfallLand}`.trim()
+          : formData.unfallortBeschreibung.trim() || 'Ungefährer Ort (keine Angabe)',
         damageDescription: formData.unfallhergang,
         policeReport: formData.polizeiGemeldet,
         extraFields: summary,
