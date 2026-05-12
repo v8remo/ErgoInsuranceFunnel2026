@@ -14,7 +14,7 @@ import {
   Heart, Baby, Home, Truck, Briefcase, Sunset,
   CheckCircle, Users, Clock, Award, Gift, ArrowRight,
   ClipboardCheck, Star, Car, AlertTriangle, MapPin,
-  CreditCard, XCircle, ChevronDown
+  CreditCard, XCircle, ChevronDown, UserPlus
 } from 'lucide-react';
 
 type BestandskundenContext =
@@ -303,6 +303,16 @@ export default function BestandskundenPage() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+              <Link href="/neukunden">
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[110px]">
+                  <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-100 transition-colors">
+                    <UserPlus className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Daten mitteilen</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Neukunden-Formular</p>
+                </div>
+              </Link>
+
               <Link href="/dokumente?formular=aenderung">
                 <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[110px]">
                   <div className="w-12 h-12 bg-violet-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-violet-100 transition-colors">
