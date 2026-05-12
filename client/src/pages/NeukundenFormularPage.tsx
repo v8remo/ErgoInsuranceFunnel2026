@@ -2,6 +2,44 @@ import { useState } from 'react';
 import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
 
+interface VersicherungEntry {
+  art: string;
+  gesellschaft: string;
+  nummer: string;
+  beitrag: string;
+  kuendigungstermin: string;
+}
+
+const emptyVersicherung = (): VersicherungEntry => ({
+  art: '',
+  gesellschaft: '',
+  nummer: '',
+  beitrag: '',
+  kuendigungstermin: '',
+});
+
+const VERSICHERUNGSARTEN = [
+  'Kfz-Haftpflicht / Vollkasko',
+  'Hausratversicherung',
+  'Privathaftpflicht',
+  'Rechtsschutzversicherung',
+  'Berufsunfähigkeitsversicherung',
+  'Unfallversicherung',
+  'Zahnzusatzversicherung',
+  'Krankenversicherung (privat)',
+  'Krankentagegeld',
+  'Krankenzusatzversicherung',
+  'Risikolebensversicherung',
+  'Lebensversicherung / Rentenversicherung',
+  'Wohngebäudeversicherung',
+  'Elementarschadenversicherung',
+  'Tierhalterhaftpflicht',
+  'Reiseversicherung',
+  'Cyberversicherung',
+  'Gewerbeversicherung',
+  'Sonstige',
+];
+
 interface FormData {
   anrede: string;
   titel: string;
@@ -96,11 +134,18 @@ export default function NeukundenFormularPage() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [versicherungen, setVersicherungen] = useState<VersicherungEntry[]>([emptyVersicherung()]);
 
   const set = <K extends keyof FormData>(field: K, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }));
     if (errors[field]) setErrors(prev => { const n = { ...prev }; delete n[field]; return n; });
   };
+
+  const setVersicherung = (i: number, field: keyof VersicherungEntry, value: string) => {
+    setVersicherungen(prev => prev.map((v, idx) => idx === i ? { ...v, [field]: value } : v));
+  };
+  const addVersicherung = () => setVersicherungen(prev => [...prev, emptyVersicherung()]);
+  const removeVersicherung = (i: number) => setVersicherungen(prev => prev.filter((_, idx) => idx !== i));
 
   const validate = (): boolean => {
     const e: Partial<Record<keyof FormData, string>> = {};
@@ -120,7 +165,10 @@ export default function NeukundenFormularPage() {
     setSubmitting(true);
     setSubmitError(null);
     try {
-      await apiRequest('POST', '/api/neukunden/submit', form);
+      await apiRequest('POST', '/api/neukunden/submit', {
+        ...form,
+        versicherungen: versicherungen.filter(v => v.art || v.gesellschaft || v.nummer),
+      });
       setSuccess(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: unknown) {
@@ -355,6 +403,102 @@ export default function NeukundenFormularPage() {
             <Field label="Besuchszeit" hint="Wann sind Sie am besten erreichbar / zuhause?">
               <input type="text" value={form.besuchszeit} onChange={e => set('besuchszeit', e.target.value)} className={inputCls} placeholder="z.B. Montag–Freitag 17–20 Uhr" />
             </Field>
+
+            {/* ── Bestehende Versicherungen ── */}
+            <SectionHeader title="Bestehende Versicherungen" />
+            <p className="text-xs text-gray-400 -mt-2">
+              Tragen Sie Ihre vorhandenen Versicherungsverträge ein – auch bei anderen Gesellschaften. Das hilft uns, Lücken zu erkennen und Doppelversicherungen zu vermeiden.
+            </p>
+
+            <div className="flex flex-col gap-4">
+              {versicherungen.map((v, i) => (
+                <div key={i} className="relative bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col gap-3">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                      Vertrag {i + 1}
+                    </span>
+                    {versicherungen.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeVersicherung(i)}
+                        className="text-xs text-red-500 hover:text-red-700 font-medium transition-colors"
+                      >
+                        ✕ Entfernen
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-semibold text-gray-600">Versicherungsart</label>
+                      <select
+                        value={v.art}
+                        onChange={e => setVersicherung(i, 'art', e.target.value)}
+                        className={selectCls}
+                      >
+                        <option value="">– Bitte auswählen –</option>
+                        {VERSICHERUNGSARTEN.map(art => (
+                          <option key={art} value={art}>{art}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-semibold text-gray-600">Versicherungsgesellschaft</label>
+                      <input
+                        type="text"
+                        value={v.gesellschaft}
+                        onChange={e => setVersicherung(i, 'gesellschaft', e.target.value)}
+                        className={inputCls}
+                        placeholder="z.B. Allianz, HUK, AXA …"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-semibold text-gray-600">Versicherungsnummer</label>
+                      <input
+                        type="text"
+                        value={v.nummer}
+                        onChange={e => setVersicherung(i, 'nummer', e.target.value)}
+                        className={inputCls}
+                        placeholder="z.B. 123456789"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-semibold text-gray-600">Jahresbeitrag (€)</label>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        value={v.beitrag}
+                        onChange={e => setVersicherung(i, 'beitrag', e.target.value)}
+                        className={inputCls}
+                        placeholder="z.B. 240,00"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-semibold text-gray-600">Kündigungstermin</label>
+                      <input
+                        type="text"
+                        value={v.kuendigungstermin}
+                        onChange={e => setVersicherung(i, 'kuendigungstermin', e.target.value)}
+                        className={inputCls}
+                        placeholder="z.B. 31.12.2025"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              <button
+                type="button"
+                onClick={addVersicherung}
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border-2 border-dashed border-gray-300 text-sm font-semibold text-gray-500 hover:border-[#003781] hover:text-[#003781] transition-colors"
+              >
+                + Weiteren Vertrag hinzufügen
+              </button>
+            </div>
 
             <Field label="Notiz / Anmerkungen">
               <textarea value={form.notiz} onChange={e => set('notiz', e.target.value)} rows={3} className={inputCls} placeholder="Besonderheiten, Wünsche oder weitere Informationen …" />

@@ -1053,7 +1053,7 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
         emailPrivat, emailDienstlich,
         beruf, stellung, sozialversicherungsnummer,
         strasseHausnr, adressergaenzung, plz, ort, land,
-        besuchszeit, notiz,
+        besuchszeit, notiz, versicherungen,
       } = req.body;
 
       if (!nachname || !vorname || !anrede) {
@@ -1113,6 +1113,27 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
               row('Besuchszeit', besuchszeit),
             ].join(''))}
             ${notiz ? section('Notiz', row('Anmerkungen', notiz)) : ''}
+            ${Array.isArray(versicherungen) && versicherungen.length > 0 ? `
+              <tr><td colspan="2" style="padding:14px 10px 4px;background:#f7f7f7;font-size:11px;font-weight:bold;letter-spacing:1px;color:#888;text-transform:uppercase;border-top:1px solid #e5e5e5">Bestehende Versicherungen</td></tr>
+              <tr><td colspan="2" style="padding:0">
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">
+                  <tr style="background:#eee">
+                    <td style="padding:6px 10px;font-size:11px;font-weight:bold;color:#555">Art</td>
+                    <td style="padding:6px 10px;font-size:11px;font-weight:bold;color:#555">Gesellschaft</td>
+                    <td style="padding:6px 10px;font-size:11px;font-weight:bold;color:#555">Vers.-Nr.</td>
+                    <td style="padding:6px 10px;font-size:11px;font-weight:bold;color:#555">Jahresbeitrag</td>
+                    <td style="padding:6px 10px;font-size:11px;font-weight:bold;color:#555">Kündigung</td>
+                  </tr>
+                  ${(versicherungen as { art: string; gesellschaft: string; nummer: string; beitrag: string; kuendigungstermin: string }[]).map((v, i) => `
+                  <tr style="background:${i % 2 === 0 ? '#fff' : '#f9f9f9'}">
+                    <td style="padding:6px 10px;font-size:12px;color:#222">${v.art || '–'}</td>
+                    <td style="padding:6px 10px;font-size:12px;color:#222">${v.gesellschaft || '–'}</td>
+                    <td style="padding:6px 10px;font-size:12px;color:#222;font-family:monospace">${v.nummer || '–'}</td>
+                    <td style="padding:6px 10px;font-size:12px;color:#222">${v.beitrag ? v.beitrag + ' €' : '–'}</td>
+                    <td style="padding:6px 10px;font-size:12px;color:#222">${v.kuendigungstermin || '–'}</td>
+                  </tr>`).join('')}
+                </table>
+              </td></tr>` : ''}
           </table>
           <div style="background:#f7f7f7;padding:14px;text-align:center;font-size:12px;color:#999;border-top:1px solid #e5e5e5">
             ERGO Agentur Stübe · Ganderkesee · morino.stuebe@ergo.de
