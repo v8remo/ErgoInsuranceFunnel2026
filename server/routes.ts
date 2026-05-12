@@ -1043,6 +1043,110 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
     }
   });
 
+  app.post("/api/neukunden/submit", async (req, res) => {
+    try {
+      const {
+        anrede, titel, adelspraedikat, berufstitel,
+        nachname, vorname, geburtsdatum, staatsangehoerigkeit,
+        geburtsname, geburtsort, geburtsland,
+        mobilPrivat, mobilDienstlich, telefonPrivat, telefonDienstlich,
+        emailPrivat, emailDienstlich,
+        beruf, stellung, sozialversicherungsnummer,
+        strasseHausnr, adressergaenzung, plz, ort, land,
+        besuchszeit, notiz,
+      } = req.body;
+
+      if (!nachname || !vorname || !anrede) {
+        return res.status(400).json({ message: "Name und Anrede sind Pflichtfelder." });
+      }
+
+      const fullName = [anrede, titel, adelspraedikat, berufstitel, vorname, nachname].filter(Boolean).join(' ');
+      const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
+
+      const row = (label: string, value: string | undefined) =>
+        value ? `<tr><td style="padding:6px 10px;color:#555;font-size:13px;white-space:nowrap;vertical-align:top;width:220px"><strong>${label}</strong></td><td style="padding:6px 10px;font-size:13px;color:#222">${value}</td></tr>` : '';
+
+      const section = (title: string, rows: string) =>
+        `<tr><td colspan="2" style="padding:14px 10px 4px;background:#f7f7f7;font-size:11px;font-weight:bold;letter-spacing:1px;color:#888;text-transform:uppercase;border-top:1px solid #e5e5e5">${title}</td></tr>${rows}`;
+
+      const emailHtml = `
+        <div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;border:1px solid #ddd;border-radius:10px;overflow:hidden">
+          <div style="background:#E2001A;color:white;padding:20px;text-align:center">
+            <h1 style="margin:0;font-size:20px">👤 Neukunden-Stammdaten</h1>
+            <p style="margin:8px 0 0;font-size:13px;opacity:.9">ergo-ganderkesee.de · Eingegangen am ${now}</p>
+          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">
+            ${section('Allgemeine Daten', [
+              row('Anrede', anrede),
+              row('Titel', titel),
+              row('Adelsprädikat', adelspraedikat),
+              row('Berufstitel', berufstitel),
+              row('Nachname', nachname),
+              row('Vorname', vorname),
+              row('Geburtsdatum', geburtsdatum ? new Date(geburtsdatum).toLocaleDateString('de-DE') : ''),
+              row('Staatsangehörigkeit', staatsangehoerigkeit),
+            ].join(''))}
+            ${section('Zusätzliche Personendaten', [
+              row('Geburtsname', geburtsname),
+              row('Geburtsort', geburtsort),
+              row('Geburtsland', geburtsland),
+            ].join(''))}
+            ${section('Kommunikation', [
+              row('Mobilfunk privat', mobilPrivat),
+              row('Mobilfunk dienstlich', mobilDienstlich),
+              row('Telefon privat', telefonPrivat),
+              row('Telefon dienstlich', telefonDienstlich),
+              row('E-Mail privat', emailPrivat),
+              row('E-Mail dienstlich', emailDienstlich),
+            ].join(''))}
+            ${section('Beruf', [
+              row('Beruf', beruf),
+              row('Stellung', stellung),
+              row('Sozialversicherungsnummer', sozialversicherungsnummer),
+            ].join(''))}
+            ${section('Hauptadresse', [
+              row('Straße / Hausnr.', strasseHausnr),
+              row('Adressergänzung', adressergaenzung),
+              row('PLZ', plz),
+              row('Ort', ort),
+              row('Land', land),
+              row('Besuchszeit', besuchszeit),
+            ].join(''))}
+            ${notiz ? section('Notiz', row('Anmerkungen', notiz)) : ''}
+          </table>
+          <div style="background:#f7f7f7;padding:14px;text-align:center;font-size:12px;color:#999;border-top:1px solid #e5e5e5">
+            ERGO Agentur Stübe · Ganderkesee · morino.stuebe@ergo.de
+          </div>
+        </div>`;
+
+      await storage.createSubmission({
+        type: 'neukunde',
+        customerName: fullName,
+        customerEmail: emailPrivat || emailDienstlich || '',
+        customerPhone: mobilPrivat || telefonPrivat || mobilDienstlich || telefonDienstlich || '',
+        subject: 'Neukunden-Stammdaten',
+        summary: `${fullName}${ort ? ' · ' + ort : ''}`,
+        details: { anrede, titel, nachname, vorname, geburtsdatum, emailPrivat, mobilPrivat, beruf, stellung, plz, ort },
+      });
+
+      if (process.env.RESEND_API_KEY) {
+        const { Resend } = await import('resend');
+        const resendClient = new Resend(process.env.RESEND_API_KEY);
+        await resendClient.emails.send({
+          from: 'ERGO Neukunden <neukunden@anfrage.ergo-stuebe.de>',
+          to: 'morino.stuebe@ergo.de',
+          subject: `👤 Neukunden-Stammdaten: ${fullName} – ${now}`,
+          html: emailHtml,
+        });
+      }
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Neukunden submit error:', error);
+      res.status(500).json({ message: "Fehler beim Übermitteln. Bitte versuchen Sie es erneut." });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
