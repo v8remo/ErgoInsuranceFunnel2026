@@ -31,7 +31,7 @@ const cityData: Record<string, {
   localSeoText2: string;
   testimonials: { name: string; text: string; stars: number }[];
   faqs: { question: string; answer: string }[];
-  nearbyLinks: { name: string; href: string; region: string }[];
+  nearbyLinks: { name: string; href: string; region: string; distance: string }[];
 }> = {
   ganderkesee: {
     name: "Ganderkesee",
@@ -83,8 +83,8 @@ const cityData: Record<string, {
       }
     ],
     nearbyLinks: [
-      { name: "Delmenhorst", href: "/versicherung-delmenhorst", region: "Kreisfreie Stadt" },
-      { name: "Oldenburg", href: "/versicherung-oldenburg", region: "Kreisfreie Stadt" },
+      { name: "Delmenhorst", href: "/versicherung-delmenhorst", region: "Kreisfreie Stadt", distance: "~10 Min." },
+      { name: "Oldenburg", href: "/versicherung-oldenburg", region: "Kreisfreie Stadt", distance: "~20 Min." },
     ]
   },
   delmenhorst: {
@@ -137,8 +137,8 @@ const cityData: Record<string, {
       }
     ],
     nearbyLinks: [
-      { name: "Ganderkesee", href: "/versicherung-ganderkesee", region: "Landkreis Oldenburg" },
-      { name: "Oldenburg", href: "/versicherung-oldenburg", region: "Kreisfreie Stadt" },
+      { name: "Ganderkesee", href: "/versicherung-ganderkesee", region: "Landkreis Oldenburg", distance: "~10 Min." },
+      { name: "Oldenburg", href: "/versicherung-oldenburg", region: "Kreisfreie Stadt", distance: "~25 Min." },
     ]
   },
   stuhr: {
@@ -190,8 +190,8 @@ const cityData: Record<string, {
       }
     ],
     nearbyLinks: [
-      { name: "Achim", href: "/versicherung-achim", region: "Landkreis Verden" },
-      { name: "Syke", href: "/versicherung-syke", region: "Landkreis Diepholz" },
+      { name: "Achim", href: "/versicherung-achim", region: "Landkreis Verden", distance: "~15 Min." },
+      { name: "Syke", href: "/versicherung-syke", region: "Landkreis Diepholz", distance: "~20 Min." },
     ]
   },
   achim: {
@@ -243,8 +243,8 @@ const cityData: Record<string, {
       }
     ],
     nearbyLinks: [
-      { name: "Stuhr", href: "/versicherung-stuhr", region: "Landkreis Diepholz" },
-      { name: "Syke", href: "/versicherung-syke", region: "Landkreis Diepholz" },
+      { name: "Stuhr", href: "/versicherung-stuhr", region: "Landkreis Diepholz", distance: "~15 Min." },
+      { name: "Syke", href: "/versicherung-syke", region: "Landkreis Diepholz", distance: "~15 Min." },
     ]
   },
   syke: {
@@ -296,8 +296,8 @@ const cityData: Record<string, {
       }
     ],
     nearbyLinks: [
-      { name: "Stuhr", href: "/versicherung-stuhr", region: "Landkreis Diepholz" },
-      { name: "Achim", href: "/versicherung-achim", region: "Landkreis Verden" },
+      { name: "Stuhr", href: "/versicherung-stuhr", region: "Landkreis Diepholz", distance: "~20 Min." },
+      { name: "Achim", href: "/versicherung-achim", region: "Landkreis Verden", distance: "~15 Min." },
     ]
   },
   oldenburg: {
@@ -350,8 +350,8 @@ const cityData: Record<string, {
       }
     ],
     nearbyLinks: [
-      { name: "Ganderkesee", href: "/versicherung-ganderkesee", region: "Landkreis Oldenburg" },
-      { name: "Delmenhorst", href: "/versicherung-delmenhorst", region: "Kreisfreie Stadt" },
+      { name: "Ganderkesee", href: "/versicherung-ganderkesee", region: "Landkreis Oldenburg", distance: "~20 Min." },
+      { name: "Delmenhorst", href: "/versicherung-delmenhorst", region: "Kreisfreie Stadt", distance: "~25 Min." },
     ]
   }
 };
@@ -867,6 +867,10 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                       ERGO Beratung {link.name}
                     </p>
                     <p className="text-xs text-gray-500 mt-0.5">{link.region}</p>
+                    <span className="inline-flex items-center gap-1 mt-1.5 text-xs font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">
+                      <Car className="w-3 h-3" />
+                      {link.distance} entfernt
+                    </span>
                   </div>
                   <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#003781] shrink-0 transition-colors" />
                 </Link>
