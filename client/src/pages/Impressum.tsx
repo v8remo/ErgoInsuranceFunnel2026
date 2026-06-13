@@ -54,7 +54,13 @@ export default function Impressum() {
                   <div className="flex items-center">
                     <Phone className="w-4 h-4 text-ergo-red mr-3" />
                     <div>
-                      <span className="font-semibold">Telefon:</span> +49 15566 771019
+                      <span className="font-semibold">Mobil:</span> <a href="tel:+4915566771019" className="hover:text-ergo-red transition-colors">+49 15566 771019</a>
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <Phone className="w-4 h-4 text-ergo-red mr-3" />
+                    <div>
+                      <span className="font-semibold">Haustelefon:</span> <a href="tel:+4942212959999" className="hover:text-ergo-red transition-colors">+49 4221 2959999</a>
                     </div>
                   </div>
                   <div className="flex items-center">

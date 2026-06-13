@@ -15,7 +15,7 @@ export default function Home() {
           "alternateName": "ERGO Versicherung Ganderkesee – Morino Stübe",
           "@id": "https://ergo-ganderkesee.de",
           "url": "https://ergo-ganderkesee.de",
-          "telephone": "+4915566771019",
+          "telephone": ["+4915566771019", "+4942212959999"],
           "email": "morino.stuebe@ergo.de",
           "description": "Ihr ERGO Versicherungsberater in Ganderkesee, Delmenhorst und Oldenburg. Kostenlose Versicherungsanalyse und persönliche Beratung.",
           "address": {

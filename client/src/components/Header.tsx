@@ -160,13 +160,22 @@ export default function Header() {
               Termin buchen
             </Link>
 
-            <a
-              href="tel:015566771019"
-              className="hidden lg:flex items-center gap-1.5 text-gray-700 hover:text-ergo-red transition-colors text-sm"
-            >
-              <Phone className="w-4 h-4" />
-              <span className="font-medium">015566 771019</span>
-            </a>
+            <div className="hidden lg:flex flex-col items-end gap-0.5">
+              <a
+                href="tel:015566771019"
+                className="flex items-center gap-1.5 text-gray-700 hover:text-ergo-red transition-colors text-sm"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span className="font-medium">015566 771019</span>
+              </a>
+              <a
+                href="tel:042212959999"
+                className="flex items-center gap-1.5 text-gray-500 hover:text-ergo-red transition-colors text-xs"
+              >
+                <Phone className="w-3 h-3" />
+                <span>04221 2959999</span>
+              </a>
+            </div>
 
             <a
               href="tel:015566771019"
@@ -261,14 +270,21 @@ export default function Header() {
                   </div>
                 </div>
 
-                {/* Bottom: Phone CTA */}
-                <div className="px-4 py-4 border-t border-gray-100">
+                {/* Bottom: Phone CTAs */}
+                <div className="px-4 py-4 border-t border-gray-100 space-y-2">
                   <a
                     href="tel:015566771019"
                     className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-ergo-red text-white font-semibold text-sm hover:bg-red-700 transition-colors"
                   >
                     <Phone className="w-4 h-4" />
-                    015566 771019 · Jetzt anrufen
+                    015566 771019 · Mobil
+                  </a>
+                  <a
+                    href="tel:042212959999"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gray-100 text-gray-700 font-medium text-sm hover:bg-gray-200 transition-colors"
+                  >
+                    <Phone className="w-4 h-4" />
+                    04221 2959999 · Büro
                   </a>
                 </div>
 
