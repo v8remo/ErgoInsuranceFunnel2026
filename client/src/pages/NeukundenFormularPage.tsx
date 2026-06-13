@@ -216,6 +216,9 @@ export default function NeukundenFormularPage() {
           <div className="ml-auto text-right">
             <div className="text-xs text-gray-500">Fragen? Rufen Sie uns an:</div>
             <a href="tel:015566771019" className="text-sm font-semibold text-[#003781]">015566 771019</a>
+            <div className="text-xs text-gray-400 mt-0.5">
+              Büro: <a href="tel:042212959999" className="hover:text-[#003781] transition-colors">04221 2959999</a>
+            </div>
           </div>
         </div>
 

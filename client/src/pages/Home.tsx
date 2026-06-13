@@ -58,6 +58,33 @@ export default function Home() {
             "reviewCount": "247",
             "bestRating": "5"
           },
+          "contactPoint": [
+            {
+              "@type": "ContactPoint",
+              "telephone": "+4915566771019",
+              "contactType": "customer service",
+              "availableLanguage": "de",
+              "contactOption": "TollFree",
+              "hoursAvailable": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+                "opens": "09:00",
+                "closes": "18:00"
+              }
+            },
+            {
+              "@type": "ContactPoint",
+              "telephone": "+4942212959999",
+              "contactType": "customer service",
+              "availableLanguage": "de",
+              "hoursAvailable": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+                "opens": "09:00",
+                "closes": "18:00"
+              }
+            }
+          ],
           "sameAs": [
             "https://www.linkedin.com/in/morino-stuebe",
             "https://www.instagram.com/morino_stuebe"

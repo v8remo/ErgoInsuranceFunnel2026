@@ -252,7 +252,7 @@ export default function ProfessionalErgoLanding() {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="text-base text-gray-600 leading-relaxed mb-6 md:text-lg max-w-xl"
             >
-              Ob Kfz, Zahnzusatz, Wohngebäude oder Haftpflicht – wir beraten Sie individuell und transparent.
+              Kostenlose Versicherungsanalyse – wir decken Lücken auf, eliminieren Doppelversicherungen und sichern bis zu 15% Bündelnachlass.
             </motion.p>
 
             {/* ── QUIZ CARD – embedded in hero ── */}
@@ -710,21 +710,21 @@ export default function ProfessionalErgoLanding() {
           className="grid grid-cols-2 gap-3"
         >
           {[
-            { href: '/schaden', icon: '🛡️', label: 'Schaden melden', sub: 'KFZ, Hausrat & mehr', bg: 'bg-red-50', tracking: 'schaden' },
-            { href: '/schaden-unfall', icon: '🚑', label: 'Unfall melden', sub: 'Unfallversicherung', bg: 'bg-amber-50', tracking: 'schaden_unfall' },
-            { href: '/kennzeichen', icon: '🚗', label: 'eVB & Kennzeichen', sub: 'eVB & Versicherungskennzeichen', bg: 'bg-amber-50', tracking: 'kennzeichen' },
-            { href: '/dokumente', icon: '📄', label: 'Dokumente', sub: 'Einreichen & unterschreiben', bg: 'bg-blue-50', tracking: 'dokumente' },
-            { href: '/termin', icon: '📅', label: 'Termin buchen', sub: 'Online-Terminvereinbarung', bg: 'bg-green-50', tracking: 'termin' },
+            { href: '/schaden', icon: '🛡️', label: 'Schaden melden', sub: 'KFZ, Hausrat & mehr', bg: 'bg-red-50', border: 'hover:border-red-200', tracking: 'schaden' },
+            { href: '/schaden-unfall', icon: '🚑', label: 'Unfall melden', sub: 'Unfallversicherung', bg: 'bg-amber-50', border: 'hover:border-amber-200', tracking: 'schaden_unfall' },
+            { href: '/kennzeichen', icon: '🚗', label: 'eVB & Kennzeichen', sub: 'eVB & Versicherungskennzeichen', bg: 'bg-amber-50', border: 'hover:border-amber-200', tracking: 'kennzeichen' },
+            { href: '/dokumente', icon: '📄', label: 'Dokumente', sub: 'Einreichen & unterschreiben', bg: 'bg-blue-50', border: 'hover:border-blue-200', tracking: 'dokumente' },
+            { href: '/termin', icon: '📅', label: 'Termin buchen', sub: 'Online-Terminvereinbarung', bg: 'bg-green-50', border: 'hover:border-green-200', tracking: 'termin' },
           ].map((item) => (
             <Link key={item.href} href={item.href} onClick={() => trackEvent('tool_clicked', { tool: item.tracking })}>
               <motion.div
                 {...staggerChild}
-                whileHover={{ y: -4, boxShadow: "0 8px 20px rgba(0,0,0,0.08)" }}
-                className="flex flex-col items-center gap-2 bg-white border border-gray-200 rounded-xl p-4 hover:border-gray-300 transition-all cursor-pointer text-center"
+                whileHover={{ y: -4, boxShadow: "0 12px 30px rgba(0,0,0,0.08)" }}
+                className={`flex flex-col items-center gap-2 bg-white border border-gray-100 rounded-xl p-4 ${item.border} transition-all cursor-pointer text-center shadow-sm`}
               >
                 <div className={`w-10 h-10 rounded-full ${item.bg} flex items-center justify-center text-lg`}>{item.icon}</div>
                 <span className="font-semibold text-gray-900 text-sm">{item.label}</span>
-                <span className="text-[11px] text-gray-400 leading-tight">{item.sub}</span>
+                <span className="text-[11px] text-gray-500 leading-tight">{item.sub}</span>
               </motion.div>
             </Link>
           ))}
