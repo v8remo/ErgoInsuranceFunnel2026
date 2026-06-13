@@ -50,7 +50,7 @@ export const spartenConfigs: Record<string, SpartenConfig> = {
     source: 'lp_kfz',
     seo: {
       title: 'Kfz-Versicherung Ganderkesee – Jetzt bis zu 30% sparen | ERGO',
-      description: 'Kfz-Versicherung bei ERGO Agentur Stübe in Ganderkesee. Persönliche Beratung, Top-Tarife und bis zu 30% Ersparnis. Jetzt kostenlosen Vergleich starten!',
+      description: 'ERGO Versicherung Ganderkesee – Kfz-Versicherung – Jetzt kostenlos beraten lassen. Persönliche Beratung, Top-Tarife & bis zu 30% Ersparnis durch Morino Stübe. Tel. 04221 2959999.',
       keywords: 'Kfz-Versicherung, Autoversicherung, Kfz Ganderkesee, ERGO Kfz, Autoversicherung vergleichen, Kfz-Haftpflicht, Teilkasko, Vollkasko',
     },
     hero: {
@@ -87,7 +87,7 @@ export const spartenConfigs: Record<string, SpartenConfig> = {
     source: 'lp_hausrat',
     seo: {
       title: 'Hausratversicherung Ganderkesee – Ihr Zuhause optimal geschützt | ERGO',
-      description: 'Hausratversicherung bei ERGO Agentur Stübe. Schutz vor Einbruch, Feuer, Wasser und Sturm. Individuelle Beratung in Ganderkesee. Jetzt kostenlos anfragen!',
+      description: 'ERGO Versicherung Ganderkesee – Hausratversicherung – Jetzt kostenlos beraten lassen. Schutz vor Einbruch, Feuer & Wasser. Individuelle Beratung durch Morino Stübe. Tel. 04221 2959999.',
       keywords: 'Hausratversicherung, Hausrat Ganderkesee, ERGO Hausrat, Einbruch Versicherung, Fahrrad versichern, Glasversicherung',
     },
     hero: {
@@ -122,7 +122,7 @@ export const spartenConfigs: Record<string, SpartenConfig> = {
     source: 'lp_haftpflicht',
     seo: {
       title: 'Haftpflichtversicherung Ganderkesee – Die wichtigste Versicherung | ERGO',
-      description: 'Private Haftpflichtversicherung bei ERGO Agentur Stübe. Die wichtigste Versicherung überhaupt – schon ab wenigen Euro monatlich. Jetzt beraten lassen!',
+      description: 'ERGO Versicherung Ganderkesee – Haftpflichtversicherung – Jetzt kostenlos beraten lassen. Die wichtigste Versicherung ab wenigen Euro im Monat. Persönliche Beratung. Tel. 04221 2959999.',
       keywords: 'Haftpflichtversicherung, Privathaftpflicht, Haftpflicht Ganderkesee, ERGO Haftpflicht, Haftpflicht günstig, Familienhaftpflicht',
     },
     hero: {
@@ -158,7 +158,7 @@ export const spartenConfigs: Record<string, SpartenConfig> = {
     source: 'lp_rechtsschutz',
     seo: {
       title: 'Rechtsschutzversicherung Ganderkesee – Ihr Recht durchsetzen | ERGO',
-      description: 'Rechtsschutzversicherung bei ERGO Agentur Stübe. Setzen Sie Ihr Recht durch – ohne Kostenrisiko. Privat, Beruf und Verkehr abgesichert. Jetzt beraten lassen!',
+      description: 'ERGO Versicherung Ganderkesee – Rechtsschutzversicherung – Jetzt kostenlos beraten lassen. Recht durchsetzen ohne Kostenrisiko – privat, beruflich & im Verkehr. Tel. 04221 2959999.',
       keywords: 'Rechtsschutzversicherung, Rechtsschutz Ganderkesee, ERGO Rechtsschutz, Anwaltskosten, Verkehrsrechtsschutz, Arbeitsrechtsschutz',
     },
     hero: {
@@ -194,7 +194,7 @@ export const spartenConfigs: Record<string, SpartenConfig> = {
     source: 'lp_berufsunfaehigkeit',
     seo: {
       title: 'Berufsunfähigkeitsversicherung Ganderkesee – Einkommen absichern | ERGO',
-      description: 'Berufsunfähigkeitsversicherung bei ERGO Agentur Stübe. Schützen Sie Ihr Einkommen – jeder 4. wird berufsunfähig. Jetzt persönlich beraten lassen!',
+      description: 'ERGO Versicherung Ganderkesee – Berufsunfähigkeitsversicherung – Jetzt kostenlos beraten lassen. Einkommen absichern – jeder 4. Arbeitnehmer wird berufsunfähig. Tel. 04221 2959999.',
       keywords: 'Berufsunfähigkeitsversicherung, BU-Versicherung, Berufsunfähigkeit, Erwerbsminderung, ERGO BU, Einkommen absichern, BU Ganderkesee',
     },
     hero: {
@@ -230,7 +230,7 @@ export const spartenConfigs: Record<string, SpartenConfig> = {
     source: 'lp_zahnzusatz',
     seo: {
       title: 'Zahnzusatzversicherung Ganderkesee – Bis zu 100% Erstattung | ERGO',
-      description: 'Zahnzusatzversicherung bei ERGO Agentur Stübe. Bis zu 100% für Zahnersatz, Implantate und Kieferorthopädie. Jetzt kostenlos beraten lassen!',
+      description: 'ERGO Versicherung Ganderkesee – Zahnzusatzversicherung – Jetzt kostenlos beraten lassen. Bis zu 100% Erstattung für Zahnersatz & Implantate. Persönliche Beratung. Tel. 04221 2959999.',
       keywords: 'Zahnzusatzversicherung, Zahnersatz, Implantate Versicherung, ERGO Zahnzusatz, Kieferorthopädie, Zahnzusatz Ganderkesee',
     },
     hero: {
@@ -267,7 +267,7 @@ export const spartenConfigs: Record<string, SpartenConfig> = {
     source: 'lp_gewerbe',
     seo: {
       title: 'Unternehmensversicherung Ganderkesee – Ihr Betrieb rundum geschützt | ERGO',
-      description: 'Gewerbeversicherung bei ERGO Agentur Stübe in Ganderkesee. Betriebshaftpflicht, Inhaltsversicherung, Cyber-Schutz und mehr. Persönliche Beratung für Selbstständige, Handwerker und KMU. Jetzt kostenlos anfragen!',
+      description: 'ERGO Versicherung Ganderkesee – Unternehmensversicherung – Jetzt kostenlos beraten lassen. Betriebshaftpflicht, Cyber-Schutz & mehr für Selbstständige und KMU. Tel. 04221 2959999.',
       keywords: 'Unternehmensversicherung, Gewerbeversicherung, Betriebshaftpflicht, Betriebsinhaltsversicherung, Cyberversicherung, Selbstständige versichern, KMU Versicherung, Ganderkesee',
     },
     hero: {
