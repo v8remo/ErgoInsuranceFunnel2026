@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Phone, Calendar, ChevronDown, Home, Scale, Smile, Car, Briefcase, HeartHandshake, FileText, AlertTriangle, Tag, LayoutGrid, Activity } from "lucide-react";
+import { Menu, Phone, Calendar, ChevronDown, Home, Scale, Smile, Car, Briefcase, HeartHandshake, FileText, AlertTriangle, Tag, LayoutGrid, Activity, MessageCircle } from "lucide-react";
 
 const INSURANCE_LINKS = [
   { href: "/hausrat", label: "Hausrat", icon: Home, desc: "Schutz für Ihr Hab & Gut" },
@@ -16,6 +16,7 @@ const INSURANCE_LINKS = [
 
 const SERVICE_LINKS = [
   { href: "/termin", label: "Termin buchen", icon: Calendar },
+  { href: "/whatsapp", label: "WhatsApp Service", icon: MessageCircle },
   { href: "/dokumente", label: "Dokument einreichen", icon: FileText },
   { href: "/schaden", label: "Schaden melden", icon: AlertTriangle },
   { href: "/schaden-unfall", label: "Unfall melden", icon: AlertTriangle },

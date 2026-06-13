@@ -32,6 +32,7 @@ const InstagramGenerator = lazy(() => import("@/pages/InstagramGenerator"));
 const BestandskundenPage = lazy(() => import("@/pages/BestandskundenPage"));
 const SchadenUnfallPage = lazy(() => import("@/pages/SchadenUnfallPage"));
 const NeukundenFormularPage = lazy(() => import("@/pages/NeukundenFormularPage"));
+const WhatsAppServicePage = lazy(() => import("@/pages/WhatsAppServicePage"));
 import { spartenConfigs } from '@/data/spartenConfig';
 const SpartenLandingPage = lazy(() => import("@/pages/SpartenLandingPage"));
 
@@ -101,6 +102,7 @@ function AppContent() {
           <Route path="/aktion/:slug" component={AktionsSeiten} />
           <Route path="/admin/instagram" component={InstagramGenerator} />
           <Route path="/bestandskunden" component={BestandskundenPage} />
+          <Route path="/whatsapp" component={WhatsAppServicePage} />
           <Route path="/kfz">{() => <SpartenLandingPage config={spartenConfigs.kfz} />}</Route>
           <Route path="/hausrat">{() => <SpartenLandingPage config={spartenConfigs.hausrat} />}</Route>
           <Route path="/haftpflicht">{() => <SpartenLandingPage config={spartenConfigs.haftpflicht} />}</Route>

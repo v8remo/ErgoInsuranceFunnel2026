@@ -343,19 +343,15 @@ export default function BestandskundenPage() {
                 </div>
               </Link>
 
-              <a
-                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hallo Herr Stübe, ich bin Kunde bei ERGO und habe eine Frage.')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link href="/whatsapp">
                 <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[110px]">
                   <div className="w-12 h-12 bg-[#25d366]/10 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#25d366]/20 transition-colors">
                     <MessageCircle className="w-6 h-6 text-[#25d366]" />
                   </div>
                   <h3 className="font-bold text-gray-900 text-xs sm:text-sm">WhatsApp</h3>
-                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Direkt schreiben</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Service & Chat</p>
                 </div>
-              </a>
+              </Link>
             </div>
           </div>
         </section>
