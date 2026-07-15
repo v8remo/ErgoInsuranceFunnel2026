@@ -10,7 +10,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/not-found";
-import CallbackWidget from "@/components/CallbackWidget";
 import CookieConsent from "@/components/CookieConsent";
 
 const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
@@ -123,7 +122,6 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <AppContent />
-        <CallbackWidget />
         <CookieConsent />
       </TooltipProvider>
     </QueryClientProvider>
