@@ -1,10 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Link } from 'wouter';
 import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
-import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, Award, Trophy, Instagram, ExternalLink, ChevronRight, ChevronDown } from 'lucide-react';
+import { Phone, Mail, Shield, Star, CheckCircle, MapPin, MessageSquare, Award, Trophy, Instagram, ExternalLink, ChevronRight, ChevronDown, CarFront, Home, SmilePlus, BriefcaseBusiness, Building2, Layers3, Clock3 } from 'lucide-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import FunnelOverlay from './FunnelOverlay';
 import '@/styles/funnel.css';
+import './ProfessionalErgoLanding.css';
 
 import ichBinDaPhoto from '@assets/optimized/untitled2.webp';
 import beraterPhoto from '@assets/optimized/ich_bin_da.webp';
@@ -90,12 +91,12 @@ const faqItems = [
 /* ═══════ Component ═══════ */
 
 const QUIZ_OPTIONS = [
-  { label: 'Kfz-Versicherung', icon: '🚗', type: 'kfz', source: 'hero_quiz' },
-  { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat', source: 'hero_quiz' },
-  { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz', source: 'hero_quiz' },
-  { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu', source: 'hero_quiz' },
-  { label: 'Gewerbe & Betrieb', icon: '🏢', type: 'gewerbe', source: 'lp_gewerbe' },
-  { label: 'Alle prüfen', icon: '✅', type: 'all', source: 'hero_quiz' },
+  { label: 'Kfz-Versicherung', icon: CarFront, type: 'kfz', source: 'hero_quiz' },
+  { label: 'Hausrat & Haftpflicht', icon: Home, type: 'hausrat', source: 'hero_quiz' },
+  { label: 'Zahnzusatz', icon: SmilePlus, type: 'zahnzusatz', source: 'hero_quiz' },
+  { label: 'Berufsunfähigkeit', icon: BriefcaseBusiness, type: 'bu', source: 'hero_quiz' },
+  { label: 'Gewerbe & Betrieb', icon: Building2, type: 'gewerbe', source: 'lp_gewerbe' },
+  { label: 'Alle prüfen', icon: Layers3, type: 'all', source: 'hero_quiz' },
 ];
 
 export default function ProfessionalErgoLanding() {
@@ -169,7 +170,7 @@ export default function ProfessionalErgoLanding() {
   };
 
   return (
-    <div className="ds-marketing min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden pb-24 sm:pb-0">
+    <div className="ds-marketing ergo-landing min-h-screen overflow-hidden pb-24 sm:pb-0">
 
       {/* ──────── E-SCOOTER KENNZEICHEN BANNER ──────── */}
       <motion.div
@@ -178,10 +179,10 @@ export default function ProfessionalErgoLanding() {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <Link href="/kennzeichen?type=kennzeichen" onClick={() => trackEvent('escooter_banner_clicked', { source: 'top_banner' })}>
-          <div className="mx-4 mt-4 md:mt-6 max-w-6xl md:mx-auto bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 rounded-2xl p-4 md:p-5 flex items-center gap-3 md:gap-5 shadow-lg cursor-pointer active:scale-[0.99] transition-transform group relative overflow-hidden">
+          <div className="ergo-promo mx-4 mt-3 md:mt-5 max-w-6xl md:mx-auto rounded-2xl p-3.5 md:p-4 flex items-center gap-3 md:gap-5 cursor-pointer active:scale-[0.99] transition-transform group relative overflow-hidden">
             <div className="absolute inset-0 bg-white/5 group-hover:bg-white/10 transition-colors" />
             <div className="relative flex items-center gap-3 md:gap-5 w-full">
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-white/20 flex items-center justify-center text-2xl md:text-3xl shrink-0">🛴</div>
+              <div className="ergo-promo-mark w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center shrink-0"><span className="text-xs font-black leading-tight text-center">E-<br />SCOOTER</span></div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="inline-block bg-white text-green-700 text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Ab 01.03.2026</span>
@@ -197,18 +198,18 @@ export default function ProfessionalErgoLanding() {
       </motion.div>
 
       {/* ──────── HERO ──────── */}
-      <section ref={heroRef} className="px-4 pt-6 pb-10 md:pt-10 md:pb-16 max-w-6xl mx-auto relative overflow-hidden">
+       <section ref={heroRef} className="ergo-hero px-4 pt-7 pb-8 md:pt-12 md:pb-14 max-w-6xl mx-auto relative overflow-hidden">
         {/* Subtle dot pattern background */}
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
-        <div className="flex flex-col md:flex-row md:items-center md:gap-10 lg:gap-14 relative">
+         <div className="flex flex-col md:flex-row md:items-stretch md:gap-8 lg:gap-12 relative">
           {/* LEFT: Text + CTAs */}
-          <div className="flex-1 text-center md:text-left mb-8 md:mb-0">
+           <div className="ergo-hero-copy flex-1 text-center md:text-left mb-8 md:mb-0">
             <motion.span
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="inline-block bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white text-xs font-bold tracking-wide uppercase px-4 py-1.5 rounded-full mb-5 md:text-sm shadow-lg shadow-red-500/20"
+               className="inline-flex items-center gap-2 ergo-eyebrow text-xs font-bold tracking-wide uppercase px-3.5 py-1.5 rounded-full mb-5 md:text-sm"
             >
               ERGO Versicherungsfachmann · Ganderkesee
             </motion.span>
@@ -217,10 +218,10 @@ export default function ProfessionalErgoLanding() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-xl font-extrabold text-gray-900 leading-tight mb-3 sm:text-2xl md:text-3xl lg:text-4xl"
+               className="text-3xl font-extrabold text-white leading-[1.05] mb-4 sm:text-4xl md:text-5xl lg:text-[3.65rem]"
             >
               Ihre ERGO Agentur in Ganderkesee –{' '}
-              <span className="bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
+               <span className="ergo-hero-highlight">
                 Persönliche Beratung rund um Ihre Absicherung
               </span>
             </motion.h1>
@@ -230,7 +231,7 @@ export default function ProfessionalErgoLanding() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.35 }}
-              className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-4"
+               className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-5"
             >
               <div className="flex items-center gap-2">
                 <div className="flex">
@@ -238,10 +239,10 @@ export default function ProfessionalErgoLanding() {
                     <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                   ))}
                 </div>
-                <span className="text-sm font-semibold text-gray-700">4.9/5</span>
-                <span className="text-xs text-gray-500">(247 Bewertungen)</span>
+                 <span className="text-sm font-semibold text-white">4.9/5</span>
+                 <span className="text-xs text-white/60">(247 Bewertungen)</span>
               </div>
-              <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-0.5 rounded-full">
+               <span className="text-xs text-emerald-200 font-medium bg-emerald-400/15 px-2.5 py-1 rounded-full">
                 Heute noch {getAvailableSlots()} freie Termine
               </span>
             </motion.div>
@@ -250,7 +251,7 @@ export default function ProfessionalErgoLanding() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="text-base text-gray-600 leading-relaxed mb-6 md:text-lg max-w-xl"
+               className="text-base text-slate-200 leading-relaxed mb-7 md:text-lg max-w-xl"
             >
               Kostenlose Versicherungsanalyse – wir decken Lücken auf, eliminieren Doppelversicherungen und sichern bis zu 15% Bündelnachlass.
             </motion.p>
@@ -262,7 +263,7 @@ export default function ProfessionalErgoLanding() {
               transition={{ duration: 0.55, delay: 0.5 }}
               className="w-full"
             >
-              <div className="rounded-2xl border-2 border-gray-100 bg-white shadow-xl shadow-gray-200/60 p-4 sm:p-5 md:p-6">
+               <div className="ergo-quiz rounded-2xl p-4 sm:p-5 md:p-6">
                 <p className="text-[11px] font-bold uppercase tracking-widest text-[#E2001A] mb-1">Kostenlose Analyse – In 2 Minuten</p>
                 <p className="text-sm sm:text-base font-bold text-gray-900 mb-4 leading-snug">
                   Was möchten Sie versichern?
@@ -289,7 +290,7 @@ export default function ProfessionalErgoLanding() {
                           : 'border-gray-200 bg-gray-50 hover:border-[#E2001A] hover:bg-red-50 hover:text-[#E2001A]'
                         }`}
                     >
-                      <span className="text-2xl leading-none shrink-0">{opt.icon}</span>
+                       <span className="ergo-quiz-icon leading-none shrink-0"><opt.icon className="w-5 h-5" /></span>
                       <span className={`font-semibold text-sm ${opt.type === 'all' ? 'text-white' : 'text-gray-800 group-hover:text-[#E2001A]'}`}>
                         {opt.label}
                       </span>
@@ -298,7 +299,7 @@ export default function ProfessionalErgoLanding() {
                   ))}
                 </div>
                 <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
-                  <p className="text-[10px] sm:text-xs text-gray-400">🔒 100% kostenlos & unverbindlich · DSGVO-konform</p>
+                   <p className="text-[10px] sm:text-xs text-gray-400">100% kostenlos & unverbindlich · DSGVO-konform</p>
                   <a
                     href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
                     target="_blank"
@@ -318,13 +319,13 @@ export default function ProfessionalErgoLanding() {
           {/* RIGHT: Video with parallax */}
           <motion.div
             style={{ y: heroParallaxY }}
-            className="flex-shrink-0 w-full md:w-[45%] lg:w-[42%]"
+             className="ergo-hero-media flex-shrink-0 w-full md:w-[45%] lg:w-[42%]"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-              className="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl aspect-video relative"
+               className="ergo-video rounded-2xl overflow-hidden aspect-video relative"
             >
               {!videoPlaying ? (
                 <button
@@ -367,7 +368,7 @@ export default function ProfessionalErgoLanding() {
                 </video>
               )}
             </motion.div>
-            <p className="text-center text-gray-400 text-xs mt-2">Morino Stübe – Ihr ERGO Berater</p>
+             <div className="ergo-video-caption flex items-center justify-between text-xs mt-3"><span>Morino Stübe – Ihr ERGO Berater</span><span className="flex items-center gap-1"><Clock3 className="w-3.5 h-3.5" /> Antwort innerhalb 24 h</span></div>
           </motion.div>
         </div>
       </section>

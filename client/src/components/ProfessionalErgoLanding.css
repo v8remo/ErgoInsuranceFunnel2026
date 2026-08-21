@@ -1,0 +1,133 @@
+.ergo-landing {
+  --hero-ink: #071c3f;
+  --hero-blue: #0b3d78;
+  --hero-red: #e30620;
+  background:
+    radial-gradient(circle at 85% 8%, rgba(227, 6, 32, .07), transparent 22rem),
+    linear-gradient(180deg, #f6f8fc 0%, #fff 42%, #f6f8fc 100%);
+}
+
+.ergo-promo {
+  background: #e30620;
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(227, 6, 32, .2);
+}
+
+.ergo-promo-mark {
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.28);
+  color: #fff;
+  letter-spacing: .04em;
+  font-size: .62rem;
+}
+
+.ergo-hero {
+  max-width: 1200px;
+  margin-top: 1rem;
+  border-radius: 1.75rem;
+  background:
+    linear-gradient(112deg, rgba(7,28,63,.98) 0%, rgba(11,61,120,.98) 62%, rgba(10,49,99,.96) 100%);
+  box-shadow: 0 24px 60px rgba(7, 28, 63, .18);
+}
+
+.ergo-hero::before {
+  content: "";
+  position: absolute;
+  width: 30rem;
+  height: 30rem;
+  right: -12rem;
+  top: -15rem;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.ergo-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 10% 0 auto;
+  width: 15rem;
+  height: 4px;
+  background: var(--hero-red);
+}
+
+.ergo-hero-copy,
+.ergo-hero-media {
+  position: relative;
+  z-index: 1;
+}
+
+.ergo-eyebrow {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.24);
+  color: #fff;
+}
+
+.ergo-eyebrow::before {
+  content: "";
+  width: .42rem;
+  height: .42rem;
+  border-radius: 50%;
+  background: #ffb3bb;
+  box-shadow: 0 0 0 4px rgba(255,179,187,.14);
+}
+
+.ergo-hero-highlight {
+  color: #ffb0b8;
+}
+
+.ergo-quiz {
+  background: #fff;
+  border: 1px solid rgba(255,255,255,.7);
+  box-shadow: 0 18px 38px rgba(0, 16, 46, .22);
+}
+
+.ergo-quiz-icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: .6rem;
+  color: var(--hero-blue);
+  background: #edf3fa;
+}
+
+.ergo-video {
+  border: 7px solid rgba(255,255,255,.9);
+  background: #071c3f;
+  box-shadow: 0 22px 45px rgba(0, 12, 36, .34);
+}
+
+.ergo-video-caption {
+  color: rgba(255,255,255,.72);
+}
+
+.ergo-video-caption span:last-child {
+  color: #b9e7d2;
+}
+
+@media (min-width: 768px) {
+  .ergo-hero-media {
+    align-self: center;
+    transform: translateY(1.25rem);
+  }
+}
+
+@media (max-width: 767px) {
+  .ergo-hero {
+    margin-top: .75rem;
+    border-radius: 1.25rem;
+  }
+
+  .ergo-hero::after {
+    width: 7rem;
+  }
+
+  .ergo-promo p {
+    max-width: 15rem;
+  }
+
+  .ergo-video-caption {
+    font-size: .68rem;
+  }
+}
