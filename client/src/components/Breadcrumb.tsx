@@ -21,28 +21,28 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
       <div className="max-w-7xl mx-auto">
         <ol className="flex items-center space-x-2 text-sm">
           <li>
-            <Link 
-              href="/" 
-              className="flex items-center text-gray-500 hover:text-ergo-red transition-colors"
+            <Link
+              href="/"
+              className="flex items-center text-ergo-mute hover:text-ergo-red transition-colors"
               aria-label="Zur Startseite"
             >
               <Home className="w-4 h-4" />
               <span className="sr-only">Home</span>
             </Link>
           </li>
-          
+
           {breadcrumbItems.map((item, index) => (
             <li key={index} className="flex items-center">
-              <ChevronRight className="w-4 h-4 text-gray-400 mx-2" />
+              <ChevronRight className="w-4 h-4 text-ergo-line mx-2" />
               {item.href ? (
-                <Link 
+                <Link
                   href={item.href}
-                  className="text-gray-500 hover:text-ergo-red transition-colors"
+                  className="text-ergo-mute hover:text-ergo-red transition-colors"
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span className="text-ergo-red font-medium" aria-current="page">
+                <span className="text-ergo-red font-bold" aria-current="page">
                   {item.label}
                 </span>
               )}

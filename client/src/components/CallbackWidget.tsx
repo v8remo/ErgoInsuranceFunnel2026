@@ -135,14 +135,14 @@ export default function CallbackWidget() {
   if (hidden) return null;
 
   const inputCls = (field: string) =>
-    `w-full p-2.5 border-2 rounded-xl text-sm outline-none transition-colors ${errors[field] ? 'border-red-500' : 'border-gray-200 focus:border-[#003781]'}`;
+    `w-full p-2.5 border rounded text-sm outline-none transition-colors ${errors[field] ? 'border-ergo-red' : 'border-ergo-line focus:border-ergo-red'}`;
 
   return (
     <>
       <style>{`
         @keyframes cb-pulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(226, 0, 26, 0.5); }
-          50% { box-shadow: 0 0 0 12px rgba(226, 0, 26, 0); }
+          0%, 100% { box-shadow: 0 0 0 0 rgba(142, 0, 56, 0.4); }
+          50% { box-shadow: 0 0 0 12px rgba(142, 0, 56, 0); }
         }
         .cb-pulse { animation: cb-pulse 2s ease-in-out infinite; }
         @keyframes cb-pop-in {
@@ -162,7 +162,7 @@ export default function CallbackWidget() {
       `}</style>
 
       {showTooltip && !isOpen && (
-        <div className="cb-tooltip fixed z-[9997] right-5 bg-white text-gray-800 text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg border border-gray-100"
+        <div className="cb-tooltip fixed z-[9997] right-5 bg-white text-ergo-ink text-sm font-medium px-4 py-2.5 rounded-lg shadow-[0_8px_24px_rgba(38,38,38,0.14)] border border-ergo-line"
           style={{ bottom: isHome ? 'calc(env(safe-area-inset-bottom, 0px) + 120px)' : 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}>
           Rückruf gewünscht?
         </div>
@@ -171,7 +171,7 @@ export default function CallbackWidget() {
       <button
         ref={buttonRef}
         onClick={() => { setIsOpen(!isOpen); setShowTooltip(false); }}
-        className={`cb-pulse fixed z-[9998] right-4 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#E2001A] text-white flex items-center justify-center shadow-lg active:scale-95 transition-transform sm:right-5`}
+        className={`cb-pulse fixed z-[9998] right-4 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-ergo-red hover:bg-ergo-red-hover text-white flex items-center justify-center shadow-[0_8px_24px_rgba(38,38,38,0.2)] transition-colors sm:right-5`}
         style={{ bottom: isHome ? 'calc(env(safe-area-inset-bottom, 0px) + 60px)' : 'calc(env(safe-area-inset-bottom, 0px) + 20px)' }}
         aria-label="Rückruf anfordern"
       >
@@ -183,12 +183,12 @@ export default function CallbackWidget() {
       {isOpen && (
         <div
           ref={popupRef}
-          className="cb-pop-in fixed z-[9999] right-4 sm:right-5 w-[320px] max-w-[calc(100vw-32px)] bg-white rounded-2xl shadow-2xl overflow-y-auto"
+          className="cb-pop-in fixed z-[9999] right-4 sm:right-5 w-[320px] max-w-[calc(100vw-32px)] bg-white rounded-lg border border-ergo-line shadow-[0_8px_24px_rgba(38,38,38,0.2)] overflow-y-auto"
           style={{ bottom: isHome ? 'calc(env(safe-area-inset-bottom, 0px) + 128px)' : 'calc(env(safe-area-inset-bottom, 0px) + 88px)', maxHeight: 'calc(100vh - 160px)' }}
         >
           <button
             onClick={close}
-            className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-colors text-lg font-bold"
+            className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 text-ergo-stone hover:bg-white hover:text-ergo-ink transition-colors text-lg font-bold"
           >
             ×
           </button>
@@ -196,57 +196,54 @@ export default function CallbackWidget() {
           {submitted ? (
             <div className="p-6 text-center" role="alert" aria-live="assertive">
               <svg width="56" height="56" viewBox="0 0 56 56" className="mx-auto mb-3">
-                <circle cx="28" cy="28" r="26" fill="#22c55e" opacity="0.15" />
-                <circle cx="28" cy="28" r="26" fill="none" stroke="#22c55e" strokeWidth="2" />
-                <path d="M17 28l7 7 15-15" fill="none" stroke="#22c55e" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="50" style={{ animation: 'cb-check 0.4s ease-out 0.2s forwards', strokeDashoffset: 50 }} />
+                <circle cx="28" cy="28" r="26" fill="#009284" opacity="0.12" />
+                <circle cx="28" cy="28" r="26" fill="none" stroke="#009284" strokeWidth="2" />
+                <path d="M17 28l7 7 15-15" fill="none" stroke="#009284" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="50" style={{ animation: 'cb-check 0.4s ease-out 0.2s forwards', strokeDashoffset: 50 }} />
               </svg>
-              <h3 className="text-lg font-bold text-gray-900 mb-1">Vielen Dank, {form.vorname}!</h3>
-              <p className="text-sm text-gray-600 mb-3">
+              <h3 className="font-serif text-lg font-bold text-ergo-ink mb-1">Vielen Dank, {form.vorname}!</h3>
+              <p className="text-sm text-ergo-stone mb-3">
                 Morino meldet sich {form.callbackTime === 'So früh wie möglich' ? 'so bald wie möglich' : form.callbackTime.toLowerCase()} bei Ihnen unter {form.phone}.
               </p>
-              <a
-                href="/termin"
-                className="inline-flex items-center gap-2 bg-[#003781] text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-[#002a66] transition-colors"
-              >
-                📅 Oder direkt Termin buchen
+              <a href="/termin" className="ergo-btn ergo-btn--secondary ergo-btn--sm text-sm">
+                Oder direkt Termin buchen
               </a>
             </div>
           ) : (
             <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-              <div className="bg-[#E2001A] text-white px-5 py-4">
-                <h3 className="font-bold text-base">Rückruf anfordern</h3>
+              <div className="bg-ergo-red text-white px-5 py-4">
+                <h3 className="font-serif font-bold text-base text-white">Rückruf anfordern</h3>
                 <p className="text-xs opacity-90 mt-0.5">Wir melden uns innerhalb von 24h bei Ihnen</p>
               </div>
 
               <div className="p-4 flex flex-col gap-3">
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label htmlFor="cb-vorname" className="text-xs font-semibold text-gray-700 mb-0.5 block">Vorname *</label>
+                    <label htmlFor="cb-vorname" className="text-xs font-semibold text-ergo-ink mb-0.5 block">Vorname *</label>
                     <input ref={firstInputRef} id="cb-vorname" type="text" value={form.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} aria-invalid={!!errors.vorname} />
-                    {errors.vorname && <span role="alert" className="text-[11px] text-red-500">{errors.vorname}</span>}
+                    {errors.vorname && <span role="alert" className="text-[11px] text-ergo-red">{errors.vorname}</span>}
                   </div>
                   <div>
-                    <label htmlFor="cb-nachname" className="text-xs font-semibold text-gray-700 mb-0.5 block">Nachname *</label>
+                    <label htmlFor="cb-nachname" className="text-xs font-semibold text-ergo-ink mb-0.5 block">Nachname *</label>
                     <input id="cb-nachname" type="text" value={form.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} aria-invalid={!!errors.nachname} />
-                    {errors.nachname && <span role="alert" className="text-[11px] text-red-500">{errors.nachname}</span>}
+                    {errors.nachname && <span role="alert" className="text-[11px] text-ergo-red">{errors.nachname}</span>}
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="cb-phone" className="text-xs font-semibold text-gray-700 mb-0.5 block">Telefonnummer *</label>
+                  <label htmlFor="cb-phone" className="text-xs font-semibold text-ergo-ink mb-0.5 block">Telefonnummer *</label>
                   <input id="cb-phone" type="tel" value={form.phone} onChange={e => updateField('phone', e.target.value)} placeholder="0151 12345678" className={inputCls('phone')} aria-invalid={!!errors.phone} />
-                  {errors.phone && <span role="alert" className="text-[11px] text-red-500">{errors.phone}</span>}
+                  {errors.phone && <span role="alert" className="text-[11px] text-ergo-red">{errors.phone}</span>}
                 </div>
 
                 <div>
-                  <label htmlFor="cb-time" className="text-xs font-semibold text-gray-700 mb-0.5 block">Wann soll ich zurückrufen? *</label>
+                  <label htmlFor="cb-time" className="text-xs font-semibold text-ergo-ink mb-0.5 block">Wann soll ich zurückrufen? *</label>
                   <select id="cb-time" value={form.callbackTime} onChange={e => updateField('callbackTime', e.target.value)} className={inputCls('callbackTime')}>
                     {CALLBACK_TIMES.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
 
                 <div>
-                  <label htmlFor="cb-topic" className="text-xs font-semibold text-gray-700 mb-0.5 block">Worum geht es?</label>
+                  <label htmlFor="cb-topic" className="text-xs font-semibold text-ergo-ink mb-0.5 block">Worum geht es?</label>
                   <select id="cb-topic" value={form.topic} onChange={e => updateField('topic', e.target.value)} className={inputCls('topic')}>
                     <option value="">– Optional auswählen –</option>
                     {TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
@@ -254,9 +251,9 @@ export default function CallbackWidget() {
                 </div>
 
                 {submitError && (
-                  <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm">
-                    <p className="text-red-600 font-medium">{submitError}</p>
-                    <a href="https://wa.me/4915566771019" target="_blank" rel="noopener noreferrer" className="inline-block mt-2 text-green-600 font-semibold text-sm">
+                  <div role="alert" className="bg-ergo-red-light border border-ergo-red/30 rounded-lg p-3 text-sm">
+                    <p className="text-ergo-red font-medium">{submitError}</p>
+                    <a href="https://wa.me/4915566771019" target="_blank" rel="noopener noreferrer" className="inline-block mt-2 text-ergo-check font-semibold text-sm">
                       WhatsApp schreiben
                     </a>
                   </div>
@@ -265,12 +262,12 @@ export default function CallbackWidget() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-[#E2001A] text-white font-semibold text-sm py-3 rounded-xl active:scale-[0.97] transition-transform disabled:opacity-60"
+                  className="ergo-btn ergo-btn--primary w-full text-sm"
                 >
                   {isSubmitting ? 'Wird gesendet...' : 'Rückruf anfordern'}
                 </button>
 
-                <p className="text-[11px] text-gray-400 text-center">
+                <p className="text-[11px] text-ergo-mute text-center">
                   Ihre Daten werden nur zur Terminvereinbarung genutzt.
                 </p>
               </div>

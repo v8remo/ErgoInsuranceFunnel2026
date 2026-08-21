@@ -1,14 +1,15 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'wouter';
-import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 import SEO from '@/components/SEO';
 import FunnelOverlay from '@/components/FunnelOverlay';
 import FAQSection from '@/components/FAQSection';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import { type SpartenConfig } from '@/data/spartenConfig';
 import {
-  Phone, Shield, Star, Users, Clock, CheckCircle,
-  MessageCircle, Award, ArrowRight, ChevronRight, MessageSquare
+  Phone, Shield, Star, Clock, CheckCircle2, MessageCircle, Award,
+  ChevronRight, MessageSquare, CarFront, Home, Scale, SmilePlus,
+  BriefcaseBusiness, Building2, Layers3, Play,
 } from 'lucide-react';
 import beraterPhoto from '@assets/optimized/ich_bin_da.webp';
 
@@ -17,52 +18,20 @@ interface SpartenLandingPageProps {
 }
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 16 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' as const },
-  transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as const },
-};
-
-const staggerContainer = {
-  initial: {},
-  whileInView: { transition: { staggerChildren: 0.1 } },
-  viewport: { once: true, margin: '-60px' as const },
-};
-
-const staggerChild = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
   transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const },
 };
 
-function AnimatedCounter({ target, suffix = '', duration = 2 }: { target: number; suffix?: string; duration?: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true });
-  const motionVal = useMotionValue(0);
-  const springVal = useSpring(motionVal, { duration: duration * 1000 });
-
-  useEffect(() => {
-    if (isInView) motionVal.set(target);
-  }, [isInView, target, motionVal]);
-
-  useEffect(() => {
-    const unsubscribe = springVal.on('change', (v) => {
-      if (ref.current) ref.current.textContent = Math.round(v) + suffix;
-    });
-    return unsubscribe;
-  }, [springVal, suffix]);
-
-  return <span ref={ref}>0{suffix}</span>;
-}
-
 const QUIZ_OPTIONS = [
-  { label: 'Kfz-Versicherung', icon: '🚗', type: 'kfz', source: 'hero_quiz' },
-  { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat', source: 'hero_quiz' },
-  { label: 'Rechtsschutz', icon: '⚖️', type: 'rechtsschutz', source: 'hero_quiz' },
-  { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz', source: 'hero_quiz' },
-  { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu', source: 'hero_quiz' },
-  { label: 'Gewerbe & Betrieb', icon: '🏢', type: 'gewerbe', source: 'lp_gewerbe' },
-  { label: 'Alle prüfen', icon: '✅', type: 'all', source: 'hero_quiz' },
+  { label: 'Kfz-Versicherung', icon: CarFront, type: 'kfz', source: 'hero_quiz' },
+  { label: 'Hausrat & Haftpflicht', icon: Home, type: 'hausrat', source: 'hero_quiz' },
+  { label: 'Rechtsschutz', icon: Scale, type: 'rechtsschutz', source: 'hero_quiz' },
+  { label: 'Zahnzusatz', icon: SmilePlus, type: 'zahnzusatz', source: 'hero_quiz' },
+  { label: 'Berufsunfähigkeit', icon: BriefcaseBusiness, type: 'bu', source: 'hero_quiz' },
+  { label: 'Gewerbe & Betrieb', icon: Building2, type: 'gewerbe', source: 'lp_gewerbe' },
+  { label: 'Alle prüfen', icon: Layers3, type: 'all', source: 'hero_quiz' },
 ];
 
 const TYPE_TO_QUIZ: Record<string, string> = {
@@ -93,48 +62,31 @@ const ergoAwards = [
 
 function ExplainerVideo({ src }: { src: string }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <motion.section
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-      className="py-10 md:py-14 px-4"
-    >
+    <motion.section {...fadeInUp} className="py-10 md:py-14 px-4">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-6">
-          <p className="text-xs font-semibold text-ergo-red uppercase tracking-widest mb-2">Erklärvideo</p>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
-            Zahnzusatz einfach erklärt
-          </h2>
-          <p className="text-gray-500 text-sm mt-2">In wenigen Minuten verstehen Sie, worauf es bei der Zahnzusatzversicherung ankommt.</p>
+          <p className="ergo-eyebrow">Erklärvideo</p>
+          <h2 className="text-2xl md:text-[28px]">Zahnzusatz einfach erklärt</h2>
+          <p className="text-ergo-stone text-sm mt-2">In wenigen Minuten verstehen Sie, worauf es bei der Zahnzusatzversicherung ankommt.</p>
         </div>
 
-        <div className="relative rounded-2xl overflow-hidden shadow-xl bg-gray-900 aspect-video">
+        <div className="relative ergo-card overflow-hidden aspect-video bg-ergo-ink">
           {!isPlaying ? (
             <button
               onClick={() => setIsPlaying(true)}
-              className="absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-4 group"
+              className="absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-4 group bg-ergo-ink"
               aria-label="Video abspielen"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/90 to-cyan-700/80" />
               <div className="relative z-10 flex flex-col items-center gap-3">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-7 h-7 sm:w-9 sm:h-9 text-ergo-red ml-1" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center">
+                  <Play className="w-7 h-7 sm:w-9 sm:h-9 text-ergo-red ml-1" fill="currentColor" />
                 </div>
                 <div className="text-center">
                   <p className="text-white font-bold text-base sm:text-lg">Video abspielen</p>
-                  <p className="text-white/70 text-xs sm:text-sm mt-0.5">Zahnzusatz-Leitfaden · ERGO Stübe</p>
+                  <p className="text-white/70 text-xs sm:text-sm mt-0.5">Zahnzusatz-Leitfaden · ERGO Agentur Stübe</p>
                 </div>
-              </div>
-              <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5 bg-black/40 text-white/70 text-xs px-2 py-1 rounded-full">
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm-1 14.5v-9l6 4.5-6 4.5z" /></svg>
-                Wird erst bei Klick geladen
               </div>
             </button>
           ) : (
@@ -148,8 +100,8 @@ function ExplainerVideo({ src }: { src: string }) {
           )}
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-3">
-          🔒 Das Video wird nur bei Klick geladen – keine Auswirkung auf die Ladezeit der Seite.
+        <p className="text-center text-xs text-ergo-mute mt-3">
+          Das Video wird erst bei Klick geladen – keine Auswirkung auf die Ladezeit der Seite.
         </p>
       </div>
     </motion.section>
@@ -175,12 +127,10 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
 
   const openFunnel = useCallback((opts?: { type?: string; label?: string; initialStep?: number }) => {
     if (opts !== undefined) {
-      // Explicit quiz-card click: apply provided values (undefined = "Alle prüfen" = generic consultation)
       setFunnelType(opts.type);
       setFunnelLabel(opts.label);
       setFunnelInitialStep(opts.initialStep);
     }
-    // When called without opts (non-quiz CTA), keep existing funnelType (= config.insuranceType default)
     setShowFunnel(true);
     trackEvent('sparten_lp_cta_click', { sparte: config.slug, source: config.source });
   }, [config.slug, config.source]);
@@ -235,68 +185,45 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
         additionalStructuredData={[serviceSchema]}
       />
 
-      <div className="ds-marketing min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden">
-        {/* Hero Section */}
-        <section className={`ds-hero bg-gradient-to-br ${config.hero.gradient} text-white py-14 md:py-20 px-4 relative overflow-hidden`}>
-          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-          <div className="max-w-5xl mx-auto relative">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
-              {/* Left: Text */}
-              <div className="flex-1 text-center lg:text-left mb-10 lg:mb-0">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  className="inline-flex items-center gap-1.5 bg-white/15 px-3 py-1.5 rounded-full text-xs font-medium mb-5"
-                >
+      <div className="bg-white min-h-screen">
+        {/* Hero */}
+        <section className="border-b border-ergo-line">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-12 md:pt-16 md:pb-16">
+            <div className="flex flex-col lg:flex-row lg:items-start lg:gap-12">
+
+              {/* Links: Text */}
+              <div className="flex-1 mb-10 lg:mb-0">
+                <p className="ergo-eyebrow">ERGO Agentur Stübe · Ganderkesee</p>
+                <h1 className="text-[30px] leading-[1.25] md:text-[40px] mb-4 max-w-xl">
+                  {config.hero.headline}
+                </h1>
+
+                <div className="flex items-center gap-2 mb-4">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3 h-3 text-yellow-300 fill-yellow-300" />
+                      <Star key={i} className="w-4 h-4 text-ergo-yellow fill-ergo-yellow" />
                     ))}
                   </div>
-                  <span>4,9/5 · über 3.500 zufriedene Kunden</span>
-                </motion.div>
+                  <span className="text-sm font-bold text-ergo-ink">4,9/5</span>
+                  <span className="text-xs text-ergo-mute">über 3.500 zufriedene Kunden</span>
+                </div>
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
-                >
-                  {config.hero.headline}
-                </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.35 }}
-                  className="text-base sm:text-lg text-white/90 max-w-xl mx-auto lg:mx-0 mb-3 leading-relaxed"
-                >
+                <p className="text-base sm:text-lg text-ergo-stone max-w-xl mb-5 leading-relaxed">
                   {config.hero.subheadline}
-                </motion.p>
+                </p>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.45 }}
-                  className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs text-white/80 mb-2"
-                >
-                  <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5 text-green-300" /> Kostenlos & unverbindlich</span>
-                  <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5 text-green-300" /> Keine Verpflichtung</span>
-                  <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5 text-green-300" /> DSGVO-konform</span>
-                </motion.div>
+                <ul className="ergo-check-list text-sm text-ergo-ink max-w-md">
+                  <li>Kostenlos & unverbindlich</li>
+                  <li>Keine Verpflichtung</li>
+                  <li>DSGVO-konform</li>
+                </ul>
               </div>
 
-              {/* Right: Quiz Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.5 }}
-                className="w-full lg:w-[420px] lg:flex-shrink-0"
-              >
-                <div className="rounded-2xl border-2 border-white/20 bg-white shadow-2xl shadow-black/20 p-4 sm:p-5">
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#E2001A] mb-1">Kostenlose Analyse – In 2 Minuten</p>
-                  <p className="text-sm sm:text-base font-bold text-gray-900 mb-4 leading-snug">
+              {/* Rechts: Quiz-Karte */}
+              <div className="w-full lg:w-[420px] lg:flex-shrink-0">
+                <div className="ergo-card p-4 sm:p-5">
+                  <p className="ergo-eyebrow mb-1">Kostenlose Analyse – in 2 Minuten</p>
+                  <p className="font-serif text-lg font-bold text-ergo-ink mb-4">
                     Was möchten Sie versichern?
                   </p>
                   <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -314,140 +241,124 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
                               initialStep: isAll ? undefined : 2,
                             });
                           }}
-                          className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all active:scale-[0.98] group relative
-                            ${isAll
-                              ? 'border-[#E2001A] bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white hover:shadow-lg hover:shadow-red-500/25 sm:col-span-2'
-                              : isPreSelected
-                                ? 'border-[#E2001A] bg-red-50 shadow-sm'
-                                : 'border-gray-200 bg-gray-50 hover:border-[#E2001A] hover:bg-red-50'
-                            }`}
+                          className={
+                            isAll
+                              ? 'ergo-btn ergo-btn--primary sm:col-span-2 justify-between px-5'
+                              : `ergo-option flex items-center gap-3 px-4 py-3 text-left relative ${isPreSelected ? 'selected' : ''}`
+                          }
                         >
-                          {isPreSelected && !isAll && (
-                            <span className="absolute -top-1.5 -right-1.5 bg-[#E2001A] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">
-                              Empfohlen
-                            </span>
+                          {isAll ? (
+                            <>
+                              <span className="flex items-center gap-3"><opt.icon className="w-5 h-5" />{opt.label}</span>
+                              <ChevronRight className="w-4 h-4" />
+                            </>
+                          ) : (
+                            <>
+                              {isPreSelected && (
+                                <span className="absolute -top-2 right-3 bg-ergo-red text-white text-[10px] font-bold px-2 py-0.5 rounded-pill leading-none">
+                                  Empfohlen
+                                </span>
+                              )}
+                              <opt.icon className="w-5 h-5 text-ergo-red shrink-0" />
+                              <span className={`font-semibold text-sm ${isPreSelected ? 'text-ergo-red' : 'text-ergo-ink'}`}>
+                                {opt.label}
+                              </span>
+                              <ChevronRight className="w-4 h-4 ml-auto shrink-0 text-ergo-mute" />
+                            </>
                           )}
-                          <span className="text-2xl leading-none shrink-0">{opt.icon}</span>
-                          <span className={`font-semibold text-sm ${isAll ? 'text-white' : isPreSelected ? 'text-[#E2001A]' : 'text-gray-800 group-hover:text-[#E2001A]'}`}>
-                            {opt.label}
-                          </span>
-                          <ChevronRight className={`w-4 h-4 ml-auto shrink-0 group-hover:translate-x-0.5 transition-transform ${isAll ? 'text-white/80' : isPreSelected ? 'text-[#E2001A]' : 'text-gray-400 group-hover:text-[#E2001A]'}`} />
                         </button>
                       );
                     })}
                   </div>
-                  <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
-                    <p className="text-[10px] sm:text-xs text-gray-400">🔒 100% kostenlos & unverbindlich · DSGVO-konform</p>
+                  <div className="mt-4 pt-3 border-t border-ergo-line flex items-center justify-between gap-3">
+                    <p className="text-xs text-ergo-mute">100% kostenlos & unverbindlich</p>
                     <a
                       href={`https://wa.me/49${whatsappNumber}?text=${encodeURIComponent(`Hallo Herr Stübe, ich interessiere mich für die ${config.seo.title.split(' – ')[0]}. Können Sie mich beraten?`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => { trackEvent('whatsapp_clicked', { source: 'sparten_hero_quiz', sparte: config.slug }); trackConversion(); }}
-                      className="flex items-center gap-1.5 text-[#25d366] hover:text-[#1da851] transition-colors text-xs font-semibold whitespace-nowrap shrink-0"
+                      className="flex items-center gap-1.5 text-[#1da851] hover:underline text-xs font-bold whitespace-nowrap shrink-0"
                     >
                       <MessageSquare className="w-3.5 h-3.5" />
                       Lieber WhatsApp
                     </a>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Glassmorphism Stats Band */}
-        <motion.section {...fadeInUp} className="px-4 py-8 max-w-4xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 divide-x divide-gray-200/60">
+        {/* Statistik-Band */}
+        <motion.section {...fadeInUp} className="bg-ergo-gray border-b border-ergo-line">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+            <div className="grid grid-cols-3 gap-4 md:gap-8 text-center">
               {[
-                { value: 3500, suffix: '+', label: 'Zufriedene Kunden' },
-                { value: 15, suffix: '+', label: 'Produkte' },
-                { value: 24, suffix: 'h', label: 'Reaktionszeit' },
-              ].map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.15 }}
-                  className="text-center"
-                >
-                  <div className="text-2xl sm:text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                  </div>
-                  <p className="text-xs md:text-sm text-gray-500 mt-1.5 font-medium">{stat.label}</p>
-                </motion.div>
+                { value: '3.500+', label: 'Zufriedene Kunden' },
+                { value: '15+', label: 'Produkte' },
+                { value: '24h', label: 'Reaktionszeit' },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <div className="font-serif text-3xl md:text-5xl font-bold text-ergo-red">{stat.value}</div>
+                  <p className="text-xs md:text-sm text-ergo-stone mt-1.5 font-medium">{stat.label}</p>
+                </div>
               ))}
             </div>
           </div>
         </motion.section>
 
-        {/* Benefits Section */}
-        <motion.section {...fadeInUp} className="py-10 md:py-16 px-4">
+        {/* Vorteile */}
+        <motion.section {...fadeInUp} className="py-12 md:py-16 px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-gray-900 mb-3">
-              Ihre Vorteile bei ERGO
-            </h2>
-            <p className="text-center text-gray-500 text-sm mb-10 max-w-xl mx-auto">
+            <h2 className="text-2xl md:text-[28px] text-center mb-3">Ihre Vorteile bei ERGO</h2>
+            <p className="text-center text-ergo-stone text-sm mb-10 max-w-xl mx-auto">
               Persönliche Beratung statt anonymer Online-Vergleich – das macht den Unterschied.
             </p>
-            <motion.div
-              {...staggerContainer}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-5"
-            >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {config.benefits.map((benefit, i) => {
                 const Icon = benefit.icon;
                 return (
-                  <motion.div
-                    key={i}
-                    {...staggerChild}
-                    className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-shadow"
-                  >
+                  <div key={i} className="ergo-card p-5">
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-ergo-red/10 flex items-center justify-center shrink-0">
-                        <Icon className="w-5 h-5 text-ergo-red" />
-                      </div>
+                      <span className="ergo-icon-disc w-10 h-10"><Icon className="w-5 h-5" /></span>
                       <div>
-                        <h3 className="font-bold text-gray-900 text-sm sm:text-base mb-1">{benefit.title}</h3>
-                        <p className="text-gray-600 text-sm leading-relaxed">{benefit.description}</p>
+                        <h3 className="font-sans font-bold text-ergo-ink text-sm sm:text-base mb-1">{benefit.title}</h3>
+                        <p className="text-ergo-stone text-sm leading-relaxed">{benefit.description}</p>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 );
               })}
-            </motion.div>
+            </div>
           </div>
         </motion.section>
 
-        {/* Explainer Video (only when config provides one) */}
+        {/* Erklärvideo (falls vorhanden) */}
         {config.explainerVideo && <ExplainerVideo src={config.explainerVideo} />}
 
-        {/* Advisor Profile Section */}
-        <motion.section {...fadeInUp} className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-5 md:p-8 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
+        {/* Berater-Profil */}
+        <motion.section {...fadeInUp} className="px-4 pb-12 md:pb-16 max-w-3xl mx-auto">
+          <div className="ergo-card p-5 md:p-8">
             <div className="flex flex-col items-center text-center gap-5 md:flex-row md:text-left md:items-start">
-              <motion.img
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.3 }}
+              <img
                 src={beraterPhoto}
                 alt="Morino Stübe - ERGO Versicherungsfachmann in Ganderkesee"
-                className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-lg shrink-0 bg-white"
+                className="w-32 h-40 md:w-40 md:h-52 rounded-lg object-contain border border-ergo-line shrink-0 bg-white"
               />
               <div className="flex-1">
-                <h2 className="text-xl font-bold text-gray-900 mb-1 md:text-2xl">Morino Stübe</h2>
-                <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann · Ganderkesee</p>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4 md:text-base">
-                  Ich berate Sie persönlich und transparent zur {config.seo.title.split(' – ')[0]}. Gemeinsam finden wir die beste Lösung für Ihre Situation – kostenlos und unverbindlich.
+                <h2 className="text-xl md:text-2xl mb-1">Morino Stübe</h2>
+                <p className="text-ergo-red font-bold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann · Ganderkesee</p>
+                <p className="text-ergo-stone text-sm leading-relaxed mb-4 md:text-base">
+                  Ich berate Sie persönlich und transparent zur {config.seo.title.split(' – ')[0]}. Gemeinsam finden
+                  wir die beste Lösung für Ihre Situation – kostenlos und unverbindlich.
                 </p>
-                <div className="flex flex-col gap-2 text-xs text-gray-500 md:text-sm">
+                <div className="flex flex-col gap-2 text-xs text-ergo-stone md:text-sm">
                   <span className="flex items-center justify-center md:justify-start gap-1.5">
                     <Shield className="w-4 h-4 text-ergo-red shrink-0" />
                     Vermittlerregister-Nr. D-5H7J-7DUI1-10
                   </span>
                   <span className="flex items-center justify-center md:justify-start gap-1.5">
-                    <Star className="w-4 h-4 text-yellow-500 shrink-0 fill-yellow-500" />
+                    <Award className="w-4 h-4 text-ergo-red shrink-0" />
                     ERGO als starker Partner seit 1906
                   </span>
                 </div>
@@ -455,7 +366,7 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
               <img
                 src="/attached_assets/ergo-logo-hq.svg"
                 alt="ERGO Logo"
-                className="h-10 md:h-14 w-auto shrink-0 hidden md:block"
+                className="h-8 md:h-10 w-auto shrink-0 hidden md:block"
                 loading="lazy"
                 decoding="async"
               />
@@ -463,40 +374,38 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
           </div>
         </motion.section>
 
-        {/* Reviews */}
-        <motion.section {...fadeInUp} className="py-10 md:py-16 px-4 bg-gray-50">
+        {/* Kundenstimmen */}
+        <motion.section {...fadeInUp} className="py-12 md:py-16 px-4 bg-ergo-gray border-y border-ergo-line">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-8">
-              Das sagen unsere Kunden
-            </h2>
-            <motion.div {...staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <h2 className="text-2xl md:text-[28px] text-center mb-8">Das sagen unsere Kunden</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {config.reviews.map((review, i) => (
-                <motion.div key={i} {...staggerChild} className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <div key={i} className="ergo-card p-5">
                   <div className="flex gap-0.5 mb-3">
                     {[...Array(review.rating)].map((_, j) => (
-                      <Star key={j} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                      <Star key={j} className="w-4 h-4 text-ergo-yellow fill-ergo-yellow" />
                     ))}
                   </div>
-                  <p className="text-gray-700 text-sm leading-relaxed mb-3 italic">"{review.text}"</p>
-                  <p className="text-xs font-semibold text-gray-500">– {review.name}</p>
-                </motion.div>
+                  <p className="text-ergo-ink text-sm leading-relaxed mb-3">„{review.text}"</p>
+                  <p className="text-xs font-semibold text-ergo-mute">– {review.name}</p>
+                </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </motion.section>
 
-        {/* Awards Band */}
-        <motion.section {...fadeInUp} className="py-10 md:py-14 px-4">
+        {/* Auszeichnungen */}
+        <motion.section {...fadeInUp} className="py-12 md:py-14 px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-lg font-bold text-center text-gray-900 mb-2">ERGO – Mehrfach ausgezeichnet</h2>
-            <p className="text-center text-gray-500 text-sm mb-8">Von unabhängigen Testinstituten bewertet</p>
+            <h2 className="text-xl md:text-2xl text-center mb-2">ERGO – mehrfach ausgezeichnet</h2>
+            <p className="text-center text-ergo-stone text-sm mb-8">Von unabhängigen Testinstituten bewertet</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {ergoAwards.map((award) => (
-                <div key={award.label} className="bg-white rounded-xl p-4 text-center border border-yellow-200 shadow-sm hover:shadow-md transition-shadow">
-                  <Award className="w-7 h-7 text-yellow-500 mx-auto mb-2" />
-                  <p className="text-xs font-bold text-ergo-red uppercase tracking-wide mb-1">{award.rating}</p>
-                  <p className="text-sm font-semibold text-gray-900 mb-1">{award.label}</p>
-                  <p className="text-[10px] text-gray-500">{award.source}</p>
+                <div key={award.label} className="ergo-card p-4 text-center">
+                  <span className="ergo-icon-disc w-10 h-10 mb-2"><Award className="w-4 h-4" /></span>
+                  <p className="text-xs font-bold text-ergo-red mb-1">{award.rating}</p>
+                  <p className="text-sm font-semibold text-ergo-ink mb-1">{award.label}</p>
+                  <p className="text-[10px] text-ergo-mute">{award.source}</p>
                 </div>
               ))}
             </div>
@@ -507,34 +416,29 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
         <FAQSection
           title="Häufige Fragen"
           faqs={config.faqs}
-          className="bg-gray-50"
+          className="bg-ergo-gray border-y border-ergo-line"
         />
 
-        {/* Final CTA */}
-        <motion.section {...fadeInUp} className="py-14 md:py-20 px-4 bg-gradient-to-br from-[#003781] to-[#005ab4] text-white">
+        {/* Abschluss-CTA */}
+        <motion.section {...fadeInUp} className="ergo-section--red py-14 md:py-20 px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-white/15 px-4 py-1.5 rounded-full text-xs font-medium mb-5">
+            <p className="inline-flex items-center gap-2 text-white/85 text-sm font-semibold mb-4">
               <Clock className="w-4 h-4" />
               {config.urgency.subtext}
-            </div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">
-              {config.urgency.text}
-            </h2>
-            <p className="text-blue-100 text-sm sm:text-base mb-8 max-w-xl mx-auto">
+            </p>
+            <h2 className="text-2xl md:text-[28px] mb-4">{config.urgency.text}</h2>
+            <p className="text-white/90 text-sm sm:text-base mb-8 max-w-xl mx-auto">
               Kostenlose, unverbindliche Beratung von Ihrem persönlichen ERGO-Berater Morino Stübe in Ganderkesee.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button
-                onClick={() => openFunnel()}
-                className="inline-flex items-center justify-center gap-2 bg-white text-[#003781] font-bold px-7 py-4 rounded-xl text-base hover:bg-gray-100 transition-colors min-h-[52px] shadow-lg"
-              >
+              <button onClick={() => openFunnel()} className="ergo-btn ergo-btn--inverted">
                 <Phone className="w-5 h-5" /> Jetzt beraten lassen
               </button>
               <a
                 href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hallo Herr Stübe, ich interessiere mich für die ${config.seo.title.split(' – ')[0]}. Können Sie mich beraten?`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-[#25d366] text-white font-bold px-6 py-4 rounded-xl text-base hover:bg-[#1da851] transition-colors min-h-[52px]"
+                className="ergo-btn ergo-btn--whatsapp"
               >
                 <MessageCircle className="w-5 h-5" /> Per WhatsApp anfragen
               </a>
@@ -542,12 +446,14 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
           </div>
         </motion.section>
 
-        <footer className="bg-gray-900 text-gray-400 py-6 px-4 text-center text-xs">
+        {/* Minimaler LP-Footer */}
+        <footer className="bg-ergo-gray border-t border-ergo-line text-ergo-stone py-6 px-4 text-center text-xs">
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/impressum" className="hover:text-white transition-colors">Impressum</Link>
-            <Link href="/datenschutz" className="hover:text-white transition-colors">Datenschutz</Link>
+            <Link href="/impressum" className="hover:text-ergo-red hover:underline transition-colors">Impressum</Link>
+            <Link href="/datenschutz" className="hover:text-ergo-red hover:underline transition-colors">Datenschutz</Link>
+            <Link href="/erstinformation" className="hover:text-ergo-red hover:underline transition-colors">Erstinformation</Link>
           </div>
-          <p className="mt-3">&copy; 2026 ERGO Versicherung - Morino Stübe</p>
+          <p className="mt-3">&copy; 2026 ERGO Agentur Stübe · Morino Stübe · Vermittlerregister-Nr. D-5H7J-7DUI1-10</p>
         </footer>
       </div>
 
