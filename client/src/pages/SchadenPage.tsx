@@ -1,3 +1,4 @@
+import { compressImageFile, exceedsUploadLimit, UPLOAD_LIMIT_MESSAGE } from '@/lib/uploads';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'wouter';
 import {
@@ -148,13 +149,14 @@ export default function SchadenPage() {
     if (errors[field]) setErrors(prev => { const n = { ...prev }; delete n[field]; return n; });
   };
 
-  const handleFiles = (newFiles: FileList | null) => {
+  const handleFiles = async (newFiles: FileList | null) => {
     if (!newFiles) return;
+    const incoming = Array.from(newFiles);
     const valid: File[] = [];
-    for (let i = 0; i < newFiles.length; i++) {
-      const f = newFiles[i];
-      if (f.size > 5 * 1024 * 1024) continue;
+    for (const raw of incoming) {
       if (files.length + valid.length >= 5) break;
+      const f = await compressImageFile(raw);
+      if (f.size > 5 * 1024 * 1024) continue;
       valid.push(f);
     }
     setFiles(prev => [...prev, ...valid].slice(0, 5));
@@ -333,6 +335,11 @@ export default function SchadenPage() {
     if (!confirm2) errs.confirm2 = 'Bitte bestätigen.';
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
+
+    if (exceedsUploadLimit(files)) {
+      setSubmitError(UPLOAD_LIMIT_MESSAGE);
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitError(null);

@@ -98,8 +98,10 @@ export default function Datenschutz() {
             <h2 className="text-xl mb-4">3. Hosting</h2>
             <div className="space-y-3 text-ergo-stone leading-relaxed">
               <p>
-                Diese Website wird bei einem externen Dienstleister gehostet (Hoster). Die personenbezogenen Daten,
-                die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert. Hierbei kann
+                Diese Website wird bei Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA, gehostet.
+                Die Auslieferung der Website und die Verarbeitung von Anfragen erfolgen vorrangig über
+                Serverstandorte in der Europäischen Union (Region Frankfurt am Main). Die personenbezogenen Daten,
+                die auf dieser Website erfasst werden, werden auf den Servern des Hosters verarbeitet. Hierbei kann
                 es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten, Vertragsdaten,
                 Kontaktdaten, Namen, Websitezugriffe und sonstige Daten, die über eine Website generiert werden, handeln.
               </p>
@@ -107,6 +109,20 @@ export default function Datenschutz() {
                 Der Einsatz des Hosters erfolgt zum Zwecke der Vertragserfüllung gegenüber unseren potenziellen und
                 bestehenden Kunden (Art. 6 Abs. 1 lit. b DSGVO) und im Interesse einer sicheren, schnellen und
                 effizienten Bereitstellung unseres Online-Angebots durch einen professionellen Anbieter (Art. 6 Abs. 1 lit. f DSGVO).
+              </p>
+              <p>
+                Mit Vercel wurde ein Vertrag über Auftragsverarbeitung (Data Processing Agreement) geschlossen.
+                Soweit Daten in die USA übermittelt werden, erfolgt dies auf Grundlage der
+                EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO); Vercel ist zudem nach dem
+                EU-U.S. Data Privacy Framework zertifiziert. Weitere Informationen:{" "}
+                <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="ergo-link">
+                  vercel.com/legal/privacy-policy
+                </a>
+              </p>
+              <p>
+                Anfragedaten (z. B. aus Beratungs-, Schaden- und Serviceformularen) werden in einer Datenbank bei
+                Neon Inc. gespeichert. Der Serverstandort der Datenbank befindet sich in der Europäischen Union
+                (Frankfurt am Main). Auch mit diesem Anbieter besteht ein Vertrag über Auftragsverarbeitung.
               </p>
             </div>
           </section>

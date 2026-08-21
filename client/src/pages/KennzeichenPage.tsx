@@ -1,3 +1,4 @@
+import { compressImageFile, exceedsUploadLimit, UPLOAD_LIMIT_MESSAGE } from '@/lib/uploads';
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'wouter';
 import {
@@ -159,14 +160,16 @@ export default function KennzeichenPage() {
   const [abeFiles, setAbeFiles] = useState<AbeFile[]>([]);
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
-  const handleAbeFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAbeFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
+    e.target.value = '';
+    const incoming = Array.from(files);
     const newFiles: AbeFile[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const f = files[i];
+    for (const raw of incoming) {
       if (abeFiles.length + newFiles.length >= 5) break;
-      if (!f.type.startsWith('image/') && f.type !== 'application/pdf') continue;
+      if (!raw.type.startsWith('image/') && raw.type !== 'application/pdf') continue;
+      const f = await compressImageFile(raw);
       if (f.size > 10 * 1024 * 1024) continue;
       const af: AbeFile = { file: f };
       if (f.type.startsWith('image/')) {
@@ -176,7 +179,6 @@ export default function KennzeichenPage() {
     }
     setAbeFiles(prev => [...prev, ...newFiles].slice(0, 5));
     if (errors.abeFiles) setErrors(prev => { const n = { ...prev }; delete n.abeFiles; return n; });
-    e.target.value = '';
   };
 
   const removeAbeFile = (index: number) => {
@@ -329,6 +331,11 @@ export default function KennzeichenPage() {
     if (!confirm2) errs.confirm2 = 'Bitte bestätigen.';
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
+
+    if (selectedType === 'kennzeichen' && exceedsUploadLimit(abeFiles.map(af => af.file))) {
+      setSubmitError(UPLOAD_LIMIT_MESSAGE);
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitError(null);

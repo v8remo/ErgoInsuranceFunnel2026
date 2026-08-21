@@ -1,3 +1,4 @@
+import { compressImageFile, exceedsUploadLimit, UPLOAD_LIMIT_MESSAGE } from '@/lib/uploads';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'wouter';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
@@ -202,14 +203,16 @@ export default function DokumentePage() {
     goToStep(2);
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
+    e.target.value = '';
+    const incoming = Array.from(files);
     const newFiles: UploadFile[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const f = files[i];
+    for (const raw of incoming) {
       if (uploadFiles.length + newFiles.length >= 10) break;
-      if (!f.type.startsWith('image/') && f.type !== 'application/pdf') continue;
+      if (!raw.type.startsWith('image/') && raw.type !== 'application/pdf') continue;
+      const f = await compressImageFile(raw);
       if (f.size > 10 * 1024 * 1024) continue;
       const uf: UploadFile = { file: f };
       if (f.type.startsWith('image/')) {
@@ -219,7 +222,6 @@ export default function DokumentePage() {
     }
     setUploadFiles(prev => [...prev, ...newFiles].slice(0, 10));
     if (errors.files) setErrors(prev => { const n = { ...prev }; delete n.files; return n; });
-    e.target.value = '';
   };
 
   const removeFile = (index: number) => {
@@ -249,6 +251,9 @@ export default function DokumentePage() {
     if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) errs.email = 'Gültige E-Mail eingeben';
     if (!formData.versicherungsnummer.trim()) errs.versicherungsnummer = 'Pflichtfeld';
     if (uploadFiles.length === 0) errs.files = 'Bitte mindestens eine Datei hochladen';
+    if (uploadFiles.length > 0 && exceedsUploadLimit(uploadFiles.map(uf => uf.file))) {
+      errs.files = UPLOAD_LIMIT_MESSAGE;
+    }
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
 

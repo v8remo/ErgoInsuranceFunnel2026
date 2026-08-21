@@ -4,25 +4,18 @@ import express from "express";
 import path from "path";
 import multer from "multer";
 import { storage } from "./storage";
-import { insertLeadSchema, insertContentSchema } from "@shared/schema";
+import { insertLeadSchema, insertContentSchema } from "../shared/schema";
 import { z } from "zod";
 import { sendLeadNotification } from "./email";
 import bcrypt from "bcryptjs";
 
-// Configure multer for file uploads
+// Multer im Memory-Modus: funktioniert auch auf read-only Dateisystemen
+// (Vercel Functions). Bilder werden als Data-URI zurückgegeben und im
+// Content-Datensatz gespeichert statt auf Platte geschrieben.
 const upload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'attached_assets/');
-    },
-    filename: (req, file, cb) => {
-      const timestamp = Date.now();
-      const originalName = file.originalname.replace(/\s+/g, '_');
-      cb(null, `${timestamp}_${originalName}`);
-    }
-  }),
+  storage: multer.memoryStorage(),
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 3 * 1024 * 1024 // 3MB – bleibt unter dem 4,5-MB-Request-Limit von Vercel
   },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
@@ -43,12 +36,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!req.file) {
         return res.status(400).json({ message: 'No image file provided' });
       }
-      
-      const imageUrl = `/attached_assets/${req.file.filename}`;
-      res.json({ 
-        success: true, 
+
+      const imageUrl = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+      res.json({
+        success: true,
         imageUrl,
-        filename: req.file.filename 
+        filename: req.file.originalname
       });
     } catch (error) {
       res.status(500).json({ message: 'Failed to upload image' });
@@ -989,8 +982,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const OpenAI = (await import('openai')).default;
       const openai = new OpenAI({
-        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
-        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY,
+        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL || undefined,
       });
 
       const prompt = `Du bist ein Experte für Instagram-Content für eine ERGO Versicherungsagentur in Ganderkesee (Norddeutschland).
