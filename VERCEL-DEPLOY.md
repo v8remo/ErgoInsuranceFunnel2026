@@ -4,23 +4,31 @@ Die App läuft auf Vercel als statisches Vite-Frontend + eine Serverless Functio
 (`api/index.ts`), die die komplette Express-API aus `server/routes.ts` ausführt.
 `vercel.json` steuert Build, Rewrites und die Region (Frankfurt, `fra1`).
 
-## 1. Datenbank (Neon, EU)
+## 1. Datenbank (Postgres, EU)
 
-Die App nutzt bereits den Neon-Serverless-Treiber – es braucht nur eine eigene
-Neon-Instanz statt der Replit-DB:
+Die App nutzt den Standard-Postgres-Treiber (`pg`) – jede Postgres-Instanz
+funktioniert. Drei Optionen:
 
-1. [neon.tech](https://neon.tech) → neues Projekt, **Region AWS eu-central-1 (Frankfurt)**.
-2. Connection String kopieren (`postgresql://…?sslmode=require`).
-3. Schema anlegen (lokal, einmalig):
-   ```bash
-   DATABASE_URL="postgresql://…" npm run db:push
-   ```
-4. Bestehende Leads/Submissions aus Replit übernehmen (optional):
-   ```bash
-   pg_dump --no-owner --no-privileges "$REPLIT_DATABASE_URL" | psql "$NEON_DATABASE_URL"
-   ```
-   Die `REPLIT_DATABASE_URL` steht in Replit unter *Secrets* → `DATABASE_URL`.
-   (Wenn `db:push` vorher lief: Dump nur mit `--data-only` einspielen.)
+- **Supabase** (Region `eu-central-1` Frankfurt): Pooler-Connection-String aus
+  *Project Settings → Database* verwenden (Port 6543, „Transaction Mode").
+  Das Tabellenschema liegt als Migration in `migrations/0000_*.sql` und kann
+  im SQL-Editor eingespielt werden – oder per `npm run db:push` (s. u.).
+- **Neon** ([neon.tech](https://neon.tech), Region Frankfurt, Free-Tier):
+  Connection String kopieren.
+- **Replit-DB vorerst weiterverwenden:** Die `DATABASE_URL` aus den
+  Replit-Secrets funktioniert auch von Vercel aus – Daten bleiben, kein Umzug
+  nötig. Nachteil: Die DB hängt weiter am Replit-Account; später umziehen.
+
+Schema anlegen (bei neuer DB, lokal einmalig):
+```bash
+DATABASE_URL="postgresql://…" npm run db:push
+```
+
+Bestehende Leads/Submissions aus Replit übernehmen (optional):
+```bash
+pg_dump --no-owner --no-privileges --data-only "$REPLIT_DATABASE_URL" | psql "$NEUE_DATABASE_URL"
+```
+Die `REPLIT_DATABASE_URL` steht in Replit unter *Secrets* → `DATABASE_URL`.
 
 ## 2. Vercel-Projekt
 
