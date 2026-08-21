@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { X, Phone, Mail, Shield, Home, Car, Heart, Gavel, Smile } from 'lucide-react';
+import { X, Phone, Mail, Shield, Home, Car, Heart, CheckCircle2, ChevronLeft } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/queryClient';
 import { trackEvent } from '@/lib/analytics';
 
 interface GeneralInsuranceFunnelProps {
@@ -164,24 +162,29 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg sm:rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
-        
+    <div className="fixed inset-0 bg-ergo-dark/60 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-[0_8px_24px_rgba(38,38,38,0.14)] max-w-2xl w-full max-h-[90vh] overflow-hidden">
+
         {/* Header */}
-        <div className="bg-ergo-gray px-4 sm:px-6 py-4 sm:py-5 border-b">
+        <div className="bg-white px-4 sm:px-6 py-4 sm:py-5 border-b border-ergo-line">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg sm:text-2xl font-bold text-ergo-dark leading-tight">ERGO Versicherungsberatung</h2>
-              <p className="text-sm sm:text-base text-gray-600 mt-1">Kostenlose Analyse & 15% Bündelnachlass</p>
+              <h2 className="text-lg sm:text-2xl leading-tight">ERGO Versicherungsberatung</h2>
+              <p className="text-sm sm:text-base text-ergo-stone mt-1">Kostenlose Analyse & 15% Bündelnachlass</p>
             </div>
-            <Button variant="ghost" size="sm" onClick={onClose} className="flex-shrink-0 p-2">
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Schließen"
+              className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full text-ergo-mute hover:bg-ergo-fog transition-colors"
+            >
               <X className="w-4 h-4 sm:w-5 sm:h-5" />
-            </Button>
+            </button>
           </div>
-          
+
           {/* Progress */}
           <div className="mt-3 sm:mt-4">
-            <div className="flex justify-between text-xs sm:text-sm text-gray-500 mb-2">
+            <div className="flex justify-between text-xs sm:text-sm text-ergo-mute mb-2">
               <span>Schritt {currentStep} von 4</span>
               <span>{Math.round(progress)}%</span>
             </div>
@@ -191,35 +194,33 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
 
         {/* Content */}
         <div className="p-4 sm:p-6 max-h-[60vh] overflow-y-auto">
-          
+
           {/* Step 1: Age Selection */}
           {currentStep === 1 && (
             <div className="fade-in">
               <div className="text-center mb-6 sm:mb-8">
-                <Shield className="w-8 h-8 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-3 sm:mb-4" />
-                <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2">
+                <span className="ergo-icon-disc mx-auto mb-3 sm:mb-4">
+                  <Shield className="w-6 h-6" />
+                </span>
+                <h3 className="text-lg sm:text-xl mb-2">
                   Wie alt sind Sie?
                 </h3>
-                <p className="text-sm sm:text-base text-gray-600">
+                <p className="text-sm sm:text-base text-ergo-stone">
                   Ihr Alter hilft uns, die passenden ERGO-Produkte für Sie zu finden
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {['18-29 Jahre', '30-39 Jahre', '40-49 Jahre', '50-59 Jahre', '60+ Jahre'].map((age) => (
-                  <Button
+                  <button
                     key={age}
-                    variant={formData.age === age ? "default" : "outline"}
-                    className={`p-4 h-auto text-left ${
-                      formData.age === age 
-                        ? "bg-ergo-red text-white" 
-                        : "border-gray-300 hover:border-ergo-red hover:text-ergo-red"
-                    }`}
+                    type="button"
+                    className={`ergo-option p-4 text-left ${formData.age === age ? 'selected' : ''}`}
                     onClick={() => setFormData(prev => ({ ...prev, age }))}
                   >
                     <div>
-                      <div className="font-semibold">{age}</div>
-                      <div className="text-xs mt-1 opacity-75">
+                      <div className={`font-semibold ${formData.age === age ? 'text-ergo-red' : 'text-ergo-ink'}`}>{age}</div>
+                      <div className="text-xs mt-1 text-ergo-mute">
                         {age === '18-29 Jahre' && 'Günstige Einstiegstarife'}
                         {age === '30-39 Jahre' && 'Familie & Beruf absichern'}
                         {age === '40-49 Jahre' && 'Optimaler Schutz'}
@@ -227,7 +228,7 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
                         {age === '60+ Jahre' && 'Spezielle Senioren-Tarife'}
                       </div>
                     </div>
-                  </Button>
+                  </button>
                 ))}
               </div>
             </div>
@@ -237,50 +238,47 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
           {currentStep === 2 && (
             <div className="fade-in">
               <div className="text-center mb-6 sm:mb-8">
-                <Shield className="w-8 h-8 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-3 sm:mb-4" />
-                <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2">
+                <span className="ergo-icon-disc mx-auto mb-3 sm:mb-4">
+                  <Shield className="w-6 h-6" />
+                </span>
+                <h3 className="text-lg sm:text-xl mb-2">
                   Welche Versicherungen interessieren Sie?
                 </h3>
-                <p className="text-sm sm:text-base text-gray-600">
+                <p className="text-sm sm:text-base text-ergo-stone">
                   Wählen Sie alle ERGO-Produkte aus, für die Sie sich interessieren
                 </p>
               </div>
 
               <div className="space-y-6">
                 {Object.entries(insuranceCategories).map(([categoryKey, category]) => (
-                  <div key={categoryKey} className="border rounded-lg p-4">
+                  <div key={categoryKey} className="ergo-card p-4">
                     <div className="flex items-center mb-4">
                       <category.icon className="w-5 h-5 text-ergo-red mr-2" />
-                      <h4 className="font-semibold text-ergo-dark">{category.title}</h4>
+                      <h4 className="font-sans font-bold text-ergo-ink">{category.title}</h4>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {category.products.map((product) => (
-                        <Button
+                        <button
                           key={product.id}
-                          variant="outline"
-                          size="sm"
-                          className={`text-left h-auto p-3 ${
-                            formData.interests.includes(product.id)
-                              ? "bg-ergo-red text-white border-ergo-red"
-                              : "border-gray-300 hover:border-ergo-red hover:text-ergo-red"
-                          }`}
+                          type="button"
+                          className={`ergo-option text-left p-3 ${formData.interests.includes(product.id) ? 'selected' : ''}`}
                           onClick={() => toggleInterest(product.id)}
                         >
                           <div>
-                            <div className="font-medium text-sm">{product.name}</div>
-                            <div className="text-xs opacity-75 mt-1">{product.description}</div>
+                            <div className={`font-medium text-sm ${formData.interests.includes(product.id) ? 'text-ergo-red' : 'text-ergo-ink'}`}>{product.name}</div>
+                            <div className="text-xs text-ergo-mute mt-1">{product.description}</div>
                           </div>
-                        </Button>
+                        </button>
                       ))}
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                <p className="text-sm text-blue-800">
-                  <strong>15% Bündelnachlass:</strong> Bei 5 oder mehr ERGO-Versicherungen erhalten Sie automatisch 15% Rabatt!
+              <div className="mt-6 p-4 bg-ergo-red-light border border-ergo-line rounded-lg">
+                <p className="text-sm text-ergo-ink">
+                  <strong className="text-ergo-red">15% Bündelnachlass:</strong> Bei 5 oder mehr ERGO-Versicherungen erhalten Sie automatisch 15% Rabatt!
                 </p>
               </div>
             </div>
@@ -290,11 +288,13 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
           {currentStep === 3 && (
             <div className="fade-in">
               <div className="text-center mb-6 sm:mb-8">
-                <Mail className="w-8 h-8 sm:w-12 sm:h-12 text-ergo-red mx-auto mb-3 sm:mb-4" />
-                <h3 className="text-lg sm:text-xl font-semibold text-ergo-dark mb-2">
+                <span className="ergo-icon-disc mx-auto mb-3 sm:mb-4">
+                  <Mail className="w-6 h-6" />
+                </span>
+                <h3 className="text-lg sm:text-xl mb-2">
                   Ihre Kontaktdaten
                 </h3>
-                <p className="text-sm sm:text-base text-gray-600">
+                <p className="text-sm sm:text-base text-ergo-stone">
                   Für Ihr kostenloses Angebot und die persönliche Beratung
                 </p>
               </div>
@@ -302,65 +302,65 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
               <div className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="firstName">Vorname *</Label>
+                    <Label htmlFor="firstName" className="text-sm font-semibold text-ergo-ink">Vorname *</Label>
                     <Input
                       id="firstName"
                       value={formData.firstName}
                       onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
                       placeholder="Ihr Vorname"
-                      className="mt-1"
+                      className="mt-1 border border-ergo-line rounded"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="lastName">Nachname *</Label>
+                    <Label htmlFor="lastName" className="text-sm font-semibold text-ergo-ink">Nachname *</Label>
                     <Input
                       id="lastName"
                       value={formData.lastName}
                       onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
                       placeholder="Ihr Nachname"
-                      className="mt-1"
+                      className="mt-1 border border-ergo-line rounded"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="email">E-Mail-Adresse *</Label>
+                  <Label htmlFor="email" className="text-sm font-semibold text-ergo-ink">E-Mail-Adresse *</Label>
                   <Input
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     placeholder="ihre.email@beispiel.de"
-                    className="mt-1"
+                    className="mt-1 border border-ergo-line rounded"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="phone">Telefonnummer *</Label>
+                  <Label htmlFor="phone" className="text-sm font-semibold text-ergo-ink">Telefonnummer *</Label>
                   <Input
                     id="phone"
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                     placeholder="01234 567890"
-                    className="mt-1"
+                    className="mt-1 border border-ergo-line rounded"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="location">Wohnort *</Label>
+                  <Label htmlFor="location" className="text-sm font-semibold text-ergo-ink">Wohnort *</Label>
                   <Input
                     id="location"
                     value={formData.location}
                     onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
                     placeholder="z.B. Ganderkesee"
-                    className="mt-1"
+                    className="mt-1 border border-ergo-line rounded"
                   />
                 </div>
               </div>
 
-              <div className="mt-6 p-4 bg-green-50 rounded-lg">
-                <p className="text-sm text-green-800">
+              <div className="mt-6 p-4 bg-ergo-gray border border-ergo-line rounded-lg">
+                <p className="text-sm text-ergo-ink">
                   <strong>Kostenlos & unverbindlich:</strong> Sie erhalten eine kostenlose Analyse Ihrer bestehenden Verträge plus Optimierungsvorschläge.
                 </p>
               </div>
@@ -370,39 +370,37 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
           {/* Step 4: Success */}
           {currentStep === 4 && (
             <div className="text-center py-8">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Smile className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-bold text-ergo-dark mb-4">
+              <CheckCircle2 className="w-14 h-14 text-ergo-check mx-auto mb-6" />
+              <h3 className="text-xl mb-4">
                 Vielen Dank für Ihr Interesse!
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-ergo-stone mb-6">
                 Ihre Anfrage wurde erfolgreich übermittelt. Morino Stübe wird sich binnen 24 Stunden bei Ihnen melden.
               </p>
-              
-              <div className="bg-ergo-gray rounded-lg p-6 mb-6">
-                <h4 className="font-semibold text-ergo-dark mb-4">Ihre nächsten Schritte:</h4>
+
+              <div className="ergo-card p-6 mb-6">
+                <h4 className="font-sans font-bold text-ergo-ink mb-4">Ihre nächsten Schritte:</h4>
                 <div className="text-left space-y-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-ergo-red text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
-                    <span className="text-sm">Kostenlose Analyse Ihrer bestehenden Verträge</span>
+                    <div className="w-6 h-6 bg-ergo-red text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0">1</div>
+                    <span className="text-sm text-ergo-ink">Kostenlose Analyse Ihrer bestehenden Verträge</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-ergo-red text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
-                    <span className="text-sm">Persönliche Beratung zu ERGO-Produkten</span>
+                    <div className="w-6 h-6 bg-ergo-red text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0">2</div>
+                    <span className="text-sm text-ergo-ink">Persönliche Beratung zu ERGO-Produkten</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-ergo-red text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
-                    <span className="text-sm">Angebot mit 15% Bündelnachlass (ab 5 Versicherungen)</span>
+                    <div className="w-6 h-6 bg-ergo-red text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0">3</div>
+                    <span className="text-sm text-ergo-ink">Angebot mit 15% Bündelnachlass (ab 5 Versicherungen)</span>
                   </div>
                 </div>
               </div>
 
               <div className="text-center">
-                <p className="text-gray-600 mb-4">Haben Sie Fragen? Rufen Sie uns gerne an:</p>
-                <a 
-                  href="tel:015566771019" 
-                  className="inline-flex items-center text-ergo-red font-semibold text-lg hover:text-red-700"
+                <p className="text-ergo-stone mb-4">Haben Sie Fragen? Rufen Sie uns gerne an:</p>
+                <a
+                  href="tel:015566771019"
+                  className="inline-flex items-center text-ergo-red font-bold text-lg hover:text-ergo-red-hover"
                 >
                   <Phone className="w-5 h-5 mr-2" />
                   015566771019
@@ -415,30 +413,32 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
 
         {/* Navigation */}
         {currentStep < 4 && (
-          <div className="flex flex-col sm:flex-row sm:justify-between items-stretch sm:items-center p-4 sm:p-6 border-t bg-gray-50 rounded-b-lg sm:rounded-b-xl gap-3 sm:gap-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between items-stretch sm:items-center p-4 sm:p-6 border-t border-ergo-line bg-ergo-gray rounded-b-lg gap-3 sm:gap-4">
             {currentStep > 1 && (
-              <Button
-                variant="ghost"
+              <button
+                type="button"
                 onClick={prevStep}
-                className="order-2 sm:order-1 text-sm sm:text-base px-4 py-3 sm:px-6 sm:py-4"
+                className="order-2 sm:order-1 inline-flex items-center justify-center gap-1 text-sm sm:text-base font-semibold text-ergo-stone hover:text-ergo-ink px-4 py-3 sm:px-6"
               >
-                ← Zurück
-              </Button>
+                <ChevronLeft className="w-4 h-4" />
+                Zurück
+              </button>
             )}
-            
-            <Button
+
+            <button
+              type="button"
               onClick={nextStep}
               disabled={!validateCurrentStep() || submitMutation.isPending}
-              className="order-1 sm:order-2 bg-ergo-red hover:bg-ergo-red-hover text-white text-sm sm:text-base px-4 py-3 sm:px-6 sm:py-4 font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto"
+              className="ergo-btn ergo-btn--primary order-1 sm:order-2 w-full sm:w-auto"
             >
               {submitMutation.isPending ? (
-                "⏳ Wird übermittelt..."
+                "Wird übermittelt..."
               ) : currentStep === 3 ? (
-                "💰 KOSTENLOSE BERATUNG ANFORDERN"
+                "KOSTENLOSE BERATUNG ANFORDERN"
               ) : (
                 `Weiter (${currentStep + 1}/4)`
               )}
-            </Button>
+            </button>
           </div>
         )}
 

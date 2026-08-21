@@ -1,15 +1,15 @@
-import { useState, useEffect, useRef } from "react";
-import { Link } from "wouter";
-import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
 import FunnelOverlay from "@/components/FunnelOverlay";
 import '@/styles/funnel.css';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
-import { Award, Shield, Handshake, Clock, ChevronDown, Phone, MessageCircle, Check, X, Heart, Briefcase, Users, Building2, Star, TrendingUp, Umbrella, Wallet, Mail, MessageSquare, ChevronRight } from "lucide-react";
+import {
+  Shield, Clock, ChevronDown, Phone, MessageCircle, Check, X, Heart, Briefcase,
+  Users, Building2, Star, TrendingUp, Umbrella, Wallet, Mail, MessageSquare,
+  ChevronRight, CheckCircle2, CarFront, Home, SmilePlus, BriefcaseBusiness, LayoutGrid, Award,
+} from "lucide-react";
 import TrustBar from "@/components/TrustBar";
 import FAQSection from "@/components/FAQSection";
 import beraterPhoto from "@assets/optimized/ich_bin_da.webp";
@@ -18,8 +18,6 @@ const products = [
   {
     id: "private-rente",
     icon: Wallet,
-    iconColor: "text-blue-600",
-    bgColor: "bg-blue-50",
     name: "ERGO Private Rentenversicherung",
     short: "3 Produktfamilien: Chance, Balance und Index – passend zu Ihrer Risikobereitschaft und Ihren Zielen.",
     highlights: ["Ab 25€/Monat", "100% Beitragsgarantie (Balance/Index)", "FFF+ Bestnote Franke & Bornberg", "Flexible Auszahlung"],
@@ -38,9 +36,9 @@ const products = [
       { title: "Online-Depot-Einsicht", description: "Jederzeit Ihr Investment im Blick" }
     ],
     detailSections: [
-      { title: "🚀 Chance", text: "Rein fondsgebunden mit bis zu 20 Fonds. Maximale Renditechancen, keine Beitragsgarantie. Ideal für renditeorientierte Sparer mit langem Anlagehorizont." },
-      { title: "⚖️ Balance", text: "Kombination aus Fonds, Sicherungsvermögen und Indexbeteiligung. 100% Beitragsgarantie zum Rentenbeginn. Flexible Aufteilung jederzeit änderbar." },
-      { title: "📊 Index", text: "Partizipation am MSCI World (30%) oder Munich Re Index (105%). Jährliche Gewinnsicherung, kein Verlustrisiko auf den Beitrag. 100% Beitragsgarantie." }
+      { title: "Chance", text: "Rein fondsgebunden mit bis zu 20 Fonds. Maximale Renditechancen, keine Beitragsgarantie. Ideal für renditeorientierte Sparer mit langem Anlagehorizont." },
+      { title: "Balance", text: "Kombination aus Fonds, Sicherungsvermögen und Indexbeteiligung. 100% Beitragsgarantie zum Rentenbeginn. Flexible Aufteilung jederzeit änderbar." },
+      { title: "Index", text: "Partizipation am MSCI World (30%) oder Munich Re Index (105%). Jährliche Gewinnsicherung, kein Verlustrisiko auf den Beitrag. 100% Beitragsgarantie." }
     ],
     steuerInfo: "In der Ansparphase sind Fondswechsel steuerfrei. Bei Auszahlung als Rente wird nur der geringe Ertragsanteil besteuert. Bei Kapitalauszahlung nach 12 Jahren und ab 62 gilt das Halbeinkünfteverfahren – nur 50% der Erträge steuerpflichtig.",
     questions: [
@@ -51,8 +49,6 @@ const products = [
   {
     id: "basis-rente",
     icon: Building2,
-    iconColor: "text-indigo-600",
-    bgColor: "bg-indigo-50",
     name: "ERGO Basis-Rente (Rürup)",
     short: "Staatlich geförderte Basisversorgung – Beiträge zu 100% steuerlich absetzbar. Ideal für Selbstständige und Gutverdiener.",
     highlights: ["100% steuerlich absetzbar", "Max. 27.565€/Jahr absetzbar", "Pfändungssicher", "Lebenslange Rente"],
@@ -79,8 +75,6 @@ const products = [
   {
     id: "betriebliche-av",
     icon: Briefcase,
-    iconColor: "text-emerald-600",
-    bgColor: "bg-emerald-50",
     name: "ERGO Betriebliche Altersvorsorge",
     short: "Vom Bruttoeinkommen sparen – mit verpflichtendem Arbeitgeberzuschuss von mindestens 15%.",
     highlights: ["Mind. 15% AG-Zuschuss", "Steuer- & SV-frei bis 302€/Monat", "Portabel bei Jobwechsel", "BU integrierbar"],
@@ -106,8 +100,6 @@ const products = [
   {
     id: "risiko-leben",
     icon: Shield,
-    iconColor: "text-red-600",
-    bgColor: "bg-red-50",
     name: "ERGO Risikolebensversicherung",
     short: "Finanzielle Absicherung Ihrer Familie im Todesfall. 3 Tarifvarianten: Grundschutz, Komfort, Premium.",
     highlights: ["Ab 1,97€/Monat", "Focus Money: Hervorragend", "Kinderschutz Plus (Premium)", "Nachversicherungsgarantie"],
@@ -133,8 +125,6 @@ const products = [
   {
     id: "bu-versicherung",
     icon: Umbrella,
-    iconColor: "text-amber-600",
-    bgColor: "bg-amber-50",
     name: "ERGO Berufsunfähigkeitsversicherung",
     short: "Sichern Sie Ihr wichtigstes Kapital: Ihre Arbeitskraft. Jeder Vierte wird im Berufsleben berufsunfähig.",
     highlights: ["Kein Verweis auf andere Berufe", "Ab 6 Monate Prognose", "Komfort & Premium Tarife", "Weltweiter Schutz"],
@@ -160,8 +150,6 @@ const products = [
   {
     id: "body-protect",
     icon: Heart,
-    iconColor: "text-pink-600",
-    bgColor: "bg-pink-50",
     name: "ERGO Body Protect",
     short: "Grundfähigkeitsversicherung – die clevere und günstigere Alternative zur BU. Bis zu 40 versicherte Fähigkeiten.",
     highlights: ["Günstiger als BU", "Weniger Gesundheitsfragen", "3 Tarife: Basis/Komfort/Premium", "Sport Plus einmalig am Markt"],
@@ -187,8 +175,6 @@ const products = [
   {
     id: "sterbegeld",
     icon: Users,
-    iconColor: "text-gray-600",
-    bgColor: "bg-gray-100",
     name: "ERGO Sterbegeldversicherung",
     short: "Entlasten Sie Ihre Angehörigen von den finanziellen Belastungen einer Bestattung. Ohne Gesundheitsfragen.",
     highlights: ["Keine Gesundheitsfragen", "Bis 20.000€ Versicherungssumme", "Doppelte Summe bei Unfall", "3 Tarifvarianten"],
@@ -268,36 +254,19 @@ const faqs = [
 ];
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 16 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' as const },
-  transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as const },
+  transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const },
 };
 
-function AnimatedCounter({ target, suffix = '', duration = 2 }: { target: number; suffix?: string; duration?: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true });
-  const motionVal = useMotionValue(0);
-  const springVal = useSpring(motionVal, { duration: duration * 1000 });
-  useEffect(() => {
-    if (isInView) motionVal.set(target);
-  }, [isInView, target, motionVal]);
-  useEffect(() => {
-    const unsubscribe = springVal.on('change', (v) => {
-      if (ref.current) ref.current.textContent = Math.round(v) + suffix;
-    });
-    return unsubscribe;
-  }, [springVal, suffix]);
-  return <span ref={ref}>0{suffix}</span>;
-}
-
 const QUIZ_OPTIONS = [
-  { label: 'Kfz-Versicherung', icon: '🚗', type: 'kfz', source: 'hero_quiz' },
-  { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat', source: 'hero_quiz' },
-  { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz', source: 'hero_quiz' },
-  { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu', source: 'hero_quiz' },
-  { label: 'Gewerbe & Betrieb', icon: '🏢', type: 'gewerbe', source: 'lp_gewerbe' },
-  { label: 'Alle prüfen', icon: '✅', type: 'all', source: 'hero_quiz' },
+  { label: 'Kfz-Versicherung', icon: CarFront, type: 'kfz', source: 'hero_quiz' },
+  { label: 'Hausrat & Haftpflicht', icon: Home, type: 'hausrat', source: 'hero_quiz' },
+  { label: 'Zahnzusatz', icon: SmilePlus, type: 'zahnzusatz', source: 'hero_quiz' },
+  { label: 'Berufsunfähigkeit', icon: BriefcaseBusiness, type: 'bu', source: 'hero_quiz' },
+  { label: 'Gewerbe & Betrieb', icon: Building2, type: 'gewerbe', source: 'lp_gewerbe' },
+  { label: 'Alle prüfen', icon: LayoutGrid, type: 'all', source: 'hero_quiz' },
 ];
 
 const QUIZ_TO_PRODUCT: Record<string, string> = {
@@ -401,70 +370,43 @@ export default function LebenVorsorge() {
         { label: "Versicherungen", href: "/" },
         { label: "Leben & Vorsorge" }
       ]} />
-      <main className="ds-marketing min-h-screen pb-16 sm:pb-0">
+      <main className="min-h-screen bg-white pb-16 sm:pb-0">
         {/* Hero Section */}
-        <section className="ds-hero py-12 md:py-20 px-4 bg-gradient-to-br from-[#003781] via-[#004fa0] to-[#001f5c] text-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-          <div className="max-w-5xl mx-auto relative">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
-              <div className="flex-1 text-center lg:text-left mb-10 lg:mb-0">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  className="inline-flex items-center gap-1.5 bg-white/15 px-3 py-1.5 rounded-full text-xs font-medium mb-5"
-                >
+        <section className="border-b border-ergo-line">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-12 md:pt-16 md:pb-16">
+            <div className="flex flex-col lg:flex-row lg:items-start lg:gap-12">
+              <div className="flex-1 mb-10 lg:mb-0">
+                <p className="ergo-eyebrow">ERGO Agentur Stübe · Ganderkesee</p>
+                <h1 className="text-[30px] leading-[1.25] md:text-[40px] mb-4 max-w-xl">
+                  Leben & Vorsorge – Ihre Zukunft gut abgesichert
+                </h1>
+
+                <div className="flex items-center gap-2 mb-4">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3 h-3 text-yellow-300 fill-yellow-300" />
+                      <Star key={i} className="w-4 h-4 text-ergo-yellow fill-ergo-yellow" />
                     ))}
                   </div>
-                  <span>4,9/5 · über 3.500 zufriedene Kunden</span>
-                </motion.div>
+                  <span className="text-sm font-bold text-ergo-ink">4,9/5</span>
+                  <span className="text-xs text-ergo-mute">über 3.500 zufriedene Kunden</span>
+                </div>
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
-                >
-                  Leben & Vorsorge –{' '}
-                  <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                    Ihre Zukunft gut abgesichert
-                  </span>
-                </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.35 }}
-                  className="text-base sm:text-lg text-white/90 max-w-xl mx-auto lg:mx-0 mb-3 leading-relaxed"
-                >
+                <p className="text-base sm:text-lg text-ergo-stone max-w-xl mb-5 leading-relaxed">
                   Von der privaten Altersvorsorge über Berufsunfähigkeit bis zur Risikolebensversicherung – persönliche Beratung vom Experten.
-                </motion.p>
+                </p>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.45 }}
-                  className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs text-white/80 mb-2"
-                >
-                  <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-green-300" /> 7 Produktlinien</span>
-                  <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-green-300" /> FFF+ Bestnote</span>
-                  <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-green-300" /> Steuervorteile sichern</span>
-                </motion.div>
+                <ul className="ergo-check-list text-sm text-ergo-ink max-w-md">
+                  <li>7 Produktlinien</li>
+                  <li>FFF+ Bestnote</li>
+                  <li>Steuervorteile sichern</li>
+                </ul>
               </div>
 
               {/* Quiz Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.5 }}
-                className="w-full lg:w-[420px] lg:flex-shrink-0"
-              >
-                <div className="rounded-2xl border-2 border-white/20 bg-white shadow-2xl shadow-black/20 p-4 sm:p-5">
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#E2001A] mb-1">Kostenlose Analyse – In 2 Minuten</p>
-                  <p className="text-sm sm:text-base font-bold text-gray-900 mb-4 leading-snug">
+              <div className="w-full lg:w-[420px] lg:flex-shrink-0">
+                <div className="ergo-card p-4 sm:p-5">
+                  <p className="ergo-eyebrow mb-1">Kostenlose Analyse – In 2 Minuten</p>
+                  <p className="font-serif text-lg font-bold text-ergo-ink mb-4">
                     Was möchten Sie versichern?
                   </p>
                   <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -478,70 +420,67 @@ export default function LebenVorsorge() {
                             trackEvent('quiz_option_clicked', { option: opt.type, source: opt.source, page: 'leben-vorsorge' });
                             handleStartFunnel(isAll ? null : QUIZ_TO_PRODUCT[opt.type]);
                           }}
-                          className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all active:scale-[0.98] group relative
-                            ${isAll
-                              ? 'border-[#E2001A] bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white hover:shadow-lg hover:shadow-red-500/25 sm:col-span-2'
-                              : isPreSelected
-                                ? 'border-[#E2001A] bg-red-50 shadow-sm'
-                                : 'border-gray-200 bg-gray-50 hover:border-[#E2001A] hover:bg-red-50'
-                            }`}
+                          className={
+                            isAll
+                              ? 'ergo-btn ergo-btn--primary sm:col-span-2 justify-between px-5'
+                              : `ergo-option flex items-center gap-3 px-4 py-3 text-left relative ${isPreSelected ? 'selected' : ''}`
+                          }
                         >
-                          {isPreSelected && !isAll && (
-                            <span className="absolute -top-1.5 -right-1.5 bg-[#E2001A] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">
-                              Empfohlen
-                            </span>
+                          {isAll ? (
+                            <>
+                              <span className="flex items-center gap-3"><opt.icon className="w-5 h-5" />{opt.label}</span>
+                              <ChevronRight className="w-4 h-4" />
+                            </>
+                          ) : (
+                            <>
+                              {isPreSelected && (
+                                <span className="absolute -top-2 right-3 bg-ergo-red text-white text-[10px] font-bold px-2 py-0.5 rounded-pill leading-none">
+                                  Empfohlen
+                                </span>
+                              )}
+                              <opt.icon className="w-5 h-5 text-ergo-red shrink-0" />
+                              <span className={`font-semibold text-sm ${isPreSelected ? 'text-ergo-red' : 'text-ergo-ink'}`}>
+                                {opt.label}
+                              </span>
+                              <ChevronRight className="w-4 h-4 ml-auto shrink-0 text-ergo-mute" />
+                            </>
                           )}
-                          <span className="text-2xl leading-none shrink-0">{opt.icon}</span>
-                          <span className={`font-semibold text-sm ${isAll ? 'text-white' : isPreSelected ? 'text-[#E2001A]' : 'text-gray-800 group-hover:text-[#E2001A]'}`}>
-                            {opt.label}
-                          </span>
-                          <ChevronRight className={`w-4 h-4 ml-auto shrink-0 group-hover:translate-x-0.5 transition-transform ${isAll ? 'text-white/80' : isPreSelected ? 'text-[#E2001A]' : 'text-gray-400 group-hover:text-[#E2001A]'}`} />
                         </button>
                       );
                     })}
                   </div>
-                  <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
-                    <p className="text-[10px] sm:text-xs text-gray-400">🔒 100% kostenlos & unverbindlich · DSGVO-konform</p>
+                  <div className="mt-4 pt-3 border-t border-ergo-line flex items-center justify-between gap-3">
+                    <p className="text-xs text-ergo-mute">100% kostenlos & unverbindlich · DSGVO-konform</p>
                     <a
                       href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20m%C3%B6chte%20mich%20zum%20Thema%20Leben%20%26%20Vorsorge%20kostenlos%20beraten%20lassen."
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => { trackEvent('whatsapp_clicked', { source: 'leben_hero_quiz' }); trackConversion(); }}
-                      className="flex items-center gap-1.5 text-[#25d366] hover:text-[#1da851] transition-colors text-xs font-semibold whitespace-nowrap shrink-0"
+                      className="flex items-center gap-1.5 text-[#1da851] hover:underline text-xs font-bold whitespace-nowrap shrink-0"
                     >
                       <MessageSquare className="w-3.5 h-3.5" />
                       Lieber WhatsApp
                     </a>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Glassmorphism Stats Band */}
-        <motion.section {...fadeInUp} className="px-4 py-8 max-w-4xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 divide-x divide-gray-200/60">
+        {/* Statistik-Band */}
+        <motion.section {...fadeInUp} className="bg-ergo-gray border-b border-ergo-line">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+            <div className="grid grid-cols-3 gap-4 md:gap-8 text-center">
               {[
-                { value: 3500, suffix: '+', label: 'Zufriedene Kunden' },
-                { value: 15, suffix: '+', label: 'Produkte' },
-                { value: 24, suffix: 'h', label: 'Reaktionszeit' },
-              ].map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.15 }}
-                  className="text-center"
-                >
-                  <div className="text-2xl sm:text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                  </div>
-                  <p className="text-xs md:text-sm text-gray-500 mt-1.5 font-medium">{stat.label}</p>
-                </motion.div>
+                { value: '3.500+', label: 'Zufriedene Kunden' },
+                { value: '15+', label: 'Produkte' },
+                { value: '24h', label: 'Reaktionszeit' },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <div className="font-serif text-3xl md:text-5xl font-bold text-ergo-red">{stat.value}</div>
+                  <p className="text-xs md:text-sm text-ergo-stone mt-1.5 font-medium">{stat.label}</p>
+                </div>
               ))}
             </div>
           </div>
@@ -551,178 +490,171 @@ export default function LebenVorsorge() {
         <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-high-contrast mb-3 sm:mb-4 px-2 leading-tight">
+              <h2 className="text-2xl md:text-[28px] mb-3 sm:mb-4 px-2">
                 7 starke Lösungen für Ihre Zukunft
               </h2>
-              <p className="text-sm sm:text-base lg:text-xl text-medium-contrast text-readable px-2">
+              <p className="text-sm sm:text-base text-ergo-stone px-2">
                 Von der Altersvorsorge bis zur Absicherung – ERGO bietet für jede Lebensphase das passende Produkt
               </p>
             </div>
 
             <div className="space-y-6">
               {products.map((product) => (
-                <Card key={product.id} className="overflow-hidden border-gray-200 hover:shadow-lg transition-shadow">
-                  <CardContent className="p-0">
-                    <div className="p-4 sm:p-6">
-                      <div className="flex flex-col sm:flex-row items-start gap-4">
-                        <div className={`w-12 h-12 sm:w-14 sm:h-14 ${product.bgColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                          <product.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${product.iconColor}`} />
+                <div key={product.id} className="ergo-card overflow-hidden">
+                  <div className="p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row items-start gap-4">
+                      <span className="ergo-icon-disc flex-shrink-0">
+                        <product.icon className="w-6 h-6" />
+                      </span>
+                      <div className="flex-1 w-full">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                          <h3 className="text-lg sm:text-xl">{product.name}</h3>
+                          <span className="ergo-chip ergo-chip--rose text-xs self-start">{product.target}</span>
                         </div>
-                        <div className="flex-1 w-full">
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                            <h3 className="text-lg sm:text-xl font-bold text-gray-900">{product.name}</h3>
-                            <Badge className="bg-blue-100 text-blue-800 text-xs self-start">{product.target}</Badge>
-                          </div>
-                          <p className="text-sm sm:text-base text-gray-600 mb-4">{product.short}</p>
+                        <p className="text-sm sm:text-base text-ergo-stone mb-4">{product.short}</p>
 
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {product.highlights.map((h, i) => (
-                              <span key={i} className="inline-flex items-center gap-1 text-xs sm:text-sm bg-green-50 text-green-700 px-2.5 py-1 rounded-full border border-green-200">
-                                <Check className="w-3 h-3 flex-shrink-0" />
-                                {h}
-                              </span>
-                            ))}
-                          </div>
-
-                          {/* Feature Cards */}
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-                            {product.features.map((feature, i) => (
-                              <div key={i} className="bg-gray-50 rounded-lg p-3">
-                                <h4 className="font-semibold text-sm text-gray-900 mb-1">{feature.title}</h4>
-                                <p className="text-xs text-gray-600 leading-relaxed">{feature.description}</p>
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="flex flex-col sm:flex-row gap-3">
-                            <Button
-                              className="bg-ergo-red hover:bg-ergo-red-hover text-white font-bold flex-1"
-                              onClick={() => {
-                                trackEvent('product_cta_clicked', { product: product.id, source: 'product_card' });
-                                handleStartFunnel(product.id);
-                              }}
-                            >
-                              Kostenlose Beratung anfordern
-                            </Button>
-                            <Button
-                              variant="outline"
-                              className="border-gray-300 text-gray-700 hover:bg-gray-50"
-                              onClick={() => toggleProduct(product.id)}
-                            >
-                              {openProduct === product.id ? "Weniger anzeigen" : "Alle Details"}
-                              <ChevronDown className={`w-4 h-4 ml-2 transition-transform ${openProduct === product.id ? "rotate-180" : ""}`} />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              className="border-green-300 text-green-700 hover:bg-green-50"
-                              onClick={() => {
-                                trackEvent('product_whatsapp_clicked', { product: product.id });
-                                const whatsappUrl = 'https://wa.me/4915566771019?text=' + encodeURIComponent(`Hallo Herr Stübe, ich interessiere mich für die ${product.name} und möchte mich kostenlos beraten lassen.`);
-                                trackAppointmentConversion(whatsappUrl);
-                              }}
-                            >
-                              <MessageCircle className="w-4 h-4 mr-1" />
-                              WhatsApp
-                            </Button>
-                          </div>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {product.highlights.map((h, i) => (
+                            <span key={i} className="inline-flex items-center gap-1 text-xs sm:text-sm bg-ergo-gray text-ergo-ink font-semibold px-2.5 py-1 rounded-pill">
+                              <Check className="w-3 h-3 flex-shrink-0 text-ergo-check" />
+                              {h}
+                            </span>
+                          ))}
                         </div>
-                      </div>
-                    </div>
 
-                    {/* Expanded Details */}
-                    <div className={`overflow-hidden transition-all duration-300 ${openProduct === product.id ? "max-h-[3000px] opacity-100" : "max-h-0 opacity-0"}`}>
-                      <div className="border-t bg-gray-50 p-4 sm:p-6">
-                        {product.detailSections && (
-                          <div className="mb-6">
-                            <h4 className="font-bold text-base text-gray-900 mb-3">Die 3 Produktfamilien</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                              {product.detailSections.map((section, i) => (
-                                <div key={i} className="bg-white rounded-lg p-4 border border-gray-200">
-                                  <h5 className="font-bold text-sm mb-2">{section.title}</h5>
-                                  <p className="text-xs text-gray-600 leading-relaxed">{section.text}</p>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        <h4 className="font-bold text-base text-gray-900 mb-3">Alle Leistungen im Detail</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-                          {product.benefits.map((benefit, i) => (
-                            <div key={i} className="flex items-start gap-3">
-                              <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <Check className="w-3 h-3 text-white" />
-                              </div>
-                              <div>
-                                <h5 className="font-semibold text-sm text-gray-900">{benefit.title}</h5>
-                                <p className="text-xs text-gray-600">{benefit.description}</p>
-                              </div>
+                        {/* Feature Cards */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                          {product.features.map((feature, i) => (
+                            <div key={i} className="bg-ergo-gray rounded-lg p-3">
+                              <h4 className="font-sans font-bold text-sm text-ergo-ink mb-1">{feature.title}</h4>
+                              <p className="text-xs text-ergo-stone leading-relaxed">{feature.description}</p>
                             </div>
                           ))}
                         </div>
 
-                        {product.steuerInfo && (
-                          <div className="bg-blue-50 rounded-lg p-4 mb-6 border border-blue-200">
-                            <h4 className="font-bold text-sm text-blue-800 mb-2">Steuervorteile</h4>
-                            <p className="text-sm text-blue-700 leading-relaxed">{product.steuerInfo}</p>
-                          </div>
-                        )}
-
-                        {product.additionalInfo && (
-                          <div className="bg-amber-50 rounded-lg p-4 mb-6 border border-amber-200">
-                            <p className="text-sm text-amber-800 leading-relaxed">{product.additionalInfo}</p>
-                          </div>
-                        )}
-
                         <div className="flex flex-col sm:flex-row gap-3">
-                          <Button
-                            className="bg-ergo-red hover:bg-ergo-red-hover text-white font-bold"
+                          <button
+                            className="ergo-btn ergo-btn--primary flex-1"
                             onClick={() => {
-                              trackEvent('product_detail_cta_clicked', { product: product.id });
+                              trackEvent('product_cta_clicked', { product: product.id, source: 'product_card' });
                               handleStartFunnel(product.id);
                             }}
                           >
-                            Jetzt kostenlos beraten lassen
-                          </Button>
-                          <Button
-                            variant="outline"
-                            className="border-green-300 text-green-700 hover:bg-green-50"
+                            Kostenlose Beratung anfordern
+                          </button>
+                          <button
+                            className="ergo-btn ergo-btn--tertiary"
+                            onClick={() => toggleProduct(product.id)}
+                          >
+                            {openProduct === product.id ? "Weniger anzeigen" : "Alle Details"}
+                            <ChevronDown className={`w-4 h-4 transition-transform ${openProduct === product.id ? "rotate-180" : ""}`} />
+                          </button>
+                          <button
+                            className="ergo-btn ergo-btn--whatsapp"
                             onClick={() => {
-                              const whatsappUrl = 'https://wa.me/4915566771019?text=' + encodeURIComponent(`Hallo Herr Stübe, ich habe mir die ${product.name} angeschaut und hätte gerne eine persönliche Beratung. Können Sie mich zurückrufen?`);
+                              trackEvent('product_whatsapp_clicked', { product: product.id });
+                              const whatsappUrl = 'https://wa.me/4915566771019?text=' + encodeURIComponent(`Hallo Herr Stübe, ich interessiere mich für die ${product.name} und möchte mich kostenlos beraten lassen.`);
                               trackAppointmentConversion(whatsappUrl);
                             }}
                           >
-                            <Phone className="w-4 h-4 mr-2" />
-                            Rückruf vereinbaren
-                          </Button>
+                            <MessageCircle className="w-4 h-4" />
+                            WhatsApp
+                          </button>
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+
+                  {/* Expanded Details */}
+                  <div className={`overflow-hidden transition-all duration-300 ${openProduct === product.id ? "max-h-[3000px] opacity-100" : "max-h-0 opacity-0"}`}>
+                    <div className="border-t border-ergo-line bg-ergo-gray p-4 sm:p-6">
+                      {product.detailSections && (
+                        <div className="mb-6">
+                          <h4 className="font-sans font-bold text-base text-ergo-ink mb-3">Die 3 Produktfamilien</h4>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            {product.detailSections.map((section, i) => (
+                              <div key={i} className="ergo-card p-4">
+                                <h5 className="font-bold text-sm mb-2">{section.title}</h5>
+                                <p className="text-xs text-ergo-stone leading-relaxed">{section.text}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <h4 className="font-sans font-bold text-base text-ergo-ink mb-3">Alle Leistungen im Detail</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                        {product.benefits.map((benefit, i) => (
+                          <div key={i} className="flex items-start gap-3">
+                            <CheckCircle2 className="w-5 h-5 text-ergo-check flex-shrink-0 mt-0.5" />
+                            <div>
+                              <h5 className="font-semibold text-sm text-ergo-ink">{benefit.title}</h5>
+                              <p className="text-xs text-ergo-stone">{benefit.description}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {product.steuerInfo && (
+                        <div className="bg-ergo-red-light border border-ergo-line rounded-lg p-4 mb-6">
+                          <h4 className="font-sans font-bold text-sm text-ergo-red mb-2">Steuervorteile</h4>
+                          <p className="text-sm text-ergo-ink leading-relaxed">{product.steuerInfo}</p>
+                        </div>
+                      )}
+
+                      {product.additionalInfo && (
+                        <div className="ergo-card p-4 mb-6">
+                          <p className="text-sm text-ergo-stone leading-relaxed">{product.additionalInfo}</p>
+                        </div>
+                      )}
+
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <button
+                          className="ergo-btn ergo-btn--primary"
+                          onClick={() => {
+                            trackEvent('product_detail_cta_clicked', { product: product.id });
+                            handleStartFunnel(product.id);
+                          }}
+                        >
+                          Jetzt kostenlos beraten lassen
+                        </button>
+                        <button
+                          className="ergo-btn ergo-btn--whatsapp"
+                          onClick={() => {
+                            const whatsappUrl = 'https://wa.me/4915566771019?text=' + encodeURIComponent(`Hallo Herr Stübe, ich habe mir die ${product.name} angeschaut und hätte gerne eine persönliche Beratung. Können Sie mich zurückrufen?`);
+                            trackAppointmentConversion(whatsappUrl);
+                          }}
+                        >
+                          <Phone className="w-4 h-4" />
+                          Rückruf vereinbaren
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
         </motion.section>
 
         {/* Comparison Table - Renten-Produktfamilien */}
-        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-ergo-gray">
+        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-ergo-gray border-y border-ergo-line">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 leading-tight">
+              <h2 className="text-2xl md:text-[28px] mb-3 sm:mb-4 px-2">
                 Die 3 Renten-Produktfamilien im Vergleich
               </h2>
-              <p className="text-sm sm:text-base lg:text-xl text-gray-700 px-2">
+              <p className="text-sm sm:text-base text-ergo-stone px-2">
                 Chance vs. Balance vs. Index – finden Sie Ihre passende Strategie
               </p>
             </div>
 
             {/* Desktop Table */}
             <div className="hidden md:block overflow-x-auto">
-              <table className="w-full border-collapse bg-white rounded-xl overflow-hidden shadow-sm">
+              <table className="w-full border-collapse bg-white rounded-lg overflow-hidden border border-ergo-line">
                 <thead>
                   <tr>
-                    <th className="text-left p-4 bg-gray-50"></th>
+                    <th className="text-left p-4 bg-ergo-gray"></th>
                     <th className="p-4 bg-ergo-red text-white text-center font-bold">Chance</th>
                     <th className="p-4 bg-ergo-dark text-white text-center font-bold">Balance</th>
                     <th className="p-4 bg-ergo-red text-white text-center font-bold">Index</th>
@@ -730,18 +662,18 @@ export default function LebenVorsorge() {
                 </thead>
                 <tbody>
                   {comparisonData.map((row, i) => (
-                    <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                      <td className="p-4 font-semibold text-gray-900 text-sm">{row.label}</td>
+                    <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-ergo-gray"}>
+                      <td className="p-4 font-semibold text-ergo-ink text-sm">{row.label}</td>
                       {(["chance", "balance", "index"] as const).map((col) => (
                         <td key={col} className="p-4 text-center text-sm">
                           {typeof row[col] === "boolean" ? (
                             row[col] ? (
-                              <Check className="w-5 h-5 text-green-500 mx-auto" />
+                              <Check className="w-5 h-5 text-ergo-check mx-auto" />
                             ) : (
-                              <X className="w-5 h-5 text-red-400 mx-auto" />
+                              <X className="w-5 h-5 text-ergo-mute mx-auto" />
                             )
                           ) : (
-                            <span className="text-gray-700">{row[col]}</span>
+                            <span className="text-ergo-stone">{row[col]}</span>
                           )}
                         </td>
                       ))}
@@ -754,22 +686,22 @@ export default function LebenVorsorge() {
             {/* Mobile Cards */}
             <div className="md:hidden space-y-4">
               {[
-                { key: "chance" as const, title: "Chance", color: "border-ergo-red", bg: "bg-ergo-red" },
-                { key: "balance" as const, title: "Balance", color: "border-gray-800", bg: "bg-ergo-dark" },
-                { key: "index" as const, title: "Index", color: "border-ergo-red", bg: "bg-ergo-red" }
+                { key: "chance" as const, title: "Chance", color: "border-l-ergo-red" },
+                { key: "balance" as const, title: "Balance", color: "border-l-ergo-dark" },
+                { key: "index" as const, title: "Index", color: "border-l-ergo-red" }
               ].map((variant) => (
-                <div key={variant.key} className={`border-l-4 ${variant.color} bg-white rounded-lg shadow-sm p-5`}>
-                  <h3 className="font-bold text-lg mb-3">{variant.title}</h3>
+                <div key={variant.key} className={`ergo-card border-l-4 ${variant.color} p-5`}>
+                  <h3 className="text-lg mb-3">{variant.title}</h3>
                   <div className="space-y-2">
                     {comparisonData.map((row, i) => (
-                      <div key={i} className="flex justify-between items-center text-sm py-1 border-b border-gray-100 last:border-0">
-                        <span className="text-gray-600">{row.label}</span>
-                        <span className="font-medium text-gray-900 text-right ml-4">
+                      <div key={i} className="flex justify-between items-center text-sm py-1 border-b border-ergo-line last:border-0">
+                        <span className="text-ergo-stone">{row.label}</span>
+                        <span className="font-medium text-ergo-ink text-right ml-4">
                           {typeof row[variant.key] === "boolean" ? (
                             row[variant.key] ? (
-                              <Check className="w-4 h-4 text-green-500" />
+                              <Check className="w-4 h-4 text-ergo-check" />
                             ) : (
-                              <X className="w-4 h-4 text-red-400" />
+                              <X className="w-4 h-4 text-ergo-mute" />
                             )
                           ) : (
                             <span className="text-xs">{row[variant.key]}</span>
@@ -783,16 +715,15 @@ export default function LebenVorsorge() {
             </div>
 
             <div className="text-center mt-8">
-              <Button
-                size="lg"
-                className="bg-ergo-red hover:bg-ergo-red-hover text-white font-bold px-8 py-4"
+              <button
+                className="ergo-btn ergo-btn--primary"
                 onClick={() => {
                   trackEvent('comparison_cta_clicked', { source: 'comparison_table' });
                   handleStartFunnel("private-rente");
                 }}
               >
                 Welche Strategie passt zu mir? Kostenlos beraten lassen
-              </Button>
+              </button>
             </div>
           </div>
         </motion.section>
@@ -801,89 +732,82 @@ export default function LebenVorsorge() {
         <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 leading-tight">
+              <h2 className="text-2xl md:text-[28px] mb-3 sm:mb-4 px-2">
                 Steuervorteile: ETF-Depot vs. ERGO Rentenversicherung
               </h2>
-              <p className="text-sm sm:text-base lg:text-xl text-gray-700 px-2">
+              <p className="text-sm sm:text-base text-ergo-stone px-2">
                 Warum die Rentenversicherung steuerlich oft die klügere Wahl ist
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="border-gray-200">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3 mb-5">
-                    <TrendingUp className="w-8 h-8 text-gray-400" />
-                    <h3 className="text-lg font-bold text-gray-900">ETF-Depot</h3>
-                  </div>
-                  <ul className="space-y-3">
-                    {[
-                      "Fondswechsel löst Kapitalertragssteuer aus (ca. 26,4%)",
-                      "Jährliche Vorabpauschale auf Erträge",
-                      "Kein Langlebigkeitsschutz – Kapital kann aufgebraucht werden",
-                      "Volle Besteuerung der Gewinne bei Entnahme"
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm">
-                        <X className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+              <div className="ergo-card p-6">
+                <div className="flex items-center gap-3 mb-5">
+                  <TrendingUp className="w-8 h-8 text-ergo-mute" />
+                  <h3 className="font-sans font-bold text-lg text-ergo-ink">ETF-Depot</h3>
+                </div>
+                <ul className="space-y-3">
+                  {[
+                    "Fondswechsel löst Kapitalertragssteuer aus (ca. 26,4%)",
+                    "Jährliche Vorabpauschale auf Erträge",
+                    "Kein Langlebigkeitsschutz – Kapital kann aufgebraucht werden",
+                    "Volle Besteuerung der Gewinne bei Entnahme"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm">
+                      <X className="w-4 h-4 text-ergo-mute mt-0.5 flex-shrink-0" />
+                      <span className="text-ergo-stone">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-              <Card className="border-2 border-ergo-red">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3 mb-5">
-                    <Star className="w-8 h-8 text-ergo-red" />
-                    <h3 className="text-lg font-bold text-ergo-red">ERGO Rentenversicherung</h3>
-                  </div>
-                  <ul className="space-y-3">
-                    {[
-                      ["Fondswechsel steuerfrei", "beliebig oft umschichten ohne Kapitalertragssteuer"],
-                      ["Ertragsanteilbesteuerung", "nur geringer Anteil der Rente wird besteuert"],
-                      ["Halbeinkünfteverfahren", "nur 50% der Erträge steuerpflichtig (ab 62, nach 12 Jahren)"],
-                      ["Lebenslange Rente", "Langlebigkeitsrisiko abgesichert – garantierte Zahlung"]
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm">
-                        <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700"><strong>{item[0]}</strong> – {item[1]}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+              <div className="ergo-card border-2 border-ergo-red p-6">
+                <div className="flex items-center gap-3 mb-5">
+                  <Star className="w-8 h-8 text-ergo-red" />
+                  <h3 className="font-sans font-bold text-lg text-ergo-red">ERGO Rentenversicherung</h3>
+                </div>
+                <ul className="space-y-3">
+                  {[
+                    ["Fondswechsel steuerfrei", "beliebig oft umschichten ohne Kapitalertragssteuer"],
+                    ["Ertragsanteilbesteuerung", "nur geringer Anteil der Rente wird besteuert"],
+                    ["Halbeinkünfteverfahren", "nur 50% der Erträge steuerpflichtig (ab 62, nach 12 Jahren)"],
+                    ["Lebenslange Rente", "Langlebigkeitsrisiko abgesichert – garantierte Zahlung"]
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm">
+                      <Check className="w-4 h-4 text-ergo-check mt-0.5 flex-shrink-0" />
+                      <span className="text-ergo-stone"><strong className="text-ergo-ink">{item[0]}</strong> – {item[1]}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </motion.section>
 
-        {/* Expert Section – Glassmorphism */}
+        {/* Expert Section */}
         <motion.section {...fadeInUp} className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-6">Ihr Versicherungsexperte</h2>
-          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-5 md:p-8 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
+          <h2 className="text-xl sm:text-2xl text-center mb-6">Ihr Versicherungsexperte</h2>
+          <div className="ergo-card p-5 md:p-8">
             <div className="flex flex-col items-center text-center gap-5 md:flex-row md:text-left md:items-start">
-              <motion.img
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.3 }}
+              <img
                 src={beraterPhoto}
                 alt="Morino Stübe - ERGO Versicherungsfachmann in Ganderkesee"
-                className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-lg shrink-0 bg-white"
+                className="w-32 h-40 md:w-40 md:h-52 rounded-lg object-contain border border-ergo-line shrink-0 bg-white"
                 loading="lazy"
               />
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-gray-900 mb-1 md:text-2xl">Morino Stübe</h3>
-                <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann · Leben & Vorsorge Spezialist</p>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4 md:text-base">
+                <h3 className="text-xl mb-1 md:text-2xl">Morino Stübe</h3>
+                <p className="text-ergo-red font-bold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann · Leben & Vorsorge Spezialist</p>
+                <p className="text-ergo-stone text-sm leading-relaxed mb-4 md:text-base">
                   Ich berate Sie persönlich und transparent zu allen Fragen rund um Altersvorsorge und Absicherung – von der privaten Rente über Berufsunfähigkeit bis zur Risikolebensversicherung.
                 </p>
-                <div className="flex flex-col gap-2 text-xs text-gray-500 md:text-sm">
+                <div className="flex flex-col gap-2 text-xs text-ergo-stone md:text-sm">
                   <span className="flex items-center justify-center md:justify-start gap-1.5">
                     <Shield className="w-4 h-4 text-ergo-red shrink-0" />
                     Vermittlerregister-Nr. D-5H7J-7DUI1-10
                   </span>
                   <span className="flex items-center justify-center md:justify-start gap-1.5">
-                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500 shrink-0" />
+                    <Award className="w-4 h-4 text-ergo-red shrink-0" />
                     ERGO als starker Partner seit 1906
                   </span>
                 </div>
@@ -891,7 +815,7 @@ export default function LebenVorsorge() {
               <img
                 src="/attached_assets/ergo-logo-hq.svg"
                 alt="ERGO Logo"
-                className="h-10 md:h-14 w-auto shrink-0 hidden md:block"
+                className="h-8 md:h-10 w-auto shrink-0 hidden md:block"
                 loading="lazy"
                 decoding="async"
               />
@@ -905,49 +829,45 @@ export default function LebenVorsorge() {
           title="Häufige Fragen zu Leben & Vorsorge"
           subtitle="Weitere Fragen? Kontaktieren Sie uns direkt – Morino Stübe berät Sie persönlich in Ganderkesee, Delmenhorst und Oldenburg."
           faqs={faqs.map(f => ({ question: f.question, answer: f.answer }))}
-          className="bg-ergo-gray"
+          className="bg-ergo-gray border-y border-ergo-line"
         />
 
         {/* Final CTA Section */}
-        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight">
+        <motion.section {...fadeInUp} className="ergo-section--red py-14 md:py-20 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-2xl md:text-[28px] mb-3 sm:mb-4 px-2">
               Kostenlose Analyse Ihrer Altersvorsorge!
             </h2>
-            <p className="text-sm sm:text-base lg:text-xl mb-6 sm:mb-8 px-2 text-white/90">
+            <p className="text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 px-2 text-white/90">
               <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer Altersvorsorge und Absicherung.
               <strong> Persönliche Beratung durch Ihren ERGO-Experten vor Ort.</strong>
             </p>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-                <Button
-                  size="lg"
-                  className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-xl font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                  onClick={() => {
-                    trackEvent('final_cta_clicked', { insurance_type: 'leben-vorsorge', source: 'bottom_section', value: 15 });
-                    handleStartFunnel();
-                  }}
-                >
-                  KOSTENLOSE BERATUNG STARTEN
-                </Button>
-                <Button
-                  size="lg"
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold"
-                  onClick={() => {
-                    trackEvent('final_whatsapp_clicked', { insurance_type: 'leben-vorsorge', source: 'bottom_section' });
-                    const whatsappUrl = 'https://wa.me/4915566771019?text=' + encodeURIComponent('Hallo Herr Stübe, ich möchte mich zum Thema Leben & Vorsorge kostenlos beraten lassen. Welche Produkte empfehlen Sie mir?');
-                    trackAppointmentConversion(whatsappUrl);
-                  }}
-                >
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Sofortige WhatsApp Beratung
-                </Button>
-              </div>
-              <p className="text-sm font-medium mt-3 text-white/80">
-                Kostenlose Analyse - Optimierung bestehender Verträge - Persönliche Beratung vom Experten
-              </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
+              <button
+                className="ergo-btn ergo-btn--inverted"
+                onClick={() => {
+                  trackEvent('final_cta_clicked', { insurance_type: 'leben-vorsorge', source: 'bottom_section', value: 15 });
+                  handleStartFunnel();
+                }}
+              >
+                KOSTENLOSE BERATUNG STARTEN
+              </button>
+              <button
+                className="ergo-btn ergo-btn--whatsapp"
+                onClick={() => {
+                  trackEvent('final_whatsapp_clicked', { insurance_type: 'leben-vorsorge', source: 'bottom_section' });
+                  const whatsappUrl = 'https://wa.me/4915566771019?text=' + encodeURIComponent('Hallo Herr Stübe, ich möchte mich zum Thema Leben & Vorsorge kostenlos beraten lassen. Welche Produkte empfehlen Sie mir?');
+                  trackAppointmentConversion(whatsappUrl);
+                }}
+              >
+                <MessageCircle className="w-5 h-5" />
+                Sofortige WhatsApp Beratung
+              </button>
             </div>
+            <p className="text-sm font-medium mb-6 sm:mb-8 text-white/80">
+              Kostenlose Analyse - Optimierung bestehender Verträge - Persönliche Beratung vom Experten
+            </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm font-medium text-white/80">
               <div className="flex items-center gap-2">
@@ -963,13 +883,13 @@ export default function LebenVorsorge() {
         </motion.section>
 
         {/* Sticky Mobile CTA Bar */}
-        <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
+        <div className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-ergo-line px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
           <button
             onClick={() => {
               setFunnelOpen(true);
               trackEvent('sticky_cta_clicked', { source: 'leben_vorsorge' });
             }}
-            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm min-h-[44px] py-3 rounded-xl whitespace-nowrap shadow-lg shadow-red-500/20 animate-pulse-subtle"
+            className="ergo-btn ergo-btn--primary ergo-btn--sm flex-1 whitespace-nowrap"
           >
             <Mail className="w-4 h-4 shrink-0" />
             Kostenlose Beratung
@@ -979,7 +899,7 @@ export default function LebenVorsorge() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackConversion()}
-            className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 min-h-[44px] py-3 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap"
+            className="ergo-btn ergo-btn--whatsapp ergo-btn--sm whitespace-nowrap"
           >
             <MessageSquare className="w-4 h-4 shrink-0" />
             WhatsApp

@@ -3,7 +3,7 @@ import SEO from '@/components/SEO';
 import FunnelOverlay from '@/components/FunnelOverlay';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import '@/styles/funnel.css';
-import { Calculator, TrendingDown, Phone, MessageCircle, PiggyBank, ChevronDown, ChevronUp } from 'lucide-react';
+import { Calculator, TrendingDown, Phone, MessageCircle, Check, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface InsuranceEntry {
   name: string;
@@ -72,32 +72,29 @@ export default function SparRechner() {
         keywords="Bündelnachlass ERGO, Versicherung sparen, Bündelrabatt, Versicherung günstiger, ERGO Rabatt, Sachversicherung bündeln"
       />
 
-      <div className="ds-form-flow min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-8 md:py-14">
 
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-              <PiggyBank className="w-4 h-4" />
-              ERGO Bündelnachlass
-            </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+            <p className="ergo-eyebrow">ERGO Bündelnachlass</p>
+            <h1 className="text-[30px] md:text-[40px] mb-2">
               Bündel-Sparrechner
             </h1>
-            <p className="text-gray-500 text-sm md:text-base">
+            <p className="text-ergo-stone text-sm md:text-base">
               Berechnen Sie, wie viel Sie mit dem ERGO Bündelnachlass sparen können
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 md:p-8 mb-6">
+          <div className="ergo-card p-6 md:p-8 mb-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900">Ihre Sachversicherungen</h2>
-              <button onClick={() => setShowInfo(!showInfo)} className="text-sm text-gray-400 hover:text-gray-600 flex items-center gap-1">
+              <h2 className="text-lg">Ihre Sachversicherungen</h2>
+              <button onClick={() => setShowInfo(!showInfo)} className="text-sm text-ergo-mute hover:text-ergo-stone flex items-center gap-1">
                 Info {showInfo ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </button>
             </div>
 
             {showInfo && (
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4 text-sm text-blue-800">
+              <div className="bg-ergo-gray border border-ergo-line rounded-lg p-4 mb-4 text-sm text-ergo-ink">
                 <p className="font-semibold mb-1">So funktioniert der Bündelnachlass:</p>
                 <ul className="space-y-1 text-xs">
                   <li>2 Verträge = <strong>5% Rabatt</strong></li>
@@ -105,28 +102,29 @@ export default function SparRechner() {
                   <li>4 Verträge = <strong>12% Rabatt</strong></li>
                   <li>5+ Verträge = <strong>bis zu 15% Rabatt</strong></li>
                 </ul>
-                <p className="text-xs mt-2 text-blue-600">Gilt für Sachversicherungen (Kfz, Haftpflicht, Hausrat, Wohngebäude, Rechtsschutz, Unfall).</p>
+                <p className="text-xs mt-2 text-ergo-stone">Gilt für Sachversicherungen (Kfz, Haftpflicht, Hausrat, Wohngebäude, Rechtsschutz, Unfall).</p>
               </div>
             )}
 
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-ergo-stone mb-4">
               Wählen Sie Ihre Versicherungen und geben Sie den aktuellen Jahresbeitrag ein:
             </p>
 
             <div className="space-y-3">
               {entries.map((entry, i) => (
-                <div key={entry.name} className={`flex flex-wrap items-center gap-2 sm:gap-3 p-3 rounded-xl border-2 transition-all ${
-                  entry.active ? 'border-green-300 bg-green-50' : 'border-gray-200'
+                <div key={entry.name} className={`ergo-option flex flex-wrap items-center gap-2 sm:gap-3 p-3 ${
+                  entry.active ? 'selected' : ''
                 }`}>
                   <button
                     onClick={() => toggleEntry(i)}
-                    className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 transition-colors ${
-                      entry.active ? 'bg-green-500 border-green-500 text-white' : 'border-gray-300'
+                    aria-pressed={entry.active}
+                    className={`w-6 h-6 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
+                      entry.active ? 'bg-ergo-red border-ergo-red text-white' : 'border-ergo-line bg-white'
                     }`}
                   >
-                    {entry.active && '✓'}
+                    {entry.active && <Check className="w-4 h-4" />}
                   </button>
-                  <span className={`flex-1 min-w-0 font-medium text-sm ${entry.active ? 'text-gray-900' : 'text-gray-500'}`}>
+                  <span className={`flex-1 min-w-0 font-medium text-sm ${entry.active ? 'text-ergo-ink' : 'text-ergo-stone'}`}>
                     {entry.name}
                   </span>
                   {entry.active && (
@@ -137,9 +135,9 @@ export default function SparRechner() {
                         value={entry.beitrag}
                         onChange={(e) => updateBeitrag(i, e.target.value)}
                         placeholder="0"
-                        className="w-[72px] text-right p-2 border border-gray-300 rounded-lg text-sm font-semibold focus:outline-none focus:border-green-500"
+                        className="w-[72px] text-right p-2 border border-ergo-line rounded text-sm font-semibold focus:outline-none focus:border-ergo-red"
                       />
-                      <span className="text-xs sm:text-sm text-gray-500">€/J.</span>
+                      <span className="text-xs sm:text-sm text-ergo-stone">€/J.</span>
                     </div>
                   )}
                 </div>
@@ -147,77 +145,73 @@ export default function SparRechner() {
             </div>
 
             <div className="mt-4 flex items-center justify-between text-sm">
-              <span className="text-gray-500">{anzahlVertraege} Versicherung{anzahlVertraege !== 1 ? 'en' : ''} ausgewählt</span>
+              <span className="text-ergo-stone">{anzahlVertraege} Versicherung{anzahlVertraege !== 1 ? 'en' : ''} ausgewählt</span>
               {anzahlVertraege >= 2 && (
-                <span className="text-green-600 font-bold">{rabattProzent}% Bündelnachlass</span>
+                <span className="text-ergo-check font-bold">{rabattProzent}% Bündelnachlass</span>
               )}
             </div>
 
             <button
               onClick={handleCalculate}
               disabled={anzahlVertraege < 2}
-              className={`w-full mt-4 min-h-[52px] rounded-xl font-bold text-base transition-colors ${
-                anzahlVertraege >= 2
-                  ? 'bg-ergo-red text-white hover:bg-[#c5001a]'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              }`}
+              className="ergo-btn ergo-btn--primary w-full mt-4"
             >
-              <Calculator className="w-5 h-5 inline mr-2" />
+              <Calculator className="w-5 h-5" />
               {anzahlVertraege < 2 ? 'Mindestens 2 Versicherungen auswählen' : 'Ersparnis berechnen'}
             </button>
           </div>
 
           {showResult && (
             <div className="space-y-6">
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 md:p-8">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">Ihre Ersparnis</h3>
+              <div className="ergo-card p-6 md:p-8">
+                <h3 className="text-lg mb-4 text-center">Ihre Ersparnis</h3>
 
                 <div className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:gap-4 text-center mb-6">
-                  <div className="bg-gray-50 rounded-xl p-4 flex items-center justify-between sm:flex-col sm:justify-center">
-                    <p className="text-xs text-gray-500 sm:mb-1">Aktuell</p>
+                  <div className="bg-ergo-gray rounded-lg p-4 flex items-center justify-between sm:flex-col sm:justify-center">
+                    <p className="text-xs text-ergo-stone sm:mb-1">Aktuell</p>
                     <div className="flex items-baseline gap-1 sm:flex-col sm:items-center">
-                      <p className="text-xl sm:text-lg font-bold text-gray-900">{totalBeitrag.toFixed(0)} €</p>
-                      <p className="text-xs text-gray-400">pro Jahr</p>
+                      <p className="text-xl sm:text-lg font-bold text-ergo-ink">{totalBeitrag.toFixed(0)} €</p>
+                      <p className="text-xs text-ergo-mute">pro Jahr</p>
                     </div>
                   </div>
-                  <div className="bg-red-50 rounded-xl p-4 flex items-center justify-between sm:flex-col sm:justify-center">
+                  <div className="bg-ergo-red-light rounded-lg p-4 flex items-center justify-between sm:flex-col sm:justify-center">
                     <div className="flex items-center gap-1 sm:mb-1">
-                      <TrendingDown className="w-3 h-3 text-red-500" />
-                      <p className="text-xs text-red-500 font-semibold">-{rabattProzent}%</p>
+                      <TrendingDown className="w-3 h-3 text-ergo-red" />
+                      <p className="text-xs text-ergo-red font-semibold">-{rabattProzent}%</p>
                     </div>
                     <div className="flex items-baseline gap-1 sm:flex-col sm:items-center">
-                      <p className="text-xl sm:text-lg font-bold text-red-600">-{ersparnis.toFixed(0)} €</p>
-                      <p className="text-xs text-gray-400">Ersparnis</p>
+                      <p className="text-xl sm:text-lg font-bold text-ergo-red">-{ersparnis.toFixed(0)} €</p>
+                      <p className="text-xs text-ergo-mute">Ersparnis</p>
                     </div>
                   </div>
-                  <div className="bg-green-50 rounded-xl p-4 flex items-center justify-between sm:flex-col sm:justify-center">
-                    <p className="text-xs text-green-600 font-semibold sm:mb-1">Mit ERGO</p>
+                  <div className="bg-ergo-gray rounded-lg p-4 flex items-center justify-between sm:flex-col sm:justify-center">
+                    <p className="text-xs text-ergo-check font-semibold sm:mb-1">Mit ERGO</p>
                     <div className="flex items-baseline gap-1 sm:flex-col sm:items-center">
-                      <p className="text-xl sm:text-lg font-bold text-green-700">{neuerBeitrag.toFixed(0)} €</p>
-                      <p className="text-xs text-gray-400">pro Jahr</p>
+                      <p className="text-xl sm:text-lg font-bold text-ergo-check">{neuerBeitrag.toFixed(0)} €</p>
+                      <p className="text-xs text-ergo-mute">pro Jahr</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-green-100 border border-green-300 rounded-xl p-4 text-center">
-                  <p className="text-green-800 font-bold text-lg">
+                <div className="bg-ergo-red-light border border-ergo-red/30 rounded-lg p-4 text-center">
+                  <p className="text-ergo-red font-bold text-lg">
                     Sie sparen bis zu {ersparnis.toFixed(0)} € pro Jahr!
                   </p>
-                  <p className="text-green-600 text-sm mt-1">
+                  <p className="text-ergo-stone text-sm mt-1">
                     Das sind {(ersparnis / 12).toFixed(0)} € pro Monat mit dem Bündelnachlass.
                   </p>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-[#003781] to-[#005ab4] rounded-2xl p-6 text-white text-center">
-                <h3 className="text-lg font-bold mb-2">Jetzt persönliches Angebot erhalten</h3>
-                <p className="text-sm text-blue-100 mb-4">
+              <div className="ergo-section--red rounded-lg p-6 text-center">
+                <h3 className="text-lg mb-2">Jetzt persönliches Angebot erhalten</h3>
+                <p className="text-sm text-white/90 mb-4">
                   Ich berechne Ihren individuellen Bündelnachlass und zeige Ihnen die besten Tarife.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <button
                     onClick={() => { setShowFunnel(true); trackEvent('sparrechner_to_funnel'); }}
-                    className="inline-flex items-center justify-center gap-2 bg-white text-[#003781] font-bold px-6 py-3 rounded-xl hover:bg-gray-100 transition-colors min-h-[48px]"
+                    className="ergo-btn ergo-btn--inverted"
                   >
                     <Phone className="w-4 h-4" /> Kostenlos beraten lassen
                   </button>
@@ -225,7 +219,7 @@ export default function SparRechner() {
                     href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hallo Herr Stübe, ich habe den Sparrechner genutzt und möchte gerne ein persönliches Angebot für ${anzahlVertraege} Sachversicherungen mit Bündelnachlass.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-[#25d366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#1da851] transition-colors min-h-[48px]"
+                    className="ergo-btn ergo-btn--whatsapp"
                   >
                     <MessageCircle className="w-4 h-4" /> Per WhatsApp
                   </a>
@@ -234,7 +228,7 @@ export default function SparRechner() {
             </div>
           )}
 
-          <p className="text-center text-xs text-gray-400 mt-8">
+          <p className="text-center text-xs text-ergo-mute mt-8">
             Die Berechnung ist unverbindlich und dient zur Orientierung. Der tatsächliche Bündelnachlass wird individuell berechnet.
           </p>
         </div>

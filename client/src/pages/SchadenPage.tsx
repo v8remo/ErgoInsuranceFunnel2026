@@ -1,5 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'wouter';
+import {
+  CarFront, Zap, Home, Building2, Scale, Shield, Briefcase, ClipboardList, Ambulance,
+  Lock, Check, ChevronLeft, Camera, Upload, FileText, X, Star, AlertTriangle, MessageCircle,
+  type LucideIcon,
+} from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -74,26 +79,26 @@ const initialFormData: FormData = {
   glasGroesse: '',
 };
 
-const damageTypes: { type: DamageType; icon: string; title: string; subtitle?: string }[] = [
-  { type: 'kfz', icon: '🚗', title: 'Kfz-Schaden' },
-  { type: 'glasschaden', icon: '🔲', title: 'Kfz-Glasschaden', subtitle: 'In Kooperation mit Carglass' },
-  { type: 'hausrat', icon: '🏠', title: 'Hausrat-Schaden' },
-  { type: 'gebaeude', icon: '🏚️', title: 'Gebäudeschaden' },
-  { type: 'rechtsschutz', icon: '⚖️', title: 'Rechtsschutz-Fall' },
-  { type: 'haftpflicht', icon: '🛡️', title: 'Haftpflicht-Schaden' },
-  { type: 'bu', icon: '💼', title: 'Berufsunfähigkeit' },
-  { type: 'sonstiges', icon: '📋', title: 'Sonstiger Schaden' },
+const damageTypes: { type: DamageType; icon: LucideIcon; title: string; subtitle?: string }[] = [
+  { type: 'kfz', icon: CarFront, title: 'Kfz-Schaden' },
+  { type: 'glasschaden', icon: Zap, title: 'Kfz-Glasschaden', subtitle: 'In Kooperation mit Carglass' },
+  { type: 'hausrat', icon: Home, title: 'Hausrat-Schaden' },
+  { type: 'gebaeude', icon: Building2, title: 'Gebäudeschaden' },
+  { type: 'rechtsschutz', icon: Scale, title: 'Rechtsschutz-Fall' },
+  { type: 'haftpflicht', icon: Shield, title: 'Haftpflicht-Schaden' },
+  { type: 'bu', icon: Briefcase, title: 'Berufsunfähigkeit' },
+  { type: 'sonstiges', icon: ClipboardList, title: 'Sonstiger Schaden' },
 ];
 
-const damageTypeLabels: Record<DamageType, { icon: string; title: string }> = {
-  kfz: { icon: '🚗', title: 'Kfz-Schaden' },
-  glasschaden: { icon: '🔲', title: 'Kfz-Glasschaden' },
-  hausrat: { icon: '🏠', title: 'Hausrat-Schaden' },
-  gebaeude: { icon: '🏚️', title: 'Gebäudeschaden' },
-  rechtsschutz: { icon: '⚖️', title: 'Rechtsschutz-Fall' },
-  haftpflicht: { icon: '🛡️', title: 'Haftpflicht-Schaden' },
-  bu: { icon: '💼', title: 'Berufsunfähigkeit' },
-  sonstiges: { icon: '📋', title: 'Sonstiger Schaden' },
+const damageTypeLabels: Record<DamageType, { icon: LucideIcon; title: string }> = {
+  kfz: { icon: CarFront, title: 'Kfz-Schaden' },
+  glasschaden: { icon: Zap, title: 'Kfz-Glasschaden' },
+  hausrat: { icon: Home, title: 'Hausrat-Schaden' },
+  gebaeude: { icon: Building2, title: 'Gebäudeschaden' },
+  rechtsschutz: { icon: Scale, title: 'Rechtsschutz-Fall' },
+  haftpflicht: { icon: Shield, title: 'Haftpflicht-Schaden' },
+  bu: { icon: Briefcase, title: 'Berufsunfähigkeit' },
+  sonstiges: { icon: ClipboardList, title: 'Sonstiger Schaden' },
 };
 
 export default function SchadenPage() {
@@ -378,7 +383,7 @@ export default function SchadenPage() {
   };
 
   const inputCls = (field: string) =>
-    `w-full p-3 border-2 rounded-xl text-base outline-none transition-colors ${errors[field] ? 'border-red-500' : 'border-gray-200 focus:border-[#003781]'}`;
+    `w-full p-3 border rounded text-base outline-none transition-colors ${errors[field] ? 'border-ergo-red' : 'border-ergo-line focus:border-ergo-red'}`;
 
   const renderRadioGroup = (field: keyof FormData, options: { value: string; label: string }[]) => (
     <div className="flex flex-wrap gap-2">
@@ -387,10 +392,8 @@ export default function SchadenPage() {
           key={opt.value}
           type="button"
           onClick={() => updateField(field, opt.value)}
-          className={`px-4 py-2 rounded-xl border-2 text-sm font-semibold transition-colors ${
-            formData[field] === opt.value
-              ? 'bg-[#003781] text-white border-[#003781]'
-              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+          className={`ergo-option px-4 py-2 text-sm font-semibold text-ergo-ink ${
+            formData[field] === opt.value ? 'selected' : ''
           }`}
         >
           {opt.label}
@@ -408,7 +411,7 @@ export default function SchadenPage() {
   };
 
   return (
-    <div className="ds-form-flow min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div className="min-h-screen bg-white" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <SEO
         title="Schaden melden – ERGO Agentur Stübe Ganderkesee"
         description="Versicherungsschaden schnell und einfach online melden. Kfz-Schaden, Glasschaden, Hausrat oder Haftpflicht – Ihre ERGO Agentur Stübe in Ganderkesee hilft sofort."
@@ -420,25 +423,25 @@ export default function SchadenPage() {
           <>
             <div className="flex items-center justify-between mb-4">
               {step > 1 ? (
-                <button onClick={() => goToStep(step - 1)} className="text-[#003781] font-semibold text-sm flex items-center gap-1 min-h-[44px]">
-                  ← Zurück
+                <button onClick={() => goToStep(step - 1)} className="text-ergo-red font-bold text-sm flex items-center gap-1 min-h-[44px]">
+                  <ChevronLeft className="w-4 h-4" /> Zurück
                 </button>
               ) : (
                 <div />
               )}
-              <span className="text-xs text-gray-500 font-medium">
+              <span className="text-xs text-ergo-stone font-medium">
                 Schritt {Math.min(step, 3)} von 3 — {step === 1 ? 'Schadenart' : step === 2 ? 'Details' : 'Absenden'}
               </span>
             </div>
-            <div className="h-1 bg-gray-200 rounded-full mb-3 overflow-hidden">
-              <div className="h-full bg-[#E2001A] rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercent}%` }} />
+            <div className="h-1 bg-ergo-fog rounded-full mb-3 overflow-hidden">
+              <div className="h-full bg-ergo-red rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercent}%` }} />
             </div>
-            <div className="flex items-center justify-center gap-3 text-[11px] text-gray-400 mb-5">
-              <span>🔒 DSGVO-konform</span>
+            <div className="flex items-center justify-center gap-3 text-[11px] text-ergo-mute mb-5">
+              <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> DSGVO-konform</span>
               <span>·</span>
-              <span>⚡ Antwort in 24h</span>
+              <span className="flex items-center gap-1"><Zap className="w-3 h-3" /> Antwort in 24h</span>
               <span>·</span>
-              <span>✅ Kostenlos</span>
+              <span className="flex items-center gap-1"><Check className="w-3 h-3 text-ergo-check" /> Kostenlos</span>
             </div>
           </>
         )}
@@ -448,89 +451,92 @@ export default function SchadenPage() {
           {step === 1 && (
             <div>
               <div className="text-center mb-6">
-                <div className="inline-block bg-[#E2001A] text-white text-xs font-bold px-3 py-1 rounded-full mb-3">ERGO</div>
-                <h1 className="text-2xl font-extrabold text-gray-900 mb-2">Schaden melden</h1>
-                <p className="text-sm text-gray-500">Wählen Sie die Art des Schadens aus</p>
+                <p className="ergo-eyebrow">ERGO Agentur Stübe · Schadenservice</p>
+                <h1 className="text-[30px] md:text-[40px] leading-[1.25] mb-2">Schaden melden</h1>
+                <p className="text-sm text-ergo-stone">Wählen Sie die Art des Schadens aus</p>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 {damageTypes.map(card => (
                   <button
                     key={card.type}
                     onClick={() => handleSelectType(card.type)}
-                    className="bg-white border-2 border-gray-200 rounded-xl p-4 text-center flex flex-col items-center gap-2 transition-colors active:border-[#E2001A] hover:border-[#E2001A]"
+                    className="ergo-option p-4 text-center flex flex-col items-center gap-2"
                   >
-                    <span className="text-3xl">{card.icon}</span>
-                    <span className="font-bold text-gray-900 text-sm">{card.title}</span>
-                    {card.subtitle && <span className="text-xs text-gray-500 -mt-1">{card.subtitle}</span>}
+                    <span className="ergo-icon-disc w-10 h-10"><card.icon className="w-4 h-4" /></span>
+                    <span className="font-sans font-bold text-ergo-ink text-sm">{card.title}</span>
+                    {card.subtitle && <span className="text-xs text-ergo-stone -mt-1">{card.subtitle}</span>}
                   </button>
                 ))}
                 <Link
                   href="/schaden-unfall"
-                  className="bg-amber-50 border-2 border-amber-200 rounded-xl p-4 text-center flex flex-col items-center gap-2 transition-colors hover:border-amber-400 active:border-amber-500"
+                  className="ergo-option p-4 text-center flex flex-col items-center gap-2"
                 >
-                  <span className="text-3xl">🚑</span>
-                  <span className="font-bold text-gray-900 text-sm">Unfall</span>
-                  <span className="text-xs text-gray-500 -mt-1">Unfallversicherung</span>
+                  <span className="ergo-icon-disc w-10 h-10"><Ambulance className="w-4 h-4" /></span>
+                  <span className="font-sans font-bold text-ergo-ink text-sm">Unfall</span>
+                  <span className="text-xs text-ergo-stone -mt-1">Unfallversicherung</span>
                 </Link>
               </div>
               <div className="mt-6 text-center">
-                <Link href="/" className="text-sm text-[#003781] font-medium">← Zurück zur Startseite</Link>
+                <Link href="/" className="ergo-link text-sm">Zurück zur Startseite</Link>
               </div>
             </div>
           )}
 
           {step === 2 && selectedType && (
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-1">{damageTypeLabels[selectedType].icon} {damageTypeLabels[selectedType].title}</h2>
-              {selectedType === 'glasschaden' && <p className="text-xs text-gray-500 mb-1">In Kooperation mit Carglass</p>}
-              <p className="text-sm text-gray-500 mb-5">Bitte füllen Sie alle Pflichtfelder (*) aus.</p>
-              <div className="flex flex-col gap-4">
+              <h2 className="text-[22px] mb-1 flex items-center gap-2">
+                {(() => { const TypeIcon = damageTypeLabels[selectedType].icon; return <TypeIcon className="w-5 h-5 text-ergo-red shrink-0" />; })()}
+                {damageTypeLabels[selectedType].title}
+              </h2>
+              {selectedType === 'glasschaden' && <p className="text-xs text-ergo-stone mb-1">In Kooperation mit Carglass</p>}
+              <p className="text-sm text-ergo-stone mb-5">Bitte füllen Sie alle Pflichtfelder (*) aus.</p>
+              <div className="ergo-card p-5 sm:p-6 flex flex-col gap-4">
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold text-gray-700">Vorname *</label>
+                    <label className="text-sm font-semibold text-ergo-ink">Vorname *</label>
                     <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} autoComplete="given-name" enterKeyHint="next" />
-                    {errors.vorname && <span className="text-xs text-red-500">{errors.vorname}</span>}
+                    {errors.vorname && <span className="text-xs text-ergo-red">{errors.vorname}</span>}
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold text-gray-700">Nachname *</label>
+                    <label className="text-sm font-semibold text-ergo-ink">Nachname *</label>
                     <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} autoComplete="family-name" enterKeyHint="next" />
-                    {errors.nachname && <span className="text-xs text-red-500">{errors.nachname}</span>}
+                    {errors.nachname && <span className="text-xs text-ergo-red">{errors.nachname}</span>}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-gray-700">Telefon *</label>
+                  <label className="text-sm font-semibold text-ergo-ink">Telefon *</label>
                   <input type="tel" inputMode="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} autoComplete="tel" enterKeyHint="next" />
-                  {errors.telefon && <span className="text-xs text-red-500">{errors.telefon}</span>}
+                  {errors.telefon && <span className="text-xs text-ergo-red">{errors.telefon}</span>}
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-gray-700">E-Mail *</label>
+                  <label className="text-sm font-semibold text-ergo-ink">E-Mail *</label>
                   <input type="email" inputMode="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} autoComplete="email" enterKeyHint="next" />
-                  {errors.email && <span className="text-xs text-red-500">{errors.email}</span>}
+                  {errors.email && <span className="text-xs text-ergo-red">{errors.email}</span>}
                 </div>
 
                 {selectedType === 'glasschaden' && (
                   <>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Fahrzeugidentifikationsnummer (FIN) *</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Fahrzeugidentifikationsnummer (FIN) *</label>
                       <input type="text" value={formData.fin} onChange={e => updateField('fin', e.target.value)} placeholder="z.B. WVWZZZ3CZWE123456" className={inputCls('fin')} />
-                      {errors.fin && <span className="text-xs text-red-500">{errors.fin}</span>}
+                      {errors.fin && <span className="text-xs text-ergo-red">{errors.fin}</span>}
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Kennzeichen *</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Kennzeichen *</label>
                       <input type="text" value={formData.glasKennzeichen} onChange={e => updateField('glasKennzeichen', e.target.value.toUpperCase())} placeholder="z.B. OL-AB 1234" className={inputCls('glasKennzeichen')} />
-                      {errors.glasKennzeichen && <span className="text-xs text-red-500">{errors.glasKennzeichen}</span>}
+                      {errors.glasKennzeichen && <span className="text-xs text-ergo-red">{errors.glasKennzeichen}</span>}
                     </div>
 
-                    <div className="border-t border-gray-200 pt-4 mt-2">
-                      <h3 className="text-base font-bold text-gray-900 mb-3">🔲 Schadenfragen</h3>
+                    <div className="border-t border-ergo-line pt-4 mt-2">
+                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Schadenfragen</h3>
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Welche Scheibe ist beschädigt? *</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Welche Scheibe ist beschädigt? *</label>
                       <div className="flex flex-col gap-2">
                         {[
                           { value: 'frontscheibe', label: 'Frontscheibe' },
@@ -545,21 +551,21 @@ export default function SchadenPage() {
                             key={opt.value}
                             type="button"
                             onClick={() => updateField('glasScheibe', opt.value)}
-                            className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-colors ${
+                            className={`ergo-option w-full text-left px-4 py-3 text-sm font-semibold text-ergo-ink ${
                               formData.glasScheibe === opt.value
-                                ? 'bg-[#003781] text-white border-[#003781]'
-                                : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                                ? 'selected'
+                                : ''
                             }`}
                           >
                             {opt.label}
                           </button>
                         ))}
                       </div>
-                      {errors.glasScheibe && <span className="text-xs text-red-500">{errors.glasScheibe}</span>}
+                      {errors.glasScheibe && <span className="text-xs text-ergo-red">{errors.glasScheibe}</span>}
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Was liegt vor? *</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Was liegt vor? *</label>
                       <div className="flex flex-col gap-2">
                         {[
                           { value: 'steinschlag', label: 'Steinschlag (einzeln)' },
@@ -579,22 +585,22 @@ export default function SchadenPage() {
                                 updateField('glasGroesse', '');
                               }
                             }}
-                            className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-colors ${
+                            className={`ergo-option w-full text-left px-4 py-3 text-sm font-semibold text-ergo-ink ${
                               formData.glasSchadensart === opt.value
-                                ? 'bg-[#003781] text-white border-[#003781]'
-                                : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                                ? 'selected'
+                                : ''
                             }`}
                           >
                             {opt.label}
                           </button>
                         ))}
                       </div>
-                      {errors.glasSchadensart && <span className="text-xs text-red-500">{errors.glasSchadensart}</span>}
+                      {errors.glasSchadensart && <span className="text-xs text-ergo-red">{errors.glasSchadensart}</span>}
                     </div>
 
                     {['steinschlag', 'mehrere_steinschlaege', 'riss'].includes(formData.glasSchadensart) && (
                       <div className="flex flex-col gap-1">
-                        <label className="text-sm font-semibold text-gray-700">In welchem Bereich befindet sich der Schaden? *</label>
+                        <label className="text-sm font-semibold text-ergo-ink">In welchem Bereich befindet sich der Schaden? *</label>
                         <div className="flex flex-col gap-2">
                           {[
                             { value: 'rand', label: 'Weniger als 10 cm vom Rand' },
@@ -605,23 +611,23 @@ export default function SchadenPage() {
                               key={opt.value}
                               type="button"
                               onClick={() => updateField('glasBereich', opt.value)}
-                              className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-colors ${
+                              className={`ergo-option w-full text-left px-4 py-3 text-sm font-semibold text-ergo-ink ${
                                 formData.glasBereich === opt.value
-                                  ? 'bg-[#003781] text-white border-[#003781]'
-                                  : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                                  ? 'selected'
+                                  : ''
                               }`}
                             >
                               {opt.label}
                             </button>
                           ))}
                         </div>
-                        {errors.glasBereich && <span className="text-xs text-red-500">{errors.glasBereich}</span>}
+                        {errors.glasBereich && <span className="text-xs text-ergo-red">{errors.glasBereich}</span>}
                       </div>
                     )}
 
                     {formData.glasSchadensart === 'steinschlag' && (
                       <div className="flex flex-col gap-1">
-                        <label className="text-sm font-semibold text-gray-700">Größe des Schlags *</label>
+                        <label className="text-sm font-semibold text-ergo-ink">Größe des Schlags *</label>
                         <div className="flex flex-col gap-2">
                           {[
                             { value: 'kleiner', label: 'Kleiner als eine 2-€-Münze' },
@@ -631,23 +637,23 @@ export default function SchadenPage() {
                               key={opt.value}
                               type="button"
                               onClick={() => updateField('glasGroesse', opt.value)}
-                              className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-colors ${
+                              className={`ergo-option w-full text-left px-4 py-3 text-sm font-semibold text-ergo-ink ${
                                 formData.glasGroesse === opt.value
-                                  ? 'bg-[#003781] text-white border-[#003781]'
-                                  : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                                  ? 'selected'
+                                  : ''
                               }`}
                             >
                               {opt.label}
                             </button>
                           ))}
                         </div>
-                        {errors.glasGroesse && <span className="text-xs text-red-500">{errors.glasGroesse}</span>}
+                        {errors.glasGroesse && <span className="text-xs text-ergo-red">{errors.glasGroesse}</span>}
                       </div>
                     )}
 
-                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mt-2">
-                      <p className="text-sm text-gray-700">
-                        <span className="font-bold">🔧 Hinweis:</span> Nach Eingang Ihrer Meldung koordinieren wir gemeinsam mit unserem Partner Carglass einen Reparaturtermin – direkt bei Ihnen oder in einer Carglass-Filiale.
+                    <div className="bg-ergo-gray border border-ergo-line rounded-lg p-4 mt-2">
+                      <p className="text-sm text-ergo-ink">
+                        <span className="font-bold">Hinweis:</span> Nach Eingang Ihrer Meldung koordinieren wir gemeinsam mit unserem Partner Carglass einen Reparaturtermin – direkt bei Ihnen oder in einer Carglass-Filiale.
                       </p>
                     </div>
                   </>
@@ -656,31 +662,31 @@ export default function SchadenPage() {
                 {selectedType !== 'glasschaden' && (
                   <>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Versicherungsnummer *</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Versicherungsnummer *</label>
                       <input type="text" value={formData.versicherungsnummer} onChange={e => updateField('versicherungsnummer', e.target.value)} className={inputCls('versicherungsnummer')} />
-                      {errors.versicherungsnummer && <span className="text-xs text-red-500">{errors.versicherungsnummer}</span>}
+                      {errors.versicherungsnummer && <span className="text-xs text-ergo-red">{errors.versicherungsnummer}</span>}
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Schadendatum *</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Schadendatum *</label>
                       <input type="date" value={formData.schadendatum} onChange={e => updateField('schadendatum', e.target.value)} className={inputCls('schadendatum')} />
-                      {errors.schadendatum && <span className="text-xs text-red-500">{errors.schadendatum}</span>}
+                      {errors.schadendatum && <span className="text-xs text-ergo-red">{errors.schadendatum}</span>}
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Schadenort *</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Schadenort *</label>
                       <input type="text" value={formData.schadenort} onChange={e => updateField('schadenort', e.target.value)} placeholder="Straße, Ort wo der Schaden passiert ist" className={inputCls('schadenort')} />
-                      {errors.schadenort && <span className="text-xs text-red-500">{errors.schadenort}</span>}
+                      {errors.schadenort && <span className="text-xs text-ergo-red">{errors.schadenort}</span>}
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Schadensbeschreibung *</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Schadensbeschreibung *</label>
                       <textarea value={formData.beschreibung} onChange={e => updateField('beschreibung', e.target.value)} placeholder="Bitte beschreiben Sie den Schaden so genau wie möglich..." rows={4} className={inputCls('beschreibung')} />
-                      {errors.beschreibung && <span className="text-xs text-red-500">{errors.beschreibung}</span>}
+                      {errors.beschreibung && <span className="text-xs text-ergo-red">{errors.beschreibung}</span>}
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Bereits polizeilich gemeldet?</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Bereits polizeilich gemeldet?</label>
                       {renderRadioGroup('polizeiGemeldet', [
                         { value: 'ja', label: 'Ja' },
                         { value: 'nein', label: 'Nein' },
@@ -689,7 +695,7 @@ export default function SchadenPage() {
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Geschätzter Schaden in €</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Geschätzter Schaden in €</label>
                       <input type="number" value={formData.geschaetzterSchaden} onChange={e => updateField('geschaetzterSchaden', e.target.value)} className={inputCls('geschaetzterSchaden')} />
                     </div>
                   </>
@@ -697,16 +703,16 @@ export default function SchadenPage() {
 
                 {selectedType === 'kfz' && (
                   <>
-                    <div className="border-t border-gray-200 pt-4 mt-2">
-                      <h3 className="text-base font-bold text-gray-900 mb-3">🚗 Kfz-spezifische Angaben</h3>
+                    <div className="border-t border-ergo-line pt-4 mt-2">
+                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Kfz-spezifische Angaben</h3>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Kennzeichen *</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Kennzeichen *</label>
                       <input type="text" value={formData.kennzeichen} onChange={e => updateField('kennzeichen', e.target.value)} className={inputCls('kennzeichen')} />
-                      {errors.kennzeichen && <span className="text-xs text-red-500">{errors.kennzeichen}</span>}
+                      {errors.kennzeichen && <span className="text-xs text-ergo-red">{errors.kennzeichen}</span>}
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Unfallgegner vorhanden?</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Unfallgegner vorhanden?</label>
                       {renderRadioGroup('unfallgegner', [
                         { value: 'ja', label: 'Ja' },
                         { value: 'nein', label: 'Nein' },
@@ -715,17 +721,17 @@ export default function SchadenPage() {
                     {formData.unfallgegner === 'ja' && (
                       <>
                         <div className="flex flex-col gap-1">
-                          <label className="text-sm font-semibold text-gray-700">Name des Gegners</label>
+                          <label className="text-sm font-semibold text-ergo-ink">Name des Gegners</label>
                           <input type="text" value={formData.gegnerName} onChange={e => updateField('gegnerName', e.target.value)} className={inputCls('gegnerName')} />
                         </div>
                         <div className="flex flex-col gap-1">
-                          <label className="text-sm font-semibold text-gray-700">Kennzeichen des Gegners</label>
+                          <label className="text-sm font-semibold text-ergo-ink">Kennzeichen des Gegners</label>
                           <input type="text" value={formData.gegnerKennzeichen} onChange={e => updateField('gegnerKennzeichen', e.target.value)} className={inputCls('gegnerKennzeichen')} />
                         </div>
                       </>
                     )}
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Fahrzeug fahrbereit?</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Fahrzeug fahrbereit?</label>
                       {renderRadioGroup('fahrbereit', [
                         { value: 'ja', label: 'Ja' },
                         { value: 'nein', label: 'Nein' },
@@ -736,15 +742,15 @@ export default function SchadenPage() {
 
                 {(selectedType === 'hausrat' || selectedType === 'gebaeude') && (
                   <>
-                    <div className="border-t border-gray-200 pt-4 mt-2">
-                      <h3 className="text-base font-bold text-gray-900 mb-3">{selectedType === 'hausrat' ? '🏠' : '🏚️'} Weitere Angaben</h3>
+                    <div className="border-t border-ergo-line pt-4 mt-2">
+                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Weitere Angaben</h3>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Betroffene Räume/Bereiche</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Betroffene Räume/Bereiche</label>
                       <input type="text" value={formData.betroffeneRaeume} onChange={e => updateField('betroffeneRaeume', e.target.value)} className={inputCls('betroffeneRaeume')} />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Ursache</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Ursache</label>
                       <select value={formData.ursache} onChange={e => updateField('ursache', e.target.value)} className={`${inputCls('ursache')} bg-white`}>
                         <option value="">Bitte auswählen</option>
                         <option value="Einbruch">Einbruch</option>
@@ -755,7 +761,7 @@ export default function SchadenPage() {
                       </select>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Wurden bereits Notmaßnahmen ergriffen?</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Wurden bereits Notmaßnahmen ergriffen?</label>
                       {renderRadioGroup('notmassnahmen', [
                         { value: 'ja', label: 'Ja' },
                         { value: 'nein', label: 'Nein' },
@@ -766,15 +772,15 @@ export default function SchadenPage() {
 
                 {selectedType === 'rechtsschutz' && (
                   <>
-                    <div className="border-t border-gray-200 pt-4 mt-2">
-                      <h3 className="text-base font-bold text-gray-900 mb-3">⚖️ Rechtsschutz-Angaben</h3>
+                    <div className="border-t border-ergo-line pt-4 mt-2">
+                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Rechtsschutz-Angaben</h3>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Gegenseite</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Gegenseite</label>
                       <input type="text" value={formData.gegenseite} onChange={e => updateField('gegenseite', e.target.value)} placeholder="Name/Firma des Gegners" className={inputCls('gegenseite')} />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Art des Rechtsstreits</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Art des Rechtsstreits</label>
                       <select value={formData.rechtsstreitArt} onChange={e => updateField('rechtsstreitArt', e.target.value)} className={`${inputCls('rechtsstreitArt')} bg-white`}>
                         <option value="">Bitte auswählen</option>
                         <option value="Arbeitsrecht">Arbeitsrecht</option>
@@ -785,7 +791,7 @@ export default function SchadenPage() {
                       </select>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Anwalt bereits beauftragt?</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Anwalt bereits beauftragt?</label>
                       {renderRadioGroup('anwaltBeauftragt', [
                         { value: 'ja', label: 'Ja' },
                         { value: 'nein', label: 'Nein' },
@@ -796,19 +802,19 @@ export default function SchadenPage() {
 
                 {selectedType === 'bu' && (
                   <>
-                    <div className="border-t border-gray-200 pt-4 mt-2">
-                      <h3 className="text-base font-bold text-gray-900 mb-3">💼 BU-spezifische Angaben</h3>
+                    <div className="border-t border-ergo-line pt-4 mt-2">
+                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">BU-spezifische Angaben</h3>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Erkrankung/Ursache</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Erkrankung/Ursache</label>
                       <input type="text" value={formData.erkrankung} onChange={e => updateField('erkrankung', e.target.value)} className={inputCls('erkrankung')} />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Arbeitsunfähig seit</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Arbeitsunfähig seit</label>
                       <input type="date" value={formData.arbeitsunfaehigSeit} onChange={e => updateField('arbeitsunfaehigSeit', e.target.value)} className={inputCls('arbeitsunfaehigSeit')} />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Arzt bereits aufgesucht?</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Arzt bereits aufgesucht?</label>
                       {renderRadioGroup('arztAufgesucht', [
                         { value: 'ja', label: 'Ja' },
                         { value: 'nein', label: 'Nein' },
@@ -819,41 +825,41 @@ export default function SchadenPage() {
 
                 {selectedType === 'haftpflicht' && (
                   <>
-                    <div className="border-t border-gray-200 pt-4 mt-2">
-                      <h3 className="text-base font-bold text-gray-900 mb-3">🛡️ Haftpflicht-Angaben</h3>
+                    <div className="border-t border-ergo-line pt-4 mt-2">
+                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Haftpflicht-Angaben</h3>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Bitte beschreiben Sie den Haftpflichtfall *</label>
-                      <p className="text-xs text-gray-500 mb-1">z.B. wem gegenüber ein Schaden entstanden ist, wie es dazu kam, geschätzter Schadenbetrag</p>
+                      <label className="text-sm font-semibold text-ergo-ink">Bitte beschreiben Sie den Haftpflichtfall *</label>
+                      <p className="text-xs text-ergo-stone mb-1">z.B. wem gegenüber ein Schaden entstanden ist, wie es dazu kam, geschätzter Schadenbetrag</p>
                       <textarea value={formData.weitereDetails} onChange={e => updateField('weitereDetails', e.target.value)} rows={4} className={inputCls('weitereDetails')} />
-                      {errors.weitereDetails && <span className="text-xs text-red-500">{errors.weitereDetails}</span>}
+                      {errors.weitereDetails && <span className="text-xs text-ergo-red">{errors.weitereDetails}</span>}
                     </div>
                   </>
                 )}
 
                 {selectedType === 'sonstiges' && (
                   <>
-                    <div className="border-t border-gray-200 pt-4 mt-2">
-                      <h3 className="text-base font-bold text-gray-900 mb-3">📋 Weitere Angaben</h3>
+                    <div className="border-t border-ergo-line pt-4 mt-2">
+                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Weitere Angaben</h3>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Weitere Details</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Weitere Details</label>
                       <textarea value={formData.weitereDetails} onChange={e => updateField('weitereDetails', e.target.value)} rows={3} className={inputCls('weitereDetails')} />
                     </div>
                   </>
                 )}
 
-                <div className="border-t border-gray-200 pt-4 mt-2">
-                  <h3 className="text-base font-bold text-gray-900 mb-2">📷 Fotos & Dokumente anhängen (optional)</h3>
-                  <p className="text-xs text-gray-500 mb-3">Fotografieren Sie den Schaden direkt oder laden Sie vorhandene Bilder hoch. Das beschleunigt die Bearbeitung erheblich.</p>
+                <div className="border-t border-ergo-line pt-4 mt-2">
+                  <h3 className="text-base font-sans font-bold text-ergo-ink mb-2 flex items-center gap-2"><Camera className="w-4 h-4 text-ergo-red" /> Fotos & Dokumente anhängen (optional)</h3>
+                  <p className="text-xs text-ergo-stone mb-3">Fotografieren Sie den Schaden direkt oder laden Sie vorhandene Bilder hoch. Das beschleunigt die Bearbeitung erheblich.</p>
 
                   <div className="flex gap-2 mb-3">
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="flex-1 flex items-center justify-center gap-2 min-h-[48px] bg-[#003781] text-white rounded-xl font-semibold text-sm hover:bg-[#002a61] transition-colors"
+                      className="ergo-btn ergo-btn--secondary ergo-btn--sm flex-1"
                     >
-                      📁 Dateien auswählen
+                      <Upload className="w-4 h-4" /> Dateien auswählen
                     </button>
                     <button
                       type="button"
@@ -865,9 +871,9 @@ export default function SchadenPage() {
                         input.onchange = (e) => { handleFiles((e.target as HTMLInputElement).files); };
                         input.click();
                       }}
-                      className="flex items-center justify-center gap-2 min-h-[48px] px-4 bg-green-600 text-white rounded-xl font-semibold text-sm hover:bg-green-700 transition-colors"
+                      className="ergo-btn ergo-btn--tertiary ergo-btn--sm"
                     >
-                      📸 Kamera
+                      <Camera className="w-4 h-4" /> Kamera
                     </button>
                   </div>
 
@@ -876,11 +882,11 @@ export default function SchadenPage() {
                     onDragOver={e => { e.preventDefault(); setIsDragOver(true); }}
                     onDragLeave={() => setIsDragOver(false)}
                     onDrop={e => { e.preventDefault(); setIsDragOver(false); handleFiles(e.dataTransfer.files); }}
-                    className={`border-dashed border-2 rounded-xl p-4 text-center cursor-pointer transition-colors ${
-                      isDragOver ? 'border-[#003781] bg-blue-50' : 'border-gray-300 hover:border-gray-400'
+                    className={`border-dashed border-2 rounded-lg p-4 text-center cursor-pointer transition-colors ${
+                      isDragOver ? 'border-ergo-red bg-ergo-red-light' : 'border-ergo-line hover:border-ergo-red'
                     }`}
                   >
-                    <p className="text-xs text-gray-400">Oder Dateien hierher ziehen (max. 5 Dateien, je max. 5 MB)</p>
+                    <p className="text-xs text-ergo-mute">Oder Dateien hierher ziehen (max. 5 Dateien, je max. 5 MB)</p>
                   </div>
                   <input
                     ref={fileInputRef}
@@ -892,24 +898,24 @@ export default function SchadenPage() {
                   />
                   {files.length > 0 && (
                     <div className="mt-3">
-                      <p className="text-xs font-semibold text-gray-700 mb-2">{files.length} Datei{files.length !== 1 ? 'en' : ''} ausgewählt:</p>
+                      <p className="text-xs font-semibold text-ergo-ink mb-2">{files.length} Datei{files.length !== 1 ? 'en' : ''} ausgewählt:</p>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         {files.map((file, i) => (
-                          <div key={i} className="relative group bg-white border border-gray-200 rounded-xl overflow-hidden">
+                          <div key={i} className="relative group ergo-card overflow-hidden">
                             {file.type.startsWith('image/') ? (
                               <img src={URL.createObjectURL(file)} alt="" className="w-full h-24 object-cover" />
                             ) : (
-                              <div className="w-full h-24 bg-gray-100 flex items-center justify-center text-2xl">📄</div>
+                              <div className="w-full h-24 bg-ergo-gray flex items-center justify-center"><FileText className="w-6 h-6 text-ergo-red" /></div>
                             )}
                             <div className="p-2">
-                              <p className="text-xs font-medium text-gray-900 truncate">{file.name}</p>
-                              <p className="text-xs text-gray-400">{formatFileSize(file.size)}</p>
+                              <p className="text-xs font-medium text-ergo-ink truncate">{file.name}</p>
+                              <p className="text-xs text-ergo-mute">{formatFileSize(file.size)}</p>
                             </div>
                             <button
                               onClick={() => removeFile(i)}
-                              className="absolute -top-1 -right-1 w-8 h-8 bg-red-500 text-white rounded-full text-xs font-bold flex items-center justify-center opacity-90 hover:opacity-100 shadow-sm"
+                              className="absolute -top-1 -right-1 w-8 h-8 bg-ergo-red text-white rounded-full flex items-center justify-center opacity-90 hover:opacity-100"
                             >
-                              ×
+                              <X className="w-4 h-4" />
                             </button>
                           </div>
                         ))}
@@ -920,7 +926,7 @@ export default function SchadenPage() {
 
                 <button
                   onClick={handleStep2Next}
-                  className="w-full min-h-[48px] bg-[#E2001A] text-white rounded-xl font-semibold text-base hover:bg-[#c5001a] transition-colors mt-2"
+                  className="ergo-btn ergo-btn--primary w-full mt-2"
                 >
                   Weiter zur Übersicht →
                 </button>
@@ -930,14 +936,16 @@ export default function SchadenPage() {
 
           {step === 3 && selectedType && (
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Zusammenfassung</h2>
+              <h2 className="text-[22px] mb-4">Zusammenfassung</h2>
 
-              <div className="bg-gray-50 rounded-xl p-5 flex flex-col gap-3 mb-5">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">{damageTypeLabels[selectedType].icon}</span>
-                  <span className="font-bold text-gray-900">{damageTypeLabels[selectedType].title}</span>
+              <div className="ergo-card p-5 flex flex-col gap-3 mb-5">
+                <div className="flex items-center gap-3">
+                  <span className="ergo-icon-disc w-10 h-10">
+                    {(() => { const TypeIcon = damageTypeLabels[selectedType].icon; return <TypeIcon className="w-4 h-4" />; })()}
+                  </span>
+                  <span className="font-sans font-bold text-ergo-ink">{damageTypeLabels[selectedType].title}</span>
                 </div>
-                <div className="flex flex-col gap-1.5 text-sm text-gray-700">
+                <div className="flex flex-col gap-1.5 text-sm text-ergo-ink">
                   <p><span className="font-semibold">Name:</span> {formData.vorname} {formData.nachname}</p>
                   <p><span className="font-semibold">E-Mail:</span> {formData.email}</p>
                   <p><span className="font-semibold">Telefon:</span> {formData.telefon}</p>
@@ -959,37 +967,37 @@ export default function SchadenPage() {
                   )}
                   <p><span className="font-semibold">Anzahl Dateien:</span> {files.length}</p>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Alles korrekt? Bitte prüfen Sie Ihre Angaben.</p>
+                <p className="text-xs text-ergo-stone mt-1">Alles korrekt? Bitte prüfen Sie Ihre Angaben.</p>
               </div>
 
               <div className="flex flex-col gap-3 mb-5">
                 <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" checked={confirm1} onChange={e => { setConfirm1(e.target.checked); if (errors.confirm1) setErrors(prev => { const n = { ...prev }; delete n.confirm1; return n; }); }} className="mt-0.5 w-5 h-5 accent-[#003781] shrink-0 cursor-pointer" />
-                  <span className="text-sm text-gray-700">Alle Angaben sind korrekt und vollständig.</span>
+                  <input type="checkbox" checked={confirm1} onChange={e => { setConfirm1(e.target.checked); if (errors.confirm1) setErrors(prev => { const n = { ...prev }; delete n.confirm1; return n; }); }} className="mt-0.5 w-5 h-5 accent-ergo-red shrink-0 cursor-pointer" />
+                  <span className="text-sm text-ergo-ink">Alle Angaben sind korrekt und vollständig.</span>
                 </label>
-                {errors.confirm1 && <span className="text-xs text-red-500 ml-7">{errors.confirm1}</span>}
+                {errors.confirm1 && <span className="text-xs text-ergo-red ml-7">{errors.confirm1}</span>}
 
                 <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" checked={confirm2} onChange={e => { setConfirm2(e.target.checked); if (errors.confirm2) setErrors(prev => { const n = { ...prev }; delete n.confirm2; return n; }); }} className="mt-0.5 w-5 h-5 accent-[#003781] shrink-0 cursor-pointer" />
-                  <span className="text-sm text-gray-700">Ich bin mit der elektronischen Übermittlung einverstanden.</span>
+                  <input type="checkbox" checked={confirm2} onChange={e => { setConfirm2(e.target.checked); if (errors.confirm2) setErrors(prev => { const n = { ...prev }; delete n.confirm2; return n; }); }} className="mt-0.5 w-5 h-5 accent-ergo-red shrink-0 cursor-pointer" />
+                  <span className="text-sm text-ergo-ink">Ich bin mit der elektronischen Übermittlung einverstanden.</span>
                 </label>
-                {errors.confirm2 && <span className="text-xs text-red-500 ml-7">{errors.confirm2}</span>}
+                {errors.confirm2 && <span className="text-xs text-ergo-red ml-7">{errors.confirm2}</span>}
               </div>
 
               {submitError && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4 text-sm text-red-700">{submitError}</div>
+                <div className="bg-ergo-red-light border border-ergo-red/30 rounded-lg p-4 mb-4 text-sm text-ergo-red">{submitError}</div>
               )}
 
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="w-full min-h-[48px] bg-[#E2001A] text-white rounded-xl font-semibold text-base hover:bg-[#c5001a] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                className="ergo-btn ergo-btn--primary w-full"
               >
-                {isSubmitting ? 'Wird übermittelt...' : '🚨 Schaden jetzt melden'}
+                {isSubmitting ? 'Wird übermittelt...' : 'Schaden jetzt melden'}
               </button>
-              <p className="text-center text-xs text-gray-400 mt-3">
+              <p className="text-center text-xs text-ergo-mute mt-3">
                 Lieber per WhatsApp?{' '}
-                <a href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20m%C3%B6chte%20einen%20Schaden%20melden." target="_blank" rel="noopener noreferrer" className="text-green-600 font-semibold hover:underline">
+                <a href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20m%C3%B6chte%20einen%20Schaden%20melden." target="_blank" rel="noopener noreferrer" className="text-[#1da851] font-bold underline">
                   Direkt schreiben →
                 </a>
               </p>
@@ -999,36 +1007,26 @@ export default function SchadenPage() {
           {step === 4 && selectedType && (
             <div className="text-center">
               <div className="flex justify-center mb-4">
-                <svg className="w-20 h-20" viewBox="0 0 80 80">
-                  <circle cx="40" cy="40" r="36" fill="none" stroke="#22c55e" strokeWidth="4" className="animate-[scaleIn_0.4s_ease-out]" style={{ transformOrigin: 'center' }} />
-                  <path d="M24 42 L34 52 L56 30" fill="none" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" style={{ strokeDasharray: 60, strokeDashoffset: 60, animation: 'checkDraw 0.5s 0.3s ease-out forwards' }} />
-                </svg>
+                <div className="w-16 h-16 bg-ergo-check rounded-full flex items-center justify-center">
+                  <Check className="w-8 h-8 text-white" />
+                </div>
               </div>
-              <style>{`
-                @keyframes checkDraw {
-                  to { stroke-dashoffset: 0; }
-                }
-                @keyframes scaleIn {
-                  from { transform: scale(0); }
-                  to { transform: scale(1); }
-                }
-              `}</style>
 
-              <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Schadensmeldung eingegangen!</h2>
-              <p className="text-sm text-gray-600 mb-4">Morino Stübe wurde informiert und wird sich innerhalb von 24 Stunden bei Ihnen melden.</p>
-              <div className="flex items-center justify-center gap-3 mb-5 text-xs text-gray-500">
-                <span className="flex items-center gap-1">⭐ 4,9/5 Bewertung</span>
+              <h2 className="text-2xl mb-2">Schadensmeldung eingegangen!</h2>
+              <p className="text-sm text-ergo-stone mb-4">Morino Stübe wurde informiert und wird sich innerhalb von 24 Stunden bei Ihnen melden.</p>
+              <div className="flex items-center justify-center gap-3 mb-5 text-xs text-ergo-stone">
+                <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 fill-ergo-yellow text-ergo-yellow" /> 4,9/5 Bewertung</span>
                 <span>·</span>
                 <span>ERGO Versicherungsfachmann</span>
               </div>
 
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 text-left">
-                <p className="text-sm font-semibold text-amber-800">⚠️ Bei dringendem Notfall rufen Sie bitte direkt an:</p>
-                <a href="tel:015566771019" className="text-base font-bold text-[#003781] underline mt-1 inline-block">015566771019</a>
+              <div className="bg-ergo-red-light border border-ergo-red/30 rounded-lg p-4 mb-5 text-left">
+                <p className="text-sm font-semibold text-ergo-red flex items-center gap-2"><AlertTriangle className="w-4 h-4 shrink-0" /> Bei dringendem Notfall rufen Sie bitte direkt an:</p>
+                <a href="tel:015566771019" className="text-base font-bold text-ergo-red underline mt-1 inline-block">015566771019</a>
               </div>
 
-              <div className="bg-blue-50 rounded-xl p-4 mb-5 text-left flex flex-col gap-1.5 text-sm">
-                <p><span className="font-semibold">Schadensart:</span> {damageTypeLabels[selectedType].icon} {damageTypeLabels[selectedType].title}</p>
+              <div className="ergo-card p-4 mb-5 text-left flex flex-col gap-1.5 text-sm text-ergo-ink">
+                <p><span className="font-semibold">Schadensart:</span> {damageTypeLabels[selectedType].title}</p>
                 <p><span className="font-semibold">Name:</span> {formData.vorname} {formData.nachname}</p>
                 <p><span className="font-semibold">Eingereicht am:</span> {new Date().toLocaleDateString('de-DE')}</p>
               </div>
@@ -1038,12 +1036,12 @@ export default function SchadenPage() {
                   href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20habe%20gerade%20eine%20Schadensmeldung%20eingereicht."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full min-h-[48px] bg-[#25D366] text-white rounded-xl font-semibold text-base flex items-center justify-center gap-2 hover:bg-[#20bd5a] transition-colors"
+                  className="ergo-btn ergo-btn--whatsapp w-full"
                 >
-                  💬 WhatsApp schreiben
+                  <MessageCircle className="w-5 h-5" /> WhatsApp schreiben
                 </a>
-                <Link href="/" className="w-full min-h-[48px] border-2 border-gray-300 text-gray-700 rounded-xl font-semibold text-base flex items-center justify-center hover:bg-gray-50 transition-colors">
-                  ← Zurück zur Startseite
+                <Link href="/" className="ergo-btn ergo-btn--tertiary w-full">
+                  <ChevronLeft className="w-5 h-5" /> Zurück zur Startseite
                 </Link>
               </div>
             </div>

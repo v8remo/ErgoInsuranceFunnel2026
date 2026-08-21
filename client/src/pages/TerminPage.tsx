@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
-import { Calendar, Clock, MapPin, Phone, CheckCircle, Star, MessageSquare } from "lucide-react";
+import { Clock, MapPin, Phone, CheckCircle2, Star, MessageSquare } from "lucide-react";
 
 export default function TerminPage() {
   useEffect(() => {
@@ -33,33 +33,28 @@ export default function TerminPage() {
       />
 
       <Breadcrumb items={[{ label: "Termin buchen" }]} />
-    <div className="ds-service bg-white">
+    <div className="bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 sm:pt-8 sm:pb-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="inline-flex items-center gap-1.5 bg-ergo-red/10 text-ergo-red text-xs font-semibold px-3 py-1 rounded-full">
-                  <Calendar className="w-3.5 h-3.5" />
-                  Online-Terminbuchung
-                </span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+              <p className="ergo-eyebrow">Online-Terminbuchung</p>
+              <h1 className="text-[30px] leading-[1.25] md:text-[40px] mb-2">
                 Beratungstermin buchen
               </h1>
-              <p className="text-gray-600 text-base sm:text-lg max-w-xl">
+              <p className="text-ergo-stone text-base sm:text-lg max-w-xl">
                 Wählen Sie bequem Ihren Wunschtermin – kostenlos und unverbindlich.
               </p>
             </div>
             <div className="flex flex-row lg:flex-col gap-3 lg:gap-2 flex-shrink-0">
-              <div className="flex items-center gap-2 text-sm text-gray-700">
-                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+              <div className="flex items-center gap-2 text-sm text-ergo-ink">
+                <CheckCircle2 className="w-4 h-4 text-ergo-check flex-shrink-0" />
                 <span>Kostenlos & unverbindlich</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-700">
-                <Clock className="w-4 h-4 text-blue-600 flex-shrink-0" />
+              <div className="flex items-center gap-2 text-sm text-ergo-ink">
+                <Clock className="w-4 h-4 text-ergo-red flex-shrink-0" />
                 <span>Mo–Fr 9–18, Sa 9–12</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-700">
+              <div className="flex items-center gap-2 text-sm text-ergo-ink">
                 <MapPin className="w-4 h-4 text-ergo-red flex-shrink-0" />
                 <span>Vor Ort oder Video</span>
               </div>
@@ -67,10 +62,10 @@ export default function TerminPage() {
           </div>
         </div>
 
-        <div className="border-t border-gray-100" />
+        <div className="border-t border-ergo-line" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+          <div className="rounded-lg overflow-hidden border border-ergo-line">
             <Cal
               namespace="erstberatung"
               calLink="morino-stuebe-ergo/erstberatung"
@@ -80,29 +75,29 @@ export default function TerminPage() {
           </div>
 
           {/* What to expect */}
-          <div className="mt-6 bg-blue-50 border border-blue-100 rounded-xl p-4 sm:p-5">
-            <h3 className="font-semibold text-gray-900 text-sm mb-2">Was passiert nach der Buchung?</h3>
-            <div className="flex flex-col sm:flex-row gap-3 text-xs text-gray-600">
+          <div className="mt-6 bg-ergo-gray border border-ergo-line rounded-lg p-4 sm:p-5">
+            <h3 className="font-sans font-bold text-ergo-ink text-sm mb-2">Was passiert nach der Buchung?</h3>
+            <div className="flex flex-col sm:flex-row gap-3 text-xs text-ergo-stone">
               <div className="flex items-start gap-2">
-                <span className="text-green-500 shrink-0 mt-0.5">✓</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-ergo-check shrink-0 mt-0.5" />
                 <span>Sofortige Bestätigung per E-Mail</span>
               </div>
               <div className="flex items-start gap-2">
-                <span className="text-green-500 shrink-0 mt-0.5">✓</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-ergo-check shrink-0 mt-0.5" />
                 <span>Morino bereitet Ihre Analyse vor</span>
               </div>
               <div className="flex items-start gap-2">
-                <span className="text-green-500 shrink-0 mt-0.5">✓</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-ergo-check shrink-0 mt-0.5" />
                 <span>Persönliche Beratung zum Wunschtermin</span>
               </div>
             </div>
           </div>
 
           <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <span className="text-sm text-gray-500">Oder direkt Kontakt:</span>
+            <span className="text-sm text-ergo-mute">Oder direkt Kontakt:</span>
             <a
               href="tel:015566771019"
-              className="inline-flex items-center gap-2 border-2 border-ergo-red text-ergo-red px-5 py-2.5 rounded-lg font-medium hover:bg-ergo-red hover:text-white transition-colors text-sm"
+              className="ergo-btn ergo-btn--secondary ergo-btn--sm"
             >
               <Phone className="w-4 h-4" />
               Anrufen
@@ -111,7 +106,7 @@ export default function TerminPage() {
               href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20m%C3%B6chte%20gerne%20einen%20Beratungstermin%20vereinbaren."
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border-2 border-green-600 text-green-700 px-5 py-2.5 rounded-lg font-medium hover:bg-green-600 hover:text-white transition-colors text-sm"
+              className="ergo-btn ergo-btn--whatsapp ergo-btn--sm"
             >
               <MessageSquare className="w-4 h-4" />
               WhatsApp
@@ -120,15 +115,15 @@ export default function TerminPage() {
 
           {/* Social Proof */}
           <div className="mt-8 mb-2">
-            <div className="bg-gray-50 rounded-xl p-4 max-w-lg mx-auto text-center border border-gray-100">
+            <div className="ergo-card p-4 max-w-lg mx-auto text-center">
               <div className="flex items-center justify-center gap-1 mb-2">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <Star key={i} className="w-4 h-4 fill-ergo-yellow text-ergo-yellow" />
                 ))}
-                <span className="text-sm font-semibold text-gray-700 ml-1">4,9/5</span>
+                <span className="text-sm font-semibold text-ergo-ink ml-1">4,9/5</span>
               </div>
-              <p className="text-sm text-gray-600 italic mb-1">"Endlich ein Berater, der sich Zeit nimmt und alles verständlich erklärt."</p>
-              <p className="text-xs text-gray-400">Thomas K. aus Bookholzberg · Über 3.500 zufriedene Kunden</p>
+              <p className="text-sm text-ergo-stone italic mb-1">"Endlich ein Berater, der sich Zeit nimmt und alles verständlich erklärt."</p>
+              <p className="text-xs text-ergo-mute">Thomas K. aus Bookholzberg · Über 3.500 zufriedene Kunden</p>
             </div>
           </div>
         </div>
