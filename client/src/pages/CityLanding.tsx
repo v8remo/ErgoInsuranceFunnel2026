@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "wouter";
-import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
-import { Phone, MessageSquare, MapPin, Shield, CheckCircle, ArrowRight, Award, Star, Users, Home, Car, Heart, Scale, Umbrella, Instagram, Clock, FileCheck, TrendingUp, Building2, UserCheck, Mail, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { Phone, MessageSquare, MapPin, Shield, CheckCircle, Award, Star, Users, Home, Car, Heart, Scale, Umbrella, Instagram, Clock, FileCheck, TrendingUp, Building2, UserCheck, Mail, ChevronRight, CarFront, SmilePlus, BriefcaseBusiness, LayoutGrid, CalendarDays } from "lucide-react";
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
 import TrustBar from "@/components/TrustBar";
@@ -377,36 +377,19 @@ const ergoAwards = [
 ];
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 16 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' as const },
-  transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as const },
+  transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const },
 };
 
-function AnimatedCounter({ target, suffix = '', duration = 2 }: { target: number; suffix?: string; duration?: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true });
-  const motionVal = useMotionValue(0);
-  const springVal = useSpring(motionVal, { duration: duration * 1000 });
-  useEffect(() => {
-    if (isInView) motionVal.set(target);
-  }, [isInView, target, motionVal]);
-  useEffect(() => {
-    const unsubscribe = springVal.on('change', (v) => {
-      if (ref.current) ref.current.textContent = Math.round(v) + suffix;
-    });
-    return unsubscribe;
-  }, [springVal, suffix]);
-  return <span ref={ref}>0{suffix}</span>;
-}
-
 const QUIZ_OPTIONS = [
-  { label: 'Kfz-Versicherung', icon: '🚗', type: 'kfz' },
-  { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat' },
-  { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz' },
-  { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu' },
-  { label: 'Gewerbe & Betrieb', icon: '🏢', type: 'gewerbe' },
-  { label: 'Alle prüfen', icon: '✅', type: 'all' },
+  { label: 'Kfz-Versicherung', icon: CarFront, type: 'kfz' },
+  { label: 'Hausrat & Haftpflicht', icon: Home, type: 'hausrat' },
+  { label: 'Zahnzusatz', icon: SmilePlus, type: 'zahnzusatz' },
+  { label: 'Berufsunfähigkeit', icon: BriefcaseBusiness, type: 'bu' },
+  { label: 'Gewerbe & Betrieb', icon: Building2, type: 'gewerbe' },
+  { label: 'Alle prüfen', icon: LayoutGrid, type: 'all' },
 ];
 
 const QUIZ_TO_FUNNEL: Record<string, { type: string; label: string }> = {
@@ -433,8 +416,8 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Seite nicht gefunden</h1>
-          <Link href="/" className="text-ergo-red hover:underline">Zur Startseite</Link>
+          <h1 className="text-2xl mb-4">Seite nicht gefunden</h1>
+          <Link href="/" className="ergo-link">Zur Startseite</Link>
         </div>
       </div>
     );
@@ -477,65 +460,35 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         }}
       />
       <Breadcrumb items={[{ label: data.name }]} />
-      <main className="ds-marketing min-h-screen pb-16 sm:pb-0">
+      <main className="min-h-screen bg-white pb-16 sm:pb-0">
         {/* Hero Section */}
-        <section className="ds-hero py-12 md:py-20 px-4 bg-gradient-to-br from-[#003781] via-[#004fa0] to-[#001f5c] text-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-          <div className="max-w-5xl mx-auto relative">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
-              <div className="flex-1 text-center lg:text-left mb-10 lg:mb-0">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  className="inline-flex items-center gap-1.5 bg-white/15 px-3 py-1.5 rounded-full text-xs font-medium mb-5"
-                >
-                  <MapPin className="w-3.5 h-3.5" />
-                  <span>{data.region} · {data.distance} · {data.einwohner} Einwohner</span>
-                </motion.div>
+        <section className="border-b border-ergo-line">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-12 md:pt-16 md:pb-16">
+            <div className="flex flex-col lg:flex-row lg:items-start lg:gap-12">
+              <div className="flex-1 mb-10 lg:mb-0">
+                <p className="ergo-eyebrow flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 shrink-0" />
+                  {data.region} · {data.distance} · {data.einwohner} Einwohner
+                </p>
+                <h1 className="text-[30px] leading-[1.25] md:text-[40px] mb-4 max-w-xl">
+                  Ihre ERGO Agentur für {data.name}
+                </h1>
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
-                >
-                  Ihre ERGO Agentur für{' '}
-                  <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                    {data.name}
-                  </span>
-                </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.35 }}
-                  className="text-base sm:text-lg text-white/90 max-w-xl mx-auto lg:mx-0 mb-3 leading-relaxed"
-                >
+                <p className="text-base sm:text-lg text-ergo-stone max-w-xl mb-5 leading-relaxed">
                   {data.intro}
-                </motion.p>
+                </p>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.45 }}
-                  className="inline-flex items-center gap-2 bg-green-500/20 border border-green-400/30 px-3 py-1.5 rounded-full text-xs text-green-200 font-semibold mb-2"
-                >
-                  <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                  Heute noch {3 + (new Date().getDay() % 3)} freie Beratungstermine
-                </motion.div>
+                <p className="flex items-center gap-1.5 text-sm text-ergo-stone font-medium">
+                  <Clock className="w-4 h-4 text-ergo-check shrink-0" />
+                  Antwort innerhalb von 24 Stunden
+                </p>
               </div>
 
               {/* Quiz Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.5 }}
-                className="w-full lg:w-[420px] lg:flex-shrink-0"
-              >
-                <div className="rounded-2xl border-2 border-white/20 bg-white shadow-2xl shadow-black/20 p-4 sm:p-5">
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#E2001A] mb-1">Kostenlose Analyse – In 2 Minuten</p>
-                  <p className="text-sm sm:text-base font-bold text-gray-900 mb-4 leading-snug">
+              <div className="w-full lg:w-[420px] lg:flex-shrink-0">
+                <div className="ergo-card p-4 sm:p-5">
+                  <p className="ergo-eyebrow mb-1">Kostenlose Analyse – In 2 Minuten</p>
+                  <p className="font-serif text-lg font-bold text-ergo-ink mb-4">
                     Was möchten Sie versichern?
                   </p>
                   <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -556,96 +509,92 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                             }
                             setShowFunnel(true);
                           }}
-                          className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all active:scale-[0.98] group
-                            ${isAll
-                              ? 'border-[#E2001A] bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white hover:shadow-lg hover:shadow-red-500/25 sm:col-span-2'
-                              : 'border-gray-200 bg-gray-50 hover:border-[#E2001A] hover:bg-red-50'
-                            }`}
+                          className={
+                            isAll
+                              ? 'ergo-btn ergo-btn--primary sm:col-span-2 justify-between px-5'
+                              : 'ergo-option flex items-center gap-3 px-4 py-3 text-left'
+                          }
                         >
-                          <span className="text-2xl leading-none shrink-0">{opt.icon}</span>
-                          <span className={`font-semibold text-sm ${isAll ? 'text-white' : 'text-gray-800 group-hover:text-[#E2001A]'}`}>
-                            {opt.label}
-                          </span>
-                          <ChevronRight className={`w-4 h-4 ml-auto shrink-0 ${isAll ? 'text-white/80' : 'text-gray-400 group-hover:text-[#E2001A]'}`} />
+                          {isAll ? (
+                            <>
+                              <span className="flex items-center gap-3"><opt.icon className="w-5 h-5" />{opt.label}</span>
+                              <ChevronRight className="w-4 h-4" />
+                            </>
+                          ) : (
+                            <>
+                              <opt.icon className="w-5 h-5 text-ergo-red shrink-0" />
+                              <span className="font-semibold text-sm text-ergo-ink">
+                                {opt.label}
+                              </span>
+                              <ChevronRight className="w-4 h-4 ml-auto shrink-0 text-ergo-mute" />
+                            </>
+                          )}
                         </button>
                       );
                     })}
                   </div>
-                  <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
-                    <p className="text-[10px] sm:text-xs text-gray-400">🔒 100% kostenlos & unverbindlich · DSGVO-konform</p>
+                  <div className="mt-4 pt-3 border-t border-ergo-line flex items-center justify-between gap-3">
+                    <p className="text-xs text-ergo-mute">100% kostenlos & unverbindlich · DSGVO-konform</p>
                     <a
                       href={`https://wa.me/49${whatsappNumber}?text=${whatsappMessage}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => { trackEvent("city_whatsapp", { city: data.name }); trackConversion(); }}
-                      className="flex items-center gap-1.5 text-[#25d366] hover:text-[#1da851] transition-colors text-xs font-semibold whitespace-nowrap shrink-0"
+                      className="flex items-center gap-1.5 text-[#1da851] hover:underline text-xs font-bold whitespace-nowrap shrink-0"
                     >
                       <MessageSquare className="w-3.5 h-3.5" />
                       Lieber WhatsApp
                     </a>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Glassmorphism Stats Band */}
-        <motion.section {...fadeInUp} className="px-4 py-8 max-w-4xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 divide-x divide-gray-200/60">
+        {/* Statistik-Band */}
+        <motion.section {...fadeInUp} className="bg-ergo-gray border-b border-ergo-line">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+            <div className="grid grid-cols-3 gap-4 md:gap-8 text-center">
               {[
-                { value: 3500, suffix: '+', label: 'Zufriedene Kunden' },
-                { value: 15, suffix: '+', label: 'Produkte' },
-                { value: 24, suffix: 'h', label: 'Reaktionszeit' },
-              ].map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.15 }}
-                  className="text-center"
-                >
-                  <div className="text-2xl sm:text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                  </div>
-                  <p className="text-xs md:text-sm text-gray-500 mt-1.5 font-medium">{stat.label}</p>
-                </motion.div>
+                { value: '3.500+', label: 'Zufriedene Kunden' },
+                { value: '15+', label: 'Produkte' },
+                { value: '24h', label: 'Reaktionszeit' },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <div className="font-serif text-3xl md:text-5xl font-bold text-ergo-red">{stat.value}</div>
+                  <p className="text-xs md:text-sm text-ergo-stone mt-1.5 font-medium">{stat.label}</p>
+                </div>
               ))}
             </div>
           </div>
         </motion.section>
 
-        {/* Berater-Vorstellung Section – Glassmorphism */}
+        {/* Berater-Vorstellung Section */}
         <motion.section {...fadeInUp} className="px-4 py-10 md:py-14 max-w-3xl mx-auto">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-xl md:text-2xl mb-6 text-center">
             Ihr persönlicher Berater für {data.name}
           </h2>
-          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-5 md:p-8 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
+          <div className="ergo-card p-5 md:p-8">
             <div className="flex flex-col items-center text-center gap-5 md:flex-row md:text-left md:items-start">
-              <motion.img
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.3 }}
+              <img
                 src={beraterPhoto}
                 alt="Morino Stübe - ERGO Versicherungsfachmann in Ganderkesee"
-                className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-lg shrink-0 bg-white"
+                className="w-32 h-40 md:w-40 md:h-52 rounded-lg object-contain border border-ergo-line shrink-0 bg-white"
                 loading="lazy"
               />
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-gray-900 mb-1 md:text-2xl">Morino Stübe</h3>
-                <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann · Ganderkesee & Region</p>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4 md:text-base">{data.beraterIntro}</p>
+                <h3 className="text-xl mb-1 md:text-2xl">Morino Stübe</h3>
+                <p className="text-ergo-red font-bold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann · Ganderkesee & Region</p>
+                <p className="text-ergo-stone text-sm leading-relaxed mb-4 md:text-base">{data.beraterIntro}</p>
                 <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                  <span className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full">
+                  <span className="ergo-chip ergo-chip--yellow text-xs">
                     <Clock className="w-3 h-3" /> Flexible Termine
                   </span>
-                  <span className="inline-flex items-center gap-1 text-xs bg-green-50 text-green-700 px-3 py-1.5 rounded-full">
+                  <span className="ergo-chip ergo-chip--green text-xs">
                     <MessageSquare className="w-3 h-3" /> WhatsApp Erreichbar
                   </span>
-                  <span className="inline-flex items-center gap-1 text-xs bg-red-50 text-red-700 px-3 py-1.5 rounded-full">
+                  <span className="ergo-chip ergo-chip--rose text-xs">
                     <MapPin className="w-3 h-3" /> Hausbesuche möglich
                   </span>
                 </div>
@@ -655,22 +604,22 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         </motion.section>
 
         {/* ERGO Testsieger Badges */}
-        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-gradient-to-br from-yellow-50 to-orange-50">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-ergo-gray border-y border-ergo-line">
           <div className="max-w-4xl mx-auto px-4">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-center">
+            <h2 className="text-xl md:text-2xl mb-2 text-center">
               ERGO – Ausgezeichnete Qualität
             </h2>
-            <p className="text-gray-600 text-center mb-8">
+            <p className="text-ergo-stone text-center mb-8">
               Vielfach ausgezeichnet von unabhängigen Testinstituten
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {ergoAwards.map((award) => (
-                <div key={award.title} className="bg-white rounded-xl p-4 text-center border border-yellow-200 shadow-sm hover:shadow-md transition-shadow">
-                  <award.icon className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-                  <div className="text-xs font-bold text-ergo-red uppercase tracking-wide mb-1">{award.rating}</div>
-                  <div className="text-sm font-semibold text-gray-900 mb-1">{award.title}</div>
-                  <div className="text-xs text-gray-500">{award.source}</div>
-                  <div className="text-xs text-gray-400 mt-1">{award.year}</div>
+                <div key={award.title} className="ergo-card p-4 text-center">
+                  <span className="ergo-icon-disc w-10 h-10 mx-auto mb-2"><award.icon className="w-4 h-4" /></span>
+                  <div className="text-xs font-bold text-ergo-red mb-1">{award.rating}</div>
+                  <div className="text-sm font-semibold text-ergo-ink mb-1">{award.title}</div>
+                  <div className="text-xs text-ergo-stone">{award.source}</div>
+                  <div className="text-xs text-ergo-mute mt-1">{award.year}</div>
                 </div>
               ))}
             </div>
@@ -680,20 +629,20 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         {/* Detailed Service Descriptions */}
         <motion.section {...fadeInUp} className="py-10 md:py-14 bg-white">
           <div className="max-w-4xl mx-auto px-4">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-xl md:text-2xl mb-6">
               Versicherungsberatung speziell für {data.name}
             </h2>
-            <p className="text-gray-600 leading-relaxed mb-6">{data.detailedServiceText}</p>
+            <p className="text-ergo-stone leading-relaxed mb-6">{data.detailedServiceText}</p>
 
             {data.risiken.length > 0 && (
-              <div className="bg-red-50 border border-red-100 rounded-xl p-5 mb-6">
-                <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <div className="bg-ergo-red-light border border-ergo-line rounded-lg p-5 mb-6">
+                <h3 className="font-sans font-bold text-ergo-ink mb-3 flex items-center gap-2">
                   <Shield className="w-5 h-5 text-ergo-red" />
                   Typische Risiken in {data.name}
                 </h3>
                 <ul className="space-y-2">
                   {data.risiken.map((risiko) => (
-                    <li key={risiko} className="flex items-center gap-2 text-gray-700">
+                    <li key={risiko} className="flex items-center gap-2 text-ergo-ink">
                       <CheckCircle className="w-4 h-4 text-ergo-red flex-shrink-0" />
                       {risiko}
                     </li>
@@ -705,12 +654,12 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         </motion.section>
 
         {/* Insurance Products */}
-        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-gray-50">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-ergo-gray border-y border-ergo-line">
           <div className="max-w-4xl mx-auto px-4">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-xl md:text-2xl mb-6">
               Versicherungen für {data.name} im Überblick
             </h2>
-            <p className="text-gray-600 mb-8">{data.serviceText}</p>
+            <p className="text-ergo-stone mb-8">{data.serviceText}</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {insuranceProducts.map((product) => {
@@ -720,15 +669,15 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                     key={product.name}
                     href={product.href}
                     onClick={() => trackEvent("city_product_click", { city: data.name, product: product.name })}
-                    className="flex items-center justify-between p-4 bg-white rounded-xl hover:bg-blue-50 hover:border-ergo-red border border-gray-200 transition-colors group"
+                    className="ergo-tile flex items-center justify-between p-4 group"
                   >
                     <div className="flex items-center gap-3">
                       <IconComponent className="w-5 h-5 text-ergo-red" />
-                      <span className="font-medium text-gray-900 group-hover:text-ergo-red transition-colors">
+                      <span className="font-medium text-ergo-ink group-hover:text-ergo-red transition-colors">
                         {product.name}
                       </span>
                     </div>
-                    <span className="text-sm text-gray-500">{product.price}</span>
+                    <span className="text-sm text-ergo-mute">{product.price}</span>
                   </Link>
                 );
               })}
@@ -739,7 +688,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         {/* Why ERGO Agentur Stübe */}
         <motion.section {...fadeInUp} className="py-10 md:py-14 bg-white">
           <div className="max-w-4xl mx-auto px-4">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-xl md:text-2xl mb-6">
               Warum ERGO Agentur Stübe für {data.name}?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -748,14 +697,14 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                 { title: "15% Bündelnachlass", desc: "Ab 5 Versicherungen profitieren Sie von attraktiven Rabatten. Typische Familien sparen über 400€ pro Jahr.", icon: TrendingUp },
                 { title: "Persönlich vor Ort", desc: `Keine Hotline – persönliche Beratung für Kunden aus ${data.name}. Auch Hausbesuche und WhatsApp-Beratung.`, icon: Users },
               ].map((item) => (
-                <div key={item.title} className="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-10 h-10 bg-ergo-red/10 rounded-lg flex items-center justify-center">
-                      <item.icon className="w-5 h-5 text-ergo-red" />
-                    </div>
-                    <h3 className="font-semibold text-gray-900">{item.title}</h3>
+                <div key={item.title} className="ergo-card p-5">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="ergo-icon-disc w-10 h-10">
+                      <item.icon className="w-5 h-5" />
+                    </span>
+                    <h3 className="font-sans font-bold text-ergo-ink">{item.title}</h3>
                   </div>
-                  <p className="text-sm text-gray-600">{item.desc}</p>
+                  <p className="text-sm text-ergo-stone">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -763,22 +712,22 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         </motion.section>
 
         {/* Local Testimonials / Trust Section */}
-        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-gray-50">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-ergo-gray border-y border-ergo-line">
           <div className="max-w-4xl mx-auto px-4">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-center">
+            <h2 className="text-xl md:text-2xl mb-2 text-center">
               Das sagen Kunden aus {data.name}
             </h2>
-            <p className="text-gray-500 text-center mb-8">Echte Erfahrungen unserer zufriedenen Kunden</p>
+            <p className="text-ergo-stone text-center mb-8">Echte Erfahrungen unserer zufriedenen Kunden</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {data.testimonials.map((testimonial, index) => (
-                <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <div key={index} className="ergo-card p-6">
                   <div className="flex gap-1 mb-3">
                     {Array.from({ length: testimonial.stars }).map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="w-4 h-4 fill-ergo-yellow text-ergo-yellow" />
                     ))}
                   </div>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">„{testimonial.text}"</p>
-                  <p className="text-sm font-semibold text-gray-900">{testimonial.name}</p>
+                  <p className="text-ergo-ink text-sm leading-relaxed mb-4">„{testimonial.text}"</p>
+                  <p className="text-sm font-semibold text-ergo-mute">{testimonial.name}</p>
                 </div>
               ))}
             </div>
@@ -795,12 +744,12 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         />
 
         {/* Instagram Social Proof */}
-        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-gradient-to-br from-purple-50 to-pink-50">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-ergo-gray border-y border-ergo-line">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl md:text-2xl mb-3">
               Folgen Sie uns auf Instagram
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-ergo-stone mb-6">
               Versicherungstipps, Einblicke & Neuigkeiten aus der ERGO Agentur Stübe
             </p>
             <a
@@ -808,12 +757,12 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackEvent("city_instagram_click", { city: data.name })}
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold px-6 sm:px-8 py-4 min-h-[44px] rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-105"
+              className="ergo-btn ergo-btn--secondary"
             >
-              <Instagram className="w-6 h-6" />
+              <Instagram className="w-5 h-5" />
               @morino_stuebe folgen
             </a>
-            <p className="text-sm text-gray-500 mt-4">
+            <p className="text-sm text-ergo-mute mt-4">
               Regelmäßige Tipps zu Versicherungen, Vorsorge und Absicherung für {data.name} und Umgebung
             </p>
           </div>
@@ -822,22 +771,22 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         {/* Local SEO Text */}
         <motion.section {...fadeInUp} className="py-10 md:py-14 bg-white">
           <div className="max-w-4xl mx-auto px-4">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-xl md:text-2xl mb-6">
               Versicherungsschutz in {data.name} – Was Sie wissen sollten
             </h2>
             <div className="prose prose-gray max-w-none">
-              <p className="text-gray-600 leading-relaxed mb-6">{data.localSeoText}</p>
-              <p className="text-gray-600 leading-relaxed mb-6">{data.localSeoText2}</p>
+              <p className="text-ergo-stone leading-relaxed mb-6">{data.localSeoText}</p>
+              <p className="text-ergo-stone leading-relaxed mb-6">{data.localSeoText2}</p>
             </div>
 
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-6 mt-8">
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-blue-600" />
+            <div className="ergo-card p-6 mt-8">
+              <h3 className="font-sans font-bold text-ergo-ink mb-3 flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-ergo-red" />
                 Wir betreuen alle Ortsteile in {data.name}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {data.ortsteile.map((ortsteil) => (
-                  <span key={ortsteil} className="bg-white text-gray-700 text-sm px-3 py-1.5 rounded-full border border-blue-200">
+                  <span key={ortsteil} className="bg-ergo-gray text-ergo-stone text-sm px-3 py-1.5 rounded-pill">
                     {ortsteil}
                   </span>
                 ))}
@@ -847,12 +796,12 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         </motion.section>
 
         {/* Nearby Cities */}
-        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-blue-50">
+        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-ergo-gray border-y border-ergo-line">
           <div className="max-w-4xl mx-auto px-4">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-center">
+            <h2 className="text-xl md:text-2xl mb-2 text-center">
               Auch in Ihrer Nähe
             </h2>
-            <p className="text-gray-600 text-center mb-8 text-sm">
+            <p className="text-ergo-stone text-center mb-8 text-sm">
               Persönliche ERGO Versicherungsberatung auch in benachbarten Städten und Gemeinden
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -860,19 +809,19 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="flex items-center justify-between gap-4 bg-white border border-blue-200 rounded-xl px-5 py-4 hover:border-[#003781] hover:shadow-md transition-all group flex-1 max-w-xs mx-auto sm:mx-0"
+                  className="ergo-tile flex items-center justify-between gap-4 px-5 py-4 group flex-1 max-w-xs mx-auto sm:mx-0"
                 >
                   <div>
-                    <p className="font-semibold text-gray-900 group-hover:text-[#003781] transition-colors">
+                    <p className="font-semibold text-ergo-ink group-hover:text-ergo-red transition-colors">
                       ERGO Beratung {link.name}
                     </p>
-                    <p className="text-xs text-gray-500 mt-0.5">{link.region}</p>
-                    <span className="inline-flex items-center gap-1 mt-1.5 text-xs font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">
+                    <p className="text-xs text-ergo-mute mt-0.5">{link.region}</p>
+                    <span className="inline-flex items-center gap-1 mt-1.5 text-xs font-bold text-ergo-red bg-ergo-red-light px-2 py-0.5 rounded-pill">
                       <Car className="w-3 h-3" />
                       {link.distance} entfernt
                     </span>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#003781] shrink-0 transition-colors" />
+                  <ChevronRight className="w-5 h-5 text-ergo-mute group-hover:text-ergo-red shrink-0 transition-colors" />
                 </Link>
               ))}
             </div>
@@ -880,22 +829,22 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         </motion.section>
 
         {/* Contact CTA */}
-        <motion.section {...fadeInUp} className="py-10 md:py-14 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
+        <motion.section {...fadeInUp} className="ergo-section--red py-14 md:py-20 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-2xl md:text-[28px] mb-3">
               Kontakt für {data.name}
             </h2>
-            <p className="text-gray-600 mb-2">
+            <p className="text-white/90 mb-2">
               Morino Stübe · Friedensstraße 91 A · 27777 Ganderkesee
             </p>
-            <p className="text-sm text-gray-500 mb-6">
+            <p className="text-sm text-white/80 mb-6">
               {data.distance} · Montag bis Freitag, flexible Terminvereinbarung
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
                 href="tel:015566771019"
                 onClick={() => trackEvent("city_phone_click", { city: data.name })}
-                className="flex items-center justify-center gap-2 bg-[#003781] text-white font-semibold px-6 py-3.5 min-h-[44px] rounded-xl hover:bg-blue-800 transition-colors"
+                className="ergo-btn ergo-btn--inverted"
               >
                 <Phone className="w-5 h-5" />
                 01556 6771019
@@ -908,7 +857,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                   trackEvent("city_whatsapp_bottom", { city: data.name });
                   trackConversion();
                 }}
-                className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold px-6 py-3.5 min-h-[44px] rounded-xl hover:bg-green-600 transition-colors"
+                className="ergo-btn ergo-btn--whatsapp"
               >
                 <MessageSquare className="w-5 h-5" />
                 WhatsApp schreiben
@@ -916,22 +865,22 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               <Link
                 href="/termin"
                 onClick={() => trackEvent("city_termin_click", { city: data.name })}
-                className="flex items-center justify-center gap-2 border-2 border-ergo-red text-ergo-red font-semibold px-6 py-3.5 min-h-[44px] rounded-xl hover:bg-red-50 transition-colors"
+                className="ergo-btn border-white text-white hover:bg-white hover:text-ergo-red"
               >
-                <Clock className="w-5 h-5" />
+                <CalendarDays className="w-5 h-5" />
                 Termin vereinbaren
               </Link>
             </div>
           </div>
         </motion.section>
         {/* Sticky Mobile CTA Bar */}
-        <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
+        <div className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-ergo-line px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
           <button
             onClick={() => {
               setShowFunnel(true);
               trackEvent('city_sticky_cta', { city: data.name });
             }}
-            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm min-h-[44px] py-3 rounded-xl whitespace-nowrap shadow-lg shadow-red-500/20 animate-pulse-subtle"
+            className="ergo-btn ergo-btn--primary ergo-btn--sm flex-1 whitespace-nowrap"
           >
             <Mail className="w-4 h-4 shrink-0" />
             Kostenlose Analyse
@@ -944,7 +893,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               trackEvent('city_sticky_whatsapp', { city: data.name });
               trackConversion();
             }}
-            className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 min-h-[44px] py-3 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap"
+            className="ergo-btn ergo-btn--whatsapp ergo-btn--sm whitespace-nowrap"
           >
             <MessageSquare className="w-4 h-4 shrink-0" />
             WhatsApp

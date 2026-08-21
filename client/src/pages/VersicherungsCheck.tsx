@@ -4,12 +4,17 @@ import SEO from '@/components/SEO';
 import FunnelOverlay from '@/components/FunnelOverlay';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import '@/styles/funnel.css';
-import { Shield, ChevronRight, CheckCircle, AlertTriangle, XCircle, RotateCcw, Phone, MessageCircle } from 'lucide-react';
+import {
+  ChevronRight, ChevronLeft, CheckCircle, AlertTriangle, RotateCcw, Phone, MessageCircle,
+  User, Users, UsersRound, Smile, Building, Building2, Home, Car, CarFront, Zap, X,
+  Briefcase, BriefcaseBusiness, Landmark, GraduationCap, Sunrise, CheckCircle2, Info,
+  HelpCircle, ClipboardCheck, ClipboardList, type LucideIcon
+} from 'lucide-react';
 
 interface Question {
   id: string;
   question: string;
-  options: { label: string; value: string; icon?: string }[];
+  options: { label: string; value: string; icon: LucideIcon }[];
 }
 
 const questions: Question[] = [
@@ -17,61 +22,61 @@ const questions: Question[] = [
     id: 'lebenssituation',
     question: 'Wie ist Ihre aktuelle Lebenssituation?',
     options: [
-      { label: 'Single / Alleinstehend', value: 'single', icon: '👤' },
-      { label: 'Paar ohne Kinder', value: 'paar', icon: '👫' },
-      { label: 'Familie mit Kindern', value: 'familie', icon: '👨‍👩‍👧‍👦' },
-      { label: 'Senior / Rentner', value: 'senior', icon: '🧓' },
+      { label: 'Single / Alleinstehend', value: 'single', icon: User },
+      { label: 'Paar ohne Kinder', value: 'paar', icon: Users },
+      { label: 'Familie mit Kindern', value: 'familie', icon: UsersRound },
+      { label: 'Senior / Rentner', value: 'senior', icon: Smile },
     ]
   },
   {
     id: 'wohnsituation',
     question: 'Wie wohnen Sie?',
     options: [
-      { label: 'Mietwohnung', value: 'miete', icon: '🏢' },
-      { label: 'Eigentumswohnung', value: 'eigentum_wohnung', icon: '🏠' },
-      { label: 'Eigenes Haus', value: 'haus', icon: '🏡' },
-      { label: 'Bei den Eltern / WG', value: 'eltern', icon: '🏘️' },
+      { label: 'Mietwohnung', value: 'miete', icon: Building },
+      { label: 'Eigentumswohnung', value: 'eigentum_wohnung', icon: Building2 },
+      { label: 'Eigenes Haus', value: 'haus', icon: Home },
+      { label: 'Bei den Eltern / WG', value: 'eltern', icon: Users },
     ]
   },
   {
     id: 'auto',
     question: 'Besitzen Sie ein Fahrzeug?',
     options: [
-      { label: 'Ja, ein Auto', value: 'auto', icon: '🚗' },
-      { label: 'Ja, mehrere Fahrzeuge', value: 'mehrere', icon: '🚗🚗' },
-      { label: 'Ja, Motorrad / Roller', value: 'zweirad', icon: '🏍️' },
-      { label: 'Nein, kein Fahrzeug', value: 'kein', icon: '🚶' },
+      { label: 'Ja, ein Auto', value: 'auto', icon: Car },
+      { label: 'Ja, mehrere Fahrzeuge', value: 'mehrere', icon: CarFront },
+      { label: 'Ja, Motorrad / Roller', value: 'zweirad', icon: Zap },
+      { label: 'Nein, kein Fahrzeug', value: 'kein', icon: X },
     ]
   },
   {
     id: 'beruf',
     question: 'Wie ist Ihre berufliche Situation?',
     options: [
-      { label: 'Angestellt', value: 'angestellt', icon: '💼' },
-      { label: 'Selbstständig / Freiberuflich', value: 'selbststaendig', icon: '🏪' },
-      { label: 'Beamter', value: 'beamter', icon: '🏛️' },
-      { label: 'Student / Azubi', value: 'student', icon: '🎓' },
-      { label: 'Nicht berufstätig / Rentner', value: 'nicht_berufstaetig', icon: '🌿' },
+      { label: 'Angestellt', value: 'angestellt', icon: Briefcase },
+      { label: 'Selbstständig / Freiberuflich', value: 'selbststaendig', icon: BriefcaseBusiness },
+      { label: 'Beamter', value: 'beamter', icon: Landmark },
+      { label: 'Student / Azubi', value: 'student', icon: GraduationCap },
+      { label: 'Nicht berufstätig / Rentner', value: 'nicht_berufstaetig', icon: Sunrise },
     ]
   },
   {
     id: 'vorsorge',
     question: 'Haben Sie bereits für das Alter vorgesorgt?',
     options: [
-      { label: 'Ja, ausreichend', value: 'ja', icon: '✅' },
-      { label: 'Teilweise, aber unsicher', value: 'teilweise', icon: '🤔' },
-      { label: 'Nein, noch nicht', value: 'nein', icon: '❌' },
-      { label: 'Weiß ich nicht genau', value: 'unsicher', icon: '❓' },
+      { label: 'Ja, ausreichend', value: 'ja', icon: CheckCircle2 },
+      { label: 'Teilweise, aber unsicher', value: 'teilweise', icon: Info },
+      { label: 'Nein, noch nicht', value: 'nein', icon: X },
+      { label: 'Weiß ich nicht genau', value: 'unsicher', icon: HelpCircle },
     ]
   },
   {
     id: 'bestehend',
     question: 'Welche Versicherungen haben Sie bereits?',
     options: [
-      { label: 'Haftpflicht & Hausrat', value: 'basis', icon: '📋' },
-      { label: 'Mehrere (Kfz, Haftpflicht etc.)', value: 'mehrere', icon: '📑' },
-      { label: 'Nur Kfz-Versicherung', value: 'nur_kfz', icon: '🚗' },
-      { label: 'Keine / Weiß nicht', value: 'keine', icon: '🤷' },
+      { label: 'Haftpflicht & Hausrat', value: 'basis', icon: ClipboardCheck },
+      { label: 'Mehrere (Kfz, Haftpflicht etc.)', value: 'mehrere', icon: ClipboardList },
+      { label: 'Nur Kfz-Versicherung', value: 'nur_kfz', icon: Car },
+      { label: 'Keine / Weiß nicht', value: 'keine', icon: HelpCircle },
     ]
   },
 ];
@@ -154,9 +159,9 @@ export default function VersicherungsCheck() {
   };
 
   const priorityConfig = {
-    hoch: { color: 'text-red-600 bg-red-50 border-red-200', icon: AlertTriangle, label: 'Dringend empfohlen' },
-    mittel: { color: 'text-yellow-600 bg-yellow-50 border-yellow-200', icon: CheckCircle, label: 'Empfehlenswert' },
-    niedrig: { color: 'text-green-600 bg-green-50 border-green-200', icon: CheckCircle, label: 'Optional' },
+    hoch: { chip: 'ergo-chip ergo-chip--coral', icon: AlertTriangle, label: 'Dringend empfohlen' },
+    mittel: { chip: 'ergo-chip ergo-chip--yellow', icon: CheckCircle, label: 'Empfehlenswert' },
+    niedrig: { chip: 'ergo-chip ergo-chip--green', icon: CheckCircle, label: 'Optional' },
   };
 
   const whatsappNumber = "15566771019";
@@ -169,23 +174,20 @@ export default function VersicherungsCheck() {
         keywords="Versicherungscheck, Versicherung prüfen, welche Versicherung brauche ich, Versicherungslücken, ERGO Ganderkesee"
       />
 
-      <div className="ds-form-flow min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="min-h-screen bg-white">
         <div className="max-w-2xl mx-auto px-4 py-8 md:py-14">
 
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 bg-ergo-red/10 text-ergo-red px-4 py-2 rounded-full text-sm font-semibold mb-4">
-              <Shield className="w-4 h-4" />
-              Kostenloser Versicherungscheck
-            </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+            <p className="ergo-eyebrow">Kostenloser Versicherungscheck</p>
+            <h1 className="text-[30px] md:text-[40px] mb-2">
               Bin ich richtig versichert?
             </h1>
-            <p className="text-gray-500 text-sm md:text-base">
+            <p className="text-ergo-stone text-sm md:text-base">
               6 kurze Fragen – Ihre persönliche Empfehlung in 2 Minuten
             </p>
           </div>
 
-          <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
+          <div className="w-full bg-ergo-fog rounded-full h-2 mb-8">
             <div
               className="bg-ergo-red h-2 rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
@@ -193,53 +195,55 @@ export default function VersicherungsCheck() {
           </div>
 
           {!showResult ? (
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 md:p-8">
-              <p className="text-xs text-gray-400 mb-2 font-semibold">Frage {currentStep + 1} von {questions.length}</p>
-              <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-6">
+            <div className="ergo-card p-6 md:p-8">
+              <p className="text-xs text-ergo-mute mb-2 font-semibold">Frage {currentStep + 1} von {questions.length}</p>
+              <h2 className="text-lg md:text-xl mb-6">
                 {questions[currentStep].question}
               </h2>
 
               <div className="grid grid-cols-1 gap-3">
-                {questions[currentStep].options.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => handleAnswer(questions[currentStep].id, option.value)}
-                    className={`flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all min-h-[56px] ${
-                      answers[questions[currentStep].id] === option.value
-                        ? 'border-ergo-red bg-red-50 shadow-md'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    <span className="text-2xl shrink-0">{option.icon}</span>
-                    <span className="font-medium text-gray-800">{option.label}</span>
-                    <ChevronRight className="w-5 h-5 text-gray-400 ml-auto shrink-0" />
-                  </button>
-                ))}
+                {questions[currentStep].options.map((option) => {
+                  const OptionIcon = option.icon;
+                  const selected = answers[questions[currentStep].id] === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      onClick={() => handleAnswer(questions[currentStep].id, option.value)}
+                      className={`ergo-option flex items-center gap-4 p-4 text-left min-h-[56px] ${selected ? 'selected' : ''}`}
+                    >
+                      <span className="ergo-icon-disc w-10 h-10 shrink-0">
+                        <OptionIcon className="w-4 h-4" />
+                      </span>
+                      <span className="font-medium text-ergo-ink">{option.label}</span>
+                      <ChevronRight className="w-5 h-5 text-ergo-mute ml-auto shrink-0" />
+                    </button>
+                  );
+                })}
               </div>
 
               {currentStep > 0 && (
                 <button
                   onClick={() => setCurrentStep(currentStep - 1)}
-                  className="mt-4 text-sm text-gray-400 hover:text-gray-600 font-medium"
+                  className="mt-4 inline-flex items-center gap-1 text-sm text-ergo-mute hover:text-ergo-stone font-medium"
                 >
-                  ← Zurück
+                  <ChevronLeft className="w-4 h-4" /> Zurück
                 </button>
               )}
             </div>
           ) : (
             <div>
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 md:p-8 mb-6">
+              <div className="ergo-card p-6 md:p-8 mb-6">
                 <div className="text-center mb-6">
-                  <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-3 ${
-                    hochCount >= 3 ? 'bg-red-100 text-red-700' : hochCount >= 1 ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
+                  <div className={`mb-3 ${
+                    hochCount >= 3 ? 'ergo-chip ergo-chip--coral' : hochCount >= 1 ? 'ergo-chip ergo-chip--yellow' : 'ergo-chip ergo-chip--green'
                   }`}>
                     {hochCount >= 3 ? <AlertTriangle className="w-4 h-4" /> : <CheckCircle className="w-4 h-4" />}
                     {hochCount >= 3 ? `${hochCount} dringende Empfehlungen` : hochCount >= 1 ? `${hochCount} wichtige Empfehlung${hochCount > 1 ? 'en' : ''}` : 'Sie sind gut aufgestellt!'}
                   </div>
-                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                  <h2 className="text-xl md:text-2xl mb-2">
                     Ihre persönliche Auswertung
                   </h2>
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-ergo-stone text-sm">
                     Basierend auf Ihren Angaben empfehlen wir folgende Versicherungen:
                   </p>
                 </div>
@@ -250,16 +254,18 @@ export default function VersicherungsCheck() {
                     const Icon = config.icon;
                     return (
                       <Link key={i} href={rec.link}>
-                        <div className={`flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl border-2 ${config.color} cursor-pointer hover:shadow-md transition-shadow`}>
-                          <Icon className="w-5 h-5 shrink-0 mt-0.5" />
+                        <div className="ergo-tile flex items-start gap-2 sm:gap-3 p-3 sm:p-4 cursor-pointer">
+                          <span className="ergo-icon-disc w-10 h-10 shrink-0">
+                            <Icon className="w-4 h-4" />
+                          </span>
                           <div className="flex-1 min-w-0">
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-2 mb-1">
-                              <span className="font-bold text-gray-900 text-sm sm:text-base">{rec.name}</span>
-                              <span className="text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-white/80 self-start">{config.label}</span>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+                              <span className="font-sans font-bold text-ergo-ink text-sm sm:text-base">{rec.name}</span>
+                              <span className={`${config.chip} self-start text-xs`}>{config.label}</span>
                             </div>
-                            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{rec.reason}</p>
+                            <p className="text-xs sm:text-sm text-ergo-stone leading-relaxed">{rec.reason}</p>
                           </div>
-                          <ChevronRight className="w-5 h-5 shrink-0 text-gray-400 mt-1" />
+                          <ChevronRight className="w-5 h-5 shrink-0 text-ergo-mute mt-1" />
                         </div>
                       </Link>
                     );
@@ -267,15 +273,15 @@ export default function VersicherungsCheck() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-[#003781] to-[#005ab4] rounded-2xl p-6 text-white text-center mb-6">
-                <h3 className="text-lg font-bold mb-2">Kostenlose persönliche Beratung</h3>
-                <p className="text-sm text-blue-100 mb-4">
+              <div className="ergo-section--red rounded-lg p-6 text-center mb-6">
+                <h3 className="text-lg mb-2">Kostenlose persönliche Beratung</h3>
+                <p className="text-sm text-white/90 mb-4">
                   Ich analysiere Ihre Versicherungen und zeige Ihnen, wie Sie bis zu 15% mit dem Bündelnachlass sparen können.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <button
                     onClick={() => { setShowFunnel(true); trackEvent('check_to_funnel'); }}
-                    className="inline-flex items-center justify-center gap-2 bg-white text-[#003781] font-bold px-6 py-3 rounded-xl hover:bg-gray-100 transition-colors min-h-[48px]"
+                    className="ergo-btn ergo-btn--inverted"
                   >
                     <Phone className="w-4 h-4" /> Jetzt beraten lassen
                   </button>
@@ -283,7 +289,7 @@ export default function VersicherungsCheck() {
                     href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hallo Herr Stübe, ich habe gerade den Versicherungscheck auf Ihrer Seite gemacht und hätte gerne eine persönliche Beratung.')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-[#25d366] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#1da851] transition-colors min-h-[48px]"
+                    className="ergo-btn ergo-btn--whatsapp"
                   >
                     <MessageCircle className="w-4 h-4" /> Per WhatsApp
                   </a>
@@ -291,14 +297,14 @@ export default function VersicherungsCheck() {
               </div>
 
               <div className="text-center">
-                <button onClick={reset} className="inline-flex items-center gap-2 text-gray-400 hover:text-gray-600 text-sm font-medium">
+                <button onClick={reset} className="inline-flex items-center gap-2 text-ergo-mute hover:text-ergo-stone text-sm font-medium">
                   <RotateCcw className="w-4 h-4" /> Check wiederholen
                 </button>
               </div>
             </div>
           )}
 
-          <p className="text-center text-xs text-gray-400 mt-8">
+          <p className="text-center text-xs text-ergo-mute mt-8">
             Dieser Check ersetzt keine individuelle Beratung. Für eine umfassende Analyse kontaktieren Sie uns persönlich.
           </p>
         </div>

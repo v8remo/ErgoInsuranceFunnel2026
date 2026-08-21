@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import { Lead } from '@shared/schema';
+import { Lead } from '../shared/schema';
 
 interface UtmData {
   source?: string;
@@ -22,13 +22,15 @@ if (!process.env.RESEND_API_KEY) {
   console.warn('RESEND_API_KEY not found - Email notifications will be disabled');
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function sendLeadNotification(lead: Lead): Promise<boolean> {
   if (!process.env.RESEND_API_KEY) {
     console.log('Email notification skipped - no API key configured');
     return false;
   }
+
+  // Erst hier instanziieren: der Resend-Konstruktor wirft ohne API-Key und
+  // würde auf Modulebene die gesamte Serverless Function zum Absturz bringen.
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
     const emailHtml = `

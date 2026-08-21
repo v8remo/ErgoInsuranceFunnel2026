@@ -12,7 +12,7 @@ interface WhatsAppButtonProps {
 }
 
 export default function WhatsAppButton({
-  text = "💬 Sofort-Beratung",
+  text = "Sofort-Beratung per WhatsApp",
   className = "",
   variant = "inline",
 }: WhatsAppButtonProps) {
@@ -67,22 +67,22 @@ export default function WhatsAppButton({
       >
         {/* Popup card */}
         {popupOpen && (
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 w-64 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="ergo-card shadow-[0_8px_24px_rgba(38,38,38,0.14)] p-4 w-64 animate-in fade-in slide-in-from-bottom-2 duration-200">
             <div className="flex items-start justify-between gap-2 mb-2">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse shrink-0 mt-0.5" />
-                <span className="text-xs font-bold text-gray-800">Jetzt online · &lt; 1 Std. Antwort</span>
+                <span className="w-2 h-2 bg-ergo-check rounded-full shrink-0 mt-0.5" />
+                <span className="text-xs font-bold text-ergo-ink">Jetzt online · &lt; 1 Std. Antwort</span>
               </div>
               <button
                 onClick={handleDismiss}
-                className="text-gray-400 hover:text-gray-600 transition-colors shrink-0 -mt-0.5"
+                className="text-ergo-mute hover:text-ergo-ink transition-colors shrink-0 -mt-0.5"
                 aria-label="Schließen"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
-            <p className="text-xs text-gray-500 mb-3 leading-relaxed">
-              Chatte direkt mit Morino Stübe – kostenlos, schnell und persönlich.
+            <p className="text-xs text-ergo-stone mb-3 leading-relaxed">
+              Chatten Sie direkt mit Morino Stübe – kostenlos, schnell und persönlich.
             </p>
             <div className="flex flex-col gap-2">
               <a
@@ -90,14 +90,14 @@ export default function WhatsAppButton({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleClick}
-                className="flex items-center justify-center gap-2 bg-[#25d366] hover:bg-[#20b958] text-white text-xs font-bold py-2.5 rounded-xl transition-colors"
+                className="ergo-btn ergo-btn--whatsapp ergo-btn--sm w-full text-xs"
               >
                 <MessageCircle className="w-3.5 h-3.5" fill="currentColor" />
                 Jetzt schreiben
               </a>
               <a
                 href="/whatsapp"
-                className="flex items-center justify-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                className="flex items-center justify-center gap-1 text-xs text-ergo-mute hover:text-ergo-red transition-colors"
               >
                 Alle WhatsApp-Services
                 <ArrowRight className="w-3 h-3" />
@@ -110,7 +110,7 @@ export default function WhatsAppButton({
         <button
           onClick={() => setPopupOpen(v => !v)}
           onMouseEnter={() => !dismissed && setPopupOpen(true)}
-          className={`bg-[#25d366] hover:bg-[#20b958] text-white rounded-full p-3 sm:p-4 shadow-xl transition-all duration-300 hover:scale-110 ${!popupOpen ? 'animate-pulse' : ''} ${className}`}
+          className={`bg-[#25d366] hover:bg-[#1da851] text-white rounded-full p-3 sm:p-4 shadow-[0_8px_24px_rgba(38,38,38,0.2)] transition-colors duration-300 ${className}`}
           aria-label="WhatsApp Sofort-Beratung"
         >
           <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" fill="currentColor" />
@@ -125,7 +125,7 @@ export default function WhatsAppButton({
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
-      className={`inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg font-bold ${className}`}
+      className={`ergo-btn ergo-btn--whatsapp ergo-btn--sm ${className}`}
     >
       <MessageCircle className="h-5 w-5" fill="currentColor" />
       <span>{text}</span>

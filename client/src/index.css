@@ -1,89 +1,65 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * ERGO Corporate Design – Web-Tokens
+ *
+ * Farb-, Typo- und Komponenten-Tokens nach dem ERGO Designsystem (ergo.de):
+ * Berry-Rot #8E0038 als Primärfarbe, #71022E als Hover, Text #333,
+ * Linien #D9D9D9, Flächen #F6F5F5/#FBF4F4, Pastell-Akzente,
+ * Pill-Buttons (2px Border, radius 100px), Serif-Headlines.
+ * Schriften: FS Me → Open Sans, Fedra Serif → Source Serif 4.
+ */
 :root {
-  /*
-   * ERGO Versicherungs Designsystem
-   * Core colour, type and interaction tokens are intentionally centralised here
-   * so every existing service, form and landing page shares one visual language.
-   */
-  --ds-navy: #5d0739;
-  --ds-navy-deep: #420326;
-  --ds-blue: #a9e5e8;
-  --ds-red: #a50046;
-  --ds-red-dark: #810035;
-  --ds-ink: #29272b;
-  --ds-body: #5b5960;
-  --ds-canvas: #f8f8f6;
-  --ds-paper: #fffefd;
-  --ds-line: #dedde0;
-  --ds-soft-red: #f8e5ed;
-  --ds-soft-blue: #e2f6f7;
-  --ds-soft-peach: #ffe7d6;
-  --ds-success: #087443;
-  --ds-radius-sm: 0.35rem;
-  --ds-radius: 0.55rem;
-  --ds-radius-lg: 0.7rem;
-  --ds-shadow-sm: 0 1px 4px rgba(41, 39, 43, 0.06);
-  --ds-shadow: 0 5px 18px rgba(41, 39, 43, 0.09);
-  --ds-shadow-lg: 0 14px 32px rgba(41, 39, 43, 0.12);
+  --ergo-red: #8e0038;
+  --ergo-red-dark: #71022e;
+  --ergo-pink: #b31767;
+  --ergo-ink: #333333;
+  --ergo-ink-deep: #262626;
+  --ergo-muted: #737373;
+  --ergo-stone: #545241;
+  --ergo-line: #d9d9d9;
+  --ergo-line-soft: #e1e1e1;
+  --ergo-fog: #f2f2f2;
+  --ergo-cloud: #f6f5f5;
+  --ergo-rose: #fbf4f4;
+  --ergo-yellow: #fad782;
+  --ergo-coral: #fa7d73;
+  --ergo-leaf: #b3da8a;
+  --ergo-sky: #96c8ff;
+  --ergo-check: #009284;
+  --ergo-focus: #326ec8;
 
-  --background: hsl(45, 20%, 98%);
-  --foreground: hsl(300, 5%, 16%);
-  --muted: hsl(36, 20%, 96%);
-  --muted-foreground: hsl(300, 4%, 43%);
+  --ergo-font-sans: "Open Sans", Arial, Helvetica, sans-serif;
+  --ergo-font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  --ergo-radius-pill: 100px;
+  --ergo-radius: 8px;
+  --ergo-radius-sm: 4px;
+  --ergo-shadow-pop: 0 8px 24px rgba(38, 38, 38, 0.14);
+
+  /* shadcn-Mapping */
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(0, 0%, 20%);
+  --muted: hsl(0, 0%, 95%);
+  --muted-foreground: hsl(0, 0%, 40%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
-  --card: hsl(45, 100%, 99.5%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(300, 5%, 86%);
-  --input: hsl(300, 5%, 82%);
-  --primary: hsl(334, 100%, 32%);
-  --primary-foreground: hsl(0, 0%, 98%);
-  --secondary: hsl(184, 54%, 88%);
-  --secondary-foreground: hsl(300, 5%, 16%);
-  --accent: hsl(24, 100%, 92%);
-  --accent-foreground: hsl(300, 5%, 16%);
-  --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(20, 14.3%, 4.1%);
+  --popover-foreground: hsl(0, 0%, 20%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(0, 0%, 20%);
+  --border: hsl(0, 0%, 85%);
+  --input: hsl(0, 0%, 85%);
+  --primary: hsl(335, 100%, 28%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(0, 3%, 96%);
+  --secondary-foreground: hsl(0, 0%, 20%);
+  --accent: hsl(9, 5%, 97%);
+  --accent-foreground: hsl(335, 100%, 28%);
+  --destructive: hsl(0, 72%, 42%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(335, 100%, 28%);
   --radius: 0.5rem;
-
-  --ergo-red: hsl(334, 100%, 32%);
-  --ergo-red-hover: hsl(334, 100%, 26%);
-  --ergo-red-light: hsl(335, 100%, 97%);
-  --ergo-red-dark: hsl(335, 95%, 25%);
-  --ergo-dark: hsl(300, 5%, 16%);
-  --ergo-dark-light: hsl(300, 4%, 32%);
-  --ergo-gray: hsl(36, 20%, 96%);
-  --ergo-gray-light: hsl(36, 25%, 99%);
-  --ergo-blue: hsl(184, 54%, 44%);
-  --ergo-blue-light: hsl(184, 54%, 94%);
-}
-
-.dark {
-  --background: hsl(240, 10%, 3.9%);
-  --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(240, 3.7%, 15.9%);
-  --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(240, 10%, 3.9%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(240, 10%, 3.9%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(240, 3.7%, 15.9%);
-  --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(355, 95%, 44%);
-  --primary-foreground: hsl(0, 0%, 98%);
-  --secondary: hsl(240, 3.7%, 15.9%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(240, 3.7%, 15.9%);
-  --accent-foreground: hsl(0, 0%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(240, 4.9%, 83.9%);
 }
 
 @layer base {
@@ -92,7 +68,8 @@
     box-sizing: border-box;
   }
 
-  html, body {
+  html,
+  body {
     overflow-x: hidden;
     width: 100%;
   }
@@ -102,23 +79,84 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
-    color: var(--ds-ink);
-    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-    letter-spacing: -0.008em;
+    @apply antialiased;
+    background: #ffffff;
+    color: var(--ergo-ink);
+    font-family: var(--ergo-font-sans);
+    font-size: 16px;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4, h5, h6, p, span, div, a, button, label {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--ergo-font-serif);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ergo-ink);
+  }
+
+  h5,
+  h6 {
+    font-family: var(--ergo-font-sans);
+    font-weight: 700;
+    color: var(--ergo-ink);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  div,
+  a,
+  button,
+  label {
     word-break: normal;
     overflow-wrap: break-word;
     hyphens: none;
     -webkit-hyphens: none;
   }
 
-  input, textarea, select {
+  ::selection {
+    background-color: var(--ergo-red);
+    color: #ffffff;
+  }
+
+  input,
+  textarea,
+  select {
     font-size: 16px;
+    font-family: var(--ergo-font-sans);
+  }
+
+  input,
+  select,
+  textarea {
+    border-color: var(--ergo-line);
+    border-radius: var(--ergo-radius-sm);
+    background-color: #ffffff;
+    color: var(--ergo-ink);
+  }
+
+  input:hover,
+  select:hover,
+  textarea:hover {
+    border-color: var(--ergo-muted);
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--ergo-red);
+    box-shadow: 0 0 0 3px rgba(142, 0, 56, 0.12);
+    outline: none;
   }
 
   input[type="date"] {
@@ -126,8 +164,8 @@
     -webkit-appearance: none;
     appearance: none;
     min-height: 48px;
-    background-color: white;
-    color: #111827;
+    background-color: #ffffff;
+    color: var(--ergo-ink);
   }
 
   input[type="date"]::-webkit-date-and-time-value {
@@ -148,54 +186,380 @@
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Selection color */
-  ::selection {
-    background-color: var(--ds-red);
-    color: white;
-  }
-
-  h1, h2, h3 {
-    letter-spacing: -0.035em;
-    font-family: "Space Grotesk", "DM Sans", sans-serif;
-  }
-
-  h1, h2 {
-    font-weight: 750;
-  }
-
-  input, select, textarea {
-    border-color: var(--ds-line);
-    border-radius: var(--ds-radius-sm);
-    box-shadow: inset 0 1px 1px rgba(18, 39, 77, 0.02);
-  }
-
-  input:hover, select:hover, textarea:hover {
-    border-color: #b7c3d5;
-  }
-
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--ds-blue) !important;
-    box-shadow: 0 0 0 3px rgba(0, 79, 158, 0.12) !important;
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
 @layer components {
-  .ergo-red { color: var(--ergo-red); }
-  .bg-ergo-red { background-color: var(--ergo-red); color: white; }
-  .border-ergo-red { border-color: var(--ergo-red); }
-  .text-ergo-red { color: var(--ergo-red); }
-  .text-ergo-dark { color: var(--ergo-dark); }
-  .bg-ergo-dark { background-color: var(--ergo-dark); color: white; }
-  .bg-ergo-gray { background-color: var(--ergo-gray); color: var(--ergo-dark); }
-  .bg-ergo-blue { background-color: var(--ergo-blue); color: white; }
-  .bg-ergo-blue-light { background-color: var(--ergo-blue-light); color: var(--ergo-dark); }
+  /* ── Buttons: ERGO-Pill (radius 100px, 2px Border, bold) ── */
+  .ergo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0.25rem 1.5rem;
+    border: 2px solid transparent;
+    border-radius: var(--ergo-radius-pill);
+    font-family: var(--ergo-font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out,
+      border-color 0.3s ease-in-out;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ergo-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .ergo-btn--sm {
+    min-height: 40px;
+    padding: 1px 1.25rem;
+    font-size: 14px;
+  }
+
+  .ergo-btn--primary {
+    background-color: var(--ergo-red);
+    border-color: var(--ergo-red);
+    color: #ffffff;
+  }
+
+  .ergo-btn--primary:hover,
+  .ergo-btn--primary:focus-visible {
+    background-color: var(--ergo-red-dark);
+    border-color: var(--ergo-red-dark);
+    color: #ffffff;
+  }
+
+  .ergo-btn--secondary {
+    background-color: transparent;
+    border-color: var(--ergo-red);
+    color: var(--ergo-red);
+  }
+
+  .ergo-btn--secondary:hover,
+  .ergo-btn--secondary:focus-visible {
+    background-color: var(--ergo-red);
+    color: #ffffff;
+  }
+
+  .ergo-btn--tertiary {
+    background-color: transparent;
+    border-color: var(--ergo-stone);
+    color: var(--ergo-stone);
+  }
+
+  .ergo-btn--tertiary:hover,
+  .ergo-btn--tertiary:focus-visible {
+    background-color: var(--ergo-stone);
+    color: #ffffff;
+  }
+
+  .ergo-btn--inverted {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: var(--ergo-red);
+  }
+
+  .ergo-btn--inverted:hover,
+  .ergo-btn--inverted:focus-visible {
+    color: var(--ergo-red-dark);
+  }
+
+  .ergo-btn--whatsapp {
+    background-color: #25d366;
+    border-color: #25d366;
+    color: #ffffff;
+  }
+
+  .ergo-btn--whatsapp:hover,
+  .ergo-btn--whatsapp:focus-visible {
+    background-color: #1da851;
+    border-color: #1da851;
+    color: #ffffff;
+  }
+
+  /* ── Text-Link (ERGO: rot, bold, unterstrichen) ── */
+  .ergo-link {
+    color: var(--ergo-red);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .ergo-link:hover {
+    color: var(--ergo-red-dark);
+  }
+
+  /* ── Flächen ── */
+  .ergo-card {
+    background: #ffffff;
+    border: 1px solid var(--ergo-line);
+    border-radius: var(--ergo-radius);
+  }
+
+  .ergo-tile {
+    background: #ffffff;
+    border: 1px solid var(--ergo-line);
+    border-radius: var(--ergo-radius);
+    transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  }
+
+  .ergo-tile:hover {
+    border-color: var(--ergo-red);
+    background-color: var(--ergo-rose);
+  }
+
+  .ergo-option {
+    background: #ffffff;
+    border: 2px solid var(--ergo-line);
+    border-radius: var(--ergo-radius);
+    transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ergo-option:hover {
+    border-color: var(--ergo-red);
+    background-color: var(--ergo-rose);
+  }
+
+  .ergo-option.selected,
+  .ergo-option[aria-pressed="true"],
+  .ergo-option[data-selected="true"] {
+    border-color: var(--ergo-red);
+    background-color: var(--ergo-rose);
+  }
+
+  /* ── Eyebrow: kleine rote Zeile über Headlines ── */
+  .ergo-eyebrow {
+    display: block;
+    color: var(--ergo-red);
+    font-family: var(--ergo-font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Claim: große rote Serif-Zeile (ERGO .txt__claim) ── */
+  .ergo-claim {
+    font-family: var(--ergo-font-serif);
+    font-weight: 700;
+    color: var(--ergo-red);
+    font-size: 28px;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 768px) {
+    .ergo-claim {
+      font-size: 40px;
+    }
+  }
+
+  /* ── Check-Liste: petrolgrüner Kreis mit weißem Haken (ERGO CheckColorIcon) ── */
+  .ergo-check-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ergo-check-list li {
+    position: relative;
+    padding-left: 34px;
+  }
+
+  .ergo-check-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 22px;
+    height: 22px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 255.1 255.1'%3E%3Ccircle cx='127.1' cy='127.6' r='106.3' fill='%23009284'/%3E%3Cpath d='m172.8 74.4-64.7 90.2L82.4 135H63.3l35.3 41c2.5 2.9 6 4.6 9.9 4.6h.7c3.9-.4 7.8-2.5 9.9-5.7l71.7-100.6-18 .1z' fill='%23fff'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  /* ── Badges / Chips (Pastell-Akzente aus dem ERGO-System) ── */
+  .ergo-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: var(--ergo-radius-pill);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ergo-ink);
+    background: var(--ergo-cloud);
+  }
+
+  .ergo-chip--yellow {
+    background: var(--ergo-yellow);
+  }
+
+  .ergo-chip--green {
+    background: var(--ergo-leaf);
+  }
+
+  .ergo-chip--blue {
+    background: var(--ergo-sky);
+  }
+
+  .ergo-chip--coral {
+    background: var(--ergo-coral);
+  }
+
+  .ergo-chip--rose {
+    background: var(--ergo-rose);
+    color: var(--ergo-red);
+  }
+
+  /* ── Icon-Kreis für Feature-/Service-Kacheln ── */
+  .ergo-icon-disc {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--ergo-rose);
+    color: var(--ergo-red);
+    flex-shrink: 0;
+  }
+
+  /* ── Seiten-Anatomie ── */
+  .ds-page {
+    min-height: calc(100vh - 4rem);
+    background: #ffffff;
+    color: var(--ergo-ink);
+  }
+
+  @media (min-width: 768px) {
+    .ds-page {
+      min-height: calc(100vh - 5rem);
+    }
+  }
+
+  .ergo-section {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  @media (min-width: 768px) {
+    .ergo-section {
+      padding-top: 64px;
+      padding-bottom: 64px;
+    }
+  }
+
+  .ergo-section--cloud {
+    background: var(--ergo-cloud);
+  }
+
+  .ergo-section--red {
+    background: var(--ergo-red);
+    color: #ffffff;
+  }
+
+  .ergo-section--red h1,
+  .ergo-section--red h2,
+  .ergo-section--red h3,
+  .ergo-section--red h4 {
+    color: #ffffff;
+  }
+
+  /* ── Header/Footer/Breadcrumb ── */
+  .ds-site-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--ergo-line);
+  }
+
+  .ds-site-footer {
+    background: var(--ergo-cloud);
+    border-top: 1px solid var(--ergo-line);
+    color: var(--ergo-ink);
+  }
+
+  .ds-breadcrumb {
+    background: #ffffff;
+    border-color: var(--ergo-line);
+    font-size: 13px;
+  }
+
+  /* ── Kompatibilität: bestehende ds-Klassen auf ERGO-Tokens ── */
+  .ds-surface {
+    background: #ffffff;
+    border: 1px solid var(--ergo-line);
+    border-radius: var(--ergo-radius);
+  }
+
+  .ds-primary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--ergo-red);
+    border: 2px solid var(--ergo-red);
+    border-radius: var(--ergo-radius-pill);
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  }
+
+  .ds-primary-action:hover {
+    background: var(--ergo-red-dark);
+    border-color: var(--ergo-red-dark);
+    color: #ffffff;
+  }
+
+  .ds-secondary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    border: 2px solid var(--ergo-red);
+    border-radius: var(--ergo-radius-pill);
+    color: var(--ergo-red);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+
+  .ds-secondary-action:hover {
+    background: var(--ergo-red);
+    color: #ffffff;
+  }
+
+  .ds-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ergo-red);
+    font-size: 14px;
+    font-weight: 700;
+  }
 
   .insurance-card {
-    transition: all 0.3s ease;
+    transition: border-color 0.2s ease-in-out;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -203,169 +567,12 @@
 
   @media (hover: hover) {
     .insurance-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      border-color: var(--ergo-red);
     }
   }
 
   .insurance-card img {
     aspect-ratio: 400/250;
-  }
-
-  /* Shared page anatomy */
-  .ds-page {
-    min-height: calc(100vh - 4rem);
-    background: var(--ds-canvas);
-  }
-
-  .ds-page > * {
-    position: relative;
-  }
-
-  .ds-marketing,
-  .ds-service,
-  .ds-form-flow {
-    background: transparent;
-  }
-
-  .ds-surface {
-    border: 1px solid var(--ds-line);
-    border-radius: var(--ds-radius);
-    background: var(--ds-paper);
-    box-shadow: var(--ds-shadow-sm);
-  }
-
-  .ds-hero {
-    border-bottom: 2px solid var(--ds-red);
-    box-shadow: inset 0 -1px rgba(255, 255, 255, 0.18);
-  }
-
-  .ds-hero h1 {
-    max-width: 18ch;
-  }
-
-  .ds-form-flow .max-w-\[600px\],
-  .ds-form-flow .max-w-\[640px\],
-  .ds-form-flow .max-w-2xl {
-    position: relative;
-  }
-
-  .ds-form-flow .bg-white.rounded-xl,
-  .ds-form-flow .bg-white.rounded-2xl {
-    border: 1px solid var(--ds-line);
-    box-shadow: var(--ds-shadow-sm);
-  }
-
-  .ds-form-flow .bg-\[\#E2001A\] {
-    background-color: var(--ds-red);
-  }
-
-  .ds-form-flow label {
-    color: var(--ds-ink);
-    font-weight: 650;
-  }
-
-  .ds-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--ds-red);
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-  }
-
-  .ds-primary-action {
-    background: var(--ds-red);
-    border-radius: var(--ds-radius-sm);
-    box-shadow: 0 8px 18px rgba(226, 0, 26, 0.18);
-    color: #fff;
-    font-weight: 750;
-    transition: transform 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
-  }
-
-  .ds-primary-action:hover {
-    background: var(--ds-red-dark);
-    box-shadow: 0 12px 24px rgba(226, 0, 26, 0.24);
-    transform: translateY(-1px);
-  }
-
-  .ds-secondary-action {
-    border: 1px solid var(--ds-red);
-    border-radius: var(--ds-radius-sm);
-    color: var(--ds-red);
-    font-weight: 750;
-    transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
-  }
-
-  .ds-secondary-action:hover {
-    background: var(--ds-soft-red);
-    transform: translateY(-1px);
-  }
-
-  .ds-site-header {
-    background: rgba(255, 254, 253, 0.96);
-    border-bottom-color: var(--ds-line);
-  }
-
-  .ds-site-footer {
-    background: var(--ds-navy-deep);
-  }
-
-  .ds-breadcrumb {
-    background: rgba(248, 248, 246, 0.92);
-    border-color: var(--ds-line);
-  }
-
-  .ds-marketing .bg-white.rounded-2xl,
-  .ds-service .bg-white.rounded-2xl,
-  .ds-form-flow .bg-white.rounded-2xl,
-  .ds-page .bg-white.rounded-lg {
-    border-color: var(--ds-line);
-    box-shadow: var(--ds-shadow-sm);
-  }
-
-  .ds-marketing .bg-gray-50,
-  .ds-service .bg-gray-50,
-  .ds-form-flow .bg-gray-50 {
-    background-color: var(--ds-canvas);
-  }
-
-  .ds-marketing .bg-gradient-to-br.from-\[\#003781\],
-  .ds-marketing .bg-gradient-to-br.from-\[\#E2001A\],
-  .ds-service .bg-gradient-to-br.from-\[\#003781\] {
-    position: relative;
-    isolation: isolate;
-  }
-
-  .ds-marketing .bg-gradient-to-br.from-\[\#003781\]::after,
-  .ds-marketing .bg-gradient-to-br.from-\[\#E2001A\]::after,
-  .ds-service .bg-gradient-to-br.from-\[\#003781\]::after {
-    content: "";
-    position: absolute;
-    inset: auto -12% -70% auto;
-    z-index: -1;
-    width: 29rem;
-    height: 29rem;
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 50%;
-  }
-
-  .ds-page .bg-white.rounded-xl,
-  .ds-page .bg-white.rounded-2xl {
-    border-color: var(--ds-line);
-  }
-
-  .ds-page .shadow-lg,
-  .ds-page .shadow-xl {
-    box-shadow: var(--ds-shadow);
-  }
-
-  @media (min-width: 768px) {
-    .ds-page {
-      min-height: calc(100vh - 4.5rem);
-    }
   }
 
   .funnel-step {
@@ -380,7 +587,6 @@
     content-visibility: auto;
   }
 
-  /* Content visibility for below-the-fold sections */
   .cv-auto {
     content-visibility: auto;
     contain-intrinsic-size: auto 500px;
@@ -396,24 +602,16 @@
     padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
 
-  .animate-pulse-subtle {
-    animation: pulse-subtle 2.5s ease-in-out infinite;
-  }
-
-  @keyframes pulse-subtle {
-    0%, 100% { box-shadow: 0 4px 14px rgba(226, 0, 26, 0.2); }
-    50% { box-shadow: 0 4px 20px rgba(226, 0, 26, 0.4); }
-  }
-
   .section-divider {
     height: 1px;
-    background: linear-gradient(to right, transparent, rgb(229 231 235 / 0.6), transparent);
+    background: var(--ergo-line-soft);
   }
 
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
@@ -421,276 +619,11 @@
   .ds-rule {
     height: 2px;
     width: 3rem;
-    background: var(--ds-red);
+    background: var(--ergo-red);
     border-radius: 999px;
   }
-}
 
-/* Shared ERGO design language: deliberately overrides legacy utility colour
-   choices across older marketing, service, legal and admin screens. */
-.ds-page {
-  background: var(--ds-canvas);
-  color: var(--ds-ink);
-}
-
-.ds-page .bg-white,
-.ds-page .bg-gray-50,
-.ds-page .bg-gray-100 {
-  background-color: var(--ds-paper);
-}
-
-.ds-page .bg-gray-50,
-.ds-page .bg-gray-100 {
-  background-color: var(--ds-canvas);
-}
-
-.ds-page .border-gray-100,
-.ds-page .border-gray-200,
-.ds-page .border-gray-300,
-.ds-page .border-slate-200 {
-  border-color: var(--ds-line);
-}
-
-.ds-page .text-gray-900,
-.ds-page .text-gray-800,
-.ds-page .text-gray-700 {
-  color: var(--ds-ink);
-}
-
-.ds-page .text-gray-600,
-.ds-page .text-gray-500,
-.ds-page .text-gray-400 {
-  color: var(--ds-body);
-}
-
-.ds-page .bg-\[\#E2001A\],
-.ds-page .bg-\[\#e2001a\],
-.ds-page .bg-red-600,
-.ds-page .bg-red-700 {
-  background-color: var(--ds-red);
-}
-
-.ds-page .text-\[\#E2001A\],
-.ds-page .text-\[\#e2001a\],
-.ds-page .text-red-600,
-.ds-page .text-red-700 {
-  color: var(--ds-red);
-}
-
-.ds-page .rounded-2xl {
-  border-radius: var(--ds-radius-lg);
-}
-
-.ds-page .rounded-xl {
-  border-radius: var(--ds-radius);
-}
-
-.ds-page .shadow-lg,
-.ds-page .shadow-xl,
-.ds-page .shadow-2xl {
-  box-shadow: var(--ds-shadow);
-}
-
-.ds-site-header a,
-.ds-site-header button {
-  letter-spacing: .005em;
-}
-
-.ds-site-footer {
-  background: var(--ds-navy-deep);
-  border-top: 4px solid var(--ds-red);
-}
-
-.ds-site-footer .text-blue-100\/80,
-.ds-site-footer .text-gray-300,
-.ds-site-footer .text-gray-400 {
-  color: rgba(255, 245, 248, .72);
-}
-
-.ds-site-footer a:hover,
-.ds-site-footer button:hover {
-  color: #a9e5e8;
-}
-
-.ds-breadcrumb {
-  font-size: .76rem;
-  letter-spacing: .025em;
-}
-
-/* Light hero contract. These selectors intentionally sit after the legacy
-   utility palette so route-specific gradient classes cannot win. */
-.ds-marketing .ds-hero,
-.ds-service .ds-hero,
-.ds-form-flow .ds-hero,
-.ds-marketing > section:first-of-type {
-  color: var(--ds-ink) !important;
-  background-color: var(--ds-paper) !important;
-  background-image:
-    radial-gradient(circle at 88% 10%, rgba(169, 229, 232, .34), transparent 22rem),
-    linear-gradient(112deg, #fffefd 0%, #fffefd 68%, #e5f6f7 100%) !important;
-  border-top: 5px solid var(--ds-red);
-  border-bottom: 1px solid var(--ds-line);
-  box-shadow: 0 10px 26px rgba(41, 39, 43, .07);
-}
-
-.ds-marketing .ds-hero h1,
-.ds-service .ds-hero h1,
-.ds-form-flow .ds-hero h1,
-.ds-marketing > section:first-of-type h1 {
-  color: var(--ds-ink) !important;
-}
-
-.ds-marketing .ds-hero .text-white,
-.ds-service .ds-hero .text-white,
-.ds-form-flow .ds-hero .text-white,
-.ds-marketing > section:first-of-type .text-white {
-  color: var(--ds-ink) !important;
-}
-
-.ds-marketing .ds-hero .text-white\/90,
-.ds-marketing .ds-hero .text-white\/80,
-.ds-service .ds-hero .text-white\/90,
-.ds-service .ds-hero .text-white\/80,
-.ds-form-flow .ds-hero .text-white\/90,
-.ds-form-flow .ds-hero .text-white\/80,
-.ds-marketing > section:first-of-type .text-white\/90,
-.ds-marketing > section:first-of-type .text-white\/80 {
-  color: var(--ds-body) !important;
-}
-
-.ds-marketing .ds-hero .bg-white\/15,
-.ds-service .ds-hero .bg-white\/15,
-.ds-form-flow .ds-hero .bg-white\/15,
-.ds-marketing > section:first-of-type .bg-white\/15 {
-  background: var(--ds-soft-red) !important;
-  border: 1px solid #eac4d4;
-  color: var(--ds-red) !important;
-}
-
-.ds-marketing .ds-hero .text-yellow-300,
-.ds-service .ds-hero .text-yellow-300,
-.ds-form-flow .ds-hero .text-yellow-300,
-.ds-marketing > section:first-of-type .text-yellow-300 {
-  color: var(--ds-red) !important;
-}
-
-.ds-marketing .ds-hero .text-green-300,
-.ds-service .ds-hero .text-green-300,
-.ds-form-flow .ds-hero .text-green-300,
-.ds-marketing > section:first-of-type .text-green-300 {
-  color: var(--ds-success) !important;
-}
-
-/* Keep actual action controls high contrast after the hero text reset. */
-.ds-marketing .ds-hero button.text-white,
-.ds-service .ds-hero button.text-white,
-.ds-form-flow .ds-hero button.text-white,
-.ds-marketing > section:first-of-type button.text-white {
-  color: #fff !important;
-  background: var(--ds-red) !important;
-}
-
-.ds-marketing .ds-hero button.text-white *,
-.ds-service .ds-hero button.text-white *,
-.ds-form-flow .ds-hero button.text-white *,
-.ds-marketing > section:first-of-type button.text-white * {
-  color: #fff !important;
-}
-
-.ds-marketing .ds-hero .text-transparent,
-.ds-service .ds-hero .text-transparent,
-.ds-form-flow .ds-hero .text-transparent,
-.ds-marketing > section:first-of-type .text-transparent {
-  color: var(--ds-red) !important;
-  background-image: none !important;
-  -webkit-text-fill-color: var(--ds-red);
-}
-
-.ds-marketing .ds-hero [class*="bg-gradient-to-r"],
-.ds-service .ds-hero [class*="bg-gradient-to-r"],
-.ds-form-flow .ds-hero [class*="bg-gradient-to-r"],
-.ds-marketing > section:first-of-type [class*="bg-gradient-to-r"] {
-  background: var(--ds-red) !important;
-}
-
-/* Shared surfaces on product, service and funnel screens. */
-.ds-marketing .bg-white.rounded-xl,
-.ds-marketing .bg-white.rounded-2xl,
-.ds-service .bg-white.rounded-xl,
-.ds-service .bg-white.rounded-2xl,
-.ds-form-flow .bg-white.rounded-xl,
-.ds-form-flow .bg-white.rounded-2xl,
-.ds-form-flow .bg-white.rounded-lg,
-.ds-page .bg-white.rounded-lg {
-  background: var(--ds-paper) !important;
-  border: 1px solid var(--ds-line);
-  box-shadow: var(--ds-shadow-sm);
-}
-
-.ds-marketing .bg-blue-50,
-.ds-service .bg-blue-50,
-.ds-form-flow .bg-blue-50 {
-  background: var(--ds-soft-blue) !important;
-}
-
-.ds-marketing .bg-red-50,
-.ds-service .bg-red-50,
-.ds-form-flow .bg-red-50 {
-  background: var(--ds-soft-red) !important;
-}
-
-.ds-marketing .bg-yellow-50,
-.ds-service .bg-yellow-50,
-.ds-form-flow .bg-yellow-50 {
-  background: var(--ds-soft-peach) !important;
-}
-
-.ds-form-flow input,
-.ds-form-flow select,
-.ds-form-flow textarea {
-  border-color: var(--ds-line);
-  background: var(--ds-paper);
-  border-radius: var(--ds-radius-sm);
-}
-
-/* Legacy end-of-page promotion bands use the same calm surface treatment as
-   the reference system instead of reintroducing the former dark-blue theme. */
-.ds-marketing section[class*="bg-gradient-to-br"],
-.ds-service section[class*="bg-gradient-to-br"],
-.ds-form-flow section[class*="bg-gradient-to-br"] {
-  color: var(--ds-ink) !important;
-  background: linear-gradient(112deg, #fffefd 0%, #fffefd 66%, var(--ds-soft-blue) 100%) !important;
-  border-top: 4px solid var(--ds-red);
-  border-bottom: 1px solid var(--ds-line);
-}
-
-.ds-marketing section[class*="bg-gradient-to-br"] .text-blue-100,
-.ds-marketing section[class*="bg-gradient-to-br"] .text-white\/90,
-.ds-marketing section[class*="bg-gradient-to-br"] .text-white\/80,
-.ds-service section[class*="bg-gradient-to-br"] .text-blue-100,
-.ds-service section[class*="bg-gradient-to-br"] .text-white\/90,
-.ds-service section[class*="bg-gradient-to-br"] .text-white\/80 {
-  color: var(--ds-body) !important;
-}
-
-.ds-marketing section[class*="bg-gradient-to-br"] .bg-white\/15,
-.ds-service section[class*="bg-gradient-to-br"] .bg-white\/15 {
-  background: var(--ds-soft-peach) !important;
-  border: 1px solid #edcfbd;
-  color: var(--ds-red) !important;
-}
-
-.ds-marketing section[class*="bg-gradient-to-br"] a.bg-white,
-.ds-marketing section[class*="bg-gradient-to-br"] button.bg-white,
-.ds-service section[class*="bg-gradient-to-br"] a.bg-white,
-.ds-service section[class*="bg-gradient-to-br"] button.bg-white {
-  color: #fff !important;
-  background: var(--ds-red) !important;
-  box-shadow: none;
-}
-
-.ds-marketing footer.bg-gray-900,
-.ds-service footer.bg-gray-900 {
-  background: var(--ds-navy-deep) !important;
-  border-top: 4px solid var(--ds-red);
+  .font-serif-ergo {
+    font-family: var(--ergo-font-serif);
+  }
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { User, Users, UsersRound, Briefcase, Car, Home, Building, Building2, Scale, HeartHandshake, Stethoscope, Ambulance, Plane, PiggyBank, PawPrint, HeartPulse, ClipboardList, ClipboardCheck, FilePlus, HelpCircle, Euro, Shield, Zap, Handshake, Video, MapPin, Sunrise, Sun, CloudSun, Moon, Award, Clock, Lock, Check } from 'lucide-react';
 import Cal, { getCalApi } from '@calcom/embed-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import '@/styles/funnel.css';
@@ -330,7 +331,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                     transition={{ delay: 0.15, duration: 0.4 }}
                     className="funnel-badge-pill"
                   >
-                    ⭐ {Math.floor(28 + new Date().getDate() * 1.5)} Beratungen diesen Monat
+                    Kostenlose Analyse – in 2 Minuten
                   </motion.div>
                   <h2 className="funnel-hook-headline">
                     {insuranceLabel
@@ -350,7 +351,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                   >
                     Jetzt kostenlos prüfen →
                   </motion.button>
-                  <p className="funnel-trust-line">🔒 Unverbindlich & kostenlos · Datenschutz nach DSGVO</p>
+                  <p className="funnel-trust-line">Unverbindlich & kostenlos · Datenschutz nach DSGVO</p>
                 </motion.div>
               )}
 
@@ -366,14 +367,14 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   className="funnel-step"
                 >
-                  <h2 className="funnel-headline">Was beschreibt Ihre aktuelle Situation? 🏠</h2>
+                  <h2 className="funnel-headline">Was beschreibt Ihre aktuelle Situation?</h2>
                   <p className="funnel-subtext">Damit können wir Sie gezielt beraten.</p>
                   <div className="funnel-grid-2x2">
                     {[
-                      { icon: '👤', label: 'Single' },
-                      { icon: '💑', label: 'Paar ohne Kinder' },
-                      { icon: '👨‍👩‍👧', label: 'Familie mit Kindern' },
-                      { icon: '🏢', label: 'Selbstständig' }
+                      { icon: User, label: 'Single' },
+                      { icon: Users, label: 'Paar ohne Kinder' },
+                      { icon: UsersRound, label: 'Familie mit Kindern' },
+                      { icon: Building2, label: 'Selbstständig' }
                     ].map((opt, i) => (
                       <motion.button
                         key={opt.label}
@@ -388,7 +389,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                           autoAdvance(3);
                         }}
                       >
-                        <span className="funnel-option-icon">{opt.icon}</span>
+                        <span className="funnel-option-icon"><opt.icon /></span>
                         <span className="funnel-option-label">{opt.label}</span>
                       </motion.button>
                     ))}
@@ -408,24 +409,24 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   className="funnel-step"
                 >
-                  <h2 className="funnel-headline">Wo sehen Sie den größten Bedarf? 🔍</h2>
+                  <h2 className="funnel-headline">Wo sehen Sie den größten Bedarf?</h2>
                   <p className="funnel-subtext">Mehrfachauswahl möglich (max. 3)</p>
                   <div className="funnel-grid-2x2 funnel-grid-3col">
                     {[
-                      { icon: '🚗', label: 'Kfz & Mobilität' },
-                      { icon: '🏡', label: 'Haus & Hausrat' },
-                      { icon: '🏠', label: 'Wohngebäude' },
-                      { icon: '⚖️', label: 'Rechtsschutz' },
-                      { icon: '💼', label: 'Berufsunfähigkeit' },
-                      { icon: '👨‍👩‍👧', label: 'Familie & Vorsorge' },
-                      { icon: '💊', label: 'Krankenversicherung' },
-                      { icon: '🚑', label: 'Unfallversicherung' },
-                      { icon: '✈️', label: 'Reise & Ausland' },
-                      { icon: '💰', label: 'Leben & Rente' },
-                      { icon: '🏢', label: 'Gewerbe & Betrieb' },
-                      { icon: '🐾', label: 'Tierversicherung' },
-                      { icon: '🧓', label: 'Pflegeversicherung' },
-                      { icon: '📋', label: 'Sonstiges' },
+                      { icon: Car, label: 'Kfz & Mobilität' },
+                      { icon: Home, label: 'Haus & Hausrat' },
+                      { icon: Building, label: 'Wohngebäude' },
+                      { icon: Scale, label: 'Rechtsschutz' },
+                      { icon: Briefcase, label: 'Berufsunfähigkeit' },
+                      { icon: HeartHandshake, label: 'Familie & Vorsorge' },
+                      { icon: Stethoscope, label: 'Krankenversicherung' },
+                      { icon: Ambulance, label: 'Unfallversicherung' },
+                      { icon: Plane, label: 'Reise & Ausland' },
+                      { icon: PiggyBank, label: 'Leben & Rente' },
+                      { icon: Building2, label: 'Gewerbe & Betrieb' },
+                      { icon: PawPrint, label: 'Tierversicherung' },
+                      { icon: HeartPulse, label: 'Pflegeversicherung' },
+                      { icon: ClipboardList, label: 'Sonstiges' },
                     ].map((opt, i) => {
                       const isSelected = data.concerns.includes(opt.label);
                       return (
@@ -448,8 +449,8 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                             });
                           }}
                         >
-                          {isSelected && <span className="funnel-checkmark">✓</span>}
-                          <span className="funnel-option-icon">{opt.icon}</span>
+                          {isSelected && <span className="funnel-checkmark"><Check className="w-3 h-3" /></span>}
+                          <span className="funnel-option-icon"><opt.icon /></span>
                           <span className="funnel-option-label">{opt.label}</span>
                         </motion.button>
                       );
@@ -482,12 +483,12 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   className="funnel-step"
                 >
-                  <h2 className="funnel-headline">Haben Sie bereits Verträge, die Sie prüfen lassen möchten? 📋</h2>
+                  <h2 className="funnel-headline">Haben Sie bereits Verträge, die Sie prüfen lassen möchten?</h2>
                   <div className="funnel-options-list">
                     {[
-                      { icon: '✅', label: 'Ja, bestehende Verträge prüfen' },
-                      { icon: '🆕', label: 'Nein, ich suche neue Absicherung' },
-                      { icon: '🤔', label: 'Ich bin mir nicht sicher' }
+                      { icon: ClipboardCheck, label: 'Ja, bestehende Verträge prüfen' },
+                      { icon: FilePlus, label: 'Nein, ich suche neue Absicherung' },
+                      { icon: HelpCircle, label: 'Ich bin mir nicht sicher' }
                     ].map((opt, i) => (
                       <motion.button
                         key={opt.label}
@@ -502,7 +503,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                           autoAdvance(5);
                         }}
                       >
-                        <span className="funnel-option-icon">{opt.icon}</span>
+                        <span className="funnel-option-icon"><opt.icon /></span>
                         <span>{opt.label}</span>
                       </motion.button>
                     ))}
@@ -522,13 +523,13 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   className="funnel-step"
                 >
-                  <h2 className="funnel-headline">Was ist Ihnen bei der Beratung am wichtigsten? ⭐</h2>
+                  <h2 className="funnel-headline">Was ist Ihnen bei der Beratung am wichtigsten?</h2>
                   <div className="funnel-grid-2x2">
                     {[
-                      { icon: '💰', label: 'Bester Preis' },
-                      { icon: '🛡️', label: 'Lückenlose Absicherung' },
-                      { icon: '⚡', label: 'Schnelle & unkomplizierte Beratung' },
-                      { icon: '🤝', label: 'Langfristiger Ansprechpartner' }
+                      { icon: Euro, label: 'Bester Preis' },
+                      { icon: Shield, label: 'Lückenlose Absicherung' },
+                      { icon: Zap, label: 'Schnelle & unkomplizierte Beratung' },
+                      { icon: Handshake, label: 'Langfristiger Ansprechpartner' }
                     ].map((opt, i) => (
                       <motion.button
                         key={opt.label}
@@ -543,7 +544,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                           autoAdvance(6);
                         }}
                       >
-                        <span className="funnel-option-icon">{opt.icon}</span>
+                        <span className="funnel-option-icon"><opt.icon /></span>
                         <span className="funnel-option-label">{opt.label}</span>
                       </motion.button>
                     ))}
@@ -582,7 +583,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   className="funnel-step"
                 >
-                  <h2 className="funnel-headline">Wohin dürfen wir Ihre Analyse schicken? 📩</h2>
+                  <h2 className="funnel-headline">Wohin dürfen wir Ihre Analyse schicken?</h2>
                   <div className="funnel-form">
                     <div className="funnel-form-row">
                       <div className="funnel-form-field">
@@ -665,9 +666,9 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                     >
                       Weiter zum Terminwunsch →
                     </motion.button>
-                    <p className="text-center text-xs text-gray-400 mt-3">
+                    <p className="text-center text-xs text-ergo-mute mt-3">
                       Lieber direkt schreiben?{' '}
-                      <a href="https://wa.me/4915566771019" target="_blank" rel="noopener noreferrer" className="text-green-600 font-semibold hover:underline">
+                      <a href="https://wa.me/4915566771019" target="_blank" rel="noopener noreferrer" className="text-[#1da851] font-semibold hover:underline">
                         WhatsApp →
                       </a>
                     </p>
@@ -687,7 +688,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   className="funnel-step"
                 >
-                  <h2 className="funnel-headline">Wie möchten Sie beraten werden? 📅</h2>
+                  <h2 className="funnel-headline">Wie möchten Sie beraten werden?</h2>
                   <div className="funnel-grid-2x2 funnel-grid-2col">
                     <motion.button
                       whileHover={{ y: -2 }}
@@ -695,7 +696,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                       className={`funnel-option-card funnel-option-tall ${data.contactType === 'online' ? 'selected' : ''}`}
                       onClick={() => setData(prev => ({ ...prev, contactType: 'online' }))}
                     >
-                      <span className="funnel-option-icon">📹</span>
+                      <span className="funnel-option-icon"><Video /></span>
                       <span className="funnel-option-label">Online-Beratung</span>
                       <span className="funnel-option-sub">Video / Telefon</span>
                     </motion.button>
@@ -705,7 +706,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                       className={`funnel-option-card funnel-option-tall ${data.contactType === 'vorort' ? 'selected' : ''}`}
                       onClick={() => setData(prev => ({ ...prev, contactType: 'vorort' }))}
                     >
-                      <span className="funnel-option-icon">🏠</span>
+                      <span className="funnel-option-icon"><MapPin /></span>
                       <span className="funnel-option-label">Persönlich vor Ort</span>
                       <span className="funnel-option-sub">Ganderkesee & Umgebung</span>
                     </motion.button>
@@ -722,10 +723,10 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                         <h3 className="funnel-sub-headline">Wann passt es Ihnen am besten?</h3>
                         <div className="funnel-grid-2x2">
                           {[
-                            { icon: '🌅', label: 'Vormittags', sub: '9–12 Uhr' },
-                            { icon: '☀️', label: 'Mittags', sub: '12–14 Uhr' },
-                            { icon: '🌤️', label: 'Nachmittags', sub: '14–18 Uhr' },
-                            { icon: '🌙', label: 'Abends', sub: 'ab 18 Uhr' }
+                            { icon: Sunrise, label: 'Vormittags', sub: '9–12 Uhr' },
+                            { icon: Sun, label: 'Mittags', sub: '12–14 Uhr' },
+                            { icon: CloudSun, label: 'Nachmittags', sub: '14–18 Uhr' },
+                            { icon: Moon, label: 'Abends', sub: 'ab 18 Uhr' }
                           ].map((opt, i) => (
                             <motion.button
                               key={opt.label}
@@ -737,7 +738,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                               className={`funnel-option-card ${data.timePreference === opt.label ? 'selected' : ''}`}
                               onClick={() => setData(prev => ({ ...prev, timePreference: opt.label }))}
                             >
-                              <span className="funnel-option-icon">{opt.icon}</span>
+                              <span className="funnel-option-icon"><opt.icon /></span>
                               <span className="funnel-option-label">{opt.label}</span>
                               <span className="funnel-option-sub">{opt.sub}</span>
                             </motion.button>
@@ -784,7 +785,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                       initial={{ scale: 0.5, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.1 }}
-                      className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0"
+                      className="w-10 h-10 bg-ergo-check rounded-full flex items-center justify-center flex-shrink-0"
                     >
                       <svg viewBox="0 0 52 52" className="w-6 h-6">
                         <circle className="funnel-checkmark-circle" cx="26" cy="26" r="25" fill="none" />
@@ -792,14 +793,14 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                       </svg>
                     </motion.div>
                     <h2 className="funnel-headline" style={{ margin: 0 }}>
-                      🎉 Anfrage eingegangen – Termin wählen:
+                      Anfrage eingegangen – Termin wählen
                     </h2>
                   </div>
                   <p className="funnel-subtext" style={{ marginBottom: '12px' }}>
                     Wählen Sie direkt Ihren Wunschtermin für die kostenlose Beratung:
                   </p>
 
-                  <div style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: '12px' }}>
+                  <div style={{ borderRadius: '8px', overflow: 'hidden', marginBottom: '12px' }}>
                     <Cal
                       namespace="funnel-termin"
                       calLink="morino-stuebe-ergo/erstberatung"
@@ -817,7 +818,7 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
                   >
-                    💬 Lieber per WhatsApp
+                    Lieber per WhatsApp
                   </motion.a>
                   <p className="funnel-small-text">Sie erhalten eine Bestätigung per E-Mail.</p>
                 </motion.div>
@@ -838,21 +839,20 @@ export default function FunnelOverlay({ isOpen, onClose, insuranceType, insuranc
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl"
+            className="bg-white rounded-lg border border-ergo-line p-6 max-w-sm w-full text-center shadow-[0_8px_24px_rgba(38,38,38,0.2)]"
           >
-            <div className="text-4xl mb-3">🤔</div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Ihre Analyse ist fast fertig!</h3>
-            <p className="text-sm text-gray-600 mb-5">Wirklich abbrechen? Ihre bisherigen Angaben gehen verloren.</p>
+            <h3 className="font-serif text-lg font-bold text-ergo-ink mb-2">Ihre Analyse ist fast fertig</h3>
+            <p className="text-sm text-ergo-stone mb-5">Wirklich abbrechen? Ihre bisherigen Angaben gehen verloren.</p>
             <div className="flex flex-col gap-2.5">
               <button
                 onClick={() => setShowExitConfirm(false)}
-                className="w-full py-3 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold rounded-xl shadow-lg"
+                className="ergo-btn ergo-btn--primary w-full"
               >
                 Weiter machen
               </button>
               <button
                 onClick={() => { setShowExitConfirm(false); onClose(); }}
-                className="w-full py-3 text-gray-500 text-sm hover:text-gray-700 transition-colors"
+                className="w-full py-3 text-ergo-mute text-sm hover:text-ergo-ink transition-colors"
               >
                 Abbrechen
               </button>
@@ -894,15 +894,15 @@ function Step6Analysis({ showResult, onShowResult, onContinue }: {
       transition={{ duration: 0.5 }}
       className="funnel-step funnel-step-analysis"
     >
-      <h2 className="funnel-headline">✅ Perfekt!</h2>
+      <h2 className="funnel-headline">Perfekt – Ihre Angaben sind vollständig.</h2>
       <p className="funnel-subtext">
         Auf Basis Ihrer Angaben kann Morino Ihnen eine individuelle Analyse erstellen.
       </p>
       <div className="funnel-trust-items">
         {[
-          { icon: '🏆', text: 'ERGO – seit 1906 einer der größten Versicherungskonzerne' },
-          { icon: '🕐', text: 'Termin in 15 Min. – bequem per Video oder persönlich' },
-          { icon: '🔒', text: '100% kostenlos & unverbindlich' },
+          { icon: Award, text: 'ERGO – seit 1906 einer der größten Versicherungskonzerne' },
+          { icon: Clock, text: 'Termin in 15 Min. – bequem per Video oder persönlich' },
+          { icon: Lock, text: '100% kostenlos & unverbindlich' },
         ].map((item, i) => (
           <motion.div
             key={i}
@@ -911,7 +911,7 @@ function Step6Analysis({ showResult, onShowResult, onContinue }: {
             transition={{ delay: i * 0.15 }}
             className="funnel-trust-item"
           >
-            <span>{item.icon}</span> {item.text}
+            <item.icon /> {item.text}
           </motion.div>
         ))}
       </div>

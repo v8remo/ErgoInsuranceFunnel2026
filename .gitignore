@@ -14,3 +14,7 @@ vite.config.ts.*
 *.key
 *.p12
 *.pfx
+# Lokal installierte Agent-Skills (npx skills)
+.agents/
+.claude/skills/
+skills-lock.json

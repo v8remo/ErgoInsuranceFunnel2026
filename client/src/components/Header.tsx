@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Phone, Calendar, ChevronDown, Home, Scale, Smile, Car, Briefcase, HeartHandshake, FileText, AlertTriangle, Tag, LayoutGrid, Activity, MessageCircle } from "lucide-react";
+import { Menu, Phone, Calendar, ChevronDown, Home, Scale, Smile, Car, Briefcase, HeartHandshake, FileText, AlertTriangle, Tag, LayoutGrid, Activity, MessageCircle, UserCheck } from "lucide-react";
 
 const INSURANCE_LINKS = [
   { href: "/hausrat", label: "Hausrat", icon: Home, desc: "Schutz für Ihr Hab & Gut" },
@@ -28,15 +28,8 @@ const SPARTEN_PATHS = INSURANCE_LINKS.map(l => l.href);
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [location] = useLocation();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     setDropdownOpen(false);
@@ -56,71 +49,70 @@ export default function Header() {
   const isInsurancePage = SPARTEN_PATHS.some(p => location === p) || location === "/leben-vorsorge";
 
   return (
-    <header
-      className={`ds-site-header sticky top-0 z-50 w-full transition-all duration-300 ${
-          scrolled
-           ? "backdrop-blur-xl shadow-[0_1px_12px_rgba(165,0,70,0.10)] border-b"
-          : "border-b"
-      }`}
-    >
+    <header className="ds-site-header sticky top-0 z-50 w-full">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 sm:h-[4.5rem]">
+        <div className="flex justify-between items-center h-16 md:h-20">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center group shrink-0">
-            <div className="text-left">
-              <div className="text-[1.35rem] sm:text-[1.55rem] font-extrabold tracking-[-0.08em] text-ergo-red group-hover:opacity-80 transition-opacity">ERGO</div>
-              <div className="text-[10px] sm:text-xs font-medium text-slate-500 leading-tight">
-                <span className="hidden sm:inline">Agentur Stübe · Ganderkesee</span>
-                <span className="sm:hidden">Agentur Stübe</span>
-              </div>
+          <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="ERGO Agentur Stübe – Startseite">
+            <img
+              src="/attached_assets/ergo-logo-hq.svg"
+              alt="ERGO"
+              className="h-6 md:h-7 w-auto"
+              width={96}
+              height={28}
+            />
+            <div className="border-l border-ergo-line pl-3 leading-tight">
+              <div className="text-sm md:text-[15px] font-bold text-ergo-ink">Agentur Stübe</div>
+              <div className="text-[11px] md:text-xs text-ergo-mute">Ganderkesee</div>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+          <nav className="hidden md:flex items-center gap-1">
 
             {/* Versicherungen Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen(v => !v)}
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                className={`flex items-center gap-1 px-3 py-2 rounded-lg text-[15px] font-semibold transition-colors ${
                   isInsurancePage || dropdownOpen
-                    ? "text-ergo-red bg-red-50"
-                    : "text-gray-700 hover:text-ergo-red hover:bg-gray-50"
+                    ? "text-ergo-red bg-ergo-red-light"
+                    : "text-ergo-ink hover:text-ergo-red hover:bg-ergo-red-light"
                 }`}
+                aria-expanded={dropdownOpen}
               >
                 Versicherungen
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`} />
               </button>
 
               {dropdownOpen && (
-                <div className="absolute top-full left-0 mt-3 w-[480px] max-w-[calc(100vw-2rem)] bg-[#fffefd] rounded-lg shadow-[0_14px_32px_rgba(41,39,43,0.14)] border border-[#dedde0] p-3 grid grid-cols-2 gap-1">
+                <div className="absolute top-full left-0 mt-2 w-[480px] max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-[0_8px_24px_rgba(38,38,38,0.14)] border border-ergo-line p-3 grid grid-cols-2 gap-1">
                   {INSURANCE_LINKS.map(({ href, label, icon: Icon, desc }) => (
                     <Link
                       key={href}
                       href={href}
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-red-50 group transition-colors"
+                      className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-ergo-red-light group transition-colors"
                     >
-                      <div className="w-8 h-8 rounded-lg bg-red-50 group-hover:bg-ergo-red/20 flex items-center justify-center shrink-0 transition-colors mt-0.5">
+                      <div className="w-8 h-8 rounded-full bg-ergo-red-light flex items-center justify-center shrink-0 mt-0.5">
                         <Icon className="w-4 h-4 text-ergo-red" />
                       </div>
                       <div>
-                        <div className="text-sm font-semibold text-gray-900 group-hover:text-ergo-red transition-colors">{label}</div>
-                        <div className="text-xs text-gray-500">{desc}</div>
+                        <div className="text-sm font-semibold text-ergo-ink group-hover:text-ergo-red transition-colors">{label}</div>
+                        <div className="text-xs text-ergo-mute">{desc}</div>
                       </div>
                     </Link>
                   ))}
                   <Link
                     href="/leben-vorsorge"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-red-50 group transition-colors"
+                    className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-ergo-red-light group transition-colors"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-red-50 group-hover:bg-ergo-red/20 flex items-center justify-center shrink-0 transition-colors mt-0.5">
+                    <div className="w-8 h-8 rounded-full bg-ergo-red-light flex items-center justify-center shrink-0 mt-0.5">
                       <HeartHandshake className="w-4 h-4 text-ergo-red" />
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-gray-900 group-hover:text-ergo-red transition-colors">Leben & Vorsorge</div>
-                      <div className="text-xs text-gray-500">BU, Rente & Altersvorsorge</div>
+                      <div className="text-sm font-semibold text-ergo-ink group-hover:text-ergo-red transition-colors">Leben & Vorsorge</div>
+                      <div className="text-xs text-ergo-mute">BU, Rente & Altersvorsorge</div>
                     </div>
                   </Link>
                 </div>
@@ -129,10 +121,10 @@ export default function Header() {
 
             <Link
               href="/bestandskunden"
-              className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+              className={`px-3 py-2 rounded-lg text-[15px] font-semibold transition-colors ${
                 location === "/bestandskunden"
-                  ? "text-[#003781] bg-blue-50"
-                  : "text-[#003781] hover:bg-blue-50"
+                  ? "text-ergo-red bg-ergo-red-light"
+                  : "text-ergo-ink hover:text-ergo-red hover:bg-ergo-red-light"
               }`}
             >
               Mein Service
@@ -140,10 +132,10 @@ export default function Header() {
 
             <Link
               href="/termin"
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3 py-2 rounded-lg text-[15px] font-semibold transition-colors ${
                 location === "/termin"
-                  ? "text-ergo-red bg-red-50"
-                  : "text-gray-700 hover:text-ergo-red hover:bg-gray-50"
+                  ? "text-ergo-red bg-ergo-red-light"
+                  : "text-ergo-ink hover:text-ergo-red hover:bg-ergo-red-light"
               }`}
             >
               Termin
@@ -152,34 +144,25 @@ export default function Header() {
 
           {/* Right: CTA + Phone + Hamburger */}
           <div className="flex items-center gap-2 sm:gap-3">
+            <a
+              href="tel:015566771019"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-lg text-ergo-ink hover:text-ergo-red hover:bg-ergo-red-light transition-colors text-[15px] font-semibold"
+            >
+              <Phone className="w-4 h-4" />
+              015566 771019
+            </a>
+
             <Link
               href="/termin"
-              className="ds-primary-action hidden lg:flex items-center gap-1.5 px-4 py-2.5 text-sm"
+              className="ergo-btn ergo-btn--primary ergo-btn--sm hidden lg:inline-flex"
             >
-              <Calendar className="w-3.5 h-3.5" />
+              <Calendar className="w-4 h-4" />
               Termin buchen
             </Link>
 
-            <div className="hidden lg:flex flex-col items-end gap-0.5">
-              <a
-                href="tel:015566771019"
-                className="flex items-center gap-1.5 text-gray-700 hover:text-ergo-red transition-colors text-sm"
-              >
-                <Phone className="w-3.5 h-3.5" />
-                <span className="font-medium">015566 771019</span>
-              </a>
-              <a
-                href="tel:042212959999"
-                className="flex items-center gap-1.5 text-gray-500 hover:text-ergo-red transition-colors text-xs"
-              >
-                <Phone className="w-3 h-3" />
-                <span>04221 2959999</span>
-              </a>
-            </div>
-
             <a
               href="tel:015566771019"
-              className="flex lg:hidden items-center text-ergo-red p-2 rounded-lg hover:bg-red-50 transition-colors"
+              className="flex lg:hidden items-center text-ergo-red p-2 rounded-lg hover:bg-ergo-red-light transition-colors"
               aria-label="Anrufen"
             >
               <Phone className="w-5 h-5" />
@@ -188,17 +171,18 @@ export default function Header() {
             {/* Mobile Hamburger */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="md:hidden p-2 rounded-lg" aria-label="Menü">
+                <Button variant="ghost" size="icon" className="md:hidden" aria-label="Menü">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-full sm:w-[340px] p-0 flex flex-col">
 
                 {/* Sheet Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                  <div>
-                    <div className="text-lg font-bold text-ergo-red">ERGO</div>
-                    <div className="text-xs text-gray-500">Agentur Stübe · Ganderkesee</div>
+                <div className="flex items-center gap-3 px-5 py-4 border-b border-ergo-line">
+                  <img src="/attached_assets/ergo-logo-hq.svg" alt="ERGO" className="h-5 w-auto" width={80} height={23} />
+                  <div className="border-l border-ergo-line pl-3 leading-tight">
+                    <div className="text-sm font-bold text-ergo-ink">Agentur Stübe</div>
+                    <div className="text-[11px] text-ergo-mute">Ganderkesee</div>
                   </div>
                 </div>
 
@@ -206,82 +190,82 @@ export default function Header() {
 
                   {/* Versicherungen */}
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2 px-1">Versicherungen</p>
+                    <p className="text-xs font-bold text-ergo-red mb-2 px-1">Versicherungen</p>
                     <div className="space-y-0.5">
                       {INSURANCE_LINKS.map(({ href, label, icon: Icon }) => (
                         <Link
                           key={href}
                           href={href}
                           onClick={() => setIsOpen(false)}
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 group transition-colors"
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-ergo-red-light group transition-colors"
                         >
-                          <div className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-full bg-ergo-red-light flex items-center justify-center shrink-0">
                             <Icon className="w-3.5 h-3.5 text-ergo-red" />
                           </div>
-                          <span className="text-sm font-medium text-gray-800 group-hover:text-ergo-red transition-colors">{label}</span>
+                          <span className="text-sm font-medium text-ergo-ink group-hover:text-ergo-red transition-colors">{label}</span>
                         </Link>
                       ))}
                       <Link
                         href="/leben-vorsorge"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 group transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-ergo-red-light group transition-colors"
                       >
-                        <div className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
+                        <div className="w-7 h-7 rounded-full bg-ergo-red-light flex items-center justify-center shrink-0">
                           <HeartHandshake className="w-3.5 h-3.5 text-ergo-red" />
                         </div>
-                        <span className="text-sm font-medium text-gray-800 group-hover:text-ergo-red transition-colors">Leben & Vorsorge</span>
+                        <span className="text-sm font-medium text-ergo-ink group-hover:text-ergo-red transition-colors">Leben & Vorsorge</span>
                       </Link>
                     </div>
                   </div>
 
                   {/* Service */}
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2 px-1">Service</p>
+                    <p className="text-xs font-bold text-ergo-red mb-2 px-1">Service</p>
                     <div className="space-y-0.5">
                       {SERVICE_LINKS.map(({ href, label, icon: Icon }) => (
                         <Link
                           key={href}
                           href={href}
                           onClick={() => setIsOpen(false)}
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 group transition-colors"
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-ergo-red-light group transition-colors"
                         >
-                          <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
-                            <Icon className="w-3.5 h-3.5 text-gray-600" />
+                          <div className="w-7 h-7 rounded-full bg-ergo-gray flex items-center justify-center shrink-0">
+                            <Icon className="w-3.5 h-3.5 text-ergo-stone" />
                           </div>
-                          <span className="text-sm font-medium text-gray-800 group-hover:text-ergo-red transition-colors">{label}</span>
+                          <span className="text-sm font-medium text-ergo-ink group-hover:text-ergo-red transition-colors">{label}</span>
                         </Link>
                       ))}
                     </div>
                   </div>
 
-                  {/* Mein Service / Bestandskunden */}
+                  {/* Bestandskunden */}
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2 px-1">Bestandskunden</p>
+                    <p className="text-xs font-bold text-ergo-red mb-2 px-1">Bestandskunden</p>
                     <Link
                       href="/bestandskunden"
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-ergo-gray hover:bg-ergo-red-light transition-colors"
                     >
-                      <div className="w-7 h-7 rounded-lg bg-[#003781]/10 flex items-center justify-center shrink-0">
-                        <span className="text-[#003781] text-xs font-bold">✓</span>
+                      <div className="w-7 h-7 rounded-full bg-white border border-ergo-line flex items-center justify-center shrink-0">
+                        <UserCheck className="w-3.5 h-3.5 text-ergo-red" />
                       </div>
-                      <span className="text-sm font-semibold text-[#003781]">Mein Service-Portal</span>
+                      <span className="text-sm font-semibold text-ergo-ink">Mein Service-Portal</span>
                     </Link>
                   </div>
                 </div>
 
                 {/* Bottom: Phone CTAs */}
-                <div className="px-4 py-4 border-t border-gray-100 space-y-2">
+                <div className="px-4 py-4 border-t border-ergo-line space-y-2">
                   <a
                     href="tel:015566771019"
-                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-ergo-red text-white font-semibold text-sm hover:bg-red-700 transition-colors"
+                    className="ergo-btn ergo-btn--primary w-full text-sm"
                   >
                     <Phone className="w-4 h-4" />
                     015566 771019 · Mobil
                   </a>
                   <a
                     href="tel:042212959999"
-                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gray-100 text-gray-700 font-medium text-sm hover:bg-gray-200 transition-colors"
+                    className="ergo-btn ergo-btn--secondary w-full text-sm"
                   >
                     <Phone className="w-4 h-4" />
                     04221 2959999 · Büro

@@ -1,4 +1,4 @@
-import { users, leads, content, adminConfig, submissions, type User, type InsertUser, type Lead, type InsertLead, type Content, type InsertContent, type AdminConfig, type InsertAdminConfig, type Submission, type InsertSubmission } from "@shared/schema";
+import { users, leads, content, adminConfig, submissions, type User, type InsertUser, type Lead, type InsertLead, type Content, type InsertContent, type AdminConfig, type InsertAdminConfig, type Submission, type InsertSubmission } from "../shared/schema";
 import { db } from "./db";
 import { eq, and, gte, desc, sql } from "drizzle-orm";
 

@@ -12,13 +12,13 @@ The ERGO Versicherungsplattform is a professional lead generation platform desig
 ## System Architecture
 
 ### UI/UX Decisions
-The platform features a clean, professional design with a focus on user experience and conversion optimization.
-- **Color Scheme:** Utilizes ERGO's brand colors with optimized contrast ratios for WCAG compliance.
-- **Typography:** Responsive font sizes and increased line height/letter spacing for improved readability.
-- **Responsiveness:** Mobile-first CSS ensures optimal viewing and interaction across all devices. Touch-optimized buttons and larger input fields for mobile funnels.
-- **Trust Elements:** Integration of professional photos, ERGO Testsieger-Badges, and customer testimonials to build credibility. Shared `TrustBar` component (4-column: 1000+ Kunden, 4.9/5 Sterne, 97% Weiterempfehlung, 15+ Jahre Erfahrung) used across all marketing pages.
-- **Design Consistency:** Shared `Breadcrumb` component on all subpages, shared `FAQSection` accordion component, unified hero gradients (`from-ergo-red-light via-ergo-gray-light to-white`), standardized H1 sizing (`text-2xl sm:text-3xl lg:text-4xl`), and unified step-transition animations (opacity-only) across SchadenPage/KennzeichenPage/DokumentePage.
-- **Conversion Psychology:** Implementation of urgency, social proof, loss aversion, scarcity, and authority principles in CTAs and page layouts.
+The platform follows the authentic ERGO corporate design (tokens extracted from ergo.de). The design system lives centrally in `client/src/index.css` (component classes) and `tailwind.config.ts` (color/font tokens).
+- **Color Scheme:** ERGO berry red `#8E0038` (hover `#71022E`) as the single accent; text `#333`; lines `#D9D9D9`; surfaces `#F6F5F5`/`#FBF4F4`; petrol check green `#009284` (ERGO CheckColorIcon) for success/checkmarks; pastel accents (`#FAD782`, `#B3DA8A`, `#96C8FF`, `#FA7D73`) only for chips/badges. WhatsApp CTAs keep WhatsApp green. Never use Allianz blue `#003781` or bright red `#E2001A`.
+- **Typography:** Serif headlines h1–h4 (Source Serif 4, standing in for ERGO's Fedra Serif), Open Sans body/UI (standing in for FS Me). Hero H1 `text-[30px] md:text-[40px]`.
+- **Components:** Pill buttons with 2px border per the ergo.de CTA system (`ergo-btn` + `--primary/--secondary/--tertiary/--inverted/--whatsapp`); cards 8px radius with 1px border instead of shadows (`ergo-card`, hoverable `ergo-tile`); selection tiles `ergo-option`; inputs 4px radius with red focus ring; `ergo-check-list` with petrol circle checkmarks; `ergo-eyebrow` red bold intro line; `ergo-section--red` berry closing CTA bands; `ergo-icon-disc` rosé icon circles. Icons: lucide-react only, no emojis in UI.
+- **Layout language:** White heros (eyebrow + serif H1 + pill CTAs), alternating white and `bg-ergo-gray` sections, calm motion (single fadeInUp per section, no marquees/parallax/pulse/glassmorphism/gradients).
+- **Responsiveness:** Mobile-first; touch-optimized buttons (min-height 48px) and larger input fields for mobile funnels.
+- **Trust Elements:** Professional photos, ERGO Testsieger badges, customer testimonials, `TrustBar` component. Honest static claims only — no computed fake urgency/scarcity (no "X free slots today" derived from the date).
 
 ### Technical Implementations
 - **Frontend:** Built with React and TypeScript, providing a dynamic and responsive user interface.

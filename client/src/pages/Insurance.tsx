@@ -1,19 +1,20 @@
 import { useParams, Link } from "wouter";
-import { useState, useEffect, useRef } from "react";
-import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import FunnelOverlay from "@/components/FunnelOverlay";
 import '@/styles/funnel.css';
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { trackEvent, trackConversion, trackAppointmentConversion } from "@/lib/analytics";
 import { insuranceConfig } from "@/lib/insurance-config";
 import { useQuery } from "@tanstack/react-query";
 import sittingPhoto from "@assets/optimized/ich_bin_da.webp";
 import beraterBranding from "@assets/optimized/unbenannt1.webp";
-import { Award, Shield, Handshake, Clock, Star, Instagram, ExternalLink, Mail, Phone, MessageSquare, ChevronRight } from "lucide-react";
+import {
+  Award, Shield, Handshake, Clock, Star, Instagram, ExternalLink, Mail,
+  MessageSquare, MessageCircle, ChevronRight, CheckCircle2, CarFront, Home,
+  Building, Building2, Scale, SmilePlus, BriefcaseBusiness, LayoutGrid, CalendarDays,
+} from "lucide-react";
 import TrustBar from "@/components/TrustBar";
 import FAQSection from "@/components/FAQSection";
 import type { Content } from "@shared/schema";
@@ -47,38 +48,21 @@ const insuranceFAQs: Record<string, { question: string; answer: string }[]> = {
 };
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 16 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' as const },
-  transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as const },
+  transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const },
 };
 
-function AnimatedCounter({ target, suffix = '', duration = 2 }: { target: number; suffix?: string; duration?: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true });
-  const motionVal = useMotionValue(0);
-  const springVal = useSpring(motionVal, { duration: duration * 1000 });
-  useEffect(() => {
-    if (isInView) motionVal.set(target);
-  }, [isInView, target, motionVal]);
-  useEffect(() => {
-    const unsubscribe = springVal.on('change', (v) => {
-      if (ref.current) ref.current.textContent = Math.round(v) + suffix;
-    });
-    return unsubscribe;
-  }, [springVal, suffix]);
-  return <span ref={ref}>0{suffix}</span>;
-}
-
 const QUIZ_OPTIONS = [
-  { label: 'Kfz-Versicherung', icon: '🚗', type: 'kfz', source: 'hero_quiz' },
-  { label: 'Hausrat & Haftpflicht', icon: '🏠', type: 'hausrat', source: 'hero_quiz' },
-  { label: 'Wohngebäude', icon: '🏘️', type: 'wohngebaeude', source: 'hero_quiz' },
-  { label: 'Rechtsschutz', icon: '⚖️', type: 'rechtsschutz', source: 'hero_quiz' },
-  { label: 'Zahnzusatz', icon: '🦷', type: 'zahnzusatz', source: 'hero_quiz' },
-  { label: 'Berufsunfähigkeit', icon: '💼', type: 'bu', source: 'hero_quiz' },
-  { label: 'Gewerbe & Betrieb', icon: '🏢', type: 'gewerbe', source: 'lp_gewerbe' },
-  { label: 'Alle prüfen', icon: '✅', type: 'all', source: 'hero_quiz' },
+  { label: 'Kfz-Versicherung', icon: CarFront, type: 'kfz', source: 'hero_quiz' },
+  { label: 'Hausrat & Haftpflicht', icon: Home, type: 'hausrat', source: 'hero_quiz' },
+  { label: 'Wohngebäude', icon: Building, type: 'wohngebaeude', source: 'hero_quiz' },
+  { label: 'Rechtsschutz', icon: Scale, type: 'rechtsschutz', source: 'hero_quiz' },
+  { label: 'Zahnzusatz', icon: SmilePlus, type: 'zahnzusatz', source: 'hero_quiz' },
+  { label: 'Berufsunfähigkeit', icon: BriefcaseBusiness, type: 'bu', source: 'hero_quiz' },
+  { label: 'Gewerbe & Betrieb', icon: Building2, type: 'gewerbe', source: 'lp_gewerbe' },
+  { label: 'Alle prüfen', icon: LayoutGrid, type: 'all', source: 'hero_quiz' },
 ];
 
 const TYPE_TO_QUIZ: Record<string, string> = {
@@ -132,8 +116,8 @@ export default function Insurance() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Versicherung nicht gefunden</h1>
-          <p className="text-gray-600">Die angeforderte Versicherung existiert nicht.</p>
+          <h1 className="text-2xl mb-4">Versicherung nicht gefunden</h1>
+          <p className="text-ergo-stone">Die angeforderte Versicherung existiert nicht.</p>
         </div>
       </div>
     );
@@ -200,70 +184,43 @@ export default function Insurance() {
         }] : undefined}
       />
       <Breadcrumb />
-      <main className="ds-marketing min-h-screen pb-16 sm:pb-0">
+      <main className="min-h-screen bg-white pb-16 sm:pb-0">
         {/* Hero Section */}
-        <section className="ds-hero py-12 md:py-20 px-4 bg-gradient-to-br from-[#E2001A] via-[#c5001a] to-[#8b0011] text-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-          <div className="max-w-5xl mx-auto relative">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
-              <div className="flex-1 text-center lg:text-left mb-10 lg:mb-0">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  className="inline-flex items-center gap-1.5 bg-white/15 px-3 py-1.5 rounded-full text-xs font-medium mb-5"
-                >
+        <section className="border-b border-ergo-line">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-12 md:pt-16 md:pb-16">
+            <div className="flex flex-col lg:flex-row lg:items-start lg:gap-12">
+              <div className="flex-1 mb-10 lg:mb-0">
+                <p className="ergo-eyebrow">ERGO Agentur Stübe · Ganderkesee</p>
+                <h1 className="text-[30px] leading-[1.25] md:text-[40px] mb-4 max-w-xl">
+                  {insurance.title} – Optimal versichert mit ERGO
+                </h1>
+
+                <div className="flex items-center gap-2 mb-4">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3 h-3 text-yellow-300 fill-yellow-300" />
+                      <Star key={i} className="w-4 h-4 text-ergo-yellow fill-ergo-yellow" />
                     ))}
                   </div>
-                  <span>4,9/5 · über 3.500 zufriedene Kunden</span>
-                </motion.div>
+                  <span className="text-sm font-bold text-ergo-ink">4,9/5</span>
+                  <span className="text-xs text-ergo-mute">über 3.500 zufriedene Kunden</span>
+                </div>
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
-                >
-                  {insurance.title} –{' '}
-                  <span className="bg-gradient-to-r from-yellow-200 to-white bg-clip-text text-transparent">
-                    Optimal versichert mit ERGO
-                  </span>
-                </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.35 }}
-                  className="text-base sm:text-lg text-white/90 max-w-xl mx-auto lg:mx-0 mb-3 leading-relaxed"
-                >
+                <p className="text-base sm:text-lg text-ergo-stone max-w-xl mb-5 leading-relaxed">
                   Persönliche Beratung, kostenlose Analyse und 15% Bündelnachlass ab 5 ERGO-Versicherungen.
-                </motion.p>
+                </p>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.45 }}
-                  className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs text-white/80 mb-2"
-                >
-                  <span className="flex items-center gap-1"><span className="text-green-300">✓</span> Ohne Wartezeit</span>
-                  <span className="flex items-center gap-1"><span className="text-green-300">✓</span> Sofortige Deckung</span>
-                  <span className="flex items-center gap-1"><span className="text-green-300">✓</span> 15% Bündelnachlass</span>
-                </motion.div>
+                <ul className="ergo-check-list text-sm text-ergo-ink max-w-md">
+                  <li>Ohne Wartezeit</li>
+                  <li>Sofortige Deckung</li>
+                  <li>15% Bündelnachlass</li>
+                </ul>
               </div>
 
               {/* Quiz Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.5 }}
-                className="w-full lg:w-[420px] lg:flex-shrink-0"
-              >
-                <div className="rounded-2xl border-2 border-white/20 bg-white shadow-2xl shadow-black/20 p-4 sm:p-5">
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#E2001A] mb-1">Kostenlose Analyse – In 2 Minuten</p>
-                  <p className="text-sm sm:text-base font-bold text-gray-900 mb-4 leading-snug">
+              <div className="w-full lg:w-[420px] lg:flex-shrink-0">
+                <div className="ergo-card p-4 sm:p-5">
+                  <p className="ergo-eyebrow mb-1">Kostenlose Analyse – In 2 Minuten</p>
+                  <p className="font-serif text-lg font-bold text-ergo-ink mb-4">
                     Was möchten Sie versichern?
                   </p>
                   <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -291,70 +248,67 @@ export default function Insurance() {
                             }
                             handleStartFunnel();
                           }}
-                          className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all active:scale-[0.98] group relative
-                            ${isAll
-                              ? 'border-[#E2001A] bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white hover:shadow-lg hover:shadow-red-500/25 sm:col-span-2'
-                              : isPreSelected
-                                ? 'border-[#E2001A] bg-red-50 shadow-sm'
-                                : 'border-gray-200 bg-gray-50 hover:border-[#E2001A] hover:bg-red-50'
-                            }`}
+                          className={
+                            isAll
+                              ? 'ergo-btn ergo-btn--primary sm:col-span-2 justify-between px-5'
+                              : `ergo-option flex items-center gap-3 px-4 py-3 text-left relative ${isPreSelected ? 'selected' : ''}`
+                          }
                         >
-                          {isPreSelected && !isAll && (
-                            <span className="absolute -top-1.5 -right-1.5 bg-[#E2001A] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">
-                              Aktuell
-                            </span>
+                          {isAll ? (
+                            <>
+                              <span className="flex items-center gap-3"><opt.icon className="w-5 h-5" />{opt.label}</span>
+                              <ChevronRight className="w-4 h-4" />
+                            </>
+                          ) : (
+                            <>
+                              {isPreSelected && (
+                                <span className="absolute -top-2 right-3 bg-ergo-red text-white text-[10px] font-bold px-2 py-0.5 rounded-pill leading-none">
+                                  Aktuell
+                                </span>
+                              )}
+                              <opt.icon className="w-5 h-5 text-ergo-red shrink-0" />
+                              <span className={`font-semibold text-sm ${isPreSelected ? 'text-ergo-red' : 'text-ergo-ink'}`}>
+                                {opt.label}
+                              </span>
+                              <ChevronRight className="w-4 h-4 ml-auto shrink-0 text-ergo-mute" />
+                            </>
                           )}
-                          <span className="text-2xl leading-none shrink-0">{opt.icon}</span>
-                          <span className={`font-semibold text-sm ${isAll ? 'text-white' : isPreSelected ? 'text-[#E2001A]' : 'text-gray-800 group-hover:text-[#E2001A]'}`}>
-                            {opt.label}
-                          </span>
-                          <ChevronRight className={`w-4 h-4 ml-auto shrink-0 ${isAll ? 'text-white/80' : isPreSelected ? 'text-[#E2001A]' : 'text-gray-400 group-hover:text-[#E2001A]'}`} />
                         </button>
                       );
                     })}
                   </div>
-                  <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
-                    <p className="text-[10px] sm:text-xs text-gray-400">🔒 100% kostenlos & unverbindlich · DSGVO-konform</p>
+                  <div className="mt-4 pt-3 border-t border-ergo-line flex items-center justify-between gap-3">
+                    <p className="text-xs text-ergo-mute">100% kostenlos & unverbindlich · DSGVO-konform</p>
                     <a
                       href={`https://wa.me/4915566771019?text=${encodeURIComponent('Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Informationen zum 15% Bündelnachlass!')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => { trackEvent('whatsapp_clicked', { source: 'insurance_hero_quiz', insurance_type: type }); trackConversion(); }}
-                      className="flex items-center gap-1.5 text-[#25d366] hover:text-[#1da851] transition-colors text-xs font-semibold whitespace-nowrap shrink-0"
+                      className="flex items-center gap-1.5 text-[#1da851] hover:underline text-xs font-bold whitespace-nowrap shrink-0"
                     >
                       <MessageSquare className="w-3.5 h-3.5" />
                       Lieber WhatsApp
                     </a>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Glassmorphism Stats Band */}
-        <motion.section {...fadeInUp} className="px-4 py-8 max-w-4xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E2001A] via-[#003781] to-[#E2001A] rounded-t-2xl" />
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 divide-x divide-gray-200/60">
+        {/* Statistik-Band */}
+        <motion.section {...fadeInUp} className="bg-ergo-gray border-b border-ergo-line">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+            <div className="grid grid-cols-3 gap-4 md:gap-8 text-center">
               {[
-                { value: 3500, suffix: '+', label: 'Zufriedene Kunden' },
-                { value: 15, suffix: '+', label: 'Produkte' },
-                { value: 24, suffix: 'h', label: 'Reaktionszeit' },
-              ].map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.15 }}
-                  className="text-center"
-                >
-                  <div className="text-2xl sm:text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E2001A] to-[#003781] bg-clip-text text-transparent">
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                  </div>
-                  <p className="text-xs md:text-sm text-gray-500 mt-1.5 font-medium">{stat.label}</p>
-                </motion.div>
+                { value: '3.500+', label: 'Zufriedene Kunden' },
+                { value: '15+', label: 'Produkte' },
+                { value: '24h', label: 'Reaktionszeit' },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <div className="font-serif text-3xl md:text-5xl font-bold text-ergo-red">{stat.value}</div>
+                  <p className="text-xs md:text-sm text-ergo-stone mt-1.5 font-medium">{stat.label}</p>
+                </div>
               ))}
             </div>
           </div>
@@ -364,42 +318,40 @@ export default function Insurance() {
         <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-high-contrast mb-3 sm:mb-4 px-2 leading-tight text-center">
+              <h2 className="text-2xl md:text-[28px] mb-3 sm:mb-4 px-2 text-center">
                 Ihre 3 wichtigsten Vorteile
               </h2>
-              <p className="text-sm sm:text-base lg:text-xl text-medium-contrast text-readable px-2">
+              <p className="text-sm sm:text-base text-ergo-stone px-2">
                 Warum sich über 1000 Kunden für unsere {insurance.title} entschieden haben
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {insurance.features.map((feature, index) => (
-                <Card key={index} className="text-center">
-                  <CardContent className="p-4 sm:pt-6">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-ergo-red-light rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                      <div className="w-5 h-5 sm:w-6 sm:h-6 bg-ergo-red rounded-full" />
-                    </div>
-                    <h3 className="text-base sm:text-lg font-semibold text-high-contrast mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-sm sm:text-base text-medium-contrast text-readable">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                <div key={index} className="ergo-card p-5 sm:p-6 text-center">
+                  <span className="ergo-icon-disc w-10 h-10 mx-auto mb-3 sm:mb-4">
+                    <CheckCircle2 className="w-5 h-5" />
+                  </span>
+                  <h3 className="font-sans font-bold text-ergo-ink text-base sm:text-lg mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm sm:text-base text-ergo-stone">
+                    {feature.description}
+                  </p>
+                </div>
               ))}
             </div>
           </div>
         </motion.section>
 
         {/* Benefits Section */}
-        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-ergo-gray">
+        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-ergo-gray border-y border-ergo-line">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 leading-tight text-center">
+              <h2 className="text-2xl md:text-[28px] mb-3 sm:mb-4 px-2 text-center">
                 Das ist enthalten
               </h2>
-              <p className="text-sm sm:text-base lg:text-xl text-gray-700 px-2">
+              <p className="text-sm sm:text-base text-ergo-stone px-2">
                 Ihre konkreten Leistungen bei der {insurance.title}
               </p>
             </div>
@@ -407,12 +359,10 @@ export default function Insurance() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {insurance.benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start">
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full flex items-center justify-center mr-3 sm:mr-4 mt-0.5 sm:mt-1 flex-shrink-0">
-                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-white rounded-full" />
-                  </div>
+                  <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-ergo-check mr-3 sm:mr-4 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1 text-sm sm:text-base">{benefit.title}</h4>
-                    <p className="text-gray-700 text-sm sm:text-base">{benefit.description}</p>
+                    <h4 className="font-sans font-bold text-ergo-ink mb-1 text-sm sm:text-base">{benefit.title}</h4>
+                    <p className="text-ergo-stone text-sm sm:text-base">{benefit.description}</p>
                   </div>
                 </div>
               ))}
@@ -424,66 +374,64 @@ export default function Insurance() {
         <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 leading-tight text-center">
+              <h2 className="text-2xl md:text-[28px] mb-3 sm:mb-4 px-2 text-center">
                 Ihr Versicherungsexperte
               </h2>
-              <p className="text-sm sm:text-base lg:text-xl text-gray-700 px-2">
+              <p className="text-sm sm:text-base text-ergo-stone px-2">
                 Persönliche Beratung mit über 10 Jahren Erfahrung
               </p>
             </div>
 
-            <Card className="bg-ergo-gray shadow-lg">
-              <CardContent className="p-4 sm:p-6 lg:p-8">
-                <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-6 lg:gap-8">
-                  <div className="flex-shrink-0">
-                    <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-2xl overflow-hidden shadow-lg">
-                      <img 
-                        src={sittingPhoto} 
-                        alt="Morino Stübe - Ihr Versicherungsexperte" 
-                        className="w-full h-full object-contain bg-white"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
+            <div className="ergo-card p-4 sm:p-6 lg:p-8">
+              <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-6 lg:gap-8">
+                <div className="flex-shrink-0">
+                  <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-lg overflow-hidden border border-ergo-line bg-white">
+                    <img
+                      src={sittingPhoto}
+                      alt="Morino Stübe - Ihr Versicherungsexperte"
+                      className="w-full h-full object-contain bg-white"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
-                  <div className="flex-1 text-center lg:text-left">
-                    <h3 className="text-xl sm:text-2xl font-bold text-ergo-dark mb-2">
-                      Morino Stübe
-                    </h3>
-                    <p className="text-base sm:text-lg font-semibold text-ergo-red mb-3 sm:mb-4">
-                      Versicherungsfachmann nach § 84 HGB
+                </div>
+                <div className="flex-1 text-center lg:text-left">
+                  <h3 className="text-xl sm:text-2xl mb-2">
+                    Morino Stübe
+                  </h3>
+                  <p className="text-base sm:text-lg font-bold text-ergo-red mb-3 sm:mb-4">
+                    Versicherungsfachmann nach § 84 HGB
+                  </p>
+                  <div className="text-ergo-stone mb-4 sm:mb-6 text-sm sm:text-base">
+                    <p className="mb-2">
+                      <span className="font-semibold">ERGO Ganderkesee</span><br />
+                      Friedensstraße 91 A, 27777 Ganderkesee
                     </p>
-                    <div className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
-                      <p className="mb-2">
-                        <span className="font-semibold">ERGO Ganderkesee</span><br />
-                        Friedensstraße 91 A, 27777 Ganderkesee
-                      </p>
-                      <p className="text-xs sm:text-sm">
-                        Tel: 01556 6771019 | E-Mail: morino.stuebe@ergo.de
-                      </p>
+                    <p className="text-xs sm:text-sm">
+                      Tel: 01556 6771019 | E-Mail: morino.stuebe@ergo.de
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm text-ergo-ink">
+                    <div className="flex items-center gap-2">
+                      <Award className="w-4 h-4 text-ergo-red" />
+                      <span>Zertifizierter Experte</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
-                      <div className="flex items-center gap-2">
-                        <Award className="w-4 h-4 text-ergo-red" />
-                        <span>Zertifizierter Experte</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Shield className="w-4 h-4 text-ergo-red" />
-                        <span>Über 10 Jahre Erfahrung</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Handshake className="w-4 h-4 text-ergo-red" />
-                        <span>Persönliche Beratung</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-ergo-red" />
-                        <span>Schnelle Abwicklung</span>
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-ergo-red" />
+                      <span>Über 10 Jahre Erfahrung</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Handshake className="w-4 h-4 text-ergo-red" />
+                      <span>Persönliche Beratung</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-ergo-red" />
+                      <span>Schnelle Abwicklung</span>
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </motion.section>
 
@@ -497,14 +445,14 @@ export default function Insurance() {
                 <img
                   src={beraterBranding}
                   alt="Morino Stübe – Ihr ERGO Berater"
-                  className="w-32 h-40 sm:w-40 sm:h-52 rounded-2xl object-contain shadow-lg border-2 border-gray-100 bg-white"
+                  className="w-32 h-40 sm:w-40 sm:h-52 rounded-lg object-contain border border-ergo-line bg-white"
                   loading="lazy"
                 />
               </div>
               <div className="flex-1">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Ihr Berater: Morino Stübe</h2>
-                <p className="text-ergo-red font-semibold text-sm mb-3">ERGO Versicherungsfachmann · Ganderkesee</p>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                <h2 className="text-xl sm:text-2xl mb-1">Ihr Berater: Morino Stübe</h2>
+                <p className="text-ergo-red font-bold text-sm mb-3">ERGO Versicherungsfachmann · Ganderkesee</p>
+                <p className="text-ergo-stone text-sm leading-relaxed mb-4">
                   Ich berate Sie persönlich und transparent zur {insurance.title}. Gemeinsam finden wir die beste Lösung für Ihre Situation – kostenlos und unverbindlich. Besuchen Sie mich in Ganderkesee oder wir beraten Sie digital per Video oder WhatsApp.
                 </p>
                 <div className="flex flex-wrap gap-3 mb-4">
@@ -512,7 +460,7 @@ export default function Insurance() {
                     href="https://www.instagram.com/morino_stuebe/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm text-pink-600 hover:text-pink-700 font-medium"
+                    className="inline-flex items-center gap-1.5 text-sm text-ergo-red hover:text-ergo-red-hover hover:underline font-bold"
                     onClick={() => trackEvent('instagram_clicked', { source: 'insurance_page', type })}
                   >
                     <Instagram className="w-4 h-4" />
@@ -527,11 +475,11 @@ export default function Insurance() {
                     { label: "Kfz Best-Tarif", rating: "HERVORRAGEND", source: "Franke & Bornberg '25" },
                     { label: "Service", rating: "11x Champion", source: "ServiceValue '25" },
                   ].map((award) => (
-                    <div key={award.label} className="bg-gray-50 rounded-lg p-2.5 text-center border border-gray-100">
-                      <Award className="w-4 h-4 text-yellow-500 mx-auto mb-1" />
-                      <p className="text-xs font-bold text-gray-900 leading-tight">{award.rating}</p>
-                      <p className="text-[10px] text-gray-500 mt-0.5">{award.label}</p>
-                      <p className="text-[10px] text-gray-400">{award.source}</p>
+                    <div key={award.label} className="ergo-card p-2.5 text-center">
+                      <span className="ergo-icon-disc w-8 h-8 mx-auto mb-1"><Award className="w-4 h-4" /></span>
+                      <p className="text-xs font-bold text-ergo-red leading-tight">{award.rating}</p>
+                      <p className="text-[10px] text-ergo-stone mt-0.5">{award.label}</p>
+                      <p className="text-[10px] text-ergo-mute">{award.source}</p>
                     </div>
                   ))}
                 </div>
@@ -549,55 +497,51 @@ export default function Insurance() {
           />
         )}
 
-        {/* Final CTA Section with Urgency */}
-        <motion.section {...fadeInUp} className="py-12 sm:py-16 bg-gradient-to-r from-ergo-red to-red-700 text-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2 leading-tight text-white">
+        {/* Final CTA Section */}
+        <motion.section {...fadeInUp} className="ergo-section--red py-14 md:py-20 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-2xl md:text-[28px] mb-3 sm:mb-4 px-2">
               Kostenlose Analyse & 15% Bündelnachlass
             </h2>
-            <p className="text-sm sm:text-base lg:text-xl mb-6 sm:mb-8 px-2 text-white/90">
+            <p className="text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 px-2 text-white/90">
               <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer bestehenden {insurance.title} plus Optimierung und günstigere Alternativen.
-              <strong> 15% Bündelnachlass ab 5 Versicherungen!</strong> Bereits <span className="text-yellow-300 font-bold">{Math.floor(15 + new Date().getHours() * 0.8)} Kunden</span> haben heute gespart!
+              <strong> 15% Bündelnachlass ab 5 Versicherungen!</strong>
             </p>
-            
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-                <Button 
-                  size="lg" 
-                  className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-xl font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                  onClick={() => {
-                    trackEvent('final_cta_clicked', { insurance_type: type, source: 'bottom_section', value: 15 });
-                    handleStartFunnel();
-                  }}
+
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
+              <button
+                className="ergo-btn ergo-btn--inverted"
+                onClick={() => {
+                  trackEvent('final_cta_clicked', { insurance_type: type, source: 'bottom_section', value: 15 });
+                  handleStartFunnel();
+                }}
+              >
+                KOSTENLOSE ANALYSE + 15% NACHLASS
+              </button>
+              <button
+                className="ergo-btn ergo-btn--whatsapp"
+                onClick={() => {
+                  trackEvent('final_whatsapp_clicked', { insurance_type: type, source: 'bottom_section' });
+                  const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Infos zum 15% Bündelnachlass ab 5 Versicherungen!';
+                  trackAppointmentConversion(whatsappUrl);
+                }}
+              >
+                <MessageCircle className="w-5 h-5" />
+                Sofortige WhatsApp Beratung
+              </button>
+              <Link href="/termin">
+                <button
+                  className="ergo-btn border-white text-white hover:bg-white hover:text-ergo-red w-full"
+                  onClick={() => trackEvent('booking_page_clicked', { insurance_type: type, source: 'bottom_section' })}
                 >
-                  🚀 KOSTENLOSE ANALYSE + 15% NACHLASS
-                </Button>
-                <Button 
-                  size="lg" 
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold"
-                  onClick={() => {
-                    trackEvent('final_whatsapp_clicked', { insurance_type: type, source: 'bottom_section' });
-                    const whatsappUrl = 'https://wa.me/4915566771019?text=Hallo, ich möchte eine kostenlose Analyse meiner ' + insurance.title + ' und Infos zum 15% Bündelnachlass ab 5 Versicherungen!';
-                    trackAppointmentConversion(whatsappUrl);
-                  }}
-                >
-                  💬 Sofortige WhatsApp Beratung
-                </Button>
-                <Link href="/termin">
-                  <Button 
-                    size="lg"
-                    variant="outline"
-                    className="border-2 border-white text-white hover:bg-white hover:text-ergo-red px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold w-full"
-                    onClick={() => trackEvent('booking_page_clicked', { insurance_type: type, source: 'bottom_section' })}
-                  >
-                    📅 Termin buchen
-                  </Button>
-                </Link>
-              </div>
-              <p className="text-sm font-medium mt-3 text-white/80">
-                ✅ Kostenlose Analyse • Optimierung bestehender Verträge • 15% Bündelnachlass ab 5 Versicherungen
-              </p>
+                  <CalendarDays className="w-5 h-5" />
+                  Termin buchen
+                </button>
+              </Link>
             </div>
+            <p className="text-sm font-medium mb-6 sm:mb-8 text-white/80">
+              Kostenlose Analyse • Optimierung bestehender Verträge • 15% Bündelnachlass ab 5 Versicherungen
+            </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm font-medium text-white/90">
               <div className="flex items-center gap-2">
@@ -613,13 +557,13 @@ export default function Insurance() {
         </motion.section>
 
         {/* Sticky Mobile CTA Bar */}
-        <div className="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-xl border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
+        <div className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-ergo-line px-3 py-2 flex gap-2 sm:hidden safe-area-bottom">
           <button
             onClick={() => {
               handleStartFunnel();
               trackEvent('sticky_cta_clicked', { insurance_type: type });
             }}
-            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-semibold text-sm min-h-[44px] py-3 rounded-xl whitespace-nowrap shadow-lg shadow-red-500/20 animate-pulse-subtle"
+            className="ergo-btn ergo-btn--primary ergo-btn--sm flex-1 whitespace-nowrap"
           >
             <Mail className="w-4 h-4 shrink-0" />
             Kostenlose Analyse
@@ -632,7 +576,7 @@ export default function Insurance() {
               trackEvent('sticky_whatsapp_clicked', { insurance_type: type });
               trackConversion();
             }}
-            className="flex items-center justify-center gap-2 bg-green-500 text-white font-semibold text-sm px-4 min-h-[44px] py-3 rounded-xl active:scale-[0.97] transition-transform whitespace-nowrap"
+            className="ergo-btn ergo-btn--whatsapp ergo-btn--sm whitespace-nowrap"
           >
             <MessageSquare className="w-4 h-4 shrink-0" />
             WhatsApp

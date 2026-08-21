@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
+import { Lock, ShieldCheck, Check, CheckCircle2, X, AlertTriangle, Phone, Mail } from 'lucide-react';
 
 interface VersicherungEntry {
   art: string;
@@ -102,9 +103,9 @@ const initial: FormData = {
 
 function SectionHeader({ title }: { title: string }) {
   return (
-    <div className="flex items-center gap-3 pt-6 pb-2 border-b border-gray-200">
-      <div className="w-1 h-6 bg-[#E2001A] rounded-full" />
-      <h2 className="text-base font-bold text-gray-800 uppercase tracking-wide">{title}</h2>
+    <div className="flex items-center gap-3 pt-6 pb-2 border-b border-ergo-line">
+      <div className="w-1 h-6 bg-ergo-red rounded-full" />
+      <h2 className="font-sans text-base font-bold text-ergo-ink">{title}</h2>
     </div>
   );
 }
@@ -116,16 +117,16 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-sm font-semibold text-gray-700">
-        {label}{required && <span className="text-red-500 ml-0.5">*</span>}
+      <label className="text-sm font-semibold text-ergo-ink">
+        {label}{required && <span className="text-ergo-red ml-0.5">*</span>}
       </label>
-      {hint && <p className="text-xs text-gray-400">{hint}</p>}
+      {hint && <p className="text-xs text-ergo-mute">{hint}</p>}
       {children}
     </div>
   );
 }
 
-const inputCls = "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:border-[#003781] focus:ring-1 focus:ring-[#003781]/20 transition-colors bg-white";
+const inputCls = "w-full px-3 py-2.5 border border-ergo-line rounded text-sm outline-none focus:border-ergo-red focus:ring-1 focus:ring-ergo-red/20 transition-colors bg-white";
 const selectCls = `${inputCls} cursor-pointer`;
 
 export default function NeukundenFormularPage() {
@@ -180,19 +181,23 @@ export default function NeukundenFormularPage() {
 
   if (success) {
     return (
-      <div className="ds-form-flow min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-ergo-gray flex items-center justify-center px-4">
         <SEO title="Danke – Daten übermittelt | ERGO Agentur Stübe" description="Ihre Angaben wurden erfolgreich an die ERGO Agentur Stübe übermittelt." noIndex />
-        <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
-          <div className="text-5xl mb-4">✅</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Vielen Dank!</h1>
-          <p className="text-gray-600 mb-6">
+        <div className="ergo-card p-8 max-w-md w-full text-center">
+          <CheckCircle2 className="w-12 h-12 text-ergo-check mx-auto mb-4" aria-hidden="true" />
+          <h1 className="text-2xl mb-2">Vielen Dank!</h1>
+          <p className="text-ergo-stone mb-6">
             Ihre Daten wurden erfolgreich an die ERGO Agentur Stübe übermittelt. Wir melden uns schnellstmöglich bei Ihnen.
           </p>
-          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
+          <div className="bg-ergo-gray border border-ergo-line rounded-lg p-4 text-sm text-ergo-ink text-left">
             <strong>Ihre Agentur:</strong><br />
-            Morino Stübe · ERGO Versicherung<br />
-            📞 015566 771019<br />
-            📧 morino.stuebe@ergo.de
+            Morino Stübe · ERGO Versicherung
+            <span className="flex items-center gap-1.5 mt-2">
+              <Phone className="w-3.5 h-3.5 text-ergo-red shrink-0" /> 015566 771019
+            </span>
+            <span className="flex items-center gap-1.5 mt-1">
+              <Mail className="w-3.5 h-3.5 text-ergo-red shrink-0" /> morino.stuebe@ergo.de
+            </span>
           </div>
         </div>
       </div>
@@ -206,18 +211,18 @@ export default function NeukundenFormularPage() {
         description="Bitte füllen Sie das Formular aus, damit wir Ihre Daten für eine persönliche Beratung erfassen können."
         noIndex
       />
-      <div className="ds-form-flow min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-ergo-gray">
         {/* Mini-Header */}
-        <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
+        <div className="bg-white border-b border-ergo-line px-4 py-3 flex items-center gap-3">
           <div>
-            <div className="text-lg font-bold text-[#E2001A] leading-tight">ERGO</div>
-            <div className="text-[10px] text-gray-500">Agentur Stübe · Ganderkesee</div>
+            <img src="/attached_assets/ergo-logo-hq.svg" alt="ERGO" className="h-5 w-auto" />
+            <div className="text-[10px] text-ergo-mute mt-0.5">Agentur Stübe · Ganderkesee</div>
           </div>
           <div className="ml-auto text-right">
-            <div className="text-xs text-gray-500">Fragen? Rufen Sie uns an:</div>
-            <a href="tel:015566771019" className="text-sm font-semibold text-[#003781]">015566 771019</a>
-            <div className="text-xs text-gray-400 mt-0.5">
-              Büro: <a href="tel:042212959999" className="hover:text-[#003781] transition-colors">04221 2959999</a>
+            <div className="text-xs text-ergo-mute">Fragen? Rufen Sie uns an:</div>
+            <a href="tel:015566771019" className="text-sm font-bold text-ergo-red hover:text-ergo-red-hover transition-colors">015566 771019</a>
+            <div className="text-xs text-ergo-mute mt-0.5">
+              Büro: <a href="tel:042212959999" className="hover:text-ergo-red transition-colors">04221 2959999</a>
             </div>
           </div>
         </div>
@@ -225,34 +230,34 @@ export default function NeukundenFormularPage() {
         <div className="max-w-2xl mx-auto px-4 py-6 pb-16">
 
           {/* Intro */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4 text-center">
-            <div className="inline-block bg-[#E2001A] text-white text-xs font-bold px-3 py-1 rounded-full mb-3">ERGO</div>
-            <h1 className="text-xl font-extrabold text-gray-900 mb-2">Ihre Kontaktdaten</h1>
-            <p className="text-sm text-gray-500 leading-relaxed">
+          <div className="ergo-card p-5 mb-4 text-center">
+            <img src="/attached_assets/ergo-logo-hq.svg" alt="ERGO" className="h-5 w-auto mx-auto mb-3" />
+            <h1 className="text-2xl mb-2">Ihre Kontaktdaten</h1>
+            <p className="text-sm text-ergo-stone leading-relaxed">
               Bitte füllen Sie das Formular so vollständig wie möglich aus. Ihre Daten werden sicher übermittelt und ausschließlich für Ihre persönliche Beratung genutzt.
             </p>
-            <div className="flex items-center justify-center gap-4 mt-3 text-xs text-gray-400">
-              <span>🔒 SSL-verschlüsselt</span>
+            <div className="flex items-center justify-center gap-4 mt-3 text-xs text-ergo-mute">
+              <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> SSL-verschlüsselt</span>
               <span>·</span>
-              <span>🇩🇪 DSGVO-konform</span>
+              <span className="flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> DSGVO-konform</span>
               <span>·</span>
-              <span>✅ Kostenlos</span>
+              <span className="flex items-center gap-1"><Check className="w-3 h-3 text-ergo-check" /> Kostenlos</span>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="ergo-card p-5 flex flex-col gap-4">
 
             {/* ── Allgemeine Daten ── */}
             <SectionHeader title="Allgemeine Daten" />
 
             <Field label="Anrede" required>
-              <select value={form.anrede} onChange={e => set('anrede', e.target.value)} className={`${selectCls} ${errors.anrede ? 'border-red-400' : ''}`}>
+              <select value={form.anrede} onChange={e => set('anrede', e.target.value)} className={`${selectCls} ${errors.anrede ? 'border-ergo-red' : ''}`}>
                 <option value="">– Bitte auswählen –</option>
                 <option value="Herr">Herr</option>
                 <option value="Frau">Frau</option>
                 <option value="Divers">Divers</option>
               </select>
-              {errors.anrede && <span className="text-xs text-red-500">{errors.anrede}</span>}
+              {errors.anrede && <span className="text-xs text-ergo-red">{errors.anrede}</span>}
             </Field>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -283,12 +288,12 @@ export default function NeukundenFormularPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Field label="Nachname" required>
-                <input type="text" value={form.nachname} onChange={e => set('nachname', e.target.value)} className={`${inputCls} ${errors.nachname ? 'border-red-400' : ''}`} autoComplete="family-name" />
-                {errors.nachname && <span className="text-xs text-red-500">{errors.nachname}</span>}
+                <input type="text" value={form.nachname} onChange={e => set('nachname', e.target.value)} className={`${inputCls} ${errors.nachname ? 'border-ergo-red' : ''}`} autoComplete="family-name" />
+                {errors.nachname && <span className="text-xs text-ergo-red">{errors.nachname}</span>}
               </Field>
               <Field label="Vorname" required>
-                <input type="text" value={form.vorname} onChange={e => set('vorname', e.target.value)} className={`${inputCls} ${errors.vorname ? 'border-red-400' : ''}`} autoComplete="given-name" />
-                {errors.vorname && <span className="text-xs text-red-500">{errors.vorname}</span>}
+                <input type="text" value={form.vorname} onChange={e => set('vorname', e.target.value)} className={`${inputCls} ${errors.vorname ? 'border-ergo-red' : ''}`} autoComplete="given-name" />
+                {errors.vorname && <span className="text-xs text-ergo-red">{errors.vorname}</span>}
               </Field>
             </div>
 
@@ -318,11 +323,11 @@ export default function NeukundenFormularPage() {
 
             {/* ── Kommunikation ── */}
             <SectionHeader title="Kommunikation" />
-            <p className="text-xs text-gray-400 -mt-2">Bitte mindestens eine Kontaktmöglichkeit angeben.</p>
+            <p className="text-xs text-ergo-mute -mt-2">Bitte mindestens eine Kontaktmöglichkeit angeben.</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Field label="Mobilfunk privat">
-                <input type="tel" value={form.mobilPrivat} onChange={e => set('mobilPrivat', e.target.value)} className={`${inputCls} ${errors.emailPrivat ? 'border-red-400' : ''}`} placeholder="z.B. 0151 12345678" autoComplete="tel" />
+                <input type="tel" value={form.mobilPrivat} onChange={e => set('mobilPrivat', e.target.value)} className={`${inputCls} ${errors.emailPrivat ? 'border-ergo-red' : ''}`} placeholder="z.B. 0151 12345678" autoComplete="tel" />
               </Field>
               <Field label="Mobilfunk dienstlich">
                 <input type="tel" value={form.mobilDienstlich} onChange={e => set('mobilDienstlich', e.target.value)} className={inputCls} />
@@ -331,7 +336,7 @@ export default function NeukundenFormularPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Field label="Telefon privat">
-                <input type="tel" value={form.telefonPrivat} onChange={e => set('telefonPrivat', e.target.value)} className={`${inputCls} ${errors.emailPrivat ? 'border-red-400' : ''}`} />
+                <input type="tel" value={form.telefonPrivat} onChange={e => set('telefonPrivat', e.target.value)} className={`${inputCls} ${errors.emailPrivat ? 'border-ergo-red' : ''}`} />
               </Field>
               <Field label="Telefon dienstlich">
                 <input type="tel" value={form.telefonDienstlich} onChange={e => set('telefonDienstlich', e.target.value)} className={inputCls} />
@@ -340,8 +345,8 @@ export default function NeukundenFormularPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Field label="E-Mail privat">
-                <input type="email" value={form.emailPrivat} onChange={e => set('emailPrivat', e.target.value)} className={`${inputCls} ${errors.emailPrivat ? 'border-red-400' : ''}`} autoComplete="email" />
-                {errors.emailPrivat && <span className="text-xs text-red-500">{errors.emailPrivat}</span>}
+                <input type="email" value={form.emailPrivat} onChange={e => set('emailPrivat', e.target.value)} className={`${inputCls} ${errors.emailPrivat ? 'border-ergo-red' : ''}`} autoComplete="email" />
+                {errors.emailPrivat && <span className="text-xs text-ergo-red">{errors.emailPrivat}</span>}
               </Field>
               <Field label="E-Mail dienstlich">
                 <input type="email" value={form.emailDienstlich} onChange={e => set('emailDienstlich', e.target.value)} className={inputCls} />
@@ -409,31 +414,31 @@ export default function NeukundenFormularPage() {
 
             {/* ── Bestehende Versicherungen ── */}
             <SectionHeader title="Bestehende Versicherungen" />
-            <p className="text-xs text-gray-400 -mt-2">
+            <p className="text-xs text-ergo-mute -mt-2">
               Tragen Sie Ihre vorhandenen Versicherungsverträge ein – auch bei anderen Gesellschaften. Das hilft uns, Lücken zu erkennen und Doppelversicherungen zu vermeiden.
             </p>
 
             <div className="flex flex-col gap-4">
               {versicherungen.map((v, i) => (
-                <div key={i} className="relative bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col gap-3">
+                <div key={i} className="relative bg-ergo-gray border border-ergo-line rounded-lg p-4 flex flex-col gap-3">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                    <span className="text-xs font-bold text-ergo-stone">
                       Vertrag {i + 1}
                     </span>
                     {versicherungen.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeVersicherung(i)}
-                        className="text-xs text-red-500 hover:text-red-700 font-medium transition-colors"
+                        className="inline-flex items-center gap-1 text-xs text-ergo-red hover:text-ergo-red-hover font-medium transition-colors"
                       >
-                        ✕ Entfernen
+                        <X className="w-3 h-3" /> Entfernen
                       </button>
                     )}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs font-semibold text-gray-600">Versicherungsart</label>
+                      <label className="text-xs font-semibold text-ergo-stone">Versicherungsart</label>
                       <select
                         value={v.art}
                         onChange={e => setVersicherung(i, 'art', e.target.value)}
@@ -447,7 +452,7 @@ export default function NeukundenFormularPage() {
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs font-semibold text-gray-600">Versicherungsgesellschaft</label>
+                      <label className="text-xs font-semibold text-ergo-stone">Versicherungsgesellschaft</label>
                       <input
                         type="text"
                         value={v.gesellschaft}
@@ -460,7 +465,7 @@ export default function NeukundenFormularPage() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs font-semibold text-gray-600">Versicherungsnummer</label>
+                      <label className="text-xs font-semibold text-ergo-stone">Versicherungsnummer</label>
                       <input
                         type="text"
                         value={v.nummer}
@@ -470,7 +475,7 @@ export default function NeukundenFormularPage() {
                       />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs font-semibold text-gray-600">Jahresbeitrag (€)</label>
+                      <label className="text-xs font-semibold text-ergo-stone">Jahresbeitrag (€)</label>
                       <input
                         type="text"
                         inputMode="decimal"
@@ -481,7 +486,7 @@ export default function NeukundenFormularPage() {
                       />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs font-semibold text-gray-600">Kündigungstermin</label>
+                      <label className="text-xs font-semibold text-ergo-stone">Kündigungstermin</label>
                       <input
                         type="text"
                         value={v.kuendigungstermin}
@@ -497,7 +502,7 @@ export default function NeukundenFormularPage() {
               <button
                 type="button"
                 onClick={addVersicherung}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border-2 border-dashed border-gray-300 text-sm font-semibold text-gray-500 hover:border-[#003781] hover:text-[#003781] transition-colors"
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border-2 border-dashed border-ergo-line text-sm font-semibold text-ergo-stone hover:border-ergo-red hover:text-ergo-red transition-colors"
               >
                 + Weiteren Vertrag hinzufügen
               </button>
@@ -508,28 +513,29 @@ export default function NeukundenFormularPage() {
             </Field>
 
             {submitError && (
-              <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
-                ⚠️ {submitError}
+              <div className="flex items-start gap-2 bg-ergo-red-light border border-ergo-red rounded-lg p-4 text-sm text-ergo-red">
+                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" /> {submitError}
               </div>
             )}
 
-            <div className="text-xs text-gray-400 leading-relaxed pt-2">
+            <div className="text-xs text-ergo-mute leading-relaxed pt-2">
               Mit dem Absenden stimmen Sie zu, dass Ihre Daten zum Zweck der Beratung durch die ERGO Agentur Stübe verarbeitet werden. Weitere Informationen in der{' '}
-              <a href="/datenschutz" target="_blank" className="text-[#003781] underline">Datenschutzerklärung</a>.
+              <a href="/datenschutz" target="_blank" className="ergo-link">Datenschutzerklärung</a>.
             </div>
 
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-4 rounded-xl bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-bold text-base hover:shadow-lg hover:shadow-red-500/25 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+              className="ergo-btn ergo-btn--primary w-full"
             >
-              {submitting ? '⏳ Wird übermittelt …' : '✅ Daten jetzt übermitteln'}
+              {submitting ? 'Wird übermittelt …' : 'Daten jetzt übermitteln'}
             </button>
 
           </form>
 
-          <p className="text-center text-xs text-gray-400 mt-4">
-            🔒 Ihre Daten werden SSL-verschlüsselt übertragen und nicht an Dritte weitergegeben.
+          <p className="flex items-center justify-center gap-1.5 text-center text-xs text-ergo-mute mt-4">
+            <Lock className="w-3 h-3 shrink-0" />
+            Ihre Daten werden SSL-verschlüsselt übertragen und nicht an Dritte weitergegeben.
           </p>
         </div>
       </div>

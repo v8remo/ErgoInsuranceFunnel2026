@@ -54,21 +54,21 @@ export default function TrustSection() {
     <section className="py-8 sm:py-12 lg:py-16 bg-ergo-gray">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-ergo-dark mb-3 sm:mb-4 px-2">
+          <h2 className="text-2xl sm:text-[28px] lg:text-3xl text-ergo-ink mb-3 sm:mb-4 px-2">
             Über 1000 zufriedene Kunden vertrauen uns
           </h2>
-          <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
+          <p className="text-sm sm:text-base lg:text-lg text-ergo-stone px-2">
             Erfahren Sie, warum sich unsere Kunden für ERGO entscheiden
           </p>
         </div>
 
         {/* Ihr Experte Section */}
         <div className="mb-8 sm:mb-10 lg:mb-12">
-          <Card className="bg-white shadow-lg max-w-4xl mx-auto">
+          <Card className="bg-white max-w-4xl mx-auto">
             <CardContent className="p-6 sm:p-8">
               <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-8">
                 <div className="flex-shrink-0">
-                  <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-2xl overflow-hidden shadow-lg">
+                  <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-lg overflow-hidden border border-ergo-line">
                     <img 
                       src={morinoImage} 
                       alt="Morino Stübe - Ihr Versicherungsexperte" 
@@ -77,13 +77,13 @@ export default function TrustSection() {
                   </div>
                 </div>
                 <div className="flex-1 text-center lg:text-left">
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-ergo-dark mb-2">
+                  <h3 className="text-lg sm:text-xl lg:text-2xl text-ergo-ink mb-2">
                     Morino Stübe
                   </h3>
                   <p className="text-base sm:text-lg font-semibold text-ergo-red mb-3">
                     Ihr Versicherungsexperte
                   </p>
-                  <div className="text-gray-600 mb-4">
+                  <div className="text-ergo-stone mb-4">
                     <p className="mb-2">
                       <span className="font-semibold">Versicherungsfachmann nach § 84 HGB</span><br />
                       ERGO Ganderkesee
@@ -118,13 +118,13 @@ export default function TrustSection() {
             <Card key={index} className="bg-white">
               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center mb-3 sm:mb-4">
-                  <div className="flex text-yellow-400">
+                  <div className="flex text-ergo-yellow">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
                     ))}
                   </div>
                 </div>
-                <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 leading-relaxed">
+                <p className="text-sm sm:text-base text-ergo-stone mb-3 sm:mb-4 leading-relaxed">
                   "{testimonial.text}"
                 </p>
                 <div className="flex items-center">
@@ -132,8 +132,8 @@ export default function TrustSection() {
                     <span className="text-white font-semibold text-xs sm:text-sm">{testimonial.initials}</span>
                   </div>
                   <div className="min-w-0">
-                    <p className="font-semibold text-gray-900 text-sm sm:text-base truncate">{testimonial.name}</p>
-                    <p className="text-xs sm:text-sm text-gray-500">{testimonial.location}</p>
+                    <p className="font-semibold text-ergo-ink text-sm sm:text-base truncate">{testimonial.name}</p>
+                    <p className="text-xs sm:text-sm text-ergo-mute">{testimonial.location}</p>
                   </div>
                 </div>
               </CardContent>
@@ -145,11 +145,11 @@ export default function TrustSection() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {trustBadges.map((badge, index) => (
             <div key={index} className="text-center">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-4 shadow-sm">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white border border-ergo-line rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-4">
                 <badge.icon className="w-6 h-6 sm:w-8 sm:h-8 text-ergo-red" />
               </div>
-              <h3 className="font-semibold text-ergo-dark mb-1 text-sm sm:text-base">{badge.title}</h3>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{badge.description}</p>
+              <h3 className="font-sans font-semibold text-ergo-ink mb-1 text-sm sm:text-base">{badge.title}</h3>
+              <p className="text-xs sm:text-sm text-ergo-stone leading-relaxed">{badge.description}</p>
             </div>
           ))}
         </div>

@@ -1,219 +1,135 @@
 import { Link } from "wouter";
-import { Phone, Mail, MapPin, CalendarDays, MessageCircle } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
+const INSURANCE_LINKS = [
+  { href: "/kfz", label: "KFZ-Versicherung" },
+  { href: "/hausrat", label: "Hausratversicherung" },
+  { href: "/haftpflicht", label: "Haftpflichtversicherung" },
+  { href: "/rechtsschutz", label: "Rechtsschutzversicherung" },
+  { href: "/zahnzusatz", label: "Zahnzusatzversicherung" },
+  { href: "/berufsunfaehigkeit", label: "Berufsunfähigkeit" },
+  { href: "/unternehmensversicherung", label: "Gewerbeversicherung" },
+  { href: "/leben-vorsorge", label: "Leben & Vorsorge" },
+];
+
+const SERVICE_LINKS = [
+  { href: "/termin", label: "Termin buchen" },
+  { href: "/beratung", label: "Kostenlose Beratung" },
+  { href: "/dokumente", label: "Dokumente einreichen" },
+  { href: "/schaden", label: "Schaden melden" },
+  { href: "/schaden-unfall", label: "Unfall melden" },
+  { href: "/kennzeichen", label: "Kennzeichen / eVB" },
+  { href: "/whatsapp", label: "WhatsApp Service" },
+];
+
+const CUSTOMER_LINKS = [
+  { href: "/bestandskunden", label: "Kunden-Service-Hub" },
+  { href: "/versicherungscheck", label: "Versicherungscheck" },
+  { href: "/sparrechner", label: "Sparrechner" },
+];
+
+const REGION_LINKS = [
+  { href: "/versicherung-ganderkesee", label: "Versicherung Ganderkesee" },
+  { href: "/versicherung-delmenhorst", label: "Versicherung Delmenhorst" },
+  { href: "/versicherung-oldenburg", label: "Versicherung Oldenburg" },
+  { href: "/versicherung-stuhr", label: "Versicherung Stuhr" },
+  { href: "/versicherung-achim", label: "Versicherung Achim" },
+  { href: "/versicherung-syke", label: "Versicherung Syke" },
+];
+
+function FooterLink({ href, label }: { href: string; label: string }) {
+  return (
+    <li>
+      <Link href={href} className="text-sm text-ergo-dark hover:text-ergo-red hover:underline transition-colors">
+        {label}
+      </Link>
+    </li>
+  );
+}
+
 export default function Footer() {
   return (
-      <footer className="ds-site-footer text-white py-10 sm:py-14">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          
-          {/* Contact Info */}
-          <div className="mb-6 sm:mb-0">
-            <div className="ds-rule mb-4 bg-red-400" />
-            <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Kontakt</h3>
-            <div className="space-y-2 sm:space-y-3 text-blue-100/80 text-sm sm:text-base">
-              <p className="font-medium text-white">ERGO Agentur Stübe</p>
+    <footer className="ds-site-footer">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+          {/* Kontakt */}
+          <div>
+            <h3 className="font-sans text-base font-bold text-ergo-ink mb-4">Kontakt</h3>
+            <div className="space-y-3 text-sm text-ergo-dark">
+              <p className="font-bold text-ergo-ink">ERGO Agentur Stübe</p>
               <p>Morino Stübe</p>
-              
+
               <div className="flex items-start">
-                <MapPin className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5 text-ergo-red" />
                 <div>
                   <p>Friedensstraße 91 A</p>
                   <p>27777 Ganderkesee</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center">
-                <Phone className="w-4 h-4 mr-2 flex-shrink-0" />
-                <a href="tel:015566771019" className="hover:text-white transition-colors break-all">
+                <Phone className="w-4 h-4 mr-2 flex-shrink-0 text-ergo-red" />
+                <a href="tel:015566771019" className="hover:text-ergo-red hover:underline transition-colors break-all">
                   015566 771019
                 </a>
               </div>
-              
+
               <div className="flex items-center">
-                <Phone className="w-4 h-4 mr-2 flex-shrink-0" />
-                <a href="tel:042212959999" className="hover:text-white transition-colors break-all">
+                <Phone className="w-4 h-4 mr-2 flex-shrink-0 text-ergo-red" />
+                <a href="tel:042212959999" className="hover:text-ergo-red hover:underline transition-colors break-all">
                   04221 2959999
                 </a>
               </div>
-              
+
               <div className="flex items-start">
-                <Mail className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5" />
-                <a href="mailto:morino.stuebe@ergo.de" className="hover:text-white transition-colors break-all">
+                <Mail className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5 text-ergo-red" />
+                <a href="mailto:morino.stuebe@ergo.de" className="hover:text-ergo-red hover:underline transition-colors break-all">
                   morino.stuebe@ergo.de
                 </a>
               </div>
-              
-              <div className="mt-4">
+
+              <div className="pt-2">
                 <WhatsAppButton text="WhatsApp Service" className="w-full sm:w-auto" />
+              </div>
+
+              <div className="pt-2 text-sm text-ergo-dark">
+                <p className="font-bold text-ergo-ink">Öffnungszeiten</p>
+                <p>Mo–Fr: 9:00 – 18:00 Uhr</p>
+                <p>Sa: 9:00 – 12:00 Uhr</p>
               </div>
             </div>
           </div>
 
-          {/* Services */}
-          <div className="mb-6 sm:mb-0">
-            <div className="ds-rule mb-4 bg-red-400" />
-            <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Unsere Versicherungen</h3>
-            <ul className="space-y-1.5 sm:space-y-2 text-blue-100/80 text-sm sm:text-base">
-              <li>
-                <Link href="/kfz" className="hover:text-white transition-colors">
-                  KFZ-Versicherung
-                </Link>
-              </li>
-              <li>
-                <Link href="/hausrat" className="hover:text-white transition-colors">
-                  Hausratversicherung
-                </Link>
-              </li>
-              <li>
-                <Link href="/haftpflicht" className="hover:text-white transition-colors">
-                  Haftpflichtversicherung
-                </Link>
-              </li>
-              <li>
-                <Link href="/rechtsschutz" className="hover:text-white transition-colors">
-                  Rechtsschutzversicherung
-                </Link>
-              </li>
-              <li>
-                <Link href="/zahnzusatz" className="hover:text-white transition-colors">
-                  Zahnzusatzversicherung
-                </Link>
-              </li>
-              <li>
-                <Link href="/berufsunfaehigkeit" className="hover:text-white transition-colors">
-                  Berufsunfähigkeit
-                </Link>
-              </li>
-              <li>
-                <Link href="/unternehmensversicherung" className="hover:text-white transition-colors">
-                  Gewerbeversicherung
-                </Link>
-              </li>
-              <li>
-                <Link href="/leben-vorsorge" className="hover:text-white transition-colors font-medium">
-                  Leben & Vorsorge
-                </Link>
-              </li>
+          {/* Versicherungen */}
+          <div>
+            <h3 className="font-sans text-base font-bold text-ergo-ink mb-4">Unsere Versicherungen</h3>
+            <ul className="space-y-2">
+              {INSURANCE_LINKS.map(link => <FooterLink key={link.href} {...link} />)}
             </ul>
           </div>
 
           {/* Service & Regionen */}
-          <div className="mb-6 sm:mb-0">
-            <div className="ds-rule mb-4 bg-red-400" />
-            <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Service</h3>
-            <ul className="space-y-1.5 sm:space-y-2 text-blue-100/80 text-sm sm:text-base">
-              <li>
-                <Link href="/termin" className="hover:text-white transition-colors font-medium">
-                   <span className="inline-flex items-center gap-2"><CalendarDays className="w-4 h-4 text-[#a9e5e8]" />Termin buchen</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/beratung" className="hover:text-white transition-colors">
-                  Kostenlose Beratung
-                </Link>
-              </li>
-              <li>
-                <Link href="/dokumente" className="hover:text-white transition-colors">
-                  Dokumente einreichen
-                </Link>
-              </li>
-              <li>
-                <Link href="/schaden" className="hover:text-white transition-colors">
-                  Schaden melden
-                </Link>
-              </li>
-              <li>
-                <Link href="/schaden-unfall" className="hover:text-white transition-colors">
-                  Unfall melden
-                </Link>
-              </li>
-              <li>
-                <Link href="/kennzeichen" className="hover:text-white transition-colors">
-                  Kennzeichen / eVB
-                </Link>
-              </li>
-              <li>
-                <Link href="/whatsapp" className="hover:text-white transition-colors font-medium text-green-400">
-                   <span className="inline-flex items-center gap-2"><MessageCircle className="w-4 h-4" />WhatsApp Service</span>
-                </Link>
-              </li>
+          <div>
+            <h3 className="font-sans text-base font-bold text-ergo-ink mb-4">Service</h3>
+            <ul className="space-y-2 mb-6">
+              {SERVICE_LINKS.map(link => <FooterLink key={link.href} {...link} />)}
             </ul>
-            <h3 className="text-base sm:text-lg font-semibold mt-4 mb-2">Für Kunden</h3>
-            <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base mb-4">
-              <li>
-                <Link href="/bestandskunden" className="hover:text-white transition-colors font-medium">
-                  Kunden-Service-Hub
-                </Link>
-              </li>
-              <li>
-                <Link href="/versicherungscheck" className="hover:text-white transition-colors">
-                  Versicherungscheck
-                </Link>
-              </li>
-              <li>
-                <Link href="/sparrechner" className="hover:text-white transition-colors">
-                  Sparrechner
-                </Link>
-              </li>
-            </ul>
-            <h3 className="text-base sm:text-lg font-semibold mt-4 mb-2">Regionen</h3>
-            <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
-              <li>
-                <Link href="/versicherung-ganderkesee" className="hover:text-white transition-colors">
-                  Versicherung Ganderkesee
-                </Link>
-              </li>
-              <li>
-                <Link href="/versicherung-delmenhorst" className="hover:text-white transition-colors">
-                  Versicherung Delmenhorst
-                </Link>
-              </li>
-              <li>
-                <Link href="/versicherung-oldenburg" className="hover:text-white transition-colors">
-                  Versicherung Oldenburg
-                </Link>
-              </li>
-              <li>
-                <Link href="/versicherung-stuhr" className="hover:text-white transition-colors">
-                  Versicherung Stuhr
-                </Link>
-              </li>
-              <li>
-                <Link href="/versicherung-achim" className="hover:text-white transition-colors">
-                  Versicherung Achim
-                </Link>
-              </li>
-              <li>
-                <Link href="/versicherung-syke" className="hover:text-white transition-colors">
-                  Versicherung Syke
-                </Link>
-              </li>
+            <h3 className="font-sans text-base font-bold text-ergo-ink mb-4">Für Kunden</h3>
+            <ul className="space-y-2">
+              {CUSTOMER_LINKS.map(link => <FooterLink key={link.href} {...link} />)}
             </ul>
           </div>
 
-          {/* Rechtliches & Social */}
-          <div className="mb-6 sm:mb-0">
-            <div className="ds-rule mb-4 bg-red-400" />
-            <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Rechtliches</h3>
-            <ul className="space-y-1.5 sm:space-y-2 text-blue-100/80 text-sm sm:text-base">
-              <li>
-                <Link href="/impressum" className="hover:text-white transition-colors">
-                  Impressum
-                </Link>
-              </li>
-              <li>
-                <Link href="/datenschutz" className="hover:text-white transition-colors">
-                  Datenschutz
-                </Link>
-              </li>
-              <li>
-                <Link href="/erstinformation" className="hover:text-white transition-colors">
-                  Erstinformation
-                </Link>
-              </li>
+          {/* Rechtliches, Regionen & Social */}
+          <div>
+            <h3 className="font-sans text-base font-bold text-ergo-ink mb-4">Rechtliches</h3>
+            <ul className="space-y-2 mb-6">
+              <FooterLink href="/impressum" label="Impressum" />
+              <FooterLink href="/datenschutz" label="Datenschutz" />
+              <FooterLink href="/erstinformation" label="Erstinformation" />
               <li>
                 <button
                   onClick={() => {
@@ -223,54 +139,77 @@ export default function Footer() {
                       window.location.reload();
                     });
                   }}
-                  className="hover:text-white transition-colors cursor-pointer"
+                  className="text-sm text-ergo-dark hover:text-ergo-red hover:underline transition-colors cursor-pointer"
                 >
                   Cookie-Einstellungen
                 </button>
               </li>
             </ul>
 
-            <h3 className="text-base sm:text-lg font-semibold mt-4 mb-2">Folgen Sie uns</h3>
-            <div className="flex space-x-4 mb-4">
-              <a 
-                href="https://www.linkedin.com/in/morino-stuebe" 
-                target="_blank" 
+            <h3 className="font-sans text-base font-bold text-ergo-ink mb-4">Regionen</h3>
+            <ul className="space-y-2 mb-6">
+              {REGION_LINKS.map(link => <FooterLink key={link.href} {...link} />)}
+            </ul>
+
+            <h3 className="font-sans text-base font-bold text-ergo-ink mb-3">Folgen Sie uns</h3>
+            <div className="flex space-x-4">
+              <a
+                href="https://www.linkedin.com/in/morino-stuebe"
+                target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-300 hover:text-white transition-colors"
+                aria-label="LinkedIn"
+                className="text-ergo-stone hover:text-ergo-red transition-colors"
               >
-                <FaLinkedin size={20} className="sm:w-6 sm:h-6" />
+                <FaLinkedin size={22} />
               </a>
-              <a 
-                href="https://www.instagram.com/morino.stuebe.ergo" 
-                target="_blank" 
+              <a
+                href="https://www.instagram.com/morino.stuebe.ergo"
+                target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-300 hover:text-white transition-colors"
+                aria-label="Instagram"
+                className="text-ergo-stone hover:text-ergo-red transition-colors"
               >
-                <FaInstagram size={20} className="sm:w-6 sm:h-6" />
+                <FaInstagram size={22} />
               </a>
             </div>
-            
-            <div className="space-y-1 sm:space-y-2 text-gray-300 text-sm">
-              <p>Öffnungszeiten:</p>
-              <p>Mo-Fr: 9:00 - 18:00 Uhr</p>
-              <p>Sa: 9:00 - 12:00 Uhr</p>
-            </div>
-            
-            <Link 
-              href="/admin" 
-              className="inline-block mt-3 sm:mt-4 text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors"
-            >
-              Admin Dashboard
-            </Link>
           </div>
 
         </div>
-        
-        <div className="border-t border-white/15 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-blue-100/65">
-          <p className="text-sm sm:text-base">&copy; 2026 ERGO Versicherung - Morino Stübe. Alle Rechte vorbehalten.</p>
-          <p className="text-xs sm:text-sm mt-2">
-            Vermittlerregister: <a href="https://www.vermittlerregister.info" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 break-all">www.vermittlerregister.info</a>
-          </p>
+      </div>
+
+      {/* Markenzeile */}
+      <div className="border-t border-ergo-line bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <img
+              src="/attached_assets/ergo-logo-hq.svg"
+              alt="ERGO"
+              className="h-5 w-auto"
+              width={80}
+              height={23}
+              loading="lazy"
+            />
+            <span className="text-sm text-ergo-stone">Einfach, weil's wichtig ist.</span>
+          </div>
+          <div className="text-center sm:text-right text-xs text-ergo-mute space-y-1">
+            <p>&copy; 2026 ERGO Agentur Stübe · Morino Stübe. Alle Rechte vorbehalten.</p>
+            <p>
+              Vermittlerregister-Nr. D-5H7J-7DUI1-10 ·{" "}
+              <a
+                href="https://www.vermittlerregister.info"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-ergo-red hover:underline"
+              >
+                www.vermittlerregister.info
+              </a>
+            </p>
+            <p>
+              <Link href="/admin" className="hover:text-ergo-red hover:underline">
+                Admin Dashboard
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

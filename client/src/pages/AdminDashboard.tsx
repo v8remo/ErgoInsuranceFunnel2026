@@ -286,23 +286,23 @@ export default function AdminDashboard() {
 
   const getSubmissionTypeBadge = (type: string) => {
     const config: Record<string, { label: string; className: string }> = {
-      dokument: { label: "Dokument", className: "bg-blue-100 text-blue-800" },
-      schaden: { label: "Schaden", className: "bg-red-100 text-red-800" },
-      kennzeichen: { label: "Kennzeichen", className: "bg-purple-100 text-purple-800" },
-      rechnung: { label: "Rechnung", className: "bg-amber-100 text-amber-800" },
-      rueckruf: { label: "Rückruf", className: "bg-green-100 text-green-800" },
+      dokument: { label: "Dokument", className: "bg-ergo-sky text-ergo-ink" },
+      schaden: { label: "Schaden", className: "bg-ergo-coral text-ergo-ink" },
+      kennzeichen: { label: "Kennzeichen", className: "bg-ergo-red-light text-ergo-red" },
+      rechnung: { label: "Rechnung", className: "bg-ergo-yellow text-ergo-ink" },
+      rueckruf: { label: "Rückruf", className: "bg-ergo-leaf text-ergo-ink" },
     };
-    const c = config[type] || { label: type, className: "bg-gray-100 text-gray-800" };
+    const c = config[type] || { label: type, className: "bg-ergo-fog text-ergo-ink" };
     return <Badge className={c.className}>{c.label}</Badge>;
   };
 
   const getSubmissionStatusBadge = (status: string) => {
     const config: Record<string, { label: string; className: string }> = {
-      neu: { label: "Neu", className: "bg-yellow-100 text-yellow-800" },
-      bearbeitung: { label: "In Bearbeitung", className: "bg-blue-100 text-blue-800" },
-      erledigt: { label: "Erledigt", className: "bg-green-100 text-green-800" },
+      neu: { label: "Neu", className: "bg-ergo-yellow text-ergo-ink" },
+      bearbeitung: { label: "In Bearbeitung", className: "bg-ergo-sky text-ergo-ink" },
+      erledigt: { label: "Erledigt", className: "bg-ergo-leaf text-ergo-ink" },
     };
-    const c = config[status] || { label: status, className: "bg-gray-100 text-gray-800" };
+    const c = config[status] || { label: status, className: "bg-ergo-fog text-ergo-ink" };
     return <Badge className={c.className}>{c.label}</Badge>;
   };
 
@@ -494,11 +494,11 @@ export default function AdminDashboard() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      new: { label: "Neu", className: "bg-yellow-100 text-yellow-800" },
-      contacted: { label: "Kontaktiert", className: "bg-blue-100 text-blue-800" },
-      qualified: { label: "Qualifiziert", className: "bg-green-100 text-green-800" },
-      converted: { label: "Abgeschlossen", className: "bg-green-100 text-green-800" },
-      lost: { label: "Verloren", className: "bg-red-100 text-red-800" }
+      new: { label: "Neu", className: "bg-ergo-yellow text-ergo-ink" },
+      contacted: { label: "Kontaktiert", className: "bg-ergo-sky text-ergo-ink" },
+      qualified: { label: "Qualifiziert", className: "bg-ergo-leaf text-ergo-ink" },
+      converted: { label: "Abgeschlossen", className: "bg-ergo-leaf text-ergo-ink" },
+      lost: { label: "Verloren", className: "bg-ergo-coral text-ergo-ink" }
     };
     
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.new;
@@ -507,15 +507,15 @@ export default function AdminDashboard() {
 
   const getInsuranceBadge = (type: string) => {
     const colors = {
-      hausrat: "bg-blue-100 text-blue-800",
-      haftpflicht: "bg-green-100 text-green-800", 
-      wohngebaeude: "bg-purple-100 text-purple-800",
-      rechtsschutz: "bg-orange-100 text-orange-800",
-      zahnzusatz: "bg-pink-100 text-pink-800",
-      kfz: "bg-sky-100 text-sky-800",
-      bu: "bg-amber-100 text-amber-800",
-      berufsunfaehigkeit: "bg-amber-100 text-amber-800",
-      gewerbe: "bg-violet-100 text-violet-800",
+      hausrat: "bg-ergo-sky text-ergo-ink",
+      haftpflicht: "bg-ergo-leaf text-ergo-ink",
+      wohngebaeude: "bg-ergo-red-light text-ergo-red",
+      rechtsschutz: "bg-ergo-coral text-ergo-ink",
+      zahnzusatz: "bg-ergo-red-light text-ergo-red",
+      kfz: "bg-ergo-sky text-ergo-ink",
+      bu: "bg-ergo-yellow text-ergo-ink",
+      berufsunfaehigkeit: "bg-ergo-yellow text-ergo-ink",
+      gewerbe: "bg-ergo-red-light text-ergo-red",
     };
     
     const typeNames = {
@@ -531,7 +531,7 @@ export default function AdminDashboard() {
     };
     
     return (
-      <Badge className={colors[type as keyof typeof colors] || "bg-gray-100 text-gray-800"}>
+      <Badge className={colors[type as keyof typeof colors] || "bg-ergo-fog text-ergo-ink"}>
         {typeNames[type as keyof typeof typeNames] || type}
       </Badge>
     );
@@ -540,7 +540,7 @@ export default function AdminDashboard() {
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-ergo-gray-light flex items-center justify-center p-4">
-        <Card className="w-full max-w-md shadow-xl">
+        <Card className="w-full max-w-md">
           <CardHeader className="bg-ergo-red text-white rounded-t-lg">
             <CardTitle className="text-center text-white text-lg sm:text-xl">
               ERGO Admin Dashboard
@@ -558,7 +558,7 @@ export default function AdminDashboard() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Admin-Passwort eingeben"
                   required
-                  className="border-gray-300 focus:border-ergo-red focus:ring-ergo-red text-base"
+                  className="border-ergo-line focus:border-ergo-red focus:ring-ergo-red text-base"
                 />
               </div>
               <Button 
@@ -589,7 +589,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-ergo-gray-light">
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 border-t-4 border-ergo-red">
+        <div className="bg-white rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 border-t-4 border-ergo-red">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-4">
             <div>
               <h1 className="text-xl sm:text-2xl font-bold text-ergo-dark">ERGO Admin Dashboard</h1>
@@ -629,7 +629,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="bg-white rounded-lg shadow-lg p-2 mb-4 sm:mb-6">
+        <div className="bg-white rounded-lg border border-ergo-line p-2 mb-4 sm:mb-6">
           <div className="flex overflow-x-auto gap-1 pb-0.5 scrollbar-hide">
             {[
               { key: "leads", label: "Leads", icon: Users },
@@ -643,7 +643,7 @@ export default function AdminDashboard() {
                 className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
                   activeTab === tab.key
                     ? "bg-ergo-red text-white"
-                    : "text-gray-600 hover:bg-gray-100"
+                    : "text-ergo-stone hover:bg-ergo-gray"
                 }`}
               >
                 <tab.icon className="w-4 h-4 flex-shrink-0" />
@@ -664,12 +664,12 @@ export default function AdminDashboard() {
             <Card>
               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center">
-                  <div className="p-2 sm:p-3 bg-blue-100 rounded-lg">
-                    <Users className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                  <div className="p-2 sm:p-3 bg-ergo-red-light rounded-lg">
+                    <Users className="w-5 h-5 sm:w-6 sm:h-6 text-ergo-red" />
                   </div>
                   <div className="ml-3 sm:ml-4">
-                    <p className="text-xs sm:text-sm text-gray-600">Gesamt Leads</p>
-                    <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.totalLeads}</p>
+                    <p className="text-xs sm:text-sm text-ergo-stone">Gesamt Leads</p>
+                    <p className="text-xl sm:text-2xl font-bold text-ergo-ink">{stats.totalLeads}</p>
                   </div>
                 </div>
               </CardContent>
@@ -678,12 +678,12 @@ export default function AdminDashboard() {
             <Card>
               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center">
-                  <div className="p-2 sm:p-3 bg-green-100 rounded-lg">
-                    <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
+                  <div className="p-2 sm:p-3 bg-ergo-gray rounded-lg">
+                    <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-ergo-check" />
                   </div>
                   <div className="ml-3 sm:ml-4">
-                    <p className="text-xs sm:text-sm text-gray-600">Diese Woche</p>
-                    <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.weeklyLeads}</p>
+                    <p className="text-xs sm:text-sm text-ergo-stone">Diese Woche</p>
+                    <p className="text-xl sm:text-2xl font-bold text-ergo-ink">{stats.weeklyLeads}</p>
                   </div>
                 </div>
               </CardContent>
@@ -692,12 +692,12 @@ export default function AdminDashboard() {
             <Card>
               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center">
-                  <div className="p-2 sm:p-3 bg-yellow-100 rounded-lg">
-                    <Percent className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600" />
+                  <div className="p-2 sm:p-3 bg-ergo-yellow rounded-lg">
+                    <Percent className="w-5 h-5 sm:w-6 sm:h-6 text-ergo-ink" />
                   </div>
                   <div className="ml-3 sm:ml-4">
-                    <p className="text-xs sm:text-sm text-gray-600">Conversion Rate</p>
-                    <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.conversionRate}%</p>
+                    <p className="text-xs sm:text-sm text-ergo-stone">Conversion Rate</p>
+                    <p className="text-xl sm:text-2xl font-bold text-ergo-ink">{stats.conversionRate}%</p>
                   </div>
                 </div>
               </CardContent>
@@ -706,12 +706,12 @@ export default function AdminDashboard() {
             <Card>
               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center">
-                  <div className="p-2 sm:p-3 bg-red-100 rounded-lg">
-                    <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
+                  <div className="p-2 sm:p-3 bg-ergo-red-light rounded-lg">
+                    <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-ergo-red" />
                   </div>
                   <div className="ml-3 sm:ml-4">
-                    <p className="text-xs sm:text-sm text-gray-600">Offen</p>
-                    <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.openLeads}</p>
+                    <p className="text-xs sm:text-sm text-ergo-stone">Offen</p>
+                    <p className="text-xl sm:text-2xl font-bold text-ergo-ink">{stats.openLeads}</p>
                   </div>
                 </div>
               </CardContent>
@@ -722,7 +722,7 @@ export default function AdminDashboard() {
         {/* Leads Tab */}
         {activeTab === "leads" && (
         <>
-        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-6">
+        <div className="bg-white rounded-lg border border-ergo-line p-4 sm:p-6 mb-4 sm:mb-6">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
             <Select value={filterInsurance} onValueChange={setFilterInsurance}>
               <SelectTrigger className="w-full sm:w-48">
@@ -758,58 +758,58 @@ export default function AdminDashboard() {
           <CardContent>
             {isLoading ? (
               <div className="text-center py-8">
-                <div className="text-gray-500">Lade Leads...</div>
+                <div className="text-ergo-stone">Lade Leads...</div>
               </div>
             ) : leads.length === 0 ? (
               <div className="text-center py-8">
-                <div className="text-gray-500">Keine Leads gefunden</div>
+                <div className="text-ergo-stone">Keine Leads gefunden</div>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-ergo-gray">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Datum</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Versicherung</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kontakt</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktionen</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-ergo-stone uppercase">Datum</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-ergo-stone uppercase">Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-ergo-stone uppercase">Versicherung</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-ergo-stone uppercase">Kontakt</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-ergo-stone uppercase">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-ergo-stone uppercase">Aktionen</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="divide-y divide-ergo-line">
                     {leads.map((lead) => (
-                      <tr key={lead.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <tr key={lead.id} className="hover:bg-ergo-gray">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-ergo-ink">
                           {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : '-'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm font-medium text-ergo-ink">
                             {lead.firstName} {lead.lastName}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-ergo-stone">
                             Alter: {lead.age}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {getInsuranceBadge(lead.insuranceType)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-ergo-ink">
                           <div className="flex items-center mb-1">
-                            <Mail className="w-4 h-4 mr-1 text-gray-400" />
+                            <Mail className="w-4 h-4 mr-1 text-ergo-mute" />
                             <a href={`mailto:${lead.email}`} className="text-ergo-red hover:underline">
                               {lead.email}
                             </a>
                           </div>
                           <div className="flex items-center mb-1">
-                            <Phone className="w-4 h-4 mr-1 text-gray-400" />
+                            <Phone className="w-4 h-4 mr-1 text-ergo-mute" />
                             <a href={`tel:${lead.phone}`} className="text-ergo-red hover:underline">
                               {lead.phone}
                             </a>
                           </div>
                           <div className="flex items-center">
-                            <MapPin className="w-4 h-4 mr-1 text-gray-400" />
-                            <span className="text-gray-600">{lead.location}</span>
+                            <MapPin className="w-4 h-4 mr-1 text-ergo-mute" />
+                            <span className="text-ergo-stone">{lead.location}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -877,18 +877,18 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             {submissionsLoading ? (
-              <div className="text-center py-8 text-gray-500">Lade Anfragen...</div>
+              <div className="text-center py-8 text-ergo-stone">Lade Anfragen...</div>
             ) : submissionsData.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">Keine Anfragen gefunden</div>
+              <div className="text-center py-8 text-ergo-stone">Keine Anfragen gefunden</div>
             ) : (
               <div className="space-y-3">
                 {submissionsData.map((sub) => (
-                  <div key={sub.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                  <div key={sub.id} className="border rounded-lg p-4 hover:bg-ergo-gray transition-colors">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
                       <div className="flex items-center gap-2 flex-wrap">
                         {getSubmissionTypeBadge(sub.type)}
                         {getSubmissionStatusBadge(sub.status)}
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-ergo-mute">
                           {sub.createdAt ? new Date(sub.createdAt).toLocaleString("de-DE") : "-"}
                         </span>
                       </div>
@@ -920,35 +920,35 @@ export default function AdminDashboard() {
                     </div>
                     <div className="grid sm:grid-cols-2 gap-x-6 gap-y-1 text-sm">
                       <div>
-                        <span className="font-medium text-gray-700">Name: </span>
+                        <span className="font-medium text-ergo-ink">Name: </span>
                         <span>{sub.customerName || "-"}</span>
                       </div>
                       {sub.customerEmail && (
                         <div>
-                          <span className="font-medium text-gray-700">E-Mail: </span>
+                          <span className="font-medium text-ergo-ink">E-Mail: </span>
                           <a href={`mailto:${sub.customerEmail}`} className="text-ergo-red hover:underline">{sub.customerEmail}</a>
                         </div>
                       )}
                       {sub.customerPhone && (
                         <div>
-                          <span className="font-medium text-gray-700">Telefon: </span>
+                          <span className="font-medium text-ergo-ink">Telefon: </span>
                           <a href={`tel:${sub.customerPhone}`} className="text-ergo-red hover:underline">{sub.customerPhone}</a>
                         </div>
                       )}
                       {sub.subject && (
                         <div>
-                          <span className="font-medium text-gray-700">Betreff: </span>
+                          <span className="font-medium text-ergo-ink">Betreff: </span>
                           <span>{sub.subject}</span>
                         </div>
                       )}
                     </div>
                     {sub.summary && (
-                      <p className="text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded">{sub.summary}</p>
+                      <p className="text-sm text-ergo-stone mt-2 bg-ergo-gray p-2 rounded">{sub.summary}</p>
                     )}
                     {(sub.details != null && typeof sub.details === 'object' && !Array.isArray(sub.details) && Object.keys(sub.details as Record<string, unknown>).length > 0) && (
                       <details className="mt-2">
-                        <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700">Details anzeigen</summary>
-                        <pre className="text-xs bg-gray-50 p-2 rounded mt-1 overflow-x-auto whitespace-pre-wrap">
+                        <summary className="text-xs text-ergo-stone cursor-pointer hover:text-ergo-ink">Details anzeigen</summary>
+                        <pre className="text-xs bg-ergo-gray p-2 rounded mt-1 overflow-x-auto whitespace-pre-wrap">
                           {JSON.stringify(sub.details, null, 2)}
                         </pre>
                       </details>
@@ -968,9 +968,9 @@ export default function AdminDashboard() {
                           a.click();
                           URL.revokeObjectURL(url);
                         }}
-                        className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3 py-1.5 hover:bg-blue-100 transition-colors"
+                        className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-ergo-red bg-ergo-red-light border border-ergo-line rounded-lg px-3 py-1.5 hover:bg-ergo-fog transition-colors"
                       >
-                        📥 PDF herunterladen
+                        <Download className="w-3.5 h-3.5" /> PDF herunterladen
                       </button>
                     )}
                   </div>
@@ -983,7 +983,7 @@ export default function AdminDashboard() {
 
         {/* Content Management Section */}
         {activeTab === "content" && (
-        <Card className="bg-white shadow-lg border-t-4 border-ergo-red">
+        <Card className="bg-white border-t-4 border-ergo-red">
           <CardHeader>
             <CardTitle className="flex items-center">
               <Settings className="w-5 h-5 text-ergo-red mr-2" />
@@ -1030,14 +1030,14 @@ export default function AdminDashboard() {
                   price: "ab 10€/Monat"
                 }
               ].map((insurance) => (
-                <Card key={insurance.id} className="border border-gray-200">
+                <Card key={insurance.id} className="border border-ergo-line">
                   <CardHeader>
                     <CardTitle className="text-lg text-ergo-dark">{insurance.name}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-ergo-ink mb-2">
                           <Image className="w-4 h-4 inline mr-1" />
                           Aktuelles Bild
                         </label>
@@ -1051,8 +1051,8 @@ export default function AdminDashboard() {
                         
                         {/* Drag & Drop Upload Area */}
                         <div 
-                          className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer transition-colors hover:border-ergo-red hover:bg-gray-50 ${
-                            uploadingImages[insurance.id] ? 'border-ergo-red bg-gray-50' : ''
+                          className={`border-2 border-dashed border-ergo-line rounded-lg p-6 text-center cursor-pointer transition-colors hover:border-ergo-red hover:bg-ergo-gray ${
+                            uploadingImages[insurance.id] ? 'border-ergo-red bg-ergo-gray' : ''
                           }`}
                           onDragOver={handleDragOver}
                           onDrop={(e) => handleDrop(e, insurance.id)}
@@ -1061,15 +1061,15 @@ export default function AdminDashboard() {
                           {uploadingImages[insurance.id] ? (
                             <div className="flex items-center justify-center">
                               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-ergo-red"></div>
-                              <span className="ml-2 text-gray-600">Lädt...</span>
+                              <span className="ml-2 text-ergo-stone">Lädt...</span>
                             </div>
                           ) : (
                             <div>
-                              <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                              <p className="text-sm text-gray-600 mb-1">
+                              <Upload className="w-8 h-8 text-ergo-mute mx-auto mb-2" />
+                              <p className="text-sm text-ergo-stone mb-1">
                                 Bild hierher ziehen oder klicken zum Auswählen
                               </p>
-                              <p className="text-xs text-gray-500">
+                              <p className="text-xs text-ergo-stone">
                                 PNG, JPG, GIF bis 5MB
                               </p>
                             </div>
@@ -1084,14 +1084,14 @@ export default function AdminDashboard() {
                           className="hidden"
                         />
                         
-                        <p className="text-sm text-gray-500 mt-2">
+                        <p className="text-sm text-ergo-stone mt-2">
                           Empfohlene Größe: 400x250px
                         </p>
                       </div>
                       
                       <div className="space-y-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block text-sm font-medium text-ergo-ink mb-2">
                             <FileText className="w-4 h-4 inline mr-1" />
                             Titel
                           </label>
@@ -1103,11 +1103,11 @@ export default function AdminDashboard() {
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block text-sm font-medium text-ergo-ink mb-2">
                             Beschreibung
                           </label>
                           <textarea 
-                            className="w-full p-3 border border-gray-300 rounded-md resize-none"
+                            className="w-full p-3 border border-ergo-line rounded-md resize-none"
                             rows={3}
                             placeholder="Beschreibung der Versicherung"
                             value={contentData[insurance.id]?.description || insurance.description}
@@ -1116,7 +1116,7 @@ export default function AdminDashboard() {
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block text-sm font-medium text-ergo-ink mb-2">
                             Preis
                           </label>
                           <Input 
@@ -1175,7 +1175,7 @@ export default function AdminDashboard() {
             <CardContent>
               <form onSubmit={handlePasswordChange} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-ergo-ink mb-2">
                     Aktuelles Passwort
                   </label>
                   <Input
@@ -1187,7 +1187,7 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-ergo-ink mb-2">
                     Neues Passwort (mind. 8 Zeichen)
                   </label>
                   <Input
@@ -1200,7 +1200,7 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-ergo-ink mb-2">
                     Passwort bestätigen
                   </label>
                   <Input

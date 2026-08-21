@@ -1,7 +1,12 @@
+import { compressImageFile, exceedsUploadLimit, UPLOAD_LIMIT_MESSAGE } from '@/lib/uploads';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'wouter';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import SignaturePad from 'signature_pad';
+import {
+  Upload, FileText, Handshake, Pencil, ClipboardList, Lock, Check, ChevronLeft, X,
+  Zap, Info, Trash2, Download, MessageCircle, AlertTriangle, type LucideIcon,
+} from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -87,12 +92,12 @@ const docTypeLabels: Record<DocType, string> = {
   upload: 'Rechnung / Beleg einreichen',
 };
 
-const docTypeCards: { type: DocType; icon: string; title: string; desc: string }[] = [
-  { type: 'upload', icon: '📎', title: 'Rechnung / Beleg einreichen', desc: 'Rechnungen, Belege oder Nachweise hochladen und einreichen' },
-  { type: 'kuendigung', icon: '📄', title: 'Kündigungsschreiben', desc: 'Kündigung bei einem anderen Versicherer einreichen' },
-  { type: 'beraterwechsel', icon: '🔄', title: 'Beraterwechsel-Antrag', desc: 'Von Morino Stübe bei ERGO betreut werden' },
-  { type: 'aenderung', icon: '✏️', title: 'Änderungsantrag', desc: 'Adresse, IBAN oder andere Vertragsdaten ändern' },
-  { type: 'vollmacht', icon: '📋', title: 'Vollmacht & SEPA', desc: 'Betreuungsvollmacht & Lastschriftmandat erteilen' },
+const docTypeCards: { type: DocType; icon: LucideIcon; title: string; desc: string }[] = [
+  { type: 'upload', icon: Upload, title: 'Rechnung / Beleg einreichen', desc: 'Rechnungen, Belege oder Nachweise hochladen und einreichen' },
+  { type: 'kuendigung', icon: FileText, title: 'Kündigungsschreiben', desc: 'Kündigung bei einem anderen Versicherer einreichen' },
+  { type: 'beraterwechsel', icon: Handshake, title: 'Beraterwechsel-Antrag', desc: 'Von Morino Stübe bei ERGO betreut werden' },
+  { type: 'aenderung', icon: Pencil, title: 'Änderungsantrag', desc: 'Adresse, IBAN oder andere Vertragsdaten ändern' },
+  { type: 'vollmacht', icon: ClipboardList, title: 'Vollmacht & SEPA', desc: 'Betreuungsvollmacht & Lastschriftmandat erteilen' },
 ];
 
 const versicherungsarten = ['Kfz', 'Hausrat', 'Haftpflicht', 'Rechtsschutz', 'Lebensversicherung', 'Kranken', 'Sonstiges'];
@@ -198,14 +203,16 @@ export default function DokumentePage() {
     goToStep(2);
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
+    e.target.value = '';
+    const incoming = Array.from(files);
     const newFiles: UploadFile[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const f = files[i];
+    for (const raw of incoming) {
       if (uploadFiles.length + newFiles.length >= 10) break;
-      if (!f.type.startsWith('image/') && f.type !== 'application/pdf') continue;
+      if (!raw.type.startsWith('image/') && raw.type !== 'application/pdf') continue;
+      const f = await compressImageFile(raw);
       if (f.size > 10 * 1024 * 1024) continue;
       const uf: UploadFile = { file: f };
       if (f.type.startsWith('image/')) {
@@ -215,7 +222,6 @@ export default function DokumentePage() {
     }
     setUploadFiles(prev => [...prev, ...newFiles].slice(0, 10));
     if (errors.files) setErrors(prev => { const n = { ...prev }; delete n.files; return n; });
-    e.target.value = '';
   };
 
   const removeFile = (index: number) => {
@@ -245,6 +251,9 @@ export default function DokumentePage() {
     if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) errs.email = 'Gültige E-Mail eingeben';
     if (!formData.versicherungsnummer.trim()) errs.versicherungsnummer = 'Pflichtfeld';
     if (uploadFiles.length === 0) errs.files = 'Bitte mindestens eine Datei hochladen';
+    if (uploadFiles.length > 0 && exceedsUploadLimit(uploadFiles.map(uf => uf.file))) {
+      errs.files = UPLOAD_LIMIT_MESSAGE;
+    }
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
 
@@ -707,14 +716,14 @@ export default function DokumentePage() {
   };
 
   const inputCls = (field: string) =>
-    `w-full p-3 border-2 rounded-xl text-base outline-none transition-colors ${errors[field] ? 'border-red-500' : 'border-gray-200 focus:border-[#003781]'}`;
+    `w-full p-3 border rounded text-base outline-none transition-colors ${errors[field] ? 'border-ergo-red' : 'border-ergo-line focus:border-ergo-red'}`;
 
   const selectCls = (field: string) =>
-    `w-full p-3 border-2 rounded-xl text-base outline-none transition-colors bg-white ${errors[field] ? 'border-red-500' : 'border-gray-200 focus:border-[#003781]'}`;
+    `w-full p-3 border rounded text-base outline-none transition-colors bg-white ${errors[field] ? 'border-ergo-red' : 'border-ergo-line focus:border-ergo-red'}`;
 
   const renderField = (label: string, field: keyof FormData, type = 'text', placeholder = '', required = true, extraProps?: React.InputHTMLAttributes<HTMLInputElement>) => (
     <div className="flex flex-col gap-1">
-      <label className="text-sm font-semibold text-gray-700">{label}{required && ' *'}</label>
+      <label className="text-sm font-semibold text-ergo-ink">{label}{required && ' *'}</label>
       <input
         type={type}
         value={formData[field] as string}
@@ -723,7 +732,7 @@ export default function DokumentePage() {
         className={inputCls(field)}
         {...extraProps}
       />
-      {errors[field] && <span className="text-xs text-red-500">{errors[field]}</span>}
+      {errors[field] && <span className="text-xs text-ergo-red">{errors[field]}</span>}
     </div>
   );
 
@@ -734,7 +743,7 @@ export default function DokumentePage() {
     : (step === 1 ? 33 : step === 2 ? 66 : 100);
 
   return (
-    <div className="ds-form-flow min-h-screen bg-gray-50 safe-area-bottom">
+    <div className="min-h-screen bg-white safe-area-bottom">
       <SEO
         title="Dokumente & Kündigungen einreichen – ERGO Agentur Stübe Ganderkesee"
         description="Versicherungsdokumente digital einreichen: Kündigungen, Rechnungen und Belege. Schnell und sicher über Ihre ERGO Agentur Stübe in Ganderkesee."
@@ -746,25 +755,25 @@ export default function DokumentePage() {
           <>
             <div className="flex items-center justify-between mb-4">
               {step > 1 ? (
-                <button onClick={() => goToStep(step - 1)} className="text-[#003781] font-semibold text-sm flex items-center gap-1 min-h-[44px]">
-                  ← Zurück
+                <button onClick={() => goToStep(step - 1)} className="text-ergo-red font-bold text-sm flex items-center gap-1 min-h-[44px]">
+                  <ChevronLeft className="w-4 h-4" /> Zurück
                 </button>
               ) : (
                 <div />
               )}
-              <span className="text-xs text-gray-500 font-medium">
+              <span className="text-xs text-ergo-stone font-medium">
                 Schritt {Math.min(step, totalSteps)} von {totalSteps} — {step === 1 ? 'Dokumenttyp' : step === 2 ? 'Angaben' : 'Unterschrift'}
               </span>
             </div>
-            <div className="h-1 bg-gray-200 rounded-full mb-3 overflow-hidden">
-              <div className="h-full bg-[#E2001A] rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercent}%` }} />
+            <div className="h-1 bg-ergo-fog rounded-full mb-3 overflow-hidden">
+              <div className="h-full bg-ergo-red rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercent}%` }} />
             </div>
-            <div className="flex items-center justify-center gap-3 text-[11px] text-gray-400 mb-5">
-              <span>🔒 DSGVO-konform</span>
+            <div className="flex items-center justify-center gap-3 text-[11px] text-ergo-mute mb-5">
+              <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> DSGVO-konform</span>
               <span>·</span>
-              <span>📄 Rechtsgültig</span>
+              <span className="flex items-center gap-1"><FileText className="w-3 h-3" /> Rechtsgültig</span>
               <span>·</span>
-              <span>✅ Kostenlos</span>
+              <span className="flex items-center gap-1"><Check className="w-3 h-3 text-ergo-check" /> Kostenlos</span>
             </div>
           </>
         )}
@@ -774,14 +783,15 @@ export default function DokumentePage() {
           {step === 1 && (
             <div>
               <div className="text-center mb-5">
-                <h1 className="text-2xl font-extrabold text-gray-900 mb-2">Dokument erstellen</h1>
-                <p className="text-sm text-gray-500">Wählen Sie den gewünschten Dokumenttyp aus</p>
+                <p className="ergo-eyebrow">ERGO Agentur Stübe · Dokumentenservice</p>
+                <h1 className="text-[30px] md:text-[40px] leading-[1.25] mb-2">Dokument erstellen</h1>
+                <p className="text-sm text-ergo-stone">Wählen Sie den gewünschten Dokumenttyp aus</p>
               </div>
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5 flex items-start gap-3">
-                <span className="text-lg shrink-0">⚡</span>
+              <div className="bg-ergo-gray border border-ergo-line rounded-lg p-4 mb-5 flex items-start gap-3">
+                <Zap className="w-5 h-5 text-ergo-red shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">Digital einreichen – schneller als per Post</p>
-                  <p className="text-xs text-gray-500 mt-1">Sofort beim Berater · Rechtsgültig unterschrieben · Kein Porto</p>
+                  <p className="text-sm font-semibold text-ergo-ink">Digital einreichen – schneller als per Post</p>
+                  <p className="text-xs text-ergo-stone mt-1">Sofort beim Berater · Rechtsgültig unterschrieben · Kein Porto</p>
                 </div>
               </div>
               <div className="flex flex-col gap-3">
@@ -789,28 +799,28 @@ export default function DokumentePage() {
                   <button
                     key={card.type}
                     onClick={() => handleSelectType(card.type)}
-                    className="w-full bg-white border-2 border-gray-200 rounded-xl p-4 text-left flex items-start gap-3 transition-colors active:border-[#E2001A] hover:border-[#E2001A]"
+                    className="ergo-option w-full p-4 text-left flex items-start gap-3"
                   >
-                    <span className="text-2xl mt-0.5 shrink-0">{card.icon}</span>
+                    <span className="ergo-icon-disc w-10 h-10 shrink-0"><card.icon className="w-4 h-4" /></span>
                     <div>
-                      <h3 className="font-bold text-gray-900 text-base">{card.title}</h3>
-                      <p className="text-sm text-gray-500 mt-0.5">{card.desc}</p>
+                      <h3 className="font-sans font-bold text-ergo-ink text-base">{card.title}</h3>
+                      <p className="text-sm text-ergo-stone mt-0.5">{card.desc}</p>
                     </div>
                   </button>
                 ))}
               </div>
               <div className="mt-6 text-center">
-                <Link href="/" className="text-sm text-[#003781] font-medium">← Zurück zur Startseite</Link>
+                <Link href="/" className="ergo-link text-sm">Zurück zur Startseite</Link>
               </div>
             </div>
           )}
 
           {step === 2 && selectedType && (
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-1">{docTypeLabels[selectedType]}</h2>
-              <p className="text-sm text-gray-500 mb-5">Bitte füllen Sie alle Pflichtfelder (*) aus.</p>
-              <div className="flex flex-col gap-4">
-                <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide">
+              <h2 className="text-[22px] mb-1">{docTypeLabels[selectedType]}</h2>
+              <p className="text-sm text-ergo-stone mb-5">Bitte füllen Sie alle Pflichtfelder (*) aus.</p>
+              <div className="ergo-card p-5 sm:p-6 flex flex-col gap-4">
+                <h3 className="ergo-eyebrow mb-0">
                   {selectedType === 'upload' ? 'Kontaktdaten' : 'Persönliche Daten'}
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -832,59 +842,59 @@ export default function DokumentePage() {
                 {selectedType === 'kuendigung' && (
                   <>
                     {kuendigungen.map((k, i) => (
-                      <div key={i} className="bg-white border-2 border-gray-200 rounded-xl p-4 flex flex-col gap-3 relative">
+                      <div key={i} className="border border-ergo-line rounded-lg p-4 flex flex-col gap-3 relative">
                         <div className="flex items-center justify-between">
-                          <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide">
+                          <h3 className="ergo-eyebrow mb-0">
                             Versicherung {kuendigungen.length > 1 ? `${i + 1}` : ''}
                           </h3>
                           {kuendigungen.length > 1 && (
-                            <button type="button" onClick={() => removeKuendigung(i)} className="text-red-500 text-xs font-semibold hover:text-red-700 min-h-[44px] px-2">✕ Entfernen</button>
+                            <button type="button" onClick={() => removeKuendigung(i)} className="text-ergo-red text-xs font-semibold hover:text-ergo-red-hover min-h-[44px] px-2 inline-flex items-center gap-1"><X className="w-3.5 h-3.5" /> Entfernen</button>
                           )}
                         </div>
                         <div className="flex flex-col gap-1">
-                          <label className="text-sm font-semibold text-gray-700">Versicherungsgesellschaft *</label>
+                          <label className="text-sm font-semibold text-ergo-ink">Versicherungsgesellschaft *</label>
                           <input type="text" value={k.versicherungsgesellschaft} onChange={e => updateKuendigung(i, 'versicherungsgesellschaft', e.target.value)} placeholder="z.B. Allianz, HUK-Coburg" className={inputCls(`k_${i}_versicherungsgesellschaft`)} />
-                          {errors[`k_${i}_versicherungsgesellschaft`] && <span className="text-xs text-red-500">{errors[`k_${i}_versicherungsgesellschaft`]}</span>}
+                          {errors[`k_${i}_versicherungsgesellschaft`] && <span className="text-xs text-ergo-red">{errors[`k_${i}_versicherungsgesellschaft`]}</span>}
                         </div>
                         <div className="flex flex-col gap-1">
-                          <label className="text-sm font-semibold text-gray-700">Versicherungsnummer *</label>
+                          <label className="text-sm font-semibold text-ergo-ink">Versicherungsnummer *</label>
                           <input type="text" value={k.versicherungsnummer} onChange={e => updateKuendigung(i, 'versicherungsnummer', e.target.value)} className={inputCls(`k_${i}_versicherungsnummer`)} />
-                          {errors[`k_${i}_versicherungsnummer`] && <span className="text-xs text-red-500">{errors[`k_${i}_versicherungsnummer`]}</span>}
+                          {errors[`k_${i}_versicherungsnummer`] && <span className="text-xs text-ergo-red">{errors[`k_${i}_versicherungsnummer`]}</span>}
                         </div>
                         <div className="flex flex-col gap-1">
-                          <label className="text-sm font-semibold text-gray-700">Versicherungsart *</label>
+                          <label className="text-sm font-semibold text-ergo-ink">Versicherungsart *</label>
                           <select value={k.versicherungsart} onChange={e => updateKuendigung(i, 'versicherungsart', e.target.value)} className={selectCls(`k_${i}_versicherungsart`)}>
                             <option value="">Bitte auswählen</option>
                             {versicherungsarten.map(v => <option key={v} value={v}>{v}</option>)}
                           </select>
-                          {errors[`k_${i}_versicherungsart`] && <span className="text-xs text-red-500">{errors[`k_${i}_versicherungsart`]}</span>}
+                          {errors[`k_${i}_versicherungsart`] && <span className="text-xs text-ergo-red">{errors[`k_${i}_versicherungsart`]}</span>}
                         </div>
                         <div className="flex flex-col gap-1">
-                          <label className="text-sm font-semibold text-gray-700">Kündigungsgrund *</label>
+                          <label className="text-sm font-semibold text-ergo-ink">Kündigungsgrund *</label>
                           <select value={k.kuendigungsgrund} onChange={e => updateKuendigung(i, 'kuendigungsgrund', e.target.value)} className={selectCls(`k_${i}_kuendigungsgrund`)}>
                             <option value="">Bitte auswählen</option>
                             {kuendigungsgruende.map(g => <option key={g} value={g}>{g}</option>)}
                           </select>
-                          {errors[`k_${i}_kuendigungsgrund`] && <span className="text-xs text-red-500">{errors[`k_${i}_kuendigungsgrund`]}</span>}
+                          {errors[`k_${i}_kuendigungsgrund`] && <span className="text-xs text-ergo-red">{errors[`k_${i}_kuendigungsgrund`]}</span>}
                         </div>
                         <div className="flex flex-col gap-1">
-                          <label className="text-sm font-semibold text-gray-700">Gewünschtes Kündigungsdatum</label>
+                          <label className="text-sm font-semibold text-ergo-ink">Gewünschtes Kündigungsdatum</label>
                           <input
                             type="date"
                             value={k.kuendigungsdatum}
                             onChange={e => updateKuendigung(i, 'kuendigungsdatum', e.target.value)}
                             className={`${inputCls(`k_${i}_kuendigungsdatum`)} appearance-none`}
-                            style={{ colorScheme: 'light', color: k.kuendigungsdatum ? '#111827' : '#6b7280', minHeight: '48px' }}
+                            style={{ colorScheme: 'light', color: k.kuendigungsdatum ? '#333333' : '#737373', minHeight: '48px' }}
                           />
-                          <span className="text-xs text-gray-400">Optional – ohne Angabe wird zum nächstmöglichen Termin gekündigt</span>
+                          <span className="text-xs text-ergo-mute">Optional – ohne Angabe wird zum nächstmöglichen Termin gekündigt</span>
                         </div>
                         <div className="flex flex-col gap-1">
-                          <label className="text-sm font-semibold text-gray-700">Hinweise (optional)</label>
-                          <textarea value={k.hinweise} onChange={e => updateKuendigung(i, 'hinweise', e.target.value)} rows={2} className="w-full p-3 border-2 border-gray-200 rounded-xl text-base outline-none focus:border-[#003781] resize-none" />
+                          <label className="text-sm font-semibold text-ergo-ink">Hinweise (optional)</label>
+                          <textarea value={k.hinweise} onChange={e => updateKuendigung(i, 'hinweise', e.target.value)} rows={2} className="w-full p-3 border border-ergo-line rounded text-base outline-none focus:border-ergo-red resize-none" />
                         </div>
                       </div>
                     ))}
-                    <button type="button" onClick={addKuendigung} className="w-full border-2 border-dashed border-[#003781] text-[#003781] rounded-xl p-3 font-semibold text-sm active:bg-blue-50 transition-colors min-h-[48px]">
+                    <button type="button" onClick={addKuendigung} className="w-full border-2 border-dashed border-ergo-red text-ergo-red rounded-lg p-3 font-semibold text-sm hover:bg-ergo-red-light transition-colors min-h-[48px]">
                       + Weitere Kündigung hinzufügen
                     </button>
                   </>
@@ -892,53 +902,53 @@ export default function DokumentePage() {
 
                 {selectedType === 'beraterwechsel' && (
                   <>
-                    <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide mt-2">Vertragsdaten</h3>
+                    <h3 className="ergo-eyebrow mb-0 mt-2">Vertragsdaten</h3>
                     {renderField('Geburtsdatum', 'geburtsdatum', 'date')}
                     {renderField('ERGO Kundennummer', 'ergoKundennummer', 'text', '', false)}
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Welche Verträge übertragen? *</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Welche Verträge übertragen? *</label>
                       <div className="flex flex-col gap-2 mt-1">
                         {beraterwechselVertraege.map(v => (
-                          <label key={v} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                          <label key={v} className="flex items-center gap-2 text-sm text-ergo-ink cursor-pointer">
                             <input
                               type="checkbox"
                               checked={formData.vertraegeUebertragen.includes(v)}
                               onChange={() => toggleArrayField('vertraegeUebertragen', v)}
-                              className="w-5 h-5 accent-[#E2001A] shrink-0 cursor-pointer"
+                              className="w-5 h-5 accent-ergo-red shrink-0 cursor-pointer"
                             />
                             {v}
                           </label>
                         ))}
                       </div>
-                      {errors.vertraegeUebertragen && <span className="text-xs text-red-500">{errors.vertraegeUebertragen}</span>}
+                      {errors.vertraegeUebertragen && <span className="text-xs text-ergo-red">{errors.vertraegeUebertragen}</span>}
                     </div>
                   </>
                 )}
 
                 {selectedType === 'aenderung' && (
                   <>
-                    <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide mt-2">Änderungsdaten</h3>
+                    <h3 className="ergo-eyebrow mb-0 mt-2">Änderungsdaten</h3>
                     {renderField('Versicherungsnummer', 'versicherungsnummer')}
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Was soll geändert werden? *</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Was soll geändert werden? *</label>
                       <div className="flex flex-col gap-2 mt-1">
                         {aenderungsOptionen.map(opt => (
-                          <label key={opt} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                          <label key={opt} className="flex items-center gap-2 text-sm text-ergo-ink cursor-pointer">
                             <input
                               type="checkbox"
                               checked={formData.aenderungen.includes(opt)}
                               onChange={() => toggleArrayField('aenderungen', opt)}
-                              className="w-5 h-5 accent-[#E2001A] shrink-0 cursor-pointer"
+                              className="w-5 h-5 accent-ergo-red shrink-0 cursor-pointer"
                             />
                             {opt}
                           </label>
                         ))}
                       </div>
-                      {errors.aenderungen && <span className="text-xs text-red-500">{errors.aenderungen}</span>}
+                      {errors.aenderungen && <span className="text-xs text-ergo-red">{errors.aenderungen}</span>}
                     </div>
                     {formData.aenderungen.includes('Adresse') && (
-                      <div className="bg-blue-50 rounded-xl p-4 flex flex-col gap-3">
-                        <span className="text-xs font-bold text-[#003781]">Neue Adresse</span>
+                      <div className="bg-ergo-gray rounded-lg p-4 flex flex-col gap-3">
+                        <span className="text-xs font-bold text-ergo-red">Neue Adresse</span>
                         {renderField('Neue Straße + Hausnummer', 'neueStrasse')}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {renderField('Neue PLZ', 'neuePlz')}
@@ -947,8 +957,8 @@ export default function DokumentePage() {
                       </div>
                     )}
                     {formData.aenderungen.includes('IBAN/Bankverbindung') && (
-                      <div className="bg-blue-50 rounded-xl p-4 flex flex-col gap-3">
-                        <span className="text-xs font-bold text-[#003781]">Neue Bankverbindung</span>
+                      <div className="bg-ergo-gray rounded-lg p-4 flex flex-col gap-3">
+                        <span className="text-xs font-bold text-ergo-red">Neue Bankverbindung</span>
                         {renderField('Kontoinhaber', 'kontoinhaber')}
                         {renderField('Neue IBAN', 'neueIban')}
                         {renderField('BIC', 'bic')}
@@ -956,35 +966,35 @@ export default function DokumentePage() {
                       </div>
                     )}
                     {formData.aenderungen.includes('E-Mail-Adresse') && (
-                      <div className="bg-blue-50 rounded-xl p-4 flex flex-col gap-3">
-                        <span className="text-xs font-bold text-[#003781]">Neue E-Mail</span>
+                      <div className="bg-ergo-gray rounded-lg p-4 flex flex-col gap-3">
+                        <span className="text-xs font-bold text-ergo-red">Neue E-Mail</span>
                         {renderField('Neue E-Mail-Adresse', 'neueEmail', 'email', '', true, { inputMode: 'email' as any, autoComplete: 'email', enterKeyHint: 'done' as any })}
                       </div>
                     )}
                     {formData.aenderungen.includes('Telefonnummer') && (
-                      <div className="bg-blue-50 rounded-xl p-4 flex flex-col gap-3">
-                        <span className="text-xs font-bold text-[#003781]">Neue Telefonnummer</span>
+                      <div className="bg-ergo-gray rounded-lg p-4 flex flex-col gap-3">
+                        <span className="text-xs font-bold text-ergo-red">Neue Telefonnummer</span>
                         {renderField('Neue Telefonnummer', 'neueTelefon', 'tel', '', true, { inputMode: 'tel' as any, autoComplete: 'tel', enterKeyHint: 'done' as any })}
                       </div>
                     )}
                     {formData.aenderungen.includes('Fahrzeugdaten') && (
-                      <div className="bg-blue-50 rounded-xl p-4 flex flex-col gap-3">
-                        <span className="text-xs font-bold text-[#003781]">Fahrzeugdaten</span>
+                      <div className="bg-ergo-gray rounded-lg p-4 flex flex-col gap-3">
+                        <span className="text-xs font-bold text-ergo-red">Fahrzeugdaten</span>
                         {renderField('Kennzeichen', 'kennzeichen')}
                         {renderField('Fahrzeugtyp', 'fahrzeugtyp')}
                         {renderField('Erstzulassung', 'erstzulassung', 'date')}
                       </div>
                     )}
                     {formData.aenderungen.includes('Sonstiges') && (
-                      <div className="bg-blue-50 rounded-xl p-4 flex flex-col gap-3">
-                        <span className="text-xs font-bold text-[#003781]">Sonstiges</span>
+                      <div className="bg-ergo-gray rounded-lg p-4 flex flex-col gap-3">
+                        <span className="text-xs font-bold text-ergo-red">Sonstiges</span>
                         <div className="flex flex-col gap-1">
-                          <label className="text-sm font-semibold text-gray-700">Freitext</label>
+                          <label className="text-sm font-semibold text-ergo-ink">Freitext</label>
                           <textarea
                             value={formData.sonstigesText}
                             onChange={e => updateField('sonstigesText', e.target.value)}
                             rows={3}
-                            className="w-full p-3 border-2 border-gray-200 rounded-xl text-base outline-none focus:border-[#003781] resize-none"
+                            className="w-full p-3 border border-ergo-line rounded text-base outline-none focus:border-ergo-red resize-none"
                           />
                         </div>
                       </div>
@@ -994,7 +1004,7 @@ export default function DokumentePage() {
 
                 {selectedType === 'vollmacht' && (
                   <>
-                    <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide mt-2">Vollmacht & SEPA-Daten</h3>
+                    <h3 className="ergo-eyebrow mb-0 mt-2">Vollmacht & SEPA-Daten</h3>
                     {renderField('Geburtsdatum', 'geburtsdatum', 'date')}
                     {renderField('IBAN', 'iban', 'text', 'DE89 3704 0044 0532 0130 00')}
                     {renderField('Kontoinhaber', 'kontoinhaber')}
@@ -1005,23 +1015,23 @@ export default function DokumentePage() {
 
                 {selectedType === 'upload' && (
                   <>
-                    <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide mt-2">Versicherungsdaten</h3>
+                    <h3 className="ergo-eyebrow mb-0 mt-2">Versicherungsdaten</h3>
                     {renderField('Versicherungsnummer', 'versicherungsnummer', 'text', 'z.B. 12345678')}
                     {renderField('Schadennummer', 'schadennummer', 'text', 'Falls vorhanden', false)}
 
-                    <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide mt-2">Beschreibung</h3>
+                    <h3 className="ergo-eyebrow mb-0 mt-2">Beschreibung</h3>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-gray-700">Worum handelt es sich? (optional)</label>
+                      <label className="text-sm font-semibold text-ergo-ink">Worum handelt es sich? (optional)</label>
                       <textarea
                         value={formData.uploadBeschreibung}
                         onChange={e => updateField('uploadBeschreibung', e.target.value)}
                         rows={3}
                         placeholder="z.B. Zahnarztrechnung vom 15.01., Reparaturrechnung KFZ..."
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl text-base outline-none focus:border-[#003781] resize-none"
+                        className="w-full p-3 border border-ergo-line rounded text-base outline-none focus:border-ergo-red resize-none"
                       />
                     </div>
 
-                    <h3 className="text-sm font-bold text-[#003781] uppercase tracking-wide mt-2">Dateien hochladen *</h3>
+                    <h3 className="ergo-eyebrow mb-0 mt-2">Dateien hochladen *</h3>
                     <div className="flex flex-col gap-3">
                       <input
                         ref={fileInputRef}
@@ -1035,26 +1045,22 @@ export default function DokumentePage() {
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploadFiles.length >= 10}
-                        className="w-full border-2 border-dashed border-[#003781] text-[#003781] rounded-xl p-6 flex flex-col items-center gap-2 active:bg-blue-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="w-full border-2 border-dashed border-ergo-red text-ergo-red rounded-lg p-6 flex flex-col items-center gap-2 hover:bg-ergo-red-light transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                       >
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="17 8 12 3 7 8" />
-                          <line x1="12" y1="3" x2="12" y2="15" />
-                        </svg>
+                        <Upload className="w-8 h-8" />
                         <span className="font-semibold text-sm">Fotos oder PDFs auswählen</span>
-                        <span className="text-xs text-gray-400">Max. 10 Dateien, je max. 10 MB</span>
+                        <span className="text-xs text-ergo-mute">Max. 10 Dateien, je max. 10 MB</span>
                       </button>
 
-                      <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-start gap-2">
-                        <span className="text-base shrink-0 mt-0.5">💡</span>
-                        <p className="text-xs text-gray-600">
+                      <div className="bg-ergo-gray border border-ergo-line rounded-lg p-3 flex items-start gap-2">
+                        <Info className="w-4 h-4 text-ergo-red shrink-0 mt-0.5" />
+                        <p className="text-xs text-ergo-stone">
                           Mehr als 10 Dateien? Senden Sie diese bitte direkt per{' '}
                           <a
                             href={`https://wa.me/4915566771019?text=${encodeURIComponent('Hallo Herr Stübe, ich möchte Ihnen mehrere Rechnungen/Belege zusenden.')}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[#25d366] font-semibold underline"
+                            className="text-[#1da851] font-semibold underline"
                           >
                             WhatsApp
                           </a>.
@@ -1064,44 +1070,44 @@ export default function DokumentePage() {
                       {uploadFiles.length > 0 && (
                         <div className="flex flex-col gap-2">
                           {uploadFiles.map((uf, i) => (
-                            <div key={i} className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-3">
+                            <div key={i} className="flex items-center gap-3 ergo-card p-3">
                               {uf.preview ? (
-                                <img src={uf.preview} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" />
+                                <img src={uf.preview} alt="" className="w-12 h-12 rounded object-cover shrink-0" />
                               ) : (
-                                <div className="w-12 h-12 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
-                                  <span className="text-lg">📄</span>
-                                </div>
+                                <span className="ergo-icon-disc w-12 h-12 shrink-0">
+                                  <FileText className="w-5 h-5" />
+                                </span>
                               )}
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-gray-900 truncate">{uf.file.name}</p>
-                                <p className="text-xs text-gray-400">{(uf.file.size / 1024).toFixed(0)} KB</p>
+                                <p className="text-sm font-medium text-ergo-ink truncate">{uf.file.name}</p>
+                                <p className="text-xs text-ergo-mute">{(uf.file.size / 1024).toFixed(0)} KB</p>
                               </div>
                               <button
                                 type="button"
                                 onClick={() => removeFile(i)}
-                                className="w-10 h-10 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-red-500 hover:bg-red-50 transition-colors shrink-0 shadow-sm"
+                                className="w-10 h-10 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-ergo-red hover:bg-ergo-red-light transition-colors shrink-0"
                                 aria-label="Datei entfernen"
                               >
-                                ✕
+                                <X className="w-4 h-4" />
                               </button>
                             </div>
                           ))}
                         </div>
                       )}
-                      {errors.files && <span className="text-xs text-red-500">{errors.files}</span>}
+                      {errors.files && <span className="text-xs text-ergo-red">{errors.files}</span>}
                     </div>
 
-                    <div className="bg-gray-50 rounded-xl p-4 mt-2">
-                      <label className="flex items-start gap-2 text-sm text-gray-700 cursor-pointer">
+                    <div className="bg-ergo-gray rounded-lg p-4 mt-2">
+                      <label className="flex items-start gap-2 text-sm text-ergo-ink cursor-pointer">
                         <input
                           type="checkbox"
                           checked={confirm1}
                           onChange={e => { setConfirm1(e.target.checked); if (errors.confirm1) setErrors(prev => { const n = { ...prev }; delete n.confirm1; return n; }); }}
-                          className="w-5 h-5 accent-[#E2001A] shrink-0 mt-0.5"
+                          className="w-5 h-5 accent-ergo-red shrink-0 mt-0.5"
                         />
                         <span>Ich bin einverstanden, dass meine Daten und Dokumente zur Bearbeitung meines Anliegens verarbeitet werden (DSGVO).</span>
                       </label>
-                      {errors.confirm1 && <p className="text-xs text-red-500 mt-1 ml-7">{errors.confirm1}</p>}
+                      {errors.confirm1 && <p className="text-xs text-ergo-red mt-1 ml-7">{errors.confirm1}</p>}
                     </div>
                   </>
                 )}
@@ -1109,7 +1115,7 @@ export default function DokumentePage() {
                 {selectedType !== 'upload' ? (
                   <button
                     onClick={handleStep2Next}
-                    className="w-full bg-ergo-red text-white font-semibold text-base py-4 rounded-xl min-h-[48px] active:scale-[0.97] transition-transform mt-2"
+                    className="ergo-btn ergo-btn--primary w-full mt-2"
                   >
                     Weiter zur Unterschrift →
                   </button>
@@ -1123,15 +1129,15 @@ export default function DokumentePage() {
                       handleUploadSubmit();
                     }}
                     disabled={isSubmitting}
-                    className="w-full bg-ergo-red text-white font-semibold text-base py-4 rounded-xl min-h-[48px] active:scale-[0.97] transition-transform mt-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="ergo-btn ergo-btn--primary w-full mt-2"
                   >
                     {isSubmitting ? (
                       <>
-                        <span className="inline-block w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         Wird gesendet...
                       </>
                     ) : (
-                      '📨 Dokumente jetzt einreichen'
+                      'Dokumente jetzt einreichen'
                     )}
                   </button>
                 )}
@@ -1141,49 +1147,49 @@ export default function DokumentePage() {
 
           {step === 3 && (
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-1">Unterschrift & Absenden</h2>
-              <p className="text-sm text-gray-500 mb-5">Bitte unterschreiben Sie im Feld und bestätigen Sie die Angaben.</p>
+              <h2 className="text-[22px] mb-1">Unterschrift & Absenden</h2>
+              <p className="text-sm text-ergo-stone mb-5">Bitte unterschreiben Sie im Feld und bestätigen Sie die Angaben.</p>
 
-              <div className="flex flex-col gap-4">
+              <div className="ergo-card p-5 sm:p-6 flex flex-col gap-4">
                 <div>
-                  <label className="text-sm font-semibold text-gray-700 mb-2 block">Ihre Unterschrift *</label>
+                  <label className="text-sm font-semibold text-ergo-ink mb-2 block">Ihre Unterschrift *</label>
                   <canvas
                     ref={canvasRef}
-                    className="w-full border-2 border-dashed border-[#003781] rounded-xl bg-white touch-none"
+                    className="w-full border-2 border-dashed border-ergo-line rounded-lg bg-white touch-none"
                     style={{ height: 180 }}
                   />
-                  <button onClick={clearSignature} className="text-sm text-[#003781] mt-2 font-medium">
-                    🗑️ Unterschrift löschen
+                  <button onClick={clearSignature} className="text-sm text-ergo-red mt-2 font-bold inline-flex items-center gap-1">
+                    <Trash2 className="w-4 h-4" /> Unterschrift löschen
                   </button>
-                  {errors.signature && <p className="text-xs text-red-500 mt-1">{errors.signature}</p>}
+                  {errors.signature && <p className="text-xs text-ergo-red mt-1">{errors.signature}</p>}
                 </div>
 
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-sm text-gray-700 font-medium mb-3">Datum: {todayFormatted()}</p>
+                <div className="bg-ergo-gray rounded-lg p-4">
+                  <p className="text-sm text-ergo-ink font-medium mb-3">Datum: {todayFormatted()}</p>
 
-                  <label className="flex items-start gap-2 text-sm text-gray-700 cursor-pointer mb-3">
+                  <label className="flex items-start gap-2 text-sm text-ergo-ink cursor-pointer mb-3">
                     <input
                       type="checkbox"
                       checked={confirm1}
                       onChange={e => { setConfirm1(e.target.checked); if (errors.confirm1) setErrors(prev => { const n = { ...prev }; delete n.confirm1; return n; }); }}
-                      className="w-5 h-5 accent-[#E2001A] shrink-0 mt-0.5"
+                      className="w-5 h-5 accent-ergo-red shrink-0 mt-0.5"
                     />
                     <span>Ich bestätige, dass alle Angaben korrekt und vollständig sind.</span>
                   </label>
-                  {errors.confirm1 && <p className="text-xs text-red-500 mb-2 ml-7">{errors.confirm1}</p>}
+                  {errors.confirm1 && <p className="text-xs text-ergo-red mb-2 ml-7">{errors.confirm1}</p>}
 
-                  <label className="flex items-start gap-2 text-sm text-gray-700 cursor-pointer mb-3">
+                  <label className="flex items-start gap-2 text-sm text-ergo-ink cursor-pointer mb-3">
                     <input
                       type="checkbox"
                       checked={confirm2}
                       onChange={e => { setConfirm2(e.target.checked); if (errors.confirm2) setErrors(prev => { const n = { ...prev }; delete n.confirm2; return n; }); }}
-                      className="w-5 h-5 accent-[#E2001A] shrink-0 mt-0.5"
+                      className="w-5 h-5 accent-ergo-red shrink-0 mt-0.5"
                     />
                     <span>Ich bin einverstanden, dass dieses Dokument elektronisch verarbeitet und weitergeleitet wird.</span>
                   </label>
-                  {errors.confirm2 && <p className="text-xs text-red-500 mb-2 ml-7">{errors.confirm2}</p>}
+                  {errors.confirm2 && <p className="text-xs text-ergo-red mb-2 ml-7">{errors.confirm2}</p>}
 
-                  <p className="text-xs text-gray-400 mt-2">
+                  <p className="text-xs text-ergo-mute mt-2">
                     Ihre Daten werden gemäß DSGVO vertraulich behandelt und ausschließlich zur Bearbeitung Ihres Anliegens verwendet.
                   </p>
                 </div>
@@ -1191,15 +1197,15 @@ export default function DokumentePage() {
                 <button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="w-full bg-ergo-red text-white font-semibold text-base py-4 rounded-xl min-h-[48px] active:scale-[0.97] transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="ergo-btn ergo-btn--primary w-full"
                 >
                   {isSubmitting ? (
                     <>
-                      <span className="inline-block w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       Wird gesendet...
                     </>
                   ) : (
-                    '📨 Dokument jetzt absenden'
+                    'Dokument jetzt absenden'
                   )}
                 </button>
               </div>
@@ -1209,32 +1215,21 @@ export default function DokumentePage() {
           {step === 4 && (
             <div className="text-center py-4">
               {submitError ? (
-                <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-6 text-left">
-                  <p className="text-red-700 font-semibold text-sm mb-1">⚠️ Fehler beim Übermitteln</p>
-                  <p className="text-red-600 text-sm">{submitError}</p>
-                  <p className="text-red-500 text-xs mt-2">Das PDF wurde trotzdem heruntergeladen. Sie können es auch per WhatsApp senden.</p>
+                <div className="bg-ergo-red-light border border-ergo-red/30 rounded-lg p-4 mb-6 text-left">
+                  <p className="text-ergo-red font-semibold text-sm mb-1 flex items-center gap-2"><AlertTriangle className="w-4 h-4 shrink-0" /> Fehler beim Übermitteln</p>
+                  <p className="text-ergo-red text-sm">{submitError}</p>
+                  <p className="text-ergo-red text-xs mt-2">Das PDF wurde trotzdem heruntergeladen. Sie können es auch per WhatsApp senden.</p>
                 </div>
               ) : (
-                <>
-                  <div className="w-16 h-16 mx-auto mb-4">
-                    <svg viewBox="0 0 52 52" className="w-full h-full">
-                      <circle cx="26" cy="26" r="24" fill="none" stroke="#22c55e" strokeWidth="2"
-                        strokeDasharray="150" strokeDashoffset="150"
-                        style={{ animation: 'dokStroke 0.6s cubic-bezier(0.65,0,0.45,1) forwards' }} />
-                      <path fill="none" stroke="#22c55e" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
-                        d="M14 27l8 8 16-16"
-                        strokeDasharray="40" strokeDashoffset="40"
-                        style={{ animation: 'dokStroke 0.3s cubic-bezier(0.65,0,0.45,1) 0.4s forwards' }} />
-                    </svg>
-                  </div>
-                  <style>{`@keyframes dokStroke { to { stroke-dashoffset: 0; } }`}</style>
-                </>
+                <div className="w-16 h-16 mx-auto mb-4 bg-ergo-check rounded-full flex items-center justify-center">
+                  <Check className="w-8 h-8 text-white" />
+                </div>
               )}
 
-              <h2 className="text-xl font-bold text-gray-900 mb-2">
-                {submitError ? (selectedType === 'upload' ? 'Fehler beim Senden' : 'PDF wurde gespeichert') : '✅ Dokument erfolgreich übermittelt!'}
+              <h2 className="text-[22px] mb-2">
+                {submitError ? (selectedType === 'upload' ? 'Fehler beim Senden' : 'PDF wurde gespeichert') : 'Dokument erfolgreich übermittelt!'}
               </h2>
-              <p className="text-sm text-gray-500 mb-6">
+              <p className="text-sm text-ergo-stone mb-6">
                 {submitError
                   ? (selectedType === 'upload'
                     ? 'Bitte versuchen Sie es erneut oder senden Sie die Dokumente per WhatsApp.'
@@ -1244,37 +1239,37 @@ export default function DokumentePage() {
                     : 'Morino Stübe hat Ihre Unterlagen erhalten und meldet sich bei Bedarf bei Ihnen.')}
               </p>
 
-              <div className="bg-blue-50 rounded-xl p-4 text-left mb-6">
+              <div className="ergo-card p-4 text-left mb-6">
                 <div className="flex flex-col gap-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Dokumenttyp</span>
-                    <span className="font-semibold text-gray-900">{docTypeLabels[selectedType!]}</span>
+                    <span className="text-ergo-stone">Dokumenttyp</span>
+                    <span className="font-semibold text-ergo-ink">{docTypeLabels[selectedType!]}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Name</span>
-                    <span className="font-semibold text-gray-900">{formData.vorname} {formData.nachname}</span>
+                    <span className="text-ergo-stone">Name</span>
+                    <span className="font-semibold text-ergo-ink">{formData.vorname} {formData.nachname}</span>
                   </div>
                   {selectedType === 'kuendigung' && kuendigungen.length > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Kündigungen</span>
-                      <span className="font-semibold text-gray-900">{kuendigungen.length} Versicherung(en)</span>
+                      <span className="text-ergo-stone">Kündigungen</span>
+                      <span className="font-semibold text-ergo-ink">{kuendigungen.length} Versicherung(en)</span>
                     </div>
                   )}
                   {selectedType === 'upload' && formData.versicherungsnummer && (
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Versicherungsnr.</span>
-                      <span className="font-semibold text-gray-900">{formData.versicherungsnummer}</span>
+                      <span className="text-ergo-stone">Versicherungsnr.</span>
+                      <span className="font-semibold text-ergo-ink">{formData.versicherungsnummer}</span>
                     </div>
                   )}
                   {selectedType === 'upload' && uploadFiles.length > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Dateien</span>
-                      <span className="font-semibold text-gray-900">{uploadFiles.length} Datei(en)</span>
+                      <span className="text-ergo-stone">Dateien</span>
+                      <span className="font-semibold text-ergo-ink">{uploadFiles.length} Datei(en)</span>
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Eingereicht am</span>
-                    <span className="font-semibold text-gray-900">{todayFormatted()}</span>
+                    <span className="text-ergo-stone">Eingereicht am</span>
+                    <span className="font-semibold text-ergo-ink">{todayFormatted()}</span>
                   </div>
                 </div>
               </div>
@@ -1282,9 +1277,9 @@ export default function DokumentePage() {
               {pdfBytes && selectedType !== 'upload' && (
                 <button
                   onClick={() => downloadPdf(pdfBytes, `${docTypeLabels[selectedType!].replace(/\s/g, '_')}_${formData.nachname}.pdf`)}
-                  className="w-full bg-[#003781] text-white font-semibold text-base py-4 rounded-xl min-h-[48px] active:scale-[0.97] transition-transform mb-3 flex items-center justify-center gap-2"
+                  className="ergo-btn ergo-btn--secondary w-full mb-3"
                 >
-                  📥 PDF erneut herunterladen
+                  <Download className="w-5 h-5" /> PDF erneut herunterladen
                 </button>
               )}
 
@@ -1292,16 +1287,16 @@ export default function DokumentePage() {
                 href={`https://wa.me/4915566771019?text=${encodeURIComponent(selectedType === 'upload' ? `Hallo Herr Stübe, ich habe soeben Rechnungen/Belege (VNR: ${formData.versicherungsnummer}) über Ihre Website eingereicht. Viele Grüße, ${formData.vorname} ${formData.nachname}` : `Hallo Herr Stübe, ich habe soeben ein ${docTypeLabels[selectedType!]} über Ihre Website eingereicht. Bitte um Bestätigung. Viele Grüße, ${formData.vorname} ${formData.nachname}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full bg-[#25d366] text-white font-semibold text-base py-4 rounded-xl min-h-[48px] active:scale-[0.97] transition-transform mb-3 flex items-center justify-center gap-2"
+                className="ergo-btn ergo-btn--whatsapp w-full mb-3"
               >
-                💬 WhatsApp schreiben
+                <MessageCircle className="w-5 h-5" /> WhatsApp schreiben
               </a>
 
               <Link
                 href="/"
-                className="w-full border-2 border-[#003781] text-[#003781] font-semibold text-base py-4 rounded-xl min-h-[48px] transition-colors hover:bg-blue-50 flex items-center justify-center gap-2"
+                className="ergo-btn ergo-btn--tertiary w-full"
               >
-                ← Zurück zur Startseite
+                <ChevronLeft className="w-5 h-5" /> Zurück zur Startseite
               </Link>
             </div>
           )}

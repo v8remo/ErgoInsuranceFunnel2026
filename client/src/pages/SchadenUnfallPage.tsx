@@ -1,5 +1,9 @@
 import { useState, useRef, useCallback } from 'react';
 import { Link } from 'wouter';
+import {
+  Ambulance, Lock, Zap, Check, ChevronLeft, Upload, FileText, Camera, X,
+  ClipboardList, Pencil, MessageCircle, AlertTriangle, type LucideIcon,
+} from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -16,12 +20,12 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-sm font-semibold text-gray-700">
-        {label}{required && <span className="text-red-500 ml-0.5">*</span>}
+      <label className="text-sm font-semibold text-ergo-ink">
+        {label}{required && <span className="text-ergo-red ml-0.5">*</span>}
       </label>
-      {hint && <p className="text-xs text-gray-400 -mt-0.5">{hint}</p>}
+      {hint && <p className="text-xs text-ergo-mute -mt-0.5">{hint}</p>}
       {children}
-      {field && errors?.[field] && <span className="text-xs text-red-500">{errors[field]}</span>}
+      {field && errors?.[field] && <span className="text-xs text-ergo-red">{errors[field]}</span>}
     </div>
   );
 }
@@ -142,7 +146,7 @@ export default function SchadenUnfallPage() {
   };
 
   const inputCls = (field: string) =>
-    `w-full p-3 border-2 rounded-xl text-base outline-none transition-colors ${errors[field] ? 'border-red-500 bg-red-50' : 'border-gray-200 focus:border-[#003781]'}`;
+    `w-full p-3 border rounded text-base outline-none transition-colors ${errors[field] ? 'border-ergo-red bg-ergo-red-light' : 'border-ergo-line focus:border-ergo-red'}`;
 
   type StringFormKey = { [K in keyof FormData]: FormData[K] extends string ? K : never }[keyof FormData];
 
@@ -157,10 +161,8 @@ export default function SchadenUnfallPage() {
           key={opt.value}
           type="button"
           onClick={() => updateField(field, opt.value)}
-          className={`px-4 py-2 rounded-xl border-2 text-sm font-semibold transition-colors min-h-[44px] ${
-            formData[field] === opt.value
-              ? 'bg-[#003781] text-white border-[#003781]'
-              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+          className={`ergo-option px-4 py-2 text-sm font-semibold text-ergo-ink min-h-[44px] ${
+            formData[field] === opt.value ? 'selected' : ''
           }`}
         >
           {opt.label}
@@ -332,7 +334,7 @@ export default function SchadenUnfallPage() {
   const stepLabels = ['Persönliche Angaben', 'Unfalldaten', 'Gesundheit', 'Weitere Angaben', 'Dokumente & Absenden'];
 
   return (
-    <div className="ds-form-flow min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div className="min-h-screen bg-white" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <SEO
         title="Unfallschaden melden – ERGO Agentur Stübe Ganderkesee"
         description="Unfallversicherungsschaden bequem online melden. Strukturiertes Formular für Ihre ERGO Unfallversicherung – Agentur Morino Stübe, Ganderkesee."
@@ -348,19 +350,19 @@ export default function SchadenUnfallPage() {
               {step > 1 ? (
                 <button
                   onClick={() => goToStep(step - 1)}
-                  className="text-[#003781] font-semibold text-sm flex items-center gap-1 min-h-[44px]"
+                  className="text-ergo-red font-bold text-sm flex items-center gap-1 min-h-[44px]"
                 >
-                  ← Zurück
+                  <ChevronLeft className="w-4 h-4" /> Zurück
                 </button>
               ) : (
                 <div />
               )}
-              <span className="text-xs text-gray-500 font-medium">Schritt {step} von {TOTAL_STEPS} – {stepLabels[step - 1]}</span>
+              <span className="text-xs text-ergo-stone font-medium">Schritt {step} von {TOTAL_STEPS} – {stepLabels[step - 1]}</span>
             </div>
 
-            <div className="h-1.5 bg-gray-200 rounded-full mb-1 overflow-hidden">
+            <div className="h-1.5 bg-ergo-fog rounded-full mb-1 overflow-hidden">
               <div
-                className="h-full bg-[#E2001A] rounded-full transition-all duration-500 ease-out"
+                className="h-full bg-ergo-red rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -368,20 +370,20 @@ export default function SchadenUnfallPage() {
               {stepLabels.map((label, i) => (
                 <div
                   key={label}
-                  className={`text-[9px] font-medium ${i + 1 === step ? 'text-[#E2001A]' : i + 1 < step ? 'text-green-600' : 'text-gray-300'}`}
+                  className={`text-[9px] font-medium ${i + 1 === step ? 'text-ergo-red' : i + 1 < step ? 'text-ergo-check' : 'text-ergo-mute'}`}
                   style={{ width: '18%', textAlign: 'center' }}
                 >
-                  {i + 1 < step ? '✓' : i + 1 === step ? '●' : '○'}
+                  {i + 1 < step ? <Check className="w-3 h-3 mx-auto" /> : i + 1 === step ? '●' : '○'}
                 </div>
               ))}
             </div>
 
-            <div className="flex items-center justify-center gap-3 text-[11px] text-gray-400 mb-5">
-              <span>🔒 DSGVO-konform</span>
+            <div className="flex items-center justify-center gap-3 text-[11px] text-ergo-mute mb-5">
+              <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> DSGVO-konform</span>
               <span>·</span>
-              <span>⚡ Antwort in 24h</span>
+              <span className="flex items-center gap-1"><Zap className="w-3 h-3" /> Antwort in 24h</span>
               <span>·</span>
-              <span>✅ Kostenlos</span>
+              <span className="flex items-center gap-1"><Check className="w-3 h-3 text-ergo-check" /> Kostenlos</span>
             </div>
           </>
         )}
@@ -390,18 +392,22 @@ export default function SchadenUnfallPage() {
 
           {/* ======= STEP 1 ======= */}
           {step === 1 && (
-            <div className="flex flex-col gap-5">
+            <div className="ergo-card p-5 sm:p-6 flex flex-col gap-5">
               <div className="text-center mb-2">
-                <div className="text-4xl mb-2">🚑</div>
-                <h1 className="text-2xl font-extrabold text-gray-900 mb-1">Unfall melden</h1>
-                <p className="text-sm text-gray-500 max-w-sm mx-auto">
+                <span className="ergo-icon-disc mx-auto mb-3"><Ambulance className="w-5 h-5" /></span>
+                <p className="ergo-eyebrow">ERGO Agentur Stübe · Unfallversicherung</p>
+                <h1 className="text-[30px] md:text-[40px] leading-[1.25] mb-1">Unfall melden</h1>
+                <p className="text-sm text-ergo-stone max-w-sm mx-auto">
                   Füllen Sie das Formular vollständig aus – Ihr Berater Morino Stübe kümmert sich dann um alles Weitere.
                 </p>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 text-sm text-blue-800">
-                <strong>Wichtig:</strong> Bei schweren Verletzungen oder Notfällen rufen Sie bitte zuerst <strong>112</strong> an.
-                Die ERGO-Schaden-Hotline erreichen Sie kostenlos unter <strong>0800 3746-000</strong>.
+              <div className="bg-ergo-gray border border-ergo-line rounded-lg px-4 py-3 text-sm text-ergo-ink flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-ergo-red shrink-0 mt-0.5" />
+                <span>
+                  <strong>Wichtig:</strong> Bei schweren Verletzungen oder Notfällen rufen Sie bitte zuerst <strong>112</strong> an.
+                  Die ERGO-Schaden-Hotline erreichen Sie kostenlos unter <strong>0800 3746-000</strong>.
+                </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -436,23 +442,23 @@ export default function SchadenUnfallPage() {
                       key={opt.value}
                       type="button"
                       onClick={() => updateField('verletzterPersonenkreis', opt.value)}
-                      className={`px-4 py-3 rounded-xl border-2 text-sm font-semibold text-left transition-colors min-h-[44px] ${
+                      className={`ergo-option px-4 py-3 text-sm font-semibold text-ergo-ink text-left min-h-[44px] ${
                         formData.verletzterPersonenkreis === opt.value
-                          ? 'bg-[#003781] text-white border-[#003781]'
-                          : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                          ? 'selected'
+                          : ''
                       }`}
                     >
                       {opt.label}
                     </button>
                   ))}
                 </div>
-                {errors.verletzterPersonenkreis && <span className="text-xs text-red-500">{errors.verletzterPersonenkreis}</span>}
+                {errors.verletzterPersonenkreis && <span className="text-xs text-ergo-red">{errors.verletzterPersonenkreis}</span>}
               </Field>
 
               {formData.verletzterPersonenkreis === 'andere' && (
                 <Field errors={errors} label="Name der verletzten Person" field="verletzterName" required>
                   <input type="text" value={formData.verletzterName} onChange={e => updateField('verletzterName', e.target.value)} className={inputCls('verletzterName')} placeholder="Vor- und Nachname" />
-                  {errors.verletzterName && <span className="text-xs text-red-500">{errors.verletzterName}</span>}
+                  {errors.verletzterName && <span className="text-xs text-ergo-red">{errors.verletzterName}</span>}
                 </Field>
               )}
 
@@ -466,7 +472,7 @@ export default function SchadenUnfallPage() {
 
               <button
                 onClick={() => handleNext(1)}
-                className="w-full bg-[#E2001A] text-white font-bold py-4 rounded-xl text-base hover:bg-[#c00017] transition-colors min-h-[52px]"
+                className="ergo-btn ergo-btn--primary w-full"
               >
                 Weiter zu Schritt 2 →
               </button>
@@ -475,10 +481,10 @@ export default function SchadenUnfallPage() {
 
           {/* ======= STEP 2 ======= */}
           {step === 2 && (
-            <div className="flex flex-col gap-5">
+            <div className="ergo-card p-5 sm:p-6 flex flex-col gap-5">
               <div className="mb-1">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Unfalldaten</h2>
-                <p className="text-sm text-gray-500">Bitte schildern Sie den Unfall so genau wie möglich.</p>
+                <h2 className="text-[22px] mb-1">Unfalldaten</h2>
+                <p className="text-sm text-ergo-stone">Bitte schildern Sie den Unfall so genau wie möglich.</p>
               </div>
 
               <Field errors={errors} label="Wann ist der Unfall passiert?" field="unfalldatum">
@@ -490,12 +496,12 @@ export default function SchadenUnfallPage() {
                   {formData.datumBekannt === 'ja' ? (
                     <>
                       <input type="date" value={formData.unfalldatum} onChange={e => updateField('unfalldatum', e.target.value)} max={new Date().toISOString().split('T')[0]} className={inputCls('unfalldatum')} />
-                      {errors.unfalldatum && <span className="text-xs text-red-500">{errors.unfalldatum}</span>}
+                      {errors.unfalldatum && <span className="text-xs text-ergo-red">{errors.unfalldatum}</span>}
                     </>
                   ) : (
                     <>
                       <input type="text" value={formData.unfalldatumUngefaehr} onChange={e => updateField('unfalldatumUngefaehr', e.target.value)} className={inputCls('unfalldatumUngefaehr')} placeholder="z.B. Anfang März 2025, nachmittags" />
-                      {errors.unfalldatumUngefaehr && <span className="text-xs text-red-500">{errors.unfalldatumUngefaehr}</span>}
+                      {errors.unfalldatumUngefaehr && <span className="text-xs text-ergo-red">{errors.unfalldatumUngefaehr}</span>}
                     </>
                   )}
                 </div>
@@ -536,7 +542,7 @@ export default function SchadenUnfallPage() {
                   <option value="Haushaltsunfall">Haushaltsunfall</option>
                   <option value="Sonstiges">Sonstiges</option>
                 </select>
-                {errors.unfallArt && <span className="text-xs text-red-500">{errors.unfallArt}</span>}
+                {errors.unfallArt && <span className="text-xs text-ergo-red">{errors.unfallArt}</span>}
               </Field>
 
               <Field errors={errors} label="Hauptursache des Unfalls" field="unfallUrsache" required>
@@ -549,7 +555,7 @@ export default function SchadenUnfallPage() {
                   <option value="Fremdeinwirkung">Fremdeinwirkung</option>
                   <option value="Sonstiges">Sonstiges</option>
                 </select>
-                {errors.unfallUrsache && <span className="text-xs text-red-500">{errors.unfallUrsache}</span>}
+                {errors.unfallUrsache && <span className="text-xs text-ergo-red">{errors.unfallUrsache}</span>}
               </Field>
 
               <Field errors={errors} label="Schilderung des Unfallhergangs" field="unfallhergang" required>
@@ -560,7 +566,7 @@ export default function SchadenUnfallPage() {
                   className={inputCls('unfallhergang')}
                   placeholder="Bitte beschreiben Sie genau, wie es zu dem Unfall kam und welche Verletzungen entstanden sind …"
                 />
-                <div className="text-xs text-gray-400 text-right">{formData.unfallhergang.length} Zeichen (mind. 30)</div>
+                <div className="text-xs text-ergo-mute text-right">{formData.unfallhergang.length} Zeichen (mind. 30)</div>
               </Field>
 
               <Field errors={errors} label="Wurde der Unfall bei der Polizei gemeldet?">
@@ -572,7 +578,7 @@ export default function SchadenUnfallPage() {
 
               <button
                 onClick={() => handleNext(2)}
-                className="w-full bg-[#E2001A] text-white font-bold py-4 rounded-xl text-base hover:bg-[#c00017] transition-colors min-h-[52px]"
+                className="ergo-btn ergo-btn--primary w-full"
               >
                 Weiter zu Schritt 3 →
               </button>
@@ -581,10 +587,10 @@ export default function SchadenUnfallPage() {
 
           {/* ======= STEP 3 ======= */}
           {step === 3 && (
-            <div className="flex flex-col gap-5">
+            <div className="ergo-card p-5 sm:p-6 flex flex-col gap-5">
               <div className="mb-1">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Gesundheitsfragen</h2>
-                <p className="text-sm text-gray-500">Diese Angaben werden für die Schadenbearbeitung benötigt. Alle Felder sind freiwillig, aber hilfreich.</p>
+                <h2 className="text-[22px] mb-1">Gesundheitsfragen</h2>
+                <p className="text-sm text-ergo-stone">Diese Angaben werden für die Schadenbearbeitung benötigt. Alle Felder sind freiwillig, aber hilfreich.</p>
               </div>
 
               <Field errors={errors} label="Hat die verletzte Person einen anerkannten Pflegegrad?">
@@ -631,20 +637,20 @@ export default function SchadenUnfallPage() {
                   <div className="mt-2 flex flex-col gap-2">
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <label className="text-xs text-gray-500 mb-1 block">AU von</label>
+                        <label className="text-xs text-ergo-stone mb-1 block">AU von</label>
                         <input type="date" value={formData.auVon} onChange={e => updateField('auVon', e.target.value)} className={inputCls('auVon')} />
                       </div>
                       <div>
-                        <label className="text-xs text-gray-500 mb-1 block">AU bis</label>
+                        <label className="text-xs text-ergo-stone mb-1 block">AU bis</label>
                         <input type="date" value={formData.auBis} onChange={e => updateField('auBis', e.target.value)} className={inputCls('auBis')} disabled={formData.auNochAktuell === 'ja'} />
                       </div>
                     </div>
-                    <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-ergo-ink">
                       <input
                         type="checkbox"
                         checked={formData.auNochAktuell === 'ja'}
                         onChange={e => updateField('auNochAktuell', e.target.checked ? 'ja' : 'nein')}
-                        className="w-4 h-4 accent-[#003781]"
+                        className="w-4 h-4 accent-ergo-red"
                       />
                       AU dauert noch an (kein Enddatum)
                     </label>
@@ -688,7 +694,7 @@ export default function SchadenUnfallPage() {
 
               <button
                 onClick={() => handleNext(3)}
-                className="w-full bg-[#E2001A] text-white font-bold py-4 rounded-xl text-base hover:bg-[#c00017] transition-colors min-h-[52px]"
+                className="ergo-btn ergo-btn--primary w-full"
               >
                 Weiter zu Schritt 4 →
               </button>
@@ -697,10 +703,10 @@ export default function SchadenUnfallPage() {
 
           {/* ======= STEP 4 ======= */}
           {step === 4 && (
-            <div className="flex flex-col gap-5">
+            <div className="ergo-card p-5 sm:p-6 flex flex-col gap-5">
               <div className="mb-1">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Weitere Angaben & Bankverbindung</h2>
-                <p className="text-sm text-gray-500">Fast geschafft! Nur noch wenige Angaben.</p>
+                <h2 className="text-[22px] mb-1">Weitere Angaben & Bankverbindung</h2>
+                <p className="text-sm text-ergo-stone">Fast geschafft! Nur noch wenige Angaben.</p>
               </div>
 
               <Field errors={errors} label="Sind Ihnen Kosten für ärztliche Nachweise entstanden?" hint="z.B. für Atteste, Bescheinigungen oder Befundberichte">
@@ -723,7 +729,7 @@ export default function SchadenUnfallPage() {
               </Field>
 
               <div>
-                <label className="text-sm font-semibold text-gray-700 block mb-2">
+                <label className="text-sm font-semibold text-ergo-ink block mb-2">
                   Wohin soll eine Versicherungsleistung überwiesen werden?
                 </label>
                 <div className="flex flex-col gap-2">
@@ -736,10 +742,10 @@ export default function SchadenUnfallPage() {
                       key={opt.value}
                       type="button"
                       onClick={() => updateField('bankverbindung', opt.value)}
-                      className={`px-4 py-3 rounded-xl border-2 text-sm font-semibold text-left transition-colors min-h-[44px] ${
+                      className={`ergo-option px-4 py-3 text-sm font-semibold text-ergo-ink text-left min-h-[44px] ${
                         formData.bankverbindung === opt.value
-                          ? 'bg-[#003781] text-white border-[#003781]'
-                          : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                          ? 'selected'
+                          : ''
                       }`}
                     >
                       {opt.label}
@@ -756,14 +762,14 @@ export default function SchadenUnfallPage() {
                       placeholder="DE00 0000 0000 0000 0000 00"
                       maxLength={27}
                     />
-                    {errors.iban && <span className="text-xs text-red-500 block mt-1">{errors.iban}</span>}
+                    {errors.iban && <span className="text-xs text-ergo-red block mt-1">{errors.iban}</span>}
                   </div>
                 )}
               </div>
 
               <button
                 onClick={() => handleNext(4)}
-                className="w-full bg-[#E2001A] text-white font-bold py-4 rounded-xl text-base hover:bg-[#c00017] transition-colors min-h-[52px]"
+                className="ergo-btn ergo-btn--primary w-full"
               >
                 Weiter zu Schritt 5 →
               </button>
@@ -772,17 +778,17 @@ export default function SchadenUnfallPage() {
 
           {/* ======= STEP 5 ======= */}
           {step === 5 && (
-            <div className="flex flex-col gap-5">
+            <div className="ergo-card p-5 sm:p-6 flex flex-col gap-5">
               <div className="mb-1">
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Dokumente hochladen & Absenden</h2>
-                <p className="text-sm text-gray-500">Laden Sie relevante Dokumente hoch und senden Sie Ihre Schadensmeldung ab.</p>
+                <h2 className="text-[22px] mb-1">Dokumente hochladen & Absenden</h2>
+                <p className="text-sm text-ergo-stone">Laden Sie relevante Dokumente hoch und senden Sie Ihre Schadensmeldung ab.</p>
               </div>
 
               <div>
-                <label className="text-sm font-semibold text-gray-700 block mb-2">
-                  Dokumente hochladen <span className="text-gray-400 font-normal">(optional, bis zu 5 Dateien)</span>
+                <label className="text-sm font-semibold text-ergo-ink block mb-2">
+                  Dokumente hochladen <span className="text-ergo-mute font-normal">(optional, bis zu 5 Dateien)</span>
                 </label>
-                <p className="text-xs text-gray-400 mb-3">
+                <p className="text-xs text-ergo-mute mb-3">
                   Ärztliche Berichte, Atteste, Fotos der Verletzung, Tagegeldbescheinigungen, Schweigepflichtentbindung · Max. 10 MB je Datei · PDF, JPG, PNG
                 </p>
 
@@ -791,11 +797,11 @@ export default function SchadenUnfallPage() {
                   onDragLeave={() => setIsDragOver(false)}
                   onDrop={e => { e.preventDefault(); setIsDragOver(false); handleFiles(e.dataTransfer.files); }}
                   onClick={() => fileInputRef.current?.click()}
-                  className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors ${isDragOver ? 'border-[#003781] bg-blue-50' : 'border-gray-300 hover:border-gray-400 bg-white'}`}
+                  className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${isDragOver ? 'border-ergo-red bg-ergo-red-light' : 'border-ergo-line hover:border-ergo-red bg-white'}`}
                 >
-                  <div className="text-3xl mb-2">📎</div>
-                  <p className="text-sm font-semibold text-gray-700">Dateien hier ablegen</p>
-                  <p className="text-xs text-gray-400 mt-1">oder klicken zum Auswählen</p>
+                  <Upload className="w-7 h-7 text-ergo-red mx-auto mb-2" />
+                  <p className="text-sm font-semibold text-ergo-ink">Dateien hier ablegen</p>
+                  <p className="text-xs text-ergo-mute mt-1">oder klicken zum Auswählen</p>
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -809,17 +815,19 @@ export default function SchadenUnfallPage() {
                 {files.length > 0 && (
                   <div className="mt-3 flex flex-col gap-2">
                     {files.map((f, i) => (
-                      <div key={i} className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-3 py-2.5">
-                        <span className="text-lg">{f.type === 'application/pdf' ? '📄' : '🖼️'}</span>
+                      <div key={i} className="flex items-center gap-3 ergo-card px-3 py-2.5">
+                        <span className="ergo-icon-disc w-10 h-10">
+                          {f.type === 'application/pdf' ? <FileText className="w-4 h-4" /> : <Camera className="w-4 h-4" />}
+                        </span>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-800 truncate">{f.name}</p>
-                          <p className="text-xs text-gray-400">{formatFileSize(f.size)}</p>
+                          <p className="text-sm font-medium text-ergo-ink truncate">{f.name}</p>
+                          <p className="text-xs text-ergo-mute">{formatFileSize(f.size)}</p>
                         </div>
-                        <button onClick={() => removeFile(i)} className="text-red-400 hover:text-red-600 text-sm font-bold px-2 py-1 min-h-[36px]">✕</button>
+                        <button onClick={() => removeFile(i)} className="text-ergo-red hover:text-ergo-red-hover px-2 py-1 min-h-[36px]" aria-label="Datei entfernen"><X className="w-4 h-4" /></button>
                       </div>
                     ))}
                     {files.length < 5 && (
-                      <button onClick={() => fileInputRef.current?.click()} className="text-sm text-[#003781] font-medium underline text-left mt-1 min-h-[36px]">
+                      <button onClick={() => fileInputRef.current?.click()} className="ergo-link text-sm text-left mt-1 min-h-[36px]">
                         + Weitere Datei hinzufügen
                       </button>
                     )}
@@ -827,13 +835,13 @@ export default function SchadenUnfallPage() {
                 )}
               </div>
 
-              <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800">
+              <div className="bg-ergo-gray border border-ergo-line rounded-lg px-4 py-3 text-sm text-ergo-ink">
                 <strong>Schweigepflichtentbindung:</strong> Für die Schadenbearbeitung benötigt ERGO ggf. ärztliche Auskünfte.{' '}
                 <a
                   href="https://www.ergo.de/de/Service/Schaden/Unfallversicherung"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline font-semibold"
+                  className="ergo-link"
                 >
                   Das offizielle ERGO-Formular zur Schweigepflichtentbindung
                 </a>{' '}
@@ -846,19 +854,19 @@ export default function SchadenUnfallPage() {
                     type="checkbox"
                     checked={formData.datenschutz}
                     onChange={e => { updateField('datenschutz', e.target.checked); if (errors.datenschutz) setErrors(prev => { const n = { ...prev }; delete n.datenschutz; return n; }); }}
-                    className="w-5 h-5 mt-0.5 accent-[#003781] shrink-0"
+                    className="w-5 h-5 mt-0.5 accent-ergo-red shrink-0"
                   />
-                  <span className="text-sm text-gray-700 leading-snug">
+                  <span className="text-sm text-ergo-ink leading-snug">
                     Ich habe die{' '}
-                    <Link href="/datenschutz" className="text-[#003781] underline" target="_blank">Datenschutzerklärung</Link>{' '}
+                    <Link href="/datenschutz" className="ergo-link" target="_blank">Datenschutzerklärung</Link>{' '}
                     gelesen und bin damit einverstanden, dass meine Daten zur Bearbeitung dieser Schadensmeldung gespeichert und verarbeitet werden. *
                   </span>
                 </label>
-                {errors.datenschutz && <p className="text-xs text-red-500 mt-1 ml-8">{errors.datenschutz}</p>}
+                {errors.datenschutz && <p className="text-xs text-ergo-red mt-1 ml-8">{errors.datenschutz}</p>}
               </div>
 
               {submitError && (
-                <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
+                <div className="bg-ergo-red-light border border-ergo-red/30 rounded-lg px-4 py-3 text-sm text-ergo-red">
                   {submitError}
                 </div>
               )}
@@ -866,17 +874,17 @@ export default function SchadenUnfallPage() {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="w-full bg-[#E2001A] text-white font-bold py-4 rounded-xl text-base hover:bg-[#c00017] transition-colors disabled:opacity-60 min-h-[52px]"
+                className="ergo-btn ergo-btn--primary w-full"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     Wird gesendet …
                   </span>
-                ) : '🚑 Schaden jetzt melden'}
+                ) : 'Schaden jetzt melden'}
               </button>
 
-              <p className="text-xs text-gray-400 text-center">
+              <p className="text-xs text-ergo-mute text-center">
                 Ihre Daten werden verschlüsselt übertragen. Nach dem Absenden meldet sich Ihr Berater Morino Stübe innerhalb von 24 Stunden.
               </p>
             </div>
@@ -885,26 +893,28 @@ export default function SchadenUnfallPage() {
           {/* ======= STEP 6 – BESTÄTIGUNG ======= */}
           {step === 6 && (
             <div className="text-center py-8 flex flex-col items-center gap-5">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-4xl">✅</div>
+              <div className="w-16 h-16 bg-ergo-check rounded-full flex items-center justify-center">
+                <Check className="w-8 h-8 text-white" />
+              </div>
               <div>
-                <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Schadensmeldung eingegangen!</h2>
-                <p className="text-gray-600 text-sm leading-relaxed max-w-sm mx-auto">
+                <h2 className="text-2xl mb-2">Schadensmeldung eingegangen!</h2>
+                <p className="text-ergo-stone text-sm leading-relaxed max-w-sm mx-auto">
                   Vielen Dank, {formData.vorname}. Ihre Unfallschadensmeldung wurde erfolgreich übermittelt.
                   Ihr Berater Morino Stübe kümmert sich und meldet sich <strong>innerhalb von 24 Stunden</strong> bei Ihnen.
                 </p>
               </div>
 
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 w-full text-left">
-                <h3 className="font-bold text-gray-900 mb-3 text-sm">Ihre nächsten Schritte</h3>
+              <div className="ergo-card p-5 w-full text-left">
+                <h3 className="font-sans font-bold text-ergo-ink mb-3 text-sm">Ihre nächsten Schritte</h3>
                 <div className="flex flex-col gap-2.5">
-                  {[
-                    { icon: '📋', text: 'Bereiten Sie alle ärztlichen Dokumente vor (Atteste, Arztberichte, Befunde).' },
-                    { icon: '📝', text: 'Füllen Sie ggf. die Schweigepflichtentbindung aus – Ihr Berater schickt Ihnen das Formular.' },
-                    { icon: '💬', text: 'Bei dringenden Fragen: WhatsApp an Morino Stübe oder ERGO-Hotline 0800 3746-000.' },
-                  ].map((item, i) => (
+                  {([
+                    { icon: ClipboardList, text: 'Bereiten Sie alle ärztlichen Dokumente vor (Atteste, Arztberichte, Befunde).' },
+                    { icon: Pencil, text: 'Füllen Sie ggf. die Schweigepflichtentbindung aus – Ihr Berater schickt Ihnen das Formular.' },
+                    { icon: MessageCircle, text: 'Bei dringenden Fragen: WhatsApp an Morino Stübe oder ERGO-Hotline 0800 3746-000.' },
+                  ] as { icon: LucideIcon; text: string }[]).map((item, i) => (
                     <div key={i} className="flex gap-3 items-start">
-                      <span className="text-lg shrink-0">{item.icon}</span>
-                      <p className="text-sm text-gray-600">{item.text}</p>
+                      <span className="ergo-icon-disc w-8 h-8 shrink-0"><item.icon className="w-4 h-4" /></span>
+                      <p className="text-sm text-ergo-stone self-center">{item.text}</p>
                     </div>
                   ))}
                 </div>
@@ -915,12 +925,12 @@ export default function SchadenUnfallPage() {
                   href={`https://wa.me/15566771019?text=${encodeURIComponent(`Hallo Herr Stübe, ich habe gerade meinen Unfallschaden über das Online-Formular gemeldet. Können Sie mir kurz bestätigen, dass Sie es erhalten haben? (Name: ${formData.vorname} ${formData.nachname})`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 bg-[#25d366] text-white font-bold px-5 py-3.5 rounded-xl hover:bg-[#1da851] transition-colors text-sm min-h-[48px]"
+                  className="ergo-btn ergo-btn--whatsapp flex-1 text-sm"
                 >
-                  💬 WhatsApp-Bestätigung
+                  <MessageCircle className="w-4 h-4" /> WhatsApp-Bestätigung
                 </a>
-                <Link href="/bestandskunden" className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-800 font-bold px-5 py-3.5 rounded-xl hover:bg-gray-200 transition-colors text-sm min-h-[48px]">
-                  ← Zurück zum Service
+                <Link href="/bestandskunden" className="ergo-btn ergo-btn--tertiary flex-1 text-sm">
+                  <ChevronLeft className="w-4 h-4" /> Zurück zum Service
                 </Link>
               </div>
             </div>

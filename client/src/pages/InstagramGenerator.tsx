@@ -16,6 +16,21 @@ import { SlideRenderer, StoryFrameRenderer } from '@/components/instagram/SlideR
 
 type TabKey = 'slides' | 'stories' | 'caption' | 'script' | 'info';
 
+// Die Instagram-Slides nutzen Inter/Montserrat (Social-Brand), die Website selbst
+// lädt nur noch die ERGO-Systemschriften – daher werden sie hier nachgeladen.
+const SLIDE_FONTS_URL =
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap';
+
+function useSlideFonts() {
+  useEffect(() => {
+    if (document.querySelector(`link[href="${SLIDE_FONTS_URL}"]`)) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = SLIDE_FONTS_URL;
+    document.head.appendChild(link);
+  }, []);
+}
+
 interface AIContent {
   hooks?: Partial<Record<HookType, string>>;
   storySetup?: string;
@@ -32,6 +47,7 @@ interface AIContent {
 }
 
 export default function InstagramGenerator() {
+  useSlideFonts();
   const [selectedTopic, setSelectedTopic] = useState<TopicTemplate | null>(null);
   const [format, setFormat] = useState<FormatKey>('feed');
   const [hookType, setHookType] = useState<HookType>('schock');
