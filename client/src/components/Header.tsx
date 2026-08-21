@@ -58,8 +58,8 @@ export default function Header() {
   return (
     <header
       className={`ds-site-header sticky top-0 z-50 w-full transition-all duration-300 ${
-        scrolled
-          ? "backdrop-blur-xl shadow-[0_1px_12px_rgba(0,28,75,0.1)] border-b"
+          scrolled
+           ? "backdrop-blur-xl shadow-[0_1px_12px_rgba(165,0,70,0.10)] border-b"
           : "border-b"
       }`}
     >
@@ -95,7 +95,7 @@ export default function Header() {
               </button>
 
               {dropdownOpen && (
-                <div className="absolute top-full left-0 mt-3 w-[480px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-[0_18px_44px_rgba(0,28,75,0.16)] border border-slate-200 p-3 grid grid-cols-2 gap-1">
+                <div className="absolute top-full left-0 mt-3 w-[480px] max-w-[calc(100vw-2rem)] bg-[#fffefd] rounded-lg shadow-[0_14px_32px_rgba(41,39,43,0.14)] border border-[#dedde0] p-3 grid grid-cols-2 gap-1">
                   {INSURANCE_LINKS.map(({ href, label, icon: Icon, desc }) => (
                     <Link
                       key={href}

@@ -1,11 +1,11 @@
 import { Link } from "wouter";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, CalendarDays, MessageCircle } from "lucide-react";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Footer() {
   return (
-    <footer className="ds-site-footer text-white py-10 sm:py-14">
+      <footer className="ds-site-footer text-white py-10 sm:py-14">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           
@@ -107,7 +107,7 @@ export default function Footer() {
             <ul className="space-y-1.5 sm:space-y-2 text-blue-100/80 text-sm sm:text-base">
               <li>
                 <Link href="/termin" className="hover:text-white transition-colors font-medium">
-                  📅 Termin buchen
+                   <span className="inline-flex items-center gap-2"><CalendarDays className="w-4 h-4 text-[#a9e5e8]" />Termin buchen</span>
                 </Link>
               </li>
               <li>
@@ -137,7 +137,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/whatsapp" className="hover:text-white transition-colors font-medium text-green-400">
-                  💬 WhatsApp Service
+                   <span className="inline-flex items-center gap-2"><MessageCircle className="w-4 h-4" />WhatsApp Service</span>
                 </Link>
               </li>
             </ul>

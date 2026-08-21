@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,57 +10,58 @@
    * Core colour, type and interaction tokens are intentionally centralised here
    * so every existing service, form and landing page shares one visual language.
    */
-  --ds-navy: #002d72;
-  --ds-navy-deep: #001b44;
-  --ds-blue: #004f9e;
-  --ds-red: #e2001a;
-  --ds-red-dark: #b90016;
-  --ds-ink: #17233a;
-  --ds-body: #41506a;
-  --ds-canvas: #f5f7fb;
-  --ds-paper: #ffffff;
-  --ds-line: #dbe2ee;
-  --ds-soft-red: #fff2f3;
-  --ds-soft-blue: #eef4fb;
+  --ds-navy: #5d0739;
+  --ds-navy-deep: #420326;
+  --ds-blue: #a9e5e8;
+  --ds-red: #a50046;
+  --ds-red-dark: #810035;
+  --ds-ink: #29272b;
+  --ds-body: #5b5960;
+  --ds-canvas: #f8f8f6;
+  --ds-paper: #fffefd;
+  --ds-line: #dedde0;
+  --ds-soft-red: #f8e5ed;
+  --ds-soft-blue: #e2f6f7;
+  --ds-soft-peach: #ffe7d6;
   --ds-success: #087443;
-  --ds-radius-sm: 0.5rem;
-  --ds-radius: 0.875rem;
-  --ds-radius-lg: 1.25rem;
-  --ds-shadow-sm: 0 2px 8px rgba(18, 39, 77, 0.06);
-  --ds-shadow: 0 12px 34px rgba(18, 39, 77, 0.1);
-  --ds-shadow-lg: 0 22px 58px rgba(0, 28, 75, 0.16);
+  --ds-radius-sm: 0.35rem;
+  --ds-radius: 0.55rem;
+  --ds-radius-lg: 0.7rem;
+  --ds-shadow-sm: 0 1px 4px rgba(41, 39, 43, 0.06);
+  --ds-shadow: 0 5px 18px rgba(41, 39, 43, 0.09);
+  --ds-shadow-lg: 0 14px 32px rgba(41, 39, 43, 0.12);
 
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --background: hsl(45, 20%, 98%);
+  --foreground: hsl(300, 5%, 16%);
+  --muted: hsl(36, 20%, 96%);
+  --muted-foreground: hsl(300, 4%, 43%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(20, 14.3%, 4.1%);
-  --card: hsl(0, 0%, 100%);
+  --card: hsl(45, 100%, 99.5%);
   --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(0, 85%, 44%);
+  --border: hsl(300, 5%, 86%);
+  --input: hsl(300, 5%, 82%);
+  --primary: hsl(334, 100%, 32%);
   --primary-foreground: hsl(0, 0%, 98%);
-  --secondary: hsl(60, 4.8%, 95.9%);
-  --secondary-foreground: hsl(24, 9.8%, 10%);
-  --accent: hsl(60, 4.8%, 95.9%);
-  --accent-foreground: hsl(24, 9.8%, 10%);
+  --secondary: hsl(184, 54%, 88%);
+  --secondary-foreground: hsl(300, 5%, 16%);
+  --accent: hsl(24, 100%, 92%);
+  --accent-foreground: hsl(300, 5%, 16%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
   --ring: hsl(20, 14.3%, 4.1%);
   --radius: 0.5rem;
 
-  --ergo-red: hsl(355, 85%, 48%);
-  --ergo-red-hover: hsl(355, 85%, 42%);
-  --ergo-red-light: hsl(355, 100%, 98%);
-  --ergo-red-dark: hsl(355, 85%, 35%);
-  --ergo-dark: hsl(216, 30%, 12%);
-  --ergo-dark-light: hsl(216, 20%, 22%);
-  --ergo-gray: hsl(220, 15%, 97%);
-  --ergo-gray-light: hsl(220, 20%, 99%);
-  --ergo-blue: hsl(220, 90%, 45%);
-  --ergo-blue-light: hsl(220, 100%, 97%);
+  --ergo-red: hsl(334, 100%, 32%);
+  --ergo-red-hover: hsl(334, 100%, 26%);
+  --ergo-red-light: hsl(335, 100%, 97%);
+  --ergo-red-dark: hsl(335, 95%, 25%);
+  --ergo-dark: hsl(300, 5%, 16%);
+  --ergo-dark-light: hsl(300, 4%, 32%);
+  --ergo-gray: hsl(36, 20%, 96%);
+  --ergo-gray-light: hsl(36, 25%, 99%);
+  --ergo-blue: hsl(184, 54%, 44%);
+  --ergo-blue-light: hsl(184, 54%, 94%);
 }
 
 .dark {
@@ -101,8 +104,8 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
     color: var(--ds-ink);
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    letter-spacing: -0.01em;
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.008em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -157,6 +160,7 @@
 
   h1, h2, h3 {
     letter-spacing: -0.035em;
+    font-family: "Space Grotesk", "DM Sans", sans-serif;
   }
 
   h1, h2 {
@@ -211,9 +215,7 @@
   /* Shared page anatomy */
   .ds-page {
     min-height: calc(100vh - 4rem);
-    background:
-      radial-gradient(circle at 100% 0%, rgba(0, 79, 158, 0.055), transparent 27rem),
-      linear-gradient(180deg, #fff 0, var(--ds-canvas) 100%);
+    background: var(--ds-canvas);
   }
 
   .ds-page > * {
@@ -223,20 +225,18 @@
   .ds-marketing,
   .ds-service,
   .ds-form-flow {
-    background:
-      radial-gradient(circle at 0% 0%, rgba(226, 0, 26, 0.045), transparent 30rem),
-      transparent;
+    background: transparent;
   }
 
   .ds-surface {
     border: 1px solid var(--ds-line);
-    border-radius: var(--ds-radius-lg);
+    border-radius: var(--ds-radius);
     background: var(--ds-paper);
     box-shadow: var(--ds-shadow-sm);
   }
 
   .ds-hero {
-    border-bottom: 4px solid var(--ds-red);
+    border-bottom: 2px solid var(--ds-red);
     box-shadow: inset 0 -1px rgba(255, 255, 255, 0.18);
   }
 
@@ -292,30 +292,29 @@
   }
 
   .ds-secondary-action {
-    border: 1px solid var(--ds-navy);
+    border: 1px solid var(--ds-red);
     border-radius: var(--ds-radius-sm);
-    color: var(--ds-navy);
+    color: var(--ds-red);
     font-weight: 750;
     transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
   }
 
   .ds-secondary-action:hover {
-    background: var(--ds-soft-blue);
+    background: var(--ds-soft-red);
     transform: translateY(-1px);
   }
 
   .ds-site-header {
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba(255, 254, 253, 0.96);
     border-bottom-color: var(--ds-line);
   }
 
   .ds-site-footer {
-    background:
-      linear-gradient(130deg, var(--ds-navy-deep), var(--ds-navy) 70%, #003e86);
+    background: var(--ds-navy-deep);
   }
 
   .ds-breadcrumb {
-    background: rgba(255, 255, 255, 0.88);
+    background: rgba(248, 248, 246, 0.92);
     border-color: var(--ds-line);
   }
 
@@ -425,4 +424,273 @@
     background: var(--ds-red);
     border-radius: 999px;
   }
+}
+
+/* Shared ERGO design language: deliberately overrides legacy utility colour
+   choices across older marketing, service, legal and admin screens. */
+.ds-page {
+  background: var(--ds-canvas);
+  color: var(--ds-ink);
+}
+
+.ds-page .bg-white,
+.ds-page .bg-gray-50,
+.ds-page .bg-gray-100 {
+  background-color: var(--ds-paper);
+}
+
+.ds-page .bg-gray-50,
+.ds-page .bg-gray-100 {
+  background-color: var(--ds-canvas);
+}
+
+.ds-page .border-gray-100,
+.ds-page .border-gray-200,
+.ds-page .border-gray-300,
+.ds-page .border-slate-200 {
+  border-color: var(--ds-line);
+}
+
+.ds-page .text-gray-900,
+.ds-page .text-gray-800,
+.ds-page .text-gray-700 {
+  color: var(--ds-ink);
+}
+
+.ds-page .text-gray-600,
+.ds-page .text-gray-500,
+.ds-page .text-gray-400 {
+  color: var(--ds-body);
+}
+
+.ds-page .bg-\[\#E2001A\],
+.ds-page .bg-\[\#e2001a\],
+.ds-page .bg-red-600,
+.ds-page .bg-red-700 {
+  background-color: var(--ds-red);
+}
+
+.ds-page .text-\[\#E2001A\],
+.ds-page .text-\[\#e2001a\],
+.ds-page .text-red-600,
+.ds-page .text-red-700 {
+  color: var(--ds-red);
+}
+
+.ds-page .rounded-2xl {
+  border-radius: var(--ds-radius-lg);
+}
+
+.ds-page .rounded-xl {
+  border-radius: var(--ds-radius);
+}
+
+.ds-page .shadow-lg,
+.ds-page .shadow-xl,
+.ds-page .shadow-2xl {
+  box-shadow: var(--ds-shadow);
+}
+
+.ds-site-header a,
+.ds-site-header button {
+  letter-spacing: .005em;
+}
+
+.ds-site-footer {
+  background: var(--ds-navy-deep);
+  border-top: 4px solid var(--ds-red);
+}
+
+.ds-site-footer .text-blue-100\/80,
+.ds-site-footer .text-gray-300,
+.ds-site-footer .text-gray-400 {
+  color: rgba(255, 245, 248, .72);
+}
+
+.ds-site-footer a:hover,
+.ds-site-footer button:hover {
+  color: #a9e5e8;
+}
+
+.ds-breadcrumb {
+  font-size: .76rem;
+  letter-spacing: .025em;
+}
+
+/* Light hero contract. These selectors intentionally sit after the legacy
+   utility palette so route-specific gradient classes cannot win. */
+.ds-marketing .ds-hero,
+.ds-service .ds-hero,
+.ds-form-flow .ds-hero,
+.ds-marketing > section:first-of-type {
+  color: var(--ds-ink) !important;
+  background-color: var(--ds-paper) !important;
+  background-image:
+    radial-gradient(circle at 88% 10%, rgba(169, 229, 232, .34), transparent 22rem),
+    linear-gradient(112deg, #fffefd 0%, #fffefd 68%, #e5f6f7 100%) !important;
+  border-top: 5px solid var(--ds-red);
+  border-bottom: 1px solid var(--ds-line);
+  box-shadow: 0 10px 26px rgba(41, 39, 43, .07);
+}
+
+.ds-marketing .ds-hero h1,
+.ds-service .ds-hero h1,
+.ds-form-flow .ds-hero h1,
+.ds-marketing > section:first-of-type h1 {
+  color: var(--ds-ink) !important;
+}
+
+.ds-marketing .ds-hero .text-white,
+.ds-service .ds-hero .text-white,
+.ds-form-flow .ds-hero .text-white,
+.ds-marketing > section:first-of-type .text-white {
+  color: var(--ds-ink) !important;
+}
+
+.ds-marketing .ds-hero .text-white\/90,
+.ds-marketing .ds-hero .text-white\/80,
+.ds-service .ds-hero .text-white\/90,
+.ds-service .ds-hero .text-white\/80,
+.ds-form-flow .ds-hero .text-white\/90,
+.ds-form-flow .ds-hero .text-white\/80,
+.ds-marketing > section:first-of-type .text-white\/90,
+.ds-marketing > section:first-of-type .text-white\/80 {
+  color: var(--ds-body) !important;
+}
+
+.ds-marketing .ds-hero .bg-white\/15,
+.ds-service .ds-hero .bg-white\/15,
+.ds-form-flow .ds-hero .bg-white\/15,
+.ds-marketing > section:first-of-type .bg-white\/15 {
+  background: var(--ds-soft-red) !important;
+  border: 1px solid #eac4d4;
+  color: var(--ds-red) !important;
+}
+
+.ds-marketing .ds-hero .text-yellow-300,
+.ds-service .ds-hero .text-yellow-300,
+.ds-form-flow .ds-hero .text-yellow-300,
+.ds-marketing > section:first-of-type .text-yellow-300 {
+  color: var(--ds-red) !important;
+}
+
+.ds-marketing .ds-hero .text-green-300,
+.ds-service .ds-hero .text-green-300,
+.ds-form-flow .ds-hero .text-green-300,
+.ds-marketing > section:first-of-type .text-green-300 {
+  color: var(--ds-success) !important;
+}
+
+/* Keep actual action controls high contrast after the hero text reset. */
+.ds-marketing .ds-hero button.text-white,
+.ds-service .ds-hero button.text-white,
+.ds-form-flow .ds-hero button.text-white,
+.ds-marketing > section:first-of-type button.text-white {
+  color: #fff !important;
+  background: var(--ds-red) !important;
+}
+
+.ds-marketing .ds-hero button.text-white *,
+.ds-service .ds-hero button.text-white *,
+.ds-form-flow .ds-hero button.text-white *,
+.ds-marketing > section:first-of-type button.text-white * {
+  color: #fff !important;
+}
+
+.ds-marketing .ds-hero .text-transparent,
+.ds-service .ds-hero .text-transparent,
+.ds-form-flow .ds-hero .text-transparent,
+.ds-marketing > section:first-of-type .text-transparent {
+  color: var(--ds-red) !important;
+  background-image: none !important;
+  -webkit-text-fill-color: var(--ds-red);
+}
+
+.ds-marketing .ds-hero [class*="bg-gradient-to-r"],
+.ds-service .ds-hero [class*="bg-gradient-to-r"],
+.ds-form-flow .ds-hero [class*="bg-gradient-to-r"],
+.ds-marketing > section:first-of-type [class*="bg-gradient-to-r"] {
+  background: var(--ds-red) !important;
+}
+
+/* Shared surfaces on product, service and funnel screens. */
+.ds-marketing .bg-white.rounded-xl,
+.ds-marketing .bg-white.rounded-2xl,
+.ds-service .bg-white.rounded-xl,
+.ds-service .bg-white.rounded-2xl,
+.ds-form-flow .bg-white.rounded-xl,
+.ds-form-flow .bg-white.rounded-2xl,
+.ds-form-flow .bg-white.rounded-lg,
+.ds-page .bg-white.rounded-lg {
+  background: var(--ds-paper) !important;
+  border: 1px solid var(--ds-line);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.ds-marketing .bg-blue-50,
+.ds-service .bg-blue-50,
+.ds-form-flow .bg-blue-50 {
+  background: var(--ds-soft-blue) !important;
+}
+
+.ds-marketing .bg-red-50,
+.ds-service .bg-red-50,
+.ds-form-flow .bg-red-50 {
+  background: var(--ds-soft-red) !important;
+}
+
+.ds-marketing .bg-yellow-50,
+.ds-service .bg-yellow-50,
+.ds-form-flow .bg-yellow-50 {
+  background: var(--ds-soft-peach) !important;
+}
+
+.ds-form-flow input,
+.ds-form-flow select,
+.ds-form-flow textarea {
+  border-color: var(--ds-line);
+  background: var(--ds-paper);
+  border-radius: var(--ds-radius-sm);
+}
+
+/* Legacy end-of-page promotion bands use the same calm surface treatment as
+   the reference system instead of reintroducing the former dark-blue theme. */
+.ds-marketing section[class*="bg-gradient-to-br"],
+.ds-service section[class*="bg-gradient-to-br"],
+.ds-form-flow section[class*="bg-gradient-to-br"] {
+  color: var(--ds-ink) !important;
+  background: linear-gradient(112deg, #fffefd 0%, #fffefd 66%, var(--ds-soft-blue) 100%) !important;
+  border-top: 4px solid var(--ds-red);
+  border-bottom: 1px solid var(--ds-line);
+}
+
+.ds-marketing section[class*="bg-gradient-to-br"] .text-blue-100,
+.ds-marketing section[class*="bg-gradient-to-br"] .text-white\/90,
+.ds-marketing section[class*="bg-gradient-to-br"] .text-white\/80,
+.ds-service section[class*="bg-gradient-to-br"] .text-blue-100,
+.ds-service section[class*="bg-gradient-to-br"] .text-white\/90,
+.ds-service section[class*="bg-gradient-to-br"] .text-white\/80 {
+  color: var(--ds-body) !important;
+}
+
+.ds-marketing section[class*="bg-gradient-to-br"] .bg-white\/15,
+.ds-service section[class*="bg-gradient-to-br"] .bg-white\/15 {
+  background: var(--ds-soft-peach) !important;
+  border: 1px solid #edcfbd;
+  color: var(--ds-red) !important;
+}
+
+.ds-marketing section[class*="bg-gradient-to-br"] a.bg-white,
+.ds-marketing section[class*="bg-gradient-to-br"] button.bg-white,
+.ds-service section[class*="bg-gradient-to-br"] a.bg-white,
+.ds-service section[class*="bg-gradient-to-br"] button.bg-white {
+  color: #fff !important;
+  background: var(--ds-red) !important;
+  box-shadow: none;
+}
+
+.ds-marketing footer.bg-gray-900,
+.ds-service footer.bg-gray-900 {
+  background: var(--ds-navy-deep) !important;
+  border-top: 4px solid var(--ds-red);
 }
