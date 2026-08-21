@@ -57,20 +57,20 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+      className={`ds-site-header sticky top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-white/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.08)] border-b border-gray-200/60"
-          : "bg-white border-b border-gray-200"
+          ? "backdrop-blur-xl shadow-[0_1px_12px_rgba(0,28,75,0.1)] border-b"
+          : "border-b"
       }`}
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-14 sm:h-16">
+        <div className="flex justify-between items-center h-16 sm:h-[4.5rem]">
 
           {/* Logo */}
           <Link href="/" className="flex items-center group shrink-0">
             <div className="text-left">
-              <div className="text-xl sm:text-2xl font-bold text-ergo-red group-hover:opacity-80 transition-opacity">ERGO</div>
-              <div className="text-[10px] sm:text-xs text-gray-500 leading-tight">
+              <div className="text-[1.35rem] sm:text-[1.55rem] font-extrabold tracking-[-0.08em] text-ergo-red group-hover:opacity-80 transition-opacity">ERGO</div>
+              <div className="text-[10px] sm:text-xs font-medium text-slate-500 leading-tight">
                 <span className="hidden sm:inline">Agentur Stübe · Ganderkesee</span>
                 <span className="sm:hidden">Agentur Stübe</span>
               </div>
@@ -84,7 +84,7 @@ export default function Header() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen(v => !v)}
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
                   isInsurancePage || dropdownOpen
                     ? "text-ergo-red bg-red-50"
                     : "text-gray-700 hover:text-ergo-red hover:bg-gray-50"
@@ -95,7 +95,7 @@ export default function Header() {
               </button>
 
               {dropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-[480px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-gray-100 p-3 grid grid-cols-2 gap-1">
+                <div className="absolute top-full left-0 mt-3 w-[480px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-[0_18px_44px_rgba(0,28,75,0.16)] border border-slate-200 p-3 grid grid-cols-2 gap-1">
                   {INSURANCE_LINKS.map(({ href, label, icon: Icon, desc }) => (
                     <Link
                       key={href}
@@ -154,7 +154,7 @@ export default function Header() {
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/termin"
-              className="hidden lg:flex items-center gap-1.5 bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white px-4 py-2 rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-red-500/25 transition-all duration-200"
+              className="ds-primary-action hidden lg:flex items-center gap-1.5 px-4 py-2.5 text-sm"
             >
               <Calendar className="w-3.5 h-3.5" />
               Termin buchen

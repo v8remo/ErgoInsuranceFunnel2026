@@ -5,14 +5,15 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Footer() {
   return (
-    <footer className="bg-ergo-dark text-white py-8 sm:py-12">
+    <footer className="ds-site-footer text-white py-10 sm:py-14">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           
           {/* Contact Info */}
           <div className="mb-6 sm:mb-0">
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Kontakt</h3>
-            <div className="space-y-2 sm:space-y-3 text-gray-300 text-sm sm:text-base">
+            <div className="ds-rule mb-4 bg-red-400" />
+            <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Kontakt</h3>
+            <div className="space-y-2 sm:space-y-3 text-blue-100/80 text-sm sm:text-base">
               <p className="font-medium text-white">ERGO Agentur Stübe</p>
               <p>Morino Stübe</p>
               
@@ -53,8 +54,9 @@ export default function Footer() {
 
           {/* Services */}
           <div className="mb-6 sm:mb-0">
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Unsere Versicherungen</h3>
-            <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
+            <div className="ds-rule mb-4 bg-red-400" />
+            <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Unsere Versicherungen</h3>
+            <ul className="space-y-1.5 sm:space-y-2 text-blue-100/80 text-sm sm:text-base">
               <li>
                 <Link href="/kfz" className="hover:text-white transition-colors">
                   KFZ-Versicherung
@@ -100,8 +102,9 @@ export default function Footer() {
 
           {/* Service & Regionen */}
           <div className="mb-6 sm:mb-0">
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Service</h3>
-            <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
+            <div className="ds-rule mb-4 bg-red-400" />
+            <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Service</h3>
+            <ul className="space-y-1.5 sm:space-y-2 text-blue-100/80 text-sm sm:text-base">
               <li>
                 <Link href="/termin" className="hover:text-white transition-colors font-medium">
                   📅 Termin buchen
@@ -193,8 +196,9 @@ export default function Footer() {
 
           {/* Rechtliches & Social */}
           <div className="mb-6 sm:mb-0">
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Rechtliches</h3>
-            <ul className="space-y-1 sm:space-y-2 text-gray-300 text-sm sm:text-base">
+            <div className="ds-rule mb-4 bg-red-400" />
+            <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Rechtliches</h3>
+            <ul className="space-y-1.5 sm:space-y-2 text-blue-100/80 text-sm sm:text-base">
               <li>
                 <Link href="/impressum" className="hover:text-white transition-colors">
                   Impressum
@@ -262,7 +266,7 @@ export default function Footer() {
 
         </div>
         
-        <div className="border-t border-gray-700 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-gray-400">
+        <div className="border-t border-white/15 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-blue-100/65">
           <p className="text-sm sm:text-base">&copy; 2026 ERGO Versicherung - Morino Stübe. Alle Rechte vorbehalten.</p>
           <p className="text-xs sm:text-sm mt-2">
             Vermittlerregister: <a href="https://www.vermittlerregister.info" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 break-all">www.vermittlerregister.info</a>

@@ -332,7 +332,7 @@ export default function SchadenUnfallPage() {
   const stepLabels = ['Persönliche Angaben', 'Unfalldaten', 'Gesundheit', 'Weitere Angaben', 'Dokumente & Absenden'];
 
   return (
-    <div className="min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div className="ds-form-flow min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <SEO
         title="Unfallschaden melden – ERGO Agentur Stübe Ganderkesee"
         description="Unfallversicherungsschaden bequem online melden. Strukturiertes Formular für Ihre ERGO Unfallversicherung – Agentur Morino Stübe, Ganderkesee."

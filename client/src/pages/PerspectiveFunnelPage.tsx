@@ -439,7 +439,7 @@ export default function PerspectiveFunnelPage() {
         </div>
       </header>
 
-      <div className="pt-14 bg-white">
+      <div className="ds-marketing pt-14 bg-white">
 
         {/* ── TRUST BANNER ── */}
         <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100 px-4 py-2.5">
@@ -469,7 +469,7 @@ export default function PerspectiveFunnelPage() {
         {/* ── QUIZ SECTION ── */}
         <section
           ref={heroRef}
-          className="bg-gradient-to-br from-[#003781] via-[#004299] to-[#005ab4] text-white px-4 pt-8 pb-12 sm:pt-12 sm:pb-16"
+          className="ds-hero bg-gradient-to-br from-[#003781] via-[#004299] to-[#005ab4] text-white px-4 pt-8 pb-12 sm:pt-12 sm:pb-16"
         >
           <div className="max-w-3xl mx-auto">
 

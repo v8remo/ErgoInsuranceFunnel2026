@@ -180,8 +180,8 @@ export default function NeukundenFormularPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <SEO title="Danke – Daten übermittelt | ERGO Agentur Stübe" noIndex />
+      <div className="ds-form-flow min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <SEO title="Danke – Daten übermittelt | ERGO Agentur Stübe" description="Ihre Angaben wurden erfolgreich an die ERGO Agentur Stübe übermittelt." noIndex />
         <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
           <div className="text-5xl mb-4">✅</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Vielen Dank!</h1>
@@ -206,7 +206,7 @@ export default function NeukundenFormularPage() {
         description="Bitte füllen Sie das Formular aus, damit wir Ihre Daten für eine persönliche Beratung erfassen können."
         noIndex
       />
-      <div className="min-h-screen bg-gray-50">
+      <div className="ds-form-flow min-h-screen bg-gray-50">
         {/* Mini-Header */}
         <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
           <div>

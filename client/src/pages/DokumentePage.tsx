@@ -734,7 +734,7 @@ export default function DokumentePage() {
     : (step === 1 ? 33 : step === 2 ? 66 : 100);
 
   return (
-    <div className="min-h-screen bg-gray-50 safe-area-bottom">
+    <div className="ds-form-flow min-h-screen bg-gray-50 safe-area-bottom">
       <SEO
         title="Dokumente & Kündigungen einreichen – ERGO Agentur Stübe Ganderkesee"
         description="Versicherungsdokumente digital einreichen: Kündigungen, Rechnungen und Belege. Schnell und sicher über Ihre ERGO Agentur Stübe in Ganderkesee."

@@ -200,9 +200,9 @@ export default function Insurance() {
         }] : undefined}
       />
       <Breadcrumb />
-      <main className="min-h-screen pb-16 sm:pb-0">
+      <main className="ds-marketing min-h-screen pb-16 sm:pb-0">
         {/* Hero Section */}
-        <section className="py-12 md:py-20 px-4 bg-gradient-to-br from-[#E2001A] via-[#c5001a] to-[#8b0011] text-white relative overflow-hidden">
+        <section className="ds-hero py-12 md:py-20 px-4 bg-gradient-to-br from-[#E2001A] via-[#c5001a] to-[#8b0011] text-white relative overflow-hidden">
           <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
           <div className="max-w-5xl mx-auto relative">
             <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">

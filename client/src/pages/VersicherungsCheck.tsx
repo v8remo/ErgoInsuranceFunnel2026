@@ -169,7 +169,7 @@ export default function VersicherungsCheck() {
         keywords="Versicherungscheck, Versicherung prüfen, welche Versicherung brauche ich, Versicherungslücken, ERGO Ganderkesee"
       />
 
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="ds-form-flow min-h-screen bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-2xl mx-auto px-4 py-8 md:py-14">
 
           <div className="text-center mb-8">

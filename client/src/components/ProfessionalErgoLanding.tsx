@@ -169,7 +169,7 @@ export default function ProfessionalErgoLanding() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden pb-24 sm:pb-0">
+    <div className="ds-marketing min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden pb-24 sm:pb-0">
 
       {/* ──────── E-SCOOTER KENNZEICHEN BANNER ──────── */}
       <motion.div

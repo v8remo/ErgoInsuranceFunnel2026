@@ -363,7 +363,7 @@ export default function KennzeichenPage() {
   const currentPremium = selectedType === 'kennzeichen' ? getPremium(formData.fahrzeugart, formData.versicherungsumfang, formData.versicherungsbeginn) : null;
 
   return (
-    <div className="min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div className="ds-form-flow min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <SEO
         title="eVB-Nummer & Versicherungskennzeichen – ERGO Agentur Stübe Ganderkesee"
         description="eVB-Nummer für Kfz-Zulassung oder Versicherungskennzeichen für Kleinkraftrad anfragen. Schnell und unkompliziert bei Ihrer ERGO Agentur Stübe in Ganderkesee."

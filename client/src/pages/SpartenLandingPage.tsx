@@ -235,9 +235,9 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
         additionalStructuredData={[serviceSchema]}
       />
 
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden">
+      <div className="ds-marketing min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden">
         {/* Hero Section */}
-        <section className={`bg-gradient-to-br ${config.hero.gradient} text-white py-14 md:py-20 px-4 relative overflow-hidden`}>
+        <section className={`ds-hero bg-gradient-to-br ${config.hero.gradient} text-white py-14 md:py-20 px-4 relative overflow-hidden`}>
           <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
           <div className="max-w-5xl mx-auto relative">
             <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">

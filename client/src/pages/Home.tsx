@@ -3,7 +3,7 @@ import SEO from "@/components/SEO";
 
 export default function Home() {
   return (
-    <div>
+    <div className="ds-home">
       <SEO
         title="ERGO Versicherung Ganderkesee | Agentur Stübe – Kostenlose Beratung"
         description="Ihr ERGO Versicherungsberater in Ganderkesee, Delmenhorst und Oldenburg. Persönliche Beratung und kostenlose Versicherungsanalyse."

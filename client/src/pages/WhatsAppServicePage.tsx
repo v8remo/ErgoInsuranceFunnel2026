@@ -115,10 +115,10 @@ export default function WhatsAppServicePage() {
         structuredData={structuredData}
       />
 
-      <div className="min-h-screen bg-white">
+      <div className="ds-service min-h-screen bg-white">
 
         {/* Hero */}
-        <section className="bg-gradient-to-br from-[#075e54] via-[#128c7e] to-[#25d366] text-white py-14 md:py-20 px-4 relative overflow-hidden">
+        <section className="ds-hero bg-gradient-to-br from-[#075e54] via-[#128c7e] to-[#25d366] text-white py-14 md:py-20 px-4 relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-8 left-8 w-32 h-32 rounded-full border-4 border-white" />
             <div className="absolute bottom-8 right-8 w-48 h-48 rounded-full border-4 border-white" />

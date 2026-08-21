@@ -401,7 +401,7 @@ export default function LebenVorsorge() {
         { label: "Versicherungen", href: "/" },
         { label: "Leben & Vorsorge" }
       ]} />
-      <main className="min-h-screen pb-16 sm:pb-0">
+      <main className="ds-marketing min-h-screen pb-16 sm:pb-0">
         {/* Hero Section */}
         <section className="py-12 md:py-20 px-4 bg-gradient-to-br from-[#003781] via-[#004fa0] to-[#001f5c] text-white relative overflow-hidden">
           <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />

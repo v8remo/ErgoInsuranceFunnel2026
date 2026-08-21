@@ -62,7 +62,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {!hideHeader && <Header />}
-      <main>{children}</main>
+      <main className="ds-page">{children}</main>
       {!hideFooter && <Footer />}
     </>
   );

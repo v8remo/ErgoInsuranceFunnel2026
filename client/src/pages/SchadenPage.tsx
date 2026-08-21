@@ -408,7 +408,7 @@ export default function SchadenPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div className="ds-form-flow min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <SEO
         title="Schaden melden – ERGO Agentur Stübe Ganderkesee"
         description="Versicherungsschaden schnell und einfach online melden. Kfz-Schaden, Glasschaden, Hausrat oder Haftpflicht – Ihre ERGO Agentur Stübe in Ganderkesee hilft sofort."

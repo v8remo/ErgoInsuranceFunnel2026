@@ -17,7 +17,7 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
   const breadcrumbItems = items || generateBreadcrumbs(location);
 
   return (
-    <nav className="bg-gray-50 py-2 px-4 sm:px-6 border-b" aria-label="Breadcrumb">
+    <nav className="ds-breadcrumb py-3 px-4 sm:px-6 border-b" aria-label="Breadcrumb">
       <div className="max-w-7xl mx-auto">
         <ol className="flex items-center space-x-2 text-sm">
           <li>

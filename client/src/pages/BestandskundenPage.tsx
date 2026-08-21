@@ -193,8 +193,8 @@ export default function BestandskundenPage() {
         keywords="ERGO Kundenservice, Bestandskunden Service, Versicherung Ganderkesee, Jahrescheck, Lebenslagen Versicherung"
       />
 
-      <div className="min-h-screen bg-white">
-        <section className="bg-gradient-to-br from-[#003781] to-[#005ab4] text-white py-8 md:py-14 px-4">
+      <div className="ds-service min-h-screen bg-white">
+        <section className="ds-hero bg-gradient-to-br from-[#003781] to-[#005ab4] text-white py-8 md:py-14 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-white/15 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
               <Star className="w-4 h-4 text-yellow-300" />

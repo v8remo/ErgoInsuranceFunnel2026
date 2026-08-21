@@ -33,7 +33,7 @@ export default function TerminPage() {
       />
 
       <Breadcrumb items={[{ label: "Termin buchen" }]} />
-      <div className="bg-white">
+    <div className="ds-service bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4 sm:pt-8 sm:pb-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10">
             <div className="flex-1 min-w-0">

@@ -72,7 +72,7 @@ export default function SparRechner() {
         keywords="Bündelnachlass ERGO, Versicherung sparen, Bündelrabatt, Versicherung günstiger, ERGO Rabatt, Sachversicherung bündeln"
       />
 
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="ds-form-flow min-h-screen bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-2xl mx-auto px-4 py-8 md:py-14">
 
           <div className="text-center mb-8">
