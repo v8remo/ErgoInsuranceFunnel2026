@@ -478,7 +478,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
-      await storage.createSubmission({
+      const submission = await storage.createSubmission({
         type: 'schaden',
         customerName,
         customerEmail,
@@ -487,6 +487,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         summary: damageDescription || '',
         details: { damageType, insuranceNumber, damageDate, damageLocation, policeReport, estimatedDamage, isGlasschaden, glasScheibe, extraFields, attachmentsCount },
       });
+      const reference = referenceFor(submission.id);
+      sendReceipt(customerEmail, customerName, damageType === 'unfall' ? 'Unfallmeldung' : 'Schadenmeldung', reference).catch(err => console.error('Receipt failed:', err));
 
       if (fileAttachments && Array.isArray(fileAttachments)) {
         if (fileAttachments.length > 5) {
@@ -628,25 +630,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { data, error } = await resendClient.emails.send({
           from: 'ERGO Schadensmeldung <schaden@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
-          subject: isUnfall
+          subject: `[${reference}] ` + (isUnfall
             ? `🚑 Unfallversicherung Schaden: ${customerName} – ${now}`
             : isGlasschaden
             ? `🔲 Kfz-Glasschaden: ${customerName} – ${glasScheibe || 'Scheibe'} – ${now}`
-            : `🚨 Schadensmeldung: ${damageType} – ${customerName} – ${now}`,
+            : `🚨 Schadensmeldung: ${damageType} – ${customerName} – ${now}`),
           html: emailHtml,
           attachments: attachments.length > 0 ? attachments : undefined,
         });
 
         if (error) {
           console.error('Resend schaden email error:', JSON.stringify(error));
-          return res.json({ success: true, emailSent: false, emailError: error.message });
+          return res.json({ success: true, reference, emailSent: false, emailError: error.message });
         }
         console.log('Schaden email sent successfully:', data?.id);
-        return res.json({ success: true, emailSent: true });
+        return res.json({ success: true, reference, emailSent: true });
       }
 
       console.warn('No RESEND_API_KEY configured, skipping schaden email');
-      res.json({ success: true, emailSent: false });
+      res.json({ success: true, reference, emailSent: false });
     } catch (error) {
       console.error('Schaden submission error:', error);
       res.status(500).json({ message: "Failed to submit damage report" });
@@ -685,7 +687,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const isEvb = requestType === 'evb';
       const typeLabel = isEvb ? 'eVB-Nummer (Kfz)' : 'Versicherungskennzeichen';
 
-      await storage.createSubmission({
+      const submission = await storage.createSubmission({
         type: 'kennzeichen',
         customerName: `${vorname} ${nachname}`,
         customerEmail: email,
@@ -694,6 +696,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         summary: '',
         details: { requestType, vorname, nachname, geburtsdatum: body.geburtsdatum, strasse: body.strasse, plz: body.plz, ort: body.ort, fahrzeugart: body.fahrzeugart, fahrzeughersteller: body.fahrzeughersteller, fahrzeugmodell: body.fahrzeugmodell, fin: body.fin, erstzulassung: body.erstzulassung, versicherungsbeginn: body.versicherungsbeginn, hinweise: body.hinweise },
       });
+      const reference = referenceFor(submission.id);
+      sendReceipt(email, `${vorname} ${nachname}`, typeLabel, reference).catch(err => console.error('Receipt failed:', err));
 
       const personalRows = [
         `<p><strong>Name:</strong> ${esc(vorname)} ${esc(nachname)}</p>`,
@@ -780,21 +784,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { data, error } = await resendClient.emails.send({
           from: 'ERGO Kennzeichen <kennzeichen@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
-          subject: `${isEvb ? '🚗 eVB-Anfrage' : '🛵 Versicherungskennzeichen'}: ${vorname} ${nachname} – ${vehicleDesc} – ${now}`,
+          subject: `[${reference}] ${isEvb ? '🚗 eVB-Anfrage' : '🛵 Versicherungskennzeichen'}: ${vorname} ${nachname} – ${vehicleDesc} – ${now}`,
           html: emailHtml,
           attachments: attachments.length > 0 ? attachments : undefined,
         });
 
         if (error) {
           console.error('Resend kennzeichen email error:', JSON.stringify(error));
-          return res.json({ success: true, emailSent: false, emailError: error.message });
+          return res.json({ success: true, reference, emailSent: false, emailError: error.message });
         }
         console.log('Kennzeichen email sent successfully:', data?.id);
-        return res.json({ success: true, emailSent: true });
+        return res.json({ success: true, reference, emailSent: true });
       }
 
       console.warn('No RESEND_API_KEY configured, skipping kennzeichen email');
-      res.json({ success: true, emailSent: false });
+      res.json({ success: true, reference, emailSent: false });
     } catch (error) {
       console.error('Kennzeichen submission error:', error);
       res.status(500).json({ message: "Fehler beim Einreichen der Anfrage" });
@@ -1174,7 +1178,7 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
           </div>
         </div>`;
 
-      await storage.createSubmission({
+      const submission = await storage.createSubmission({
         type: 'neukunde',
         customerName: fullName,
         customerEmail: emailPrivat || emailDienstlich || '',
@@ -1183,6 +1187,8 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
         summary: `${fullName}${ort ? ' · ' + ort : ''}`,
         details: { anrede, titel, nachname, vorname, geburtsdatum, emailPrivat, mobilPrivat, beruf, stellung, plz, ort },
       });
+      const reference = referenceFor(submission.id);
+      sendReceipt(emailPrivat || emailDienstlich, fullName, 'Neukunden-Stammdaten', reference).catch(err => console.error('Receipt failed:', err));
 
       if (process.env.RESEND_API_KEY) {
         const { Resend } = await import('resend');
@@ -1190,12 +1196,12 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
         await resendClient.emails.send({
           from: 'ERGO Neukunden <neukunden@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
-          subject: `👤 Neukunden-Stammdaten: ${fullName} – ${now}`,
+          subject: `[${reference}] 👤 Neukunden-Stammdaten: ${fullName} – ${now}`,
           html: emailHtml,
         });
       }
 
-      res.json({ success: true });
+      res.json({ success: true, reference });
     } catch (error) {
       console.error('Neukunden submit error:', error);
       res.status(500).json({ message: "Fehler beim Übermitteln. Bitte versuchen Sie es erneut." });
