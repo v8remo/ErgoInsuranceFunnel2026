@@ -14,3 +14,8 @@ vite.config.ts.*
 *.key
 *.p12
 *.pfx
+!.env.example
+
+# Server-Betrieb
+backups/
+uploads/

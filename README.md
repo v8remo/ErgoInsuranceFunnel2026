@@ -1,10 +1,12 @@
-# ERGO Versicherungsplattform
+# Agentur Stübe – Website & Service-Center
+
+**Betrieb auf dem eigenen Server (Docker): siehe [DEPLOY.md](DEPLOY.md).** Lokal entwickeln: `cp .env.example .env`, Postgres bereitstellen, `npm run dev`.
 
 ## Overview
 The ERGO Versicherungsplattform is a professional lead generation platform designed for ERGO insurance agencies. It features optimized landing pages for various insurance products and an administrative dashboard for content and lead management. The platform aims to enhance online presence, streamline lead capture, and provide robust tools for managing customer interactions and marketing efforts. Key capabilities include comprehensive SEO, high performance, and conversion-optimized funnels to maximize lead generation from campaigns like Google Ads. The business vision is to provide a competitive edge in the insurance market through a highly effective digital presence.
 
 ## User Preferences
-- Admin-Passwort: Wird über die Umgebungsvariable ADMIN_PASSWORD konfiguriert (bcrypt-gehasht in der Datenbank gespeichert)
+- Admin-Passwort: Startwert über ADMIN_PASSWORD, danach bcrypt-gehasht in der Datenbank; Login als serverseitige Session (`server/auth.ts`), alle Admin-APIs verlangen sie
 - E-Mail-Benachrichtigungen für neue Leads gewünscht
 - Platform soll Google Ads ready sein
 - Sichere Admin-Authentifizierung mit Passwort-Änderungsfunktion gewünscht
@@ -35,7 +37,8 @@ The platform features a clean, professional design with a focus on user experien
 - **Backend:** Developed with Express.js and PostgreSQL.
   - **API Routes:** RESTful API for managing leads and content.
   - **Database:** PostgreSQL with Drizzle ORM for robust data management.
-  - **Session Management:** Express-Session handles admin authentication.
+  - **Session Management:** express-session mit Postgres-Store (`server/auth.ts`); Admin-Routen nutzen `requireAdmin`.
+  - **Migrationen:** SQL-Dateien in `migrations/` werden beim Start automatisch eingespielt (`npm run db:generate` erzeugt neue aus `shared/schema.ts`).
 
 ### Feature Specifications
 - **SEO Optimization:** Comprehensive meta-tags, sitemap.xml, robots.txt, Schema.org structured data (LocalBusiness, FAQPage), and LLM-friendly meta-tags.
@@ -60,4 +63,4 @@ The platform features a clean, professional design with a focus on user experien
 - **Cal.com (`@calcom/embed-react`):** Embedded for online appointment scheduling at `/termin` (namespace: `erstberatung`, calLink: `morino-stuebe-ergo/erstberatung`).
 - **IHK (Industrie- und Handelskammer):** Registration number and details included in legal disclosures.
 - **LfD Niedersachsen (Landesbeauftragte für den Datenschutz):** Referenced for data protection compliance.
-- **OpenAI (via Replit AI Integrations):** Used for Instagram content generation (gpt-5.2, POST /api/instagram/generate). No own API key needed – billed to Replit credits.
+- **OpenAI:** Used for Instagram content generation (POST /api/instagram/generate), eigener Schlüssel über `OPENAI_API_KEY`.

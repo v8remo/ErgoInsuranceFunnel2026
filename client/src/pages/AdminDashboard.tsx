@@ -63,6 +63,14 @@ export default function AdminDashboard() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Bestehende Server-Sitzung übernehmen (z. B. nach Neuladen der Seite).
+  useEffect(() => {
+    fetch("/api/admin/session", { credentials: "include" })
+      .then((r) => r.json())
+      .then((d) => setIsAuthenticated(!!d.isAdmin))
+      .catch(() => {});
+  }, []);
+
   // Authentication mutation
   const loginMutation = useMutation({
     mutationFn: async (password: string) => {
@@ -504,6 +512,8 @@ export default function AdminDashboard() {
   };
 
   const handleLogout = () => {
+    apiRequest("POST", "/api/admin/logout").catch(() => {});
+    queryClient.clear();
     setIsAuthenticated(false);
     setPassword("");
     setActiveTab("leads");
