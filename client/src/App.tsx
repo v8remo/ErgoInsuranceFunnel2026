@@ -16,6 +16,7 @@ const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
 const Impressum = lazy(() => import("@/pages/Impressum"));
 const Datenschutz = lazy(() => import("@/pages/Datenschutz"));
 const DokumentePage = lazy(() => import("@/pages/DokumentePage"));
+const ServiceCenter = lazy(() => import("@/pages/ServiceCenter"));
 const SchadenPage = lazy(() => import("@/pages/SchadenPage"));
 const KennzeichenPage = lazy(() => import("@/pages/KennzeichenPage"));
 const Erstinformation = lazy(() => import("@/pages/Erstinformation"));
@@ -54,10 +55,15 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [isBU] = useRoute("/berufsunfaehigkeit");
   const [isZahn] = useRoute("/zahnzusatz");
   const [isUnternehmen] = useRoute("/unternehmensversicherung");
+  // Service-Center bringt eigenen Kopf/Fuß mit.
+  const [isServiceHome] = useRoute("/service");
+  const [isServiceSub] = useRoute("/service/:rest*");
+  const isService = isServiceHome || isServiceSub;
+  const [isDokumente] = useRoute("/dokumente");
 
   const isSparten = isKfz || isHausrat || isHaftpflicht || isRechtsschutz || isBU || isZahn || isUnternehmen;
-  const hideHeader = isAdmin || isInstagram || isBeratung;
-  const hideFooter = isAdmin || isInstagram || isBeratung || isSparten;
+  const hideHeader = isAdmin || isInstagram || isBeratung || isService || isDokumente;
+  const hideFooter = isAdmin || isInstagram || isBeratung || isSparten || isService || isDokumente;
 
   return (
     <>
@@ -77,7 +83,9 @@ function AppContent() {
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/dokumente" component={DokumentePage} />
+          <Route path="/dokumente">{() => <DokumentePage />}</Route>
+          <Route path="/service" component={ServiceCenter} />
+          <Route path="/service/:typ">{(params) => <DokumentePage initialType={params.typ} />}</Route>
           <Route path="/admin" component={AdminDashboard} />
           <Route path="/impressum" component={Impressum} />
           <Route path="/datenschutz" component={Datenschutz} />

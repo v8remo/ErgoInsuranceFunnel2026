@@ -7,7 +7,7 @@ import multer from "multer";
 import { storage } from "./storage";
 import { insertLeadSchema, insertContentSchema } from "@shared/schema";
 import { z } from "zod";
-import { sendLeadNotification, esc } from "./email";
+import { sendLeadNotification, esc, referenceFor, sendReceipt } from "./email";
 import { requireAdmin, rateLimit, startAdminSession } from "./auth";
 import bcrypt from "bcryptjs";
 
@@ -394,7 +394,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
-      await storage.createSubmission({
+      const submission = await storage.createSubmission({
         type: 'dokument',
         customerName,
         customerEmail,
@@ -404,6 +404,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         details: { documentType, pdfAttached: !!pdfBase64 },
         pdfData: pdfBase64 || null,
       });
+      const reference = referenceFor(submission.id);
+      sendReceipt(customerEmail, customerName, documentType, reference).catch(err => console.error('Receipt failed:', err));
 
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
 
@@ -443,21 +445,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { data, error } = await resendClient.emails.send({
           from: 'ERGO Dokumente <dokumente@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
-          subject: `📄 Neues Dokument: ${documentType} – ${customerName} – ${now}`,
+          subject: `[${reference}] 📄 Neues Dokument: ${documentType} – ${customerName} – ${now}`,
           html: emailHtml,
           attachments,
         });
 
         if (error) {
           console.error('Resend email error:', JSON.stringify(error));
-          return res.json({ success: true, emailSent: false, emailError: error.message });
+          return res.json({ success: true, reference, emailSent: false, emailError: error.message });
         }
         console.log('Document email sent successfully:', data?.id);
-        return res.json({ success: true, emailSent: true });
+        return res.json({ success: true, reference, emailSent: true });
       }
 
       console.warn('No RESEND_API_KEY configured, skipping email');
-      res.json({ success: true, emailSent: false });
+      res.json({ success: true, reference, emailSent: false });
     } catch (error) {
       console.error('Document submission error:', error);
       res.status(500).json({ message: "Failed to submit document" });
@@ -825,7 +827,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
-      await storage.createSubmission({
+      const submission = await storage.createSubmission({
         type: 'rechnung',
         customerName: `${vorname} ${nachname}`,
         customerEmail: email,
@@ -834,6 +836,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         summary: beschreibung || '',
         details: { versicherungsnummer, schadennummer, fileCount: fileAttachments?.length || 0 },
       });
+      const reference = referenceFor(submission.id);
+      sendReceipt(email, `${vorname} ${nachname}`, 'Rechnung / Beleg einreichen', reference).catch(err => console.error('Receipt failed:', err));
 
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
       const fileCount = fileAttachments?.length || 0;
@@ -879,21 +883,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { data, error } = await resendClient.emails.send({
           from: 'ERGO Dokumente <dokumente@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
-          subject: `📎 Rechnung/Beleg: ${vorname} ${nachname} – VNR ${versicherungsnummer} – ${now}`,
+          subject: `[${reference}] 📎 Rechnung/Beleg: ${vorname} ${nachname} – VNR ${versicherungsnummer} – ${now}`,
           html: emailHtml,
           attachments: attachments.length > 0 ? attachments : undefined,
         });
 
         if (error) {
           console.error('Resend upload email error:', JSON.stringify(error));
-          return res.json({ success: true, emailSent: false, emailError: error.message });
+          return res.json({ success: true, reference, emailSent: false, emailError: error.message });
         }
         console.log('Document upload email sent successfully:', data?.id);
-        return res.json({ success: true, emailSent: true });
+        return res.json({ success: true, reference, emailSent: true });
       }
 
       console.warn('No RESEND_API_KEY configured, skipping upload email');
-      res.json({ success: true, emailSent: false });
+      res.json({ success: true, reference, emailSent: false });
     } catch (error) {
       console.error('Document upload submission error:', error);
       res.status(500).json({ message: "Fehler beim Einreichen der Dokumente" });

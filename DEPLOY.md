@@ -48,7 +48,8 @@ zeigt es die Anzahl der Einträge pro Tabelle.
 ## 3. Prüfen
 
 - `/admin` – Login, Leads und Einreichungen sichtbar?
-- `/dokumente`, `/schaden`, `/kennzeichen`, `/neukunden` – je einmal testweise absenden, Mail kommt an?
+- `/service` – je ein Anliegen testweise absenden: Mail an dich mit Vorgangsnummer, Eingangsbestätigung an die angegebene Adresse?
+- `/schaden`, `/kennzeichen`, `/neukunden` – je einmal testweise absenden, Mail kommt an?
 - `https://<DOMAIN>/api/submissions` ohne Login aufrufen → muss `401` liefern
 
 ## 4. Domain umstellen
