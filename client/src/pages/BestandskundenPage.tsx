@@ -10,12 +10,11 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import {
-  FileText, CalendarDays, MessageCircle, Phone,
-  Heart, Baby, Home, Truck, Briefcase, Sunrise,
-  Users, Clock, Award, Gift, ArrowRight,
-  ClipboardCheck, ClipboardList, Car, CarFront, AlertTriangle, MapPin,
-  Landmark, X, ChevronDown, FilePlus, Scale, Building2,
-  Ambulance, LayoutGrid,
+  FileText, Calendar, MessageCircle, Phone,
+  Heart, Baby, Home, Truck, Briefcase, Sunset,
+  CheckCircle, Users, Clock, Award, Gift, ArrowRight,
+  ClipboardCheck, Star, Car, AlertTriangle, MapPin,
+  CreditCard, XCircle, ChevronDown, UserPlus
 } from 'lucide-react';
 
 type BestandskundenContext =
@@ -32,6 +31,7 @@ interface Lebenslage {
   title: string;
   description: string;
   versicherungen: string[];
+  color: string;
   funnelLabel: string;
   context: BestandskundenContext;
 }
@@ -42,6 +42,7 @@ const lebenslagen: Lebenslage[] = [
     title: 'Heirat / Partnerschaft',
     description: 'Zusammenziehen, heiraten oder Partnerschaft eintragen? Viele Versicherungen lassen sich zusammenlegen und sparen.',
     versicherungen: ['Haftpflicht zusammenlegen', 'Hausrat anpassen', 'Risikolebensversicherung'],
+    color: 'bg-pink-50 border-pink-200 text-pink-700',
     funnelLabel: 'Heirat / Partnerschaft',
     context: 'heirat',
   },
@@ -50,6 +51,7 @@ const lebenslagen: Lebenslage[] = [
     title: 'Nachwuchs',
     description: 'Ein Baby verändert alles – auch Ihren Versicherungsbedarf. Schützen Sie Ihre Familie richtig ab.',
     versicherungen: ['Risikolebensversicherung', 'Unfallversicherung Familie', 'Krankenversicherung Kind'],
+    color: 'bg-blue-50 border-blue-200 text-blue-700',
     funnelLabel: 'Nachwuchs / Familie',
     context: 'nachwuchs',
   },
@@ -58,6 +60,7 @@ const lebenslagen: Lebenslage[] = [
     title: 'Hauskauf / Immobilie',
     description: 'Die größte Investition Ihres Lebens braucht den besten Schutz.',
     versicherungen: ['Wohngebäudeversicherung', 'Elementarschutz', 'Bauherrenhaftpflicht'],
+    color: 'bg-green-50 border-green-200 text-green-700',
     funnelLabel: 'Hauskauf / Immobilie',
     context: 'hauskauf',
   },
@@ -66,6 +69,7 @@ const lebenslagen: Lebenslage[] = [
     title: 'Umzug',
     description: 'Neue Adresse, neuer Wohnort – prüfen Sie, ob Ihre Versicherungen noch passen.',
     versicherungen: ['Hausrat Deckungssumme', 'Wohngebäude aktualisieren', 'Kfz-Regional­klasse'],
+    color: 'bg-orange-50 border-orange-200 text-orange-700',
     funnelLabel: 'Umzug',
     context: 'umzug',
   },
@@ -74,14 +78,16 @@ const lebenslagen: Lebenslage[] = [
     title: 'Jobwechsel / Selbstständigkeit',
     description: 'Ein neuer Job oder der Schritt in die Selbstständigkeit erfordert andere Absicherungen.',
     versicherungen: ['Berufsunfähigkeit prüfen', 'Betriebshaftpflicht', 'Private Krankenversicherung'],
+    color: 'bg-purple-50 border-purple-200 text-purple-700',
     funnelLabel: 'Jobwechsel / Selbstständigkeit',
     context: 'jobwechsel',
   },
   {
-    icon: Sunrise,
+    icon: Sunset,
     title: 'Ruhestand',
     description: 'Im Ruhestand ändern sich Risiken und Bedürfnisse – optimieren Sie Ihren Schutz.',
     versicherungen: ['Sterbegeldversicherung', 'Pflegezusatz', 'Reiseversicherung'],
+    color: 'bg-amber-50 border-amber-200 text-amber-700',
     funnelLabel: 'Ruhestand',
     context: 'ruhestand',
   },
@@ -98,18 +104,18 @@ const jahrescheckSteps = [
 interface SchadenTyp {
   label: string;
   typ: string;
-  icon: typeof Car;
+  icon: string;
   href?: string;
 }
 
 const schadenTypen: SchadenTyp[] = [
-  { label: 'Kfz-Schaden', typ: 'kfz', icon: CarFront },
-  { label: 'Glasschaden', typ: 'glasschaden', icon: LayoutGrid },
-  { label: 'Hausrat', typ: 'hausrat', icon: Home },
-  { label: 'Gebäude', typ: 'gebaeude', icon: Building2 },
-  { label: 'Haftpflicht', typ: 'haftpflicht', icon: Scale },
-  { label: 'Unfall melden', typ: 'unfall', icon: Ambulance, href: '/schaden-unfall' },
-  { label: 'Sonstiges', typ: 'sonstiges', icon: ClipboardList },
+  { label: 'Kfz-Schaden', typ: 'kfz', icon: '🚗' },
+  { label: 'Glasschaden', typ: 'glasschaden', icon: '🔲' },
+  { label: 'Hausrat', typ: 'hausrat', icon: '🏠' },
+  { label: 'Gebäude', typ: 'gebaeude', icon: '🏚️' },
+  { label: 'Haftpflicht', typ: 'haftpflicht', icon: '⚖️' },
+  { label: 'Unfall melden', typ: 'unfall', icon: '🚑', href: '/schaden-unfall' },
+  { label: 'Sonstiges', typ: 'sonstiges', icon: '📋' },
 ];
 
 const faqItems = [
@@ -118,8 +124,8 @@ const faqItems = [
     answer: 'Klicken Sie oben auf „Schaden melden" und wählen Sie die passende Schadensart. Das Online-Formular führt Sie Schritt für Schritt durch die Meldung. Alternativ erreichen Sie uns telefonisch unter 01556 6771019 oder per WhatsApp.',
   },
   {
-    question: 'Was ist die ERGO-Notfallnummer?',
-    answer: 'Die ERGO-Schaden-Hotline ist 0800 3746-000. Sie ist kostenlos und rund um die Uhr (24/7) erreichbar – bei Kfz-Unfällen, Einbruch, Wasserschäden oder anderen dringenden Schadenfällen.',
+    question: 'Was ist die Notfallnummer?',
+    answer: 'Die Schaden-Hotline ist 0800 3746-000. Sie ist kostenlos und rund um die Uhr (24/7) erreichbar – bei Kfz-Unfällen, Einbruch, Wasserschäden oder anderen dringenden Schadenfällen.',
   },
   {
     question: 'Wie ändere ich meine Bankverbindung?',
@@ -131,11 +137,11 @@ const faqItems = [
   },
   {
     question: 'Was ist der Bündelrabatt und wie berechne ich ihn?',
-    answer: 'Ab 5 ERGO-Verträgen erhalten Sie einen Bündelrabatt von bis zu 15 % auf alle Beitragszahlungen. Der genaue Rabatt hängt von Ihren Vertragsarten ab. Im kostenlosen Jahrescheck ermitteln wir Ihr persönliches Sparpotenzial.',
+    answer: 'Bei mehreren passenden Verträgen kann ein Bündelrabatt möglich sein. Der genaue Nachlass hängt von Ihren Vertragsarten ab. Im kostenlosen Jahrescheck ermitteln wir Ihr persönliches Sparpotenzial.',
   },
   {
     question: 'Wie kann ich meinen Berater wechseln?',
-    answer: 'Unter „Dokument einreichen" finden Sie den Beraterwechsel-Antrag. Mit wenigen Klicks können Sie Ihre ERGO-Verträge zu Morino Stübe übertragen – kostenlos und ohne Kündigung Ihrer bestehenden Verträge.',
+    answer: 'Unter „Dokument einreichen“ finden Sie den Beraterwechsel-Antrag. Mit wenigen Klicks können Sie die Betreuung Ihrer bestehenden Verträge zu Morino Stübe übertragen – kostenlos und ohne Kündigung.',
   },
   {
     question: 'Wie lange dauert die Schadenbearbeitung?',
@@ -182,181 +188,181 @@ export default function BestandskundenPage() {
   return (
     <>
       <SEO
-        title="Ihr Service-Bereich – ERGO Agentur Stübe | Bestandskunden"
-        description="Alle Services für ERGO-Kunden auf einen Blick: Schaden melden, Dokumente einreichen, Jahrescheck buchen, Lebenslagen-Beratung. Persönlicher Service von Morino Stübe."
-        keywords="ERGO Kundenservice, Bestandskunden Service, Versicherung Ganderkesee, Jahrescheck, Lebenslagen Versicherung"
+        title="Ihr Service-Bereich – Agentur Stübe | Bestandskunden"
+        description="Alle Services auf einen Blick: Schaden melden, Dokumente einreichen, Jahrescheck buchen, Lebenslagen-Beratung. Persönlicher Service von Morino Stübe."
+        keywords="Kundenservice, Bestandskunden Service, Versicherung Ganderkesee, Jahrescheck, Lebenslagen Versicherung"
       />
 
-      <div className="min-h-screen bg-white">
-        <section className="bg-white border-b border-ergo-line py-10 md:py-14 px-4">
+      <div className="ds-service min-h-screen bg-white">
+        <section className="ds-hero bg-gradient-to-br from-[#003781] to-[#005ab4] text-white py-8 md:py-14 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <p className="ergo-eyebrow">Exklusiv für ERGO-Kunden</p>
-            <h1 className="text-[30px] leading-[1.25] md:text-[40px] mb-3">
+            <div className="inline-flex items-center gap-2 bg-white/15 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
+              <Star className="w-4 h-4 text-yellow-300" />
+              Für Kundinnen und Kunden
+            </div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 leading-tight">
               Ihr persönlicher Service-Bereich
             </h1>
-            <p className="text-sm sm:text-base text-ergo-stone max-w-xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base text-blue-100 max-w-xl mx-auto leading-relaxed">
               Schnell, einfach und direkt bei Ihrem persönlichen Berater Morino Stübe.
             </p>
           </div>
         </section>
 
-        <div className="bg-ergo-red-light border-b border-ergo-line px-4 py-4">
+        <div className="bg-gradient-to-r from-red-600 to-orange-500 text-white px-4 py-4">
           <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
             <div className="flex items-center gap-2 shrink-0">
-              <AlertTriangle className="w-6 h-6 text-ergo-red shrink-0" />
-              <span className="font-bold text-sm sm:text-base text-ergo-ink">Notfall-Hotline 24/7</span>
+              <AlertTriangle className="w-6 h-6 text-yellow-200 shrink-0" />
+              <span className="font-bold text-sm sm:text-base">Notfall-Hotline 24/7</span>
             </div>
             <div className="flex-1 text-center sm:text-left">
-              <p className="text-sm text-ergo-stone leading-snug">
-                Bei Kfz-Unfall, Einbruch oder Wasserschaden: Sofort die ERGO-Schadenhotline anrufen
+              <p className="text-sm text-red-100 leading-snug">
+                Bei Kfz-Unfall, Einbruch oder Wasserschaden: Sofort die Schaden-Hotline anrufen
               </p>
             </div>
             <a
               href="tel:08003746000"
-              className="ergo-btn ergo-btn--primary ergo-btn--sm shrink-0"
+              className="inline-flex items-center gap-2 bg-white text-red-600 font-bold px-4 py-2.5 rounded-xl hover:bg-red-50 transition-colors text-sm shrink-0 min-h-[44px]"
             >
               <Phone className="w-4 h-4" />
               0800 3746-000
             </a>
           </div>
           <div className="max-w-4xl mx-auto mt-2">
-            <p className="text-center text-xs text-ergo-stone">
+            <p className="text-center text-xs text-red-100">
               Kostenlos · Rund um die Uhr · Gilt für: Kfz-Unfall, Einbruch, Glasschaden, Wasserschaden
             </p>
           </div>
         </div>
 
-        <section className="py-8 md:py-12 px-4">
+        <section className="py-8 md:py-12 px-4 -mt-6">
           <div className="max-w-4xl mx-auto">
-            <p className="ergo-eyebrow text-center mb-5">Was suchen Sie?</p>
+            <p className="text-center text-sm font-semibold text-gray-500 uppercase tracking-widest mb-5">Was suchen Sie?</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-3">
               <div className="relative" ref={schadenRef}>
                 <button
                   type="button"
                   onClick={() => setSchadenExpanded(v => !v)}
-                  className="ergo-tile p-4 md:p-6 text-center cursor-pointer h-full min-h-[120px] w-full"
+                  className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[120px] w-full"
                 >
-                  <span className="ergo-icon-disc w-10 h-10 mb-3">
-                    <FileText className="w-4 h-4" />
-                  </span>
-                  <h3 className="font-sans font-bold text-ergo-ink text-xs sm:text-sm">Schaden melden</h3>
-                  <p className="text-[10px] sm:text-xs text-ergo-mute mt-1 flex items-center justify-center gap-1">
+                  <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-red-100 transition-colors">
+                    <FileText className="w-7 h-7 text-red-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Schaden melden</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1 flex items-center justify-center gap-1">
                     Schadensart wählen
                     <ChevronDown className={`w-3 h-3 transition-transform ${schadenExpanded ? 'rotate-180' : ''}`} />
                   </p>
                 </button>
                 {schadenExpanded && (
-                  <div className="absolute top-full left-0 right-0 z-20 mt-1 bg-white border border-ergo-line rounded-lg shadow-[0_8px_24px_rgba(38,38,38,0.14)] overflow-hidden">
-                    {schadenTypen.map((t) => {
-                      const TypIcon = t.icon;
-                      return (
-                        <Link key={t.typ + t.label} href={t.href ?? `/schaden?typ=${t.typ}`}>
-                          <div
-                            onClick={() => setSchadenExpanded(false)}
-                            className="flex items-center gap-3 px-4 py-2.5 hover:bg-ergo-red-light cursor-pointer text-sm font-medium text-ergo-ink border-b border-ergo-line last:border-0"
-                          >
-                            <TypIcon className="w-4 h-4 text-ergo-red shrink-0" />
-                            {t.label}
-                          </div>
-                        </Link>
-                      );
-                    })}
+                  <div className="absolute top-full left-0 right-0 z-20 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
+                    {schadenTypen.map((t) => (
+                      <Link key={t.typ + t.label} href={t.href ?? `/schaden?typ=${t.typ}`}>
+                        <div
+                          onClick={() => setSchadenExpanded(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-50 cursor-pointer text-sm font-medium text-gray-800 border-b border-gray-100 last:border-0"
+                        >
+                          <span className="text-base">{t.icon}</span>
+                          {t.label}
+                        </div>
+                      </Link>
+                    ))}
                   </div>
                 )}
               </div>
 
               <Link href="/dokumente">
-                <div className="ergo-tile p-4 md:p-6 text-center cursor-pointer h-full min-h-[120px]">
-                  <span className="ergo-icon-disc w-10 h-10 mb-3">
-                    <ClipboardCheck className="w-4 h-4" />
-                  </span>
-                  <h3 className="font-sans font-bold text-ergo-ink text-xs sm:text-sm">Dokument einreichen</h3>
-                  <p className="text-[10px] sm:text-xs text-ergo-mute mt-1">Kündigung, Upload, Beraterwechsel</p>
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[120px]">
+                  <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-100 transition-colors">
+                    <ClipboardCheck className="w-7 h-7 text-blue-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Dokument einreichen</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Kündigung, Upload, Beraterwechsel</p>
                 </div>
               </Link>
 
               <Link href="/kennzeichen">
-                <div className="ergo-tile p-4 md:p-6 text-center cursor-pointer h-full min-h-[120px]">
-                  <span className="ergo-icon-disc w-10 h-10 mb-3">
-                    <Car className="w-4 h-4" />
-                  </span>
-                  <h3 className="font-sans font-bold text-ergo-ink text-xs sm:text-sm">eVB / Kennzeichen</h3>
-                  <p className="text-[10px] sm:text-xs text-ergo-mute mt-1">eVB-Anfrage, Versicherungskennzeichen</p>
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[120px]">
+                  <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-amber-100 transition-colors">
+                    <Car className="w-7 h-7 text-amber-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm">eVB / Kennzeichen</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">eVB-Anfrage, Versicherungskennzeichen</p>
                 </div>
               </Link>
 
               <Link href="/termin">
-                <div className="ergo-tile p-4 md:p-6 text-center cursor-pointer h-full min-h-[120px]">
-                  <span className="ergo-icon-disc w-10 h-10 mb-3">
-                    <CalendarDays className="w-4 h-4" />
-                  </span>
-                  <h3 className="font-sans font-bold text-ergo-ink text-xs sm:text-sm">Termin buchen</h3>
-                  <p className="text-[10px] sm:text-xs text-ergo-mute mt-1">Online oder vor Ort</p>
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[120px]">
+                  <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-green-100 transition-colors">
+                    <Calendar className="w-7 h-7 text-green-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Termin buchen</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Online oder vor Ort</p>
                 </div>
               </Link>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
               <Link href="/neukunden">
-                <div className="ergo-tile p-4 md:p-6 text-center cursor-pointer h-full min-h-[110px]">
-                  <span className="ergo-icon-disc w-10 h-10 mb-3">
-                    <FilePlus className="w-4 h-4" />
-                  </span>
-                  <h3 className="font-sans font-bold text-ergo-ink text-xs sm:text-sm">Daten mitteilen</h3>
-                  <p className="text-[10px] sm:text-xs text-ergo-mute mt-1">Neukunden-Formular</p>
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[110px]">
+                  <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-100 transition-colors">
+                    <UserPlus className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Daten mitteilen</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Neukunden-Formular</p>
                 </div>
               </Link>
 
               <Link href="/dokumente?formular=aenderung">
-                <div className="ergo-tile p-4 md:p-6 text-center cursor-pointer h-full min-h-[110px]">
-                  <span className="ergo-icon-disc w-10 h-10 mb-3">
-                    <MapPin className="w-4 h-4" />
-                  </span>
-                  <h3 className="font-sans font-bold text-ergo-ink text-xs sm:text-sm">Adresse ändern</h3>
-                  <p className="text-[10px] sm:text-xs text-ergo-mute mt-1">Umzug melden</p>
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[110px]">
+                  <div className="w-12 h-12 bg-violet-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-violet-100 transition-colors">
+                    <MapPin className="w-6 h-6 text-violet-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Adresse ändern</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Umzug melden</p>
                 </div>
               </Link>
 
               <Link href="/dokumente?formular=aenderung">
-                <div className="ergo-tile p-4 md:p-6 text-center cursor-pointer h-full min-h-[110px]">
-                  <span className="ergo-icon-disc w-10 h-10 mb-3">
-                    <Landmark className="w-4 h-4" />
-                  </span>
-                  <h3 className="font-sans font-bold text-ergo-ink text-xs sm:text-sm">Bankverbindung ändern</h3>
-                  <p className="text-[10px] sm:text-xs text-ergo-mute mt-1">Neue IBAN hinterlegen</p>
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[110px]">
+                  <div className="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-teal-100 transition-colors">
+                    <CreditCard className="w-6 h-6 text-teal-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Bankverbindung ändern</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Neue IBAN hinterlegen</p>
                 </div>
               </Link>
 
               <Link href="/dokumente?formular=kuendigung">
-                <div className="ergo-tile p-4 md:p-6 text-center cursor-pointer h-full min-h-[110px]">
-                  <span className="ergo-icon-disc w-10 h-10 mb-3">
-                    <X className="w-4 h-4" />
-                  </span>
-                  <h3 className="font-sans font-bold text-ergo-ink text-xs sm:text-sm">Vertrag kündigen</h3>
-                  <p className="text-[10px] sm:text-xs text-ergo-mute mt-1">Kündigung erstellen</p>
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[110px]">
+                  <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-rose-100 transition-colors">
+                    <XCircle className="w-6 h-6 text-rose-600" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm">Vertrag kündigen</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Kündigung erstellen</p>
                 </div>
               </Link>
 
               <Link href="/whatsapp">
-                <div className="ergo-tile p-4 md:p-6 text-center cursor-pointer h-full min-h-[110px]">
-                  <span className="ergo-icon-disc w-10 h-10 mb-3">
-                    <MessageCircle className="w-4 h-4" />
-                  </span>
-                  <h3 className="font-sans font-bold text-ergo-ink text-xs sm:text-sm">WhatsApp</h3>
-                  <p className="text-[10px] sm:text-xs text-ergo-mute mt-1">Service & Chat</p>
+                <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6 text-center hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group h-full min-h-[110px]">
+                  <div className="w-12 h-12 bg-[#25d366]/10 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#25d366]/20 transition-colors">
+                    <MessageCircle className="w-6 h-6 text-[#25d366]" />
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-xs sm:text-sm">WhatsApp</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Service & Chat</p>
                 </div>
               </Link>
             </div>
           </div>
         </section>
 
-        <section className="py-10 md:py-16 px-4 bg-ergo-gray border-y border-ergo-line">
+        <section className="py-10 md:py-16 px-4 bg-gray-50">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8 md:mb-10">
-              <h2 className="text-2xl md:text-[28px] mb-3">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3">
                 Lebenslagen – Versicherung anpassen
               </h2>
-              <p className="text-ergo-stone text-sm sm:text-base max-w-xl mx-auto">
+              <p className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">
                 Ihr Leben verändert sich? Prüfen Sie, ob Ihre Versicherungen noch passen. Wir beraten Sie kostenlos.
               </p>
             </div>
@@ -368,24 +374,22 @@ export default function BestandskundenPage() {
                   <button
                     key={lage.title}
                     type="button"
-                    className="ergo-tile p-5 text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-ergo-red focus:ring-offset-2"
+                    className={`rounded-xl border-2 p-5 ${lage.color} hover:shadow-lg transition-all group cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#003781] focus:ring-offset-2`}
                     onClick={() => openFunnel(lage.context, lage.funnelLabel)}
                   >
                     <div className="flex items-start gap-3 mb-2">
-                      <span className="ergo-icon-disc w-10 h-10">
-                        <Icon className="w-4 h-4" />
-                      </span>
-                      <h3 className="font-sans font-bold text-ergo-ink text-sm sm:text-base mt-2">{lage.title}</h3>
+                      <Icon className="w-6 h-6 shrink-0 mt-0.5" />
+                      <h3 className="font-bold text-gray-900 text-sm sm:text-base">{lage.title}</h3>
                     </div>
-                    <p className="text-xs sm:text-sm text-ergo-stone mb-3 leading-relaxed">{lage.description}</p>
+                    <p className="text-xs sm:text-sm text-gray-600 mb-3 leading-relaxed">{lage.description}</p>
                     <div className="flex flex-wrap gap-1.5 mb-4">
                       {lage.versicherungen.map((v) => (
-                        <span key={v} className="inline-block bg-white text-ergo-stone text-[10px] sm:text-xs font-medium px-2.5 py-1 rounded-pill border border-ergo-line leading-tight">
+                        <span key={v} className="inline-block bg-white/60 text-gray-700 text-[10px] sm:text-xs font-medium px-2.5 py-1 rounded-full border border-current/10 leading-tight">
                           {v}
                         </span>
                       ))}
                     </div>
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-ergo-red">
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold group-hover:gap-2 transition-all">
                       Jetzt prüfen <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </button>
@@ -398,39 +402,42 @@ export default function BestandskundenPage() {
         <section className="py-10 md:py-16 px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8 md:mb-10">
-              <p className="ergo-eyebrow">Kostenlos & unverbindlich</p>
-              <h2 className="text-2xl md:text-[28px] mb-3">
+              <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
+                <ClipboardCheck className="w-4 h-4" />
+                Kostenlos & unverbindlich
+              </div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3">
                 Der kostenlose Jahrescheck
               </h2>
-              <p className="text-ergo-stone text-sm sm:text-base max-w-xl mx-auto">
+              <p className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">
                 Einmal im Jahr sollten Sie Ihre Versicherungen prüfen lassen. Unser systematisches 5-Schritte-Verfahren analysiert Ihre aktuelle Absicherung und deckt Lücken sowie Sparpotenziale auf.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 md:gap-4 mb-8">
               {jahrescheckSteps.map((s, i) => (
-                <div key={s.step} className="ergo-card p-4 text-center relative">
-                  <div className="w-8 h-8 bg-ergo-red text-white rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-bold">
+                <div key={s.step} className="bg-white rounded-xl border border-gray-200 p-4 text-center relative">
+                  <div className="w-8 h-8 bg-[#003781] text-white rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-bold">
                     {s.step}
                   </div>
-                  <h4 className="font-sans font-bold text-ergo-ink text-xs sm:text-sm mb-1">{s.title}</h4>
-                  <p className="text-[10px] sm:text-xs text-ergo-mute leading-relaxed">{s.desc}</p>
+                  <h4 className="font-bold text-gray-900 text-xs sm:text-sm mb-1">{s.title}</h4>
+                  <p className="text-[10px] sm:text-xs text-gray-500 leading-relaxed">{s.desc}</p>
                   {i < jahrescheckSteps.length - 1 && (
-                    <ArrowRight className="w-4 h-4 text-ergo-line absolute -right-3.5 top-1/2 -translate-y-1/2 hidden sm:block" />
+                    <ArrowRight className="w-4 h-4 text-gray-300 absolute -right-3.5 top-1/2 -translate-y-1/2 hidden sm:block" />
                   )}
                 </div>
               ))}
             </div>
 
-            <div className="ergo-section--red rounded-lg p-6 md:p-8 text-center">
-              <h3 className="text-lg sm:text-xl mb-2">Jahrescheck jetzt anfragen</h3>
-              <p className="text-sm text-white/90 mb-5 max-w-lg mx-auto">
+            <div className="bg-gradient-to-r from-[#003781] to-[#005ab4] rounded-2xl p-6 md:p-8 text-white text-center">
+              <h3 className="text-lg sm:text-xl font-bold mb-2">Jahrescheck jetzt anfragen</h3>
+              <p className="text-sm text-blue-100 mb-5 max-w-lg mx-auto">
                 Wir analysieren Ihre bestehenden Versicherungen und zeigen Ihnen, wo Sie bis zu 15% mit dem Bündelrabatt sparen können.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
                   onClick={() => openFunnel('jahrescheck', 'Jahrescheck')}
-                  className="ergo-btn ergo-btn--inverted"
+                  className="inline-flex items-center justify-center gap-2 bg-white text-[#003781] font-bold px-6 py-3.5 rounded-xl hover:bg-gray-100 transition-colors min-h-[48px]"
                 >
                   <ClipboardCheck className="w-4 h-4" /> Jahrescheck starten
                 </button>
@@ -438,7 +445,7 @@ export default function BestandskundenPage() {
                   href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hallo Herr Stübe, ich möchte gerne meinen kostenlosen Jahrescheck durchführen. Wann hätten Sie Zeit?')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ergo-btn ergo-btn--whatsapp"
+                  className="inline-flex items-center justify-center gap-2 bg-[#25d366] text-white font-bold px-6 py-3.5 rounded-xl hover:bg-[#1da851] transition-colors min-h-[48px]"
                 >
                   <MessageCircle className="w-4 h-4" /> Per WhatsApp
                 </a>
@@ -447,11 +454,11 @@ export default function BestandskundenPage() {
           </div>
         </section>
 
-        <section className="py-10 md:py-16 px-4 bg-ergo-gray border-y border-ergo-line">
+        <section className="py-10 md:py-16 px-4 bg-gray-50">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-[28px] mb-3">
-                Ihre Vorteile als ERGO-Kunde
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                Ihre Vorteile bei Agentur Stübe
               </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -463,12 +470,12 @@ export default function BestandskundenPage() {
               ].map((v) => {
                 const Icon = v.icon;
                 return (
-                  <div key={v.title} className="ergo-card p-5 text-center">
-                    <span className="ergo-icon-disc w-10 h-10 mb-3">
-                      <Icon className="w-4 h-4" />
-                    </span>
-                    <h3 className="font-sans font-bold text-ergo-ink text-sm mb-1">{v.title}</h3>
-                    <p className="text-xs text-ergo-mute leading-relaxed">{v.desc}</p>
+                  <div key={v.title} className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+                    <div className="w-12 h-12 bg-[#003781]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <Icon className="w-6 h-6 text-[#003781]" />
+                    </div>
+                    <h3 className="font-bold text-gray-900 text-sm mb-1">{v.title}</h3>
+                    <p className="text-xs text-gray-500 leading-relaxed">{v.desc}</p>
                   </div>
                 );
               })}
@@ -479,11 +486,11 @@ export default function BestandskundenPage() {
         <section className="py-10 md:py-16 px-4">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-[28px] mb-3">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3">
                 Häufige Fragen (FAQ)
               </h2>
-              <p className="text-ergo-stone text-sm sm:text-base max-w-xl mx-auto">
-                Antworten auf die wichtigsten Fragen rund um Ihren ERGO-Versicherungsschutz.
+              <p className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">
+                Antworten auf die wichtigsten Fragen rund um Ihren Versicherungsschutz.
               </p>
             </div>
             <Accordion type="single" collapsible className="space-y-2">
@@ -491,12 +498,12 @@ export default function BestandskundenPage() {
                 <AccordionItem
                   key={idx}
                   value={`faq-${idx}`}
-                  className="ergo-card px-5"
+                  className="bg-white border border-gray-200 rounded-xl px-5 shadow-sm"
                 >
-                  <AccordionTrigger className="text-left text-sm sm:text-base font-semibold text-ergo-ink py-4 hover:no-underline">
+                  <AccordionTrigger className="text-left text-sm sm:text-base font-semibold text-gray-900 py-4 hover:no-underline">
                     {item.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-sm text-ergo-stone pb-4 leading-relaxed">
+                  <AccordionContent className="text-sm text-gray-600 pb-4 leading-relaxed">
                     {item.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -505,18 +512,18 @@ export default function BestandskundenPage() {
           </div>
         </section>
 
-        <section className="py-10 md:py-16 px-4 bg-ergo-gray border-y border-ergo-line">
+        <section className="py-10 md:py-16 px-4 bg-gray-50">
           <div className="max-w-3xl mx-auto">
-            <div className="ergo-card p-6 md:p-8">
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-6 md:p-8">
               <div className="flex flex-col md:flex-row items-center gap-6">
-                <span className="ergo-icon-disc shrink-0">
-                  <Gift className="w-5 h-5" />
-                </span>
+                <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center shrink-0">
+                  <Gift className="w-8 h-8 text-amber-600" />
+                </div>
                 <div className="text-center md:text-left flex-1">
-                  <h3 className="text-lg sm:text-xl mb-2">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                     Empfehlen & Profitieren
                   </h3>
-                  <p className="text-sm text-ergo-stone mb-4 leading-relaxed">
+                  <p className="text-sm text-gray-600 mb-4 leading-relaxed">
                     Kennen Sie jemanden, der eine gute Versicherungsberatung gebrauchen kann?
                     Empfehlen Sie uns weiter – als Dankeschön erwartet Sie und Ihren Freund eine kleine Überraschung!
                   </p>
@@ -525,13 +532,13 @@ export default function BestandskundenPage() {
                       href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hallo Herr Stübe, ich möchte gerne jemanden für eine Versicherungsberatung empfehlen.')}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ergo-btn ergo-btn--whatsapp ergo-btn--sm"
+                      className="inline-flex items-center justify-center gap-2 bg-[#25d366] text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-[#1da851] transition-colors text-sm min-h-[44px]"
                     >
                       <MessageCircle className="w-4 h-4" /> Per WhatsApp empfehlen
                     </a>
                     <a
                       href="mailto:morino.stuebe@ergo.de?subject=Empfehlung%20f%C3%BCr%20Versicherungsberatung"
-                      className="ergo-btn ergo-btn--tertiary ergo-btn--sm"
+                      className="inline-flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 font-semibold px-5 py-2.5 rounded-xl hover:bg-gray-50 transition-colors text-sm min-h-[44px]"
                     >
                       Per E-Mail empfehlen
                     </a>
@@ -542,14 +549,14 @@ export default function BestandskundenPage() {
           </div>
         </section>
 
-        <section className="ergo-section--red py-10 md:py-14 px-4">
+        <section className="py-10 md:py-14 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h3 className="text-lg sm:text-xl mb-2">Ihr Berater</h3>
-            <p className="text-white/90 text-sm mb-4">Morino Stübe – ERGO Agentur Ganderkesee</p>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Ihr Berater</h3>
+            <p className="text-gray-600 text-sm mb-4">Morino Stübe – Agentur Stübe Ganderkesee</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
                 href="tel:015566771019"
-                className="ergo-btn ergo-btn--inverted"
+                className="inline-flex items-center justify-center gap-2 bg-ergo-red text-white font-semibold px-5 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm min-h-[48px]"
               >
                 <Phone className="w-4 h-4" /> 01556 6771019
               </a>
@@ -557,7 +564,7 @@ export default function BestandskundenPage() {
                 href={`https://wa.me/${whatsappNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ergo-btn ergo-btn--whatsapp"
+                className="inline-flex items-center justify-center gap-2 bg-[#25d366] text-white font-semibold px-5 py-3 rounded-xl hover:bg-[#1da851] transition-colors text-sm min-h-[48px]"
               >
                 <MessageCircle className="w-4 h-4" /> WhatsApp
               </a>

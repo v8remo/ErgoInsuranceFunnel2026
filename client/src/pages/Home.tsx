@@ -5,19 +5,19 @@ export default function Home() {
   return (
     <div className="ds-home">
       <SEO
-        title="ERGO Versicherung Ganderkesee | Agentur Stübe – Kostenlose Beratung"
-        description="Ihr ERGO Versicherungsberater in Ganderkesee, Delmenhorst und Oldenburg. Persönliche Beratung und kostenlose Versicherungsanalyse."
-        keywords="ERGO Versicherung Ganderkesee, Versicherungsberater Ganderkesee, ERGO Delmenhorst, ERGO Oldenburg, Versicherung wechseln, kostenlose Versicherungsanalyse, Morino Stübe, Haftpflicht, Hausrat, Kfz-Versicherung"
+        title="Versicherungsberatung Ganderkesee | Agentur Stübe – Kostenlose Beratung"
+        description="Ihre Versicherungsberatung in Ganderkesee, Delmenhorst und Oldenburg. Persönliche Beratung und kostenlose Versicherungsanalyse."
+        keywords="Versicherungsberatung Ganderkesee, Versicherungsberater Ganderkesee, Versicherung Delmenhorst, Versicherung Oldenburg, Versicherung wechseln, kostenlose Versicherungsanalyse, Morino Stübe, Haftpflicht, Hausrat, Kfz-Versicherung"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "InsuranceAgency",
-          "name": "ERGO Agentur Stübe",
-          "alternateName": "ERGO Versicherung Ganderkesee – Morino Stübe",
+          "name": "Agentur Stübe",
+          "alternateName": "Versicherungsberatung Ganderkesee – Morino Stübe",
           "@id": "https://ergo-ganderkesee.de",
           "url": "https://ergo-ganderkesee.de",
           "telephone": ["+4915566771019", "+4942212959999"],
           "email": "morino.stuebe@ergo.de",
-          "description": "Ihr ERGO Versicherungsberater in Ganderkesee, Delmenhorst und Oldenburg. Kostenlose Versicherungsanalyse und persönliche Beratung.",
+          "description": "Ihre Versicherungsberatung in Ganderkesee, Delmenhorst und Oldenburg. Kostenlose Versicherungsanalyse und persönliche Beratung.",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "Friedensstraße 91 A",

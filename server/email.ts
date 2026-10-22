@@ -1,5 +1,12 @@
 import { Resend } from 'resend';
-import { Lead } from '../shared/schema';
+import { Lead } from '@shared/schema';
+
+// Formulareingaben vor dem Einsetzen in HTML-Mails maskieren.
+export function esc(value: unknown): string {
+  return String(value ?? "").replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+  );
+}
 
 interface UtmData {
   source?: string;
@@ -22,15 +29,13 @@ if (!process.env.RESEND_API_KEY) {
   console.warn('RESEND_API_KEY not found - Email notifications will be disabled');
 }
 
+const resend = new Resend(process.env.RESEND_API_KEY || "re_unset");
+
 export async function sendLeadNotification(lead: Lead): Promise<boolean> {
   if (!process.env.RESEND_API_KEY) {
     console.log('Email notification skipped - no API key configured');
     return false;
   }
-
-  // Erst hier instanziieren: der Resend-Konstruktor wirft ohne API-Key und
-  // würde auf Modulebene die gesamte Serverless Function zum Absturz bringen.
-  const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
     const emailHtml = `
@@ -44,12 +49,12 @@ export async function sendLeadNotification(lead: Lead): Promise<boolean> {
           <h2 style="color: #e53e3e; margin-top: 0;">Lead-Details</h2>
           
           <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <p><strong>Versicherungstyp:</strong> ${getInsuranceName(lead.insuranceType)}</p>
-            <p><strong>Name:</strong> ${lead.firstName} ${lead.lastName}</p>
-            <p><strong>E-Mail:</strong> <a href="mailto:${lead.email}">${lead.email}</a></p>
-            <p><strong>Telefon:</strong> <a href="tel:${lead.phone}">${lead.phone}</a></p>
-            <p><strong>PLZ:</strong> ${lead.location}</p>
-            <p><strong>Alter:</strong> ${lead.age}</p>
+            <p><strong>Versicherungstyp:</strong> ${esc(getInsuranceName(lead.insuranceType))}</p>
+            <p><strong>Name:</strong> ${esc(lead.firstName)} ${esc(lead.lastName)}</p>
+            <p><strong>E-Mail:</strong> <a href="mailto:${esc(lead.email)}">${esc(lead.email)}</a></p>
+            <p><strong>Telefon:</strong> <a href="tel:${esc(lead.phone)}">${esc(lead.phone)}</a></p>
+            <p><strong>PLZ:</strong> ${esc(lead.location)}</p>
+            <p><strong>Alter:</strong> ${esc(lead.age)}</p>
             <p><strong>Eingegangen:</strong> ${new Date(lead.createdAt).toLocaleString('de-DE')}</p>
           </div>
           
@@ -102,17 +107,17 @@ function renderSpecificData(specificData: unknown): string {
   ${otherEntries.length > 0 ? `
   <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
     <h3 style="color: #e53e3e; margin-top: 0;">Weitere Angaben</h3>
-    ${otherEntries.map(([key, value]) => `<p><strong>${getFieldName(key)}:</strong> ${value}</p>`).join('')}
+    ${otherEntries.map(([key, value]) => `<p><strong>${esc(getFieldName(key))}:</strong> ${esc(value)}</p>`).join('')}
   </div>` : ''}
   ${hasUTM && utm ? `
   <div style="background-color: #fffbeb; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; margin-bottom: 15px;">
     <h3 style="color: #92400e; margin-top: 0;">📊 Google Ads Tracking</h3>
-    ${utm.gclid ? `<p><strong>GCLID:</strong> <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:12px;">${utm.gclid}</code></p>` : ''}
-    ${utm.source ? `<p><strong>Quelle:</strong> ${utm.source}</p>` : ''}
-    ${utm.medium ? `<p><strong>Medium:</strong> ${utm.medium}</p>` : ''}
-    ${utm.campaign ? `<p><strong>Kampagne:</strong> ${utm.campaign}</p>` : ''}
-    ${utm.term ? `<p><strong>Suchbegriff:</strong> ${utm.term}</p>` : ''}
-    ${utm.content ? `<p><strong>Anzeige:</strong> ${utm.content}</p>` : ''}
+    ${utm.gclid ? `<p><strong>GCLID:</strong> <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:12px;">${esc(utm.gclid)}</code></p>` : ''}
+    ${utm.source ? `<p><strong>Quelle:</strong> ${esc(utm.source)}</p>` : ''}
+    ${utm.medium ? `<p><strong>Medium:</strong> ${esc(utm.medium)}</p>` : ''}
+    ${utm.campaign ? `<p><strong>Kampagne:</strong> ${esc(utm.campaign)}</p>` : ''}
+    ${utm.term ? `<p><strong>Suchbegriff:</strong> ${esc(utm.term)}</p>` : ''}
+    ${utm.content ? `<p><strong>Anzeige:</strong> ${esc(utm.content)}</p>` : ''}
   </div>` : ''}`;
 }
 

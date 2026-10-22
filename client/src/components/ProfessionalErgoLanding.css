@@ -1,0 +1,183 @@
+.ergo-landing {
+  --hero-ink: #29272b;
+  --hero-blue: #1d5558;
+  --hero-red: #c26b45;
+  background:
+    radial-gradient(circle at 88% 6%, rgba(169, 229, 232, .38), transparent 22rem),
+    linear-gradient(180deg, #f8f8f6 0%, #fffefd 48%, #f5f5f2 100%);
+}
+
+.ergo-promo {
+  background: #1d5558;
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(165, 0, 70, .16);
+}
+
+.ergo-promo-mark {
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.28);
+  color: #fff;
+  letter-spacing: .04em;
+  font-size: .62rem;
+}
+
+.ergo-hero {
+  max-width: 1200px;
+  margin-top: 1rem;
+  border-radius: .7rem;
+  background:
+    linear-gradient(112deg, #fffefd 0%, #fffefd 65%, #e3f6f7 100%);
+  border: 1px solid #dedde0;
+  box-shadow: 0 12px 28px rgba(41, 39, 43, .08);
+}
+
+.ergo-hero::before {
+  content: "";
+  position: absolute;
+  width: 30rem;
+  height: 30rem;
+  right: -12rem;
+  top: -15rem;
+  border: 1px solid rgba(165,0,70,.10);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.ergo-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 10% 0 auto;
+  width: 15rem;
+  height: 4px;
+  background: var(--hero-red);
+}
+
+.ergo-hero-copy,
+.ergo-hero-media {
+  position: relative;
+  z-index: 1;
+}
+
+.ergo-hero-copy h1,
+.ergo-hero-copy .text-white {
+  color: #29272b;
+}
+
+.ergo-hero-copy .text-slate-200 {
+  color: #5b5960;
+}
+
+.ergo-hero-copy .text-white\/60 {
+  color: #6b6870;
+}
+
+.ergo-hero-copy .text-emerald-200 {
+  color: #087443;
+  background: #e2f6f0;
+}
+
+.ergo-hero-media .text-white {
+  color: #fff;
+}
+
+.ergo-eyebrow {
+  background: #f8e5ed;
+  border: 1px solid #eac4d4;
+  color: #c26b45;
+}
+
+.ergo-eyebrow::before {
+  content: "";
+  width: .42rem;
+  height: .42rem;
+  border-radius: 50%;
+  background: #c26b45;
+  box-shadow: 0 0 0 4px rgba(165,0,70,.10);
+}
+
+.ergo-hero-highlight {
+  color: #c26b45;
+}
+
+.ergo-quiz {
+  background: #fff;
+  border: 1px solid rgba(255,255,255,.7);
+  box-shadow: 0 18px 38px rgba(0, 16, 46, .22);
+}
+
+.ergo-quiz-icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: .6rem;
+  color: var(--hero-blue);
+  background: #edf3fa;
+}
+
+.ergo-video {
+  border: 6px solid #fffefd;
+  background: #5d0739;
+  box-shadow: 0 16px 32px rgba(41, 39, 43, .16);
+}
+
+.ergo-video-caption {
+  color: #6b6870;
+}
+
+.ergo-video-caption span:last-child {
+  color: #b9e7d2;
+}
+
+@media (min-width: 768px) {
+  .ergo-hero-media {
+    align-self: center;
+    transform: translateY(1.25rem);
+  }
+}
+
+@media (max-width: 767px) {
+  .ergo-hero {
+    margin-top: .75rem;
+    border-radius: 1.25rem;
+  }
+
+  .ergo-hero::after {
+    width: 7rem;
+  }
+
+  .ergo-promo p {
+    max-width: 15rem;
+  }
+
+  .ergo-video-caption {
+    font-size: .68rem;
+  }
+}
+
+/* Shared Agentur Stübe visual language for the professional landing route. */
+.ergo-landing {
+  --hero-ink: #263333;
+  --hero-blue: #1d5558;
+  --hero-red: #c26b45;
+  background:
+    radial-gradient(circle at 88% 6%, rgba(227,239,235,.8), transparent 22rem),
+    linear-gradient(180deg, #f5f2eb 0%, #fffdf8 48%, #f0eee7 100%);
+}
+.ergo-promo { background: #1d5558; box-shadow: 0 8px 22px rgba(29,85,88,.16); }
+.ergo-promo-mark { background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.3); }
+.ergo-hero {
+  background: linear-gradient(112deg, #fffdf8 0%, #fffdf8 65%, #e3efeb 100%);
+  border-color: #d9ded8; box-shadow: 0 12px 28px rgba(38,51,51,.09);
+}
+.ergo-hero::before { border-color: rgba(194,107,69,.15); }
+.ergo-hero::after { background: #c26b45; }
+.ergo-hero-copy h1, .ergo-hero-copy .text-white { color: #263333; }
+.ergo-hero-copy .text-slate-200, .ergo-hero-copy .text-white\/60 { color: #596866; }
+.ergo-hero-copy .text-emerald-200 { color: #2e725f; background: #e3efeb; }
+.ergo-eyebrow { background: #f7e8df; border-color: #e8cfc2; color: #985039; }
+.ergo-eyebrow::before { background: #c26b45; box-shadow: 0 0 0 4px rgba(194,107,69,.12); }
+.ergo-hero-highlight { color: #c26b45; }
+.ergo-quiz { box-shadow: 0 18px 38px rgba(18,61,65,.2); }
+.ergo-quiz-icon { color: #1d5558; background: #e3efeb; }
+.ergo-video { background: #123d41; box-shadow: 0 16px 32px rgba(38,51,51,.16); }

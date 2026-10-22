@@ -1,10 +1,12 @@
-# ERGO Versicherungsplattform
+# Agentur Stübe – Website & Service-Center
+
+**Betrieb auf dem eigenen Server (Docker): siehe [DEPLOY.md](DEPLOY.md).** Lokal entwickeln: `cp .env.example .env`, Postgres bereitstellen, `npm run dev`.
 
 ## Overview
 The ERGO Versicherungsplattform is a professional lead generation platform designed for ERGO insurance agencies. It features optimized landing pages for various insurance products and an administrative dashboard for content and lead management. The platform aims to enhance online presence, streamline lead capture, and provide robust tools for managing customer interactions and marketing efforts. Key capabilities include comprehensive SEO, high performance, and conversion-optimized funnels to maximize lead generation from campaigns like Google Ads. The business vision is to provide a competitive edge in the insurance market through a highly effective digital presence.
 
 ## User Preferences
-- Admin-Passwort: Wird über die Umgebungsvariable ADMIN_PASSWORD konfiguriert (bcrypt-gehasht in der Datenbank gespeichert)
+- Admin-Passwort: Startwert über ADMIN_PASSWORD, danach bcrypt-gehasht in der Datenbank; Login als serverseitige Session (`server/auth.ts`), alle Admin-APIs verlangen sie
 - E-Mail-Benachrichtigungen für neue Leads gewünscht
 - Platform soll Google Ads ready sein
 - Sichere Admin-Authentifizierung mit Passwort-Änderungsfunktion gewünscht
@@ -12,13 +14,13 @@ The ERGO Versicherungsplattform is a professional lead generation platform desig
 ## System Architecture
 
 ### UI/UX Decisions
-The platform follows the authentic ERGO corporate design (tokens extracted from ergo.de). The design system lives centrally in `client/src/index.css` (component classes) and `tailwind.config.ts` (color/font tokens).
-- **Color Scheme:** ERGO berry red `#8E0038` (hover `#71022E`) as the single accent; text `#333`; lines `#D9D9D9`; surfaces `#F6F5F5`/`#FBF4F4`; petrol check green `#009284` (ERGO CheckColorIcon) for success/checkmarks; pastel accents (`#FAD782`, `#B3DA8A`, `#96C8FF`, `#FA7D73`) only for chips/badges. WhatsApp CTAs keep WhatsApp green. Never use Allianz blue `#003781` or bright red `#E2001A`.
-- **Typography:** Serif headlines h1–h4 (Source Serif 4, standing in for ERGO's Fedra Serif), Open Sans body/UI (standing in for FS Me). Hero H1 `text-[30px] md:text-[40px]`.
-- **Components:** Pill buttons with 2px border per the ergo.de CTA system (`ergo-btn` + `--primary/--secondary/--tertiary/--inverted/--whatsapp`); cards 8px radius with 1px border instead of shadows (`ergo-card`, hoverable `ergo-tile`); selection tiles `ergo-option`; inputs 4px radius with red focus ring; `ergo-check-list` with petrol circle checkmarks; `ergo-eyebrow` red bold intro line; `ergo-section--red` berry closing CTA bands; `ergo-icon-disc` rosé icon circles. Icons: lucide-react only, no emojis in UI.
-- **Layout language:** White heros (eyebrow + serif H1 + pill CTAs), alternating white and `bg-ergo-gray` sections, calm motion (single fadeInUp per section, no marquees/parallax/pulse/glassmorphism/gradients).
-- **Responsiveness:** Mobile-first; touch-optimized buttons (min-height 48px) and larger input fields for mobile funnels.
-- **Trust Elements:** Professional photos, ERGO Testsieger badges, customer testimonials, `TrustBar` component. Honest static claims only — no computed fake urgency/scarcity (no "X free slots today" derived from the date).
+The platform features a clean, professional design with a focus on user experience and conversion optimization.
+- **Color Scheme:** Utilizes ERGO's brand colors with optimized contrast ratios for WCAG compliance.
+- **Typography:** Responsive font sizes and increased line height/letter spacing for improved readability.
+- **Responsiveness:** Mobile-first CSS ensures optimal viewing and interaction across all devices. Touch-optimized buttons and larger input fields for mobile funnels.
+- **Trust Elements:** Integration of professional photos, ERGO Testsieger-Badges, and customer testimonials to build credibility. Shared `TrustBar` component (4-column: 1000+ Kunden, 4.9/5 Sterne, 97% Weiterempfehlung, 15+ Jahre Erfahrung) used across all marketing pages.
+- **Design Consistency:** Shared `Breadcrumb` component on all subpages, shared `FAQSection` accordion component, unified hero gradients (`from-ergo-red-light via-ergo-gray-light to-white`), standardized H1 sizing (`text-2xl sm:text-3xl lg:text-4xl`), and unified step-transition animations (opacity-only) across SchadenPage/KennzeichenPage/DokumentePage.
+- **Conversion Psychology:** Implementation of urgency, social proof, loss aversion, scarcity, and authority principles in CTAs and page layouts.
 
 ### Technical Implementations
 - **Frontend:** Built with React and TypeScript, providing a dynamic and responsive user interface.
@@ -35,7 +37,8 @@ The platform follows the authentic ERGO corporate design (tokens extracted from 
 - **Backend:** Developed with Express.js and PostgreSQL.
   - **API Routes:** RESTful API for managing leads and content.
   - **Database:** PostgreSQL with Drizzle ORM for robust data management.
-  - **Session Management:** Express-Session handles admin authentication.
+  - **Session Management:** express-session mit Postgres-Store (`server/auth.ts`); Admin-Routen nutzen `requireAdmin`.
+  - **Migrationen:** SQL-Dateien in `migrations/` werden beim Start automatisch eingespielt (`npm run db:generate` erzeugt neue aus `shared/schema.ts`).
 
 ### Feature Specifications
 - **SEO Optimization:** Comprehensive meta-tags, sitemap.xml, robots.txt, Schema.org structured data (LocalBusiness, FAQPage), and LLM-friendly meta-tags.
@@ -60,4 +63,4 @@ The platform follows the authentic ERGO corporate design (tokens extracted from 
 - **Cal.com (`@calcom/embed-react`):** Embedded for online appointment scheduling at `/termin` (namespace: `erstberatung`, calLink: `morino-stuebe-ergo/erstberatung`).
 - **IHK (Industrie- und Handelskammer):** Registration number and details included in legal disclosures.
 - **LfD Niedersachsen (Landesbeauftragte für den Datenschutz):** Referenced for data protection compliance.
-- **OpenAI (via Replit AI Integrations):** Used for Instagram content generation (gpt-5.2, POST /api/instagram/generate). No own API key needed – billed to Replit credits.
+- **OpenAI:** Used for Instagram content generation (POST /api/instagram/generate), eigener Schlüssel über `OPENAI_API_KEY`.

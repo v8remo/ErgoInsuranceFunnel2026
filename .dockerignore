@@ -1,0 +1,10 @@
+node_modules
+dist
+backups
+.git
+.env
+.env.*
+*.dump
+# Arbeitsnotizen nicht öffentlich ausliefern
+attached_assets/*.md
+attached_assets/*.txt
