@@ -58,8 +58,12 @@ function Layout({ children }: { children: React.ReactNode }) {
   // Service-Center bringt eigenen Kopf/Fuß mit.
   const [isServiceHome] = useRoute("/service");
   const [isServiceSub] = useRoute("/service/:rest*");
-  const isService = isServiceHome || isServiceSub;
   const [isDokumente] = useRoute("/dokumente");
+  const [isSchaden] = useRoute("/schaden");
+  const [isUnfall] = useRoute("/schaden-unfall");
+  const [isKennzeichen] = useRoute("/kennzeichen");
+  const [isNeukunden] = useRoute("/neukunden");
+  const isService = isServiceHome || isServiceSub || isSchaden || isUnfall || isKennzeichen || isNeukunden;
 
   const isSparten = isKfz || isHausrat || isHaftpflicht || isRechtsschutz || isBU || isZahn || isUnternehmen;
   const hideHeader = isAdmin || isInstagram || isBeratung || isService || isDokumente;
