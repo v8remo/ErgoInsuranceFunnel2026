@@ -67,9 +67,9 @@ export default function SparRechner() {
   return (
     <>
       <SEO
-        title="Bündel-Sparrechner – Bis zu 15% sparen | ERGO Agentur Stübe"
-        description="Berechnen Sie jetzt Ihre Ersparnis mit dem ERGO Bündelnachlass. Bis zu 15% Rabatt bei 5+ Sachversicherungen. Kostenlos und unverbindlich."
-        keywords="Bündelnachlass ERGO, Versicherung sparen, Bündelrabatt, Versicherung günstiger, ERGO Rabatt, Sachversicherung bündeln"
+        title="Bündel-Sparrechner – mögliche Ersparnis | Agentur Stübe"
+        description="Berechnen Sie unverbindlich Ihre mögliche Ersparnis, wenn mehrere Sachversicherungen gebündelt werden."
+        keywords="Bündelnachlass, Versicherung sparen, Bündelrabatt, Versicherung günstiger, Sachversicherung bündeln, Agentur Stübe"
       />
 
       <div className="ds-form-flow min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -78,13 +78,13 @@ export default function SparRechner() {
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
               <PiggyBank className="w-4 h-4" />
-              ERGO Bündelnachlass
+              Bündelvorteil prüfen
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
               Bündel-Sparrechner
             </h1>
             <p className="text-gray-500 text-sm md:text-base">
-              Berechnen Sie, wie viel Sie mit dem ERGO Bündelnachlass sparen können
+              Berechnen Sie unverbindlich Ihre mögliche Ersparnis bei gebündelten Verträgen
             </p>
           </div>
 
@@ -191,7 +191,7 @@ export default function SparRechner() {
                     </div>
                   </div>
                   <div className="bg-green-50 rounded-xl p-4 flex items-center justify-between sm:flex-col sm:justify-center">
-                    <p className="text-xs text-green-600 font-semibold sm:mb-1">Mit ERGO</p>
+                    <p className="text-xs text-green-600 font-semibold sm:mb-1">Gebündelt</p>
                     <div className="flex items-baseline gap-1 sm:flex-col sm:items-center">
                       <p className="text-xl sm:text-lg font-bold text-green-700">{neuerBeitrag.toFixed(0)} €</p>
                       <p className="text-xs text-gray-400">pro Jahr</p>

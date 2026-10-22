@@ -90,7 +90,7 @@ const docTypeLabels: Record<DocType, string> = {
 const docTypeCards: { type: DocType; icon: string; title: string; desc: string }[] = [
   { type: 'upload', icon: '📎', title: 'Rechnung / Beleg einreichen', desc: 'Rechnungen, Belege oder Nachweise hochladen und einreichen' },
   { type: 'kuendigung', icon: '📄', title: 'Kündigungsschreiben', desc: 'Kündigung bei einem anderen Versicherer einreichen' },
-  { type: 'beraterwechsel', icon: '🔄', title: 'Beraterwechsel-Antrag', desc: 'Von Morino Stübe bei ERGO betreut werden' },
+  { type: 'beraterwechsel', icon: '🔄', title: 'Beraterwechsel-Antrag', desc: 'Von Morino Stübe betreut werden' },
   { type: 'aenderung', icon: '✏️', title: 'Änderungsantrag', desc: 'Adresse, IBAN oder andere Vertragsdaten ändern' },
   { type: 'vollmacht', icon: '📋', title: 'Vollmacht & SEPA', desc: 'Betreuungsvollmacht & Lastschriftmandat erteilen' },
 ];
@@ -387,7 +387,7 @@ export default function DokumentePage() {
     let y = height - 50;
 
     if (selectedType !== 'kuendigung') {
-      page.drawText('ERGO', { x: width - margin - 80, y, font: helveticaBold, size: 28, color: ergoRed });
+      page.drawText('Agentur Stuebe', { x: width - margin - 170, y, font: helveticaBold, size: 20, color: ergoRed });
       y -= 18;
       page.drawText('Agentur Stuebe - Morino Stuebe', { x: width - margin - 170, y, font: helvetica, size: 12, color: ergoBlue });
       y -= 20;
@@ -611,7 +611,7 @@ export default function DokumentePage() {
       page.drawText(s(`${formData.vorname} ${formData.nachname}`), { x: margin, y, font: helvetica, size: 10, color: black });
 
       const footerY = 30;
-      const footerText = 'Erstellt ueber ergo-stuebe.de | ERGO Agentur Stuebe | Tel: 015566771019 | Vermittlerregister-Nr.: D-5H7J-7DUI1-10';
+      const footerText = 'Erstellt ueber ergo-stuebe.de | Agentur Stuebe | Tel: 015566771019 | Vermittlerregister-Nr.: D-5H7J-7DUI1-10';
       const footerWidth = helvetica.widthOfTextAtSize(footerText, 8);
       page.drawText(footerText, { x: (width - footerWidth) / 2, y: footerY, font: helvetica, size: 8, color: rgb(0.5, 0.5, 0.5) });
     }
@@ -736,9 +736,9 @@ export default function DokumentePage() {
   return (
     <div className="ds-form-flow min-h-screen bg-gray-50 safe-area-bottom">
       <SEO
-        title="Dokumente & Kündigungen einreichen – ERGO Agentur Stübe Ganderkesee"
-        description="Versicherungsdokumente digital einreichen: Kündigungen, Rechnungen und Belege. Schnell und sicher über Ihre ERGO Agentur Stübe in Ganderkesee."
-        keywords="Versicherung kündigen, Dokumente einreichen, ERGO Ganderkesee, Rechnung einreichen, Kündigung Versicherung"
+        title="Dokumente & Kündigungen einreichen – Agentur Stübe Ganderkesee"
+        description="Versicherungsdokumente digital einreichen: Kündigungen, Rechnungen und Belege. Schnell und sicher über die Agentur Stübe in Ganderkesee."
+        keywords="Versicherung kündigen, Dokumente einreichen, Ganderkesee, Rechnung einreichen, Kündigung Versicherung"
       />
       <Breadcrumb items={[{ label: "Dokumente" }]} />
       <div className="max-w-[600px] mx-auto px-5 py-6">

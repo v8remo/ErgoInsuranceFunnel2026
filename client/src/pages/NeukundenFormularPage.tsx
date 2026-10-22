@@ -181,16 +181,16 @@ export default function NeukundenFormularPage() {
   if (success) {
     return (
       <div className="ds-form-flow min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <SEO title="Danke – Daten übermittelt | ERGO Agentur Stübe" description="Ihre Angaben wurden erfolgreich an die ERGO Agentur Stübe übermittelt." noIndex />
+        <SEO title="Danke – Daten übermittelt | Agentur Stübe" description="Ihre Angaben wurden erfolgreich an die Agentur Stübe übermittelt." noIndex />
         <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
           <div className="text-5xl mb-4">✅</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Vielen Dank!</h1>
           <p className="text-gray-600 mb-6">
-            Ihre Daten wurden erfolgreich an die ERGO Agentur Stübe übermittelt. Wir melden uns schnellstmöglich bei Ihnen.
+            Ihre Daten wurden erfolgreich an die Agentur Stübe übermittelt. Wir melden uns schnellstmöglich bei Ihnen.
           </p>
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
             <strong>Ihre Agentur:</strong><br />
-            Morino Stübe · ERGO Versicherung<br />
+            Morino Stübe · Agentur Stübe<br />
             📞 015566 771019<br />
             📧 morino.stuebe@ergo.de
           </div>
@@ -202,7 +202,7 @@ export default function NeukundenFormularPage() {
   return (
     <>
       <SEO
-        title="Kundendaten mitteilen – ERGO Agentur Stübe Ganderkesee"
+        title="Kundendaten mitteilen – Agentur Stübe Ganderkesee"
         description="Bitte füllen Sie das Formular aus, damit wir Ihre Daten für eine persönliche Beratung erfassen können."
         noIndex
       />
@@ -210,7 +210,7 @@ export default function NeukundenFormularPage() {
         {/* Mini-Header */}
         <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
           <div>
-            <div className="text-lg font-bold text-[#E2001A] leading-tight">ERGO</div>
+            <div className="text-lg font-bold text-[#E2001A] leading-tight">Agentur Stübe</div>
             <div className="text-[10px] text-gray-500">Agentur Stübe · Ganderkesee</div>
           </div>
           <div className="ml-auto text-right">
@@ -226,7 +226,7 @@ export default function NeukundenFormularPage() {
 
           {/* Intro */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4 text-center">
-            <div className="inline-block bg-[#E2001A] text-white text-xs font-bold px-3 py-1 rounded-full mb-3">ERGO</div>
+            <div className="inline-block bg-[#E2001A] text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Agentur Stübe</div>
             <h1 className="text-xl font-extrabold text-gray-900 mb-2">Ihre Kontaktdaten</h1>
             <p className="text-sm text-gray-500 leading-relaxed">
               Bitte füllen Sie das Formular so vollständig wie möglich aus. Ihre Daten werden sicher übermittelt und ausschließlich für Ihre persönliche Beratung genutzt.
@@ -514,7 +514,7 @@ export default function NeukundenFormularPage() {
             )}
 
             <div className="text-xs text-gray-400 leading-relaxed pt-2">
-              Mit dem Absenden stimmen Sie zu, dass Ihre Daten zum Zweck der Beratung durch die ERGO Agentur Stübe verarbeitet werden. Weitere Informationen in der{' '}
+              Mit dem Absenden stimmen Sie zu, dass Ihre Daten zum Zweck der Beratung durch die Agentur Stübe verarbeitet werden. Weitere Informationen in der{' '}
               <a href="/datenschutz" target="_blank" className="text-[#003781] underline">Datenschutzerklärung</a>.
             </div>
 

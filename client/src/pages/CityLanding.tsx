@@ -8,6 +8,7 @@ import TrustBar from "@/components/TrustBar";
 import FAQSection from "@/components/FAQSection";
 import { trackEvent, trackConversion } from "@/lib/analytics";
 import FunnelOverlay from "@/components/FunnelOverlay";
+import { neutralizePublicBranding } from "@/lib/public-brand";
 import '@/styles/funnel.css';
 import beraterPhoto from "@assets/optimized/ich_bin_da.webp";
 
@@ -292,7 +293,7 @@ const cityData: Record<string, {
       },
       {
         question: "Gibt es eine ERGO Agentur direkt in Syke?",
-        answer: "Die nächste persönliche ERGO Beratung für Syke erhalten Sie bei der Agentur Stübe in Ganderkesee – nur ca. 25 Minuten entfernt. Ich betreue bereits zufriedene Kunden aus Syke und dem Landkreis Diepholz und freue mich darauf, auch Sie kennenzulernen – gerne bei Ihnen zu Hause."
+        answer: "Die nächste persönliche Versicherungsberatung für Syke erhalten Sie bei der Agentur Stübe in Ganderkesee – nur ca. 25 Minuten entfernt. Ich betreue bereits zufriedene Kunden aus Syke und dem Landkreis Diepholz und freue mich darauf, auch Sie kennenzulernen – gerne bei Ihnen zu Hause."
       }
     ],
     nearbyLinks: [
@@ -418,7 +419,28 @@ const QUIZ_TO_FUNNEL: Record<string, { type: string; label: string }> = {
 };
 
 export default function CityLanding({ cityKey }: { cityKey: string }) {
-  const data = cityData[cityKey];
+  const rawData = cityData[cityKey];
+  const data = rawData ? {
+    ...rawData,
+    description: neutralizePublicBranding(rawData.description),
+    metaTitle: neutralizePublicBranding(rawData.metaTitle),
+    metaDescription: neutralizePublicBranding(rawData.metaDescription),
+    keywords: neutralizePublicBranding(rawData.keywords),
+    intro: neutralizePublicBranding(rawData.intro),
+    serviceText: neutralizePublicBranding(rawData.serviceText),
+    beraterIntro: neutralizePublicBranding(rawData.beraterIntro),
+    detailedServiceText: neutralizePublicBranding(rawData.detailedServiceText),
+    localSeoText: neutralizePublicBranding(rawData.localSeoText),
+    localSeoText2: neutralizePublicBranding(rawData.localSeoText2),
+    testimonials: rawData.testimonials.map(item => ({
+      ...item,
+      text: neutralizePublicBranding(item.text),
+    })),
+    faqs: rawData.faqs.map(item => ({
+      question: neutralizePublicBranding(item.question),
+      answer: neutralizePublicBranding(item.answer),
+    })),
+  } : undefined;
   const [showFunnel, setShowFunnel] = useState(false);
   const [funnelInsuranceType, setFunnelInsuranceType] = useState<string | undefined>(undefined);
   const [funnelInsuranceLabel, setFunnelInsuranceLabel] = useState<string | undefined>(undefined);
@@ -455,7 +477,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         structuredData={{
           "@context": "https://schema.org",
           "@type": "InsuranceAgency",
-          "name": "ERGO Agentur Stübe",
+          "name": "Agentur Stübe",
           "description": data.description,
           "telephone": "+4915566771019",
           "email": "morino.stuebe@ergo.de",
@@ -500,7 +522,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                   transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
                   className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
                 >
-                  Ihre ERGO Agentur für{' '}
+                  Ihre Agentur Stübe für{' '}
                   <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                     {data.name}
                   </span>
@@ -630,13 +652,13 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                 whileHover={{ scale: 1.03 }}
                 transition={{ duration: 0.3 }}
                 src={beraterPhoto}
-                alt="Morino Stübe - ERGO Versicherungsfachmann in Ganderkesee"
+                alt="Morino Stübe - persönlicher Versicherungsfachmann in Ganderkesee"
                 className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-lg shrink-0 bg-white"
                 loading="lazy"
               />
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-gray-900 mb-1 md:text-2xl">Morino Stübe</h3>
-                <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann · Ganderkesee & Region</p>
+                <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">Persönlicher Versicherungsfachmann · Ganderkesee & Region</p>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4 md:text-base">{data.beraterIntro}</p>
                 <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                   <span className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full">
@@ -658,7 +680,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         <motion.section {...fadeInUp} className="py-10 md:py-14 bg-gradient-to-br from-yellow-50 to-orange-50">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-center">
-              ERGO – Ausgezeichnete Qualität
+              Versicherungsleistungen im unabhängigen Vergleich
             </h2>
             <p className="text-gray-600 text-center mb-8">
               Vielfach ausgezeichnet von unabhängigen Testinstituten
@@ -740,7 +762,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
         <motion.section {...fadeInUp} className="py-10 md:py-14 bg-white">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
-              Warum ERGO Agentur Stübe für {data.name}?
+              Warum Agentur Stübe für {data.name}?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
@@ -801,7 +823,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               Folgen Sie uns auf Instagram
             </h2>
             <p className="text-gray-600 mb-6">
-              Versicherungstipps, Einblicke & Neuigkeiten aus der ERGO Agentur Stübe
+              Versicherungstipps, Einblicke & Neuigkeiten aus der Agentur Stübe
             </p>
             <a
               href="https://www.instagram.com/morino_stuebe/"
@@ -853,7 +875,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
               Auch in Ihrer Nähe
             </h2>
             <p className="text-gray-600 text-center mb-8 text-sm">
-              Persönliche ERGO Versicherungsberatung auch in benachbarten Städten und Gemeinden
+              Persönliche Versicherungsberatung auch in benachbarten Städten und Gemeinden
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {data.nearbyLinks.map((link) => (
@@ -864,7 +886,7 @@ export default function CityLanding({ cityKey }: { cityKey: string }) {
                 >
                   <div>
                     <p className="font-semibold text-gray-900 group-hover:text-[#003781] transition-colors">
-                      ERGO Beratung {link.name}
+                      Beratung für {link.name}
                     </p>
                     <p className="text-xs text-gray-500 mt-0.5">{link.region}</p>
                     <span className="inline-flex items-center gap-1 mt-1.5 text-xs font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">

@@ -438,7 +438,7 @@ function BrandingSlide({ format, slideIndex, totalSlides }: { format: FormatKey;
         fontWeight: 600,
         color: ERGO.textMedium,
       }}>
-        Persönlich. Nahbar. Für dich da.
+        Persönlich beraten. Gut begleitet.
       </div>
       <ProgressBar current={slideIndex} total={totalSlides} />
     </div>

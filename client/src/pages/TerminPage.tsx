@@ -27,8 +27,8 @@ export default function TerminPage() {
   return (
     <>
       <SEO
-        title="Termin buchen | ERGO Agentur Stübe Ganderkesee"
-        description="Buchen Sie jetzt Ihren persönlichen Beratungstermin bei ERGO Agentur Stübe in Ganderkesee. Kostenlos, unverbindlich und bequem online."
+        title="Termin buchen | Agentur Stübe Ganderkesee"
+        description="Buchen Sie jetzt Ihren persönlichen Beratungstermin bei der Agentur Stübe in Ganderkesee. Kostenlos, unverbindlich und bequem online."
         locality="Ganderkesee"
       />
 

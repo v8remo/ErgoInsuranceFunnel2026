@@ -325,7 +325,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const type = req.query.type as string | undefined;
       const status = req.query.status as string | undefined;
-      const subs = await storage.getSubmissions({ type, status });
+      const subject = req.query.subject as string | undefined;
+      const subjectIn = subject === 'unfall_all'
+        ? ['unfall', 'Unfallversicherung']
+        : undefined;
+      const subs = await storage.getSubmissions({ type, status, subject: subjectIn ? undefined : subject, subjectIn });
       res.json(subs);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch submissions" });

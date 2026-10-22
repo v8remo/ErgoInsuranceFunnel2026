@@ -255,7 +255,12 @@ export default function AdminDashboard() {
     queryKey: ["/api/submissions", filterSubmissionType],
     queryFn: async () => {
       const params = new URLSearchParams();
-      if (filterSubmissionType !== "all") params.set("type", filterSubmissionType);
+      if (filterSubmissionType === "schaden_unfall") {
+        params.set("type", "schaden");
+        params.set("subject", "unfall_all");
+      } else if (filterSubmissionType !== "all") {
+        params.set("type", filterSubmissionType);
+      }
       const response = await apiRequest("GET", `/api/submissions?${params.toString()}`);
       return response.json();
     },
@@ -284,7 +289,13 @@ export default function AdminDashboard() {
     }
   });
 
-  const getSubmissionTypeBadge = (type: string) => {
+  const isUnfallSubmission = (type: string, subject?: string | null) =>
+    type === "schaden" && (subject === "unfall" || subject === "Unfallversicherung");
+
+  const getSubmissionTypeBadge = (type: string, subject?: string | null) => {
+    if (isUnfallSubmission(type, subject)) {
+      return <Badge className="bg-orange-100 text-orange-800">🚑 Unfallversicherung</Badge>;
+    }
     const config: Record<string, { label: string; className: string }> = {
       dokument: { label: "Dokument", className: "bg-blue-100 text-blue-800" },
       schaden: { label: "Schaden", className: "bg-red-100 text-red-800" },
@@ -294,6 +305,28 @@ export default function AdminDashboard() {
     };
     const c = config[type] || { label: type, className: "bg-gray-100 text-gray-800" };
     return <Badge className={c.className}>{c.label}</Badge>;
+  };
+
+  const parseUnfallSummary = (summary: string) => {
+    const sections: { title: string; items: { key: string; value: string }[] }[] = [];
+    const lines = summary.split('\n');
+    let currentSection: { title: string; items: { key: string; value: string }[] } | null = null;
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('---') && trimmed.endsWith('---')) {
+        if (currentSection) sections.push(currentSection);
+        currentSection = { title: trimmed.replace(/---/g, '').trim(), items: [] };
+      } else if (trimmed.startsWith('===')) {
+        // skip header line
+      } else if (currentSection && trimmed.includes(': ')) {
+        const colonIdx = trimmed.indexOf(': ');
+        const key = trimmed.substring(0, colonIdx).trim();
+        const value = trimmed.substring(colonIdx + 2).trim();
+        if (key && value) currentSection.items.push({ key, value });
+      }
+    }
+    if (currentSection) sections.push(currentSection);
+    return sections;
   };
 
   const getSubmissionStatusBadge = (status: string) => {
@@ -543,7 +576,7 @@ export default function AdminDashboard() {
         <Card className="w-full max-w-md shadow-xl">
           <CardHeader className="bg-ergo-red text-white rounded-t-lg">
             <CardTitle className="text-center text-white text-lg sm:text-xl">
-              ERGO Admin Dashboard
+              Agentur Stübe · Verwaltung
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 sm:p-6">
@@ -861,13 +894,14 @@ export default function AdminDashboard() {
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
               <CardTitle>Kundenanfragen</CardTitle>
               <Select value={filterSubmissionType} onValueChange={setFilterSubmissionType}>
-                <SelectTrigger className="w-full sm:w-48">
+                <SelectTrigger className="w-full sm:w-56">
                   <SelectValue placeholder="Typ filtern" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Alle Typen</SelectItem>
                   <SelectItem value="dokument">Dokumente</SelectItem>
-                  <SelectItem value="schaden">Schaden</SelectItem>
+                  <SelectItem value="schaden">Schaden (alle)</SelectItem>
+                  <SelectItem value="schaden_unfall">🚑 Unfallversicherung</SelectItem>
                   <SelectItem value="kennzeichen">Kennzeichen</SelectItem>
                   <SelectItem value="rechnung">Rechnungen</SelectItem>
                   <SelectItem value="rueckruf">Rückrufe</SelectItem>
@@ -886,7 +920,7 @@ export default function AdminDashboard() {
                   <div key={sub.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
                       <div className="flex items-center gap-2 flex-wrap">
-                        {getSubmissionTypeBadge(sub.type)}
+                        {getSubmissionTypeBadge(sub.type, sub.subject)}
                         {getSubmissionStatusBadge(sub.status)}
                         <span className="text-xs text-gray-400">
                           {sub.createdAt ? new Date(sub.createdAt).toLocaleString("de-DE") : "-"}
@@ -942,12 +976,39 @@ export default function AdminDashboard() {
                         </div>
                       )}
                     </div>
-                    {sub.summary && (
+                    {isUnfallSubmission(sub.type, sub.subject) ? (() => {
+                      const structuredText = (sub.details as any)?.extraFields || sub.summary || '';
+                      const sections = structuredText ? parseUnfallSummary(structuredText) : [];
+                      return sections.length > 0 ? (
+                        <details className="mt-3" open>
+                          <summary className="text-xs font-semibold text-orange-700 cursor-pointer hover:text-orange-900 flex items-center gap-1 mb-2">
+                            🚑 Unfallmeldung – Strukturierte Detailansicht
+                          </summary>
+                          <div className="mt-2 space-y-3">
+                            {sections.map((section) => (
+                              <div key={section.title} className="bg-orange-50 border border-orange-100 rounded-lg p-3">
+                                <h4 className="text-xs font-bold text-orange-800 uppercase tracking-wide mb-2">{section.title}</h4>
+                                <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
+                                  {section.items.map((item) => (
+                                    <div key={item.key} className="flex gap-1 text-xs">
+                                      <dt className="font-medium text-gray-600 shrink-0">{item.key}:</dt>
+                                      <dd className="text-gray-800 break-words">{item.value}</dd>
+                                    </div>
+                                  ))}
+                                </dl>
+                              </div>
+                            ))}
+                          </div>
+                        </details>
+                      ) : structuredText ? (
+                        <p className="text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded whitespace-pre-wrap">{structuredText}</p>
+                      ) : null;
+                    })() : sub.summary ? (
                       <p className="text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded">{sub.summary}</p>
-                    )}
+                    ) : null}
                     {(sub.details != null && typeof sub.details === 'object' && !Array.isArray(sub.details) && Object.keys(sub.details as Record<string, unknown>).length > 0) && (
                       <details className="mt-2">
-                        <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700">Details anzeigen</summary>
+                        <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700">Rohdaten anzeigen</summary>
                         <pre className="text-xs bg-gray-50 p-2 rounded mt-1 overflow-x-auto whitespace-pre-wrap">
                           {JSON.stringify(sub.details, null, 2)}
                         </pre>

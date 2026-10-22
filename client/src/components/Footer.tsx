@@ -11,10 +11,11 @@ export default function Footer() {
           
           {/* Contact Info */}
           <div className="mb-6 sm:mb-0">
+            <img src="/agentur-stuebe-logo-inverse.svg" alt="Agentur Stübe" className="h-12 sm:h-14 w-auto mb-5" />
             <div className="ds-rule mb-4 bg-red-400" />
             <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4">Kontakt</h3>
             <div className="space-y-2 sm:space-y-3 text-blue-100/80 text-sm sm:text-base">
-              <p className="font-medium text-white">ERGO Agentur Stübe</p>
+               <p className="font-medium text-white">Agentur Stübe</p>
               <p>Morino Stübe</p>
               
               <div className="flex items-start">
@@ -267,7 +268,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-white/15 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-blue-100/65">
-          <p className="text-sm sm:text-base">&copy; 2026 ERGO Versicherung - Morino Stübe. Alle Rechte vorbehalten.</p>
+          <p className="text-sm sm:text-base">&copy; 2026 Agentur Stübe - Morino Stübe. Alle Rechte vorbehalten.</p>
           <p className="text-xs sm:text-sm mt-2">
             Vermittlerregister: <a href="https://www.vermittlerregister.info" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 break-all">www.vermittlerregister.info</a>
           </p>

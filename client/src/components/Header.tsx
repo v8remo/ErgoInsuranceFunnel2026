@@ -59,7 +59,7 @@ export default function Header() {
     <header
       className={`ds-site-header sticky top-0 z-50 w-full transition-all duration-300 ${
           scrolled
-           ? "backdrop-blur-xl shadow-[0_1px_12px_rgba(165,0,70,0.10)] border-b"
+            ? "backdrop-blur-xl shadow-[0_1px_12px_rgba(29,85,88,0.12)] border-b"
           : "border-b"
       }`}
     >
@@ -67,14 +67,12 @@ export default function Header() {
         <div className="flex justify-between items-center h-16 sm:h-[4.5rem]">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center group shrink-0">
-            <div className="text-left">
-              <div className="text-[1.35rem] sm:text-[1.55rem] font-extrabold tracking-[-0.08em] text-ergo-red group-hover:opacity-80 transition-opacity">ERGO</div>
-              <div className="text-[10px] sm:text-xs font-medium text-slate-500 leading-tight">
-                <span className="hidden sm:inline">Agentur Stübe · Ganderkesee</span>
-                <span className="sm:hidden">Agentur Stübe</span>
-              </div>
-            </div>
+          <Link href="/" className="flex items-center group shrink-0" aria-label="Agentur Stübe – Startseite">
+            <img
+              src="/agentur-stuebe-logo.svg"
+              alt="Agentur Stübe"
+              className="h-10 sm:h-12 w-auto transition-transform duration-200 group-hover:scale-[1.02]"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -86,8 +84,8 @@ export default function Header() {
                 onClick={() => setDropdownOpen(v => !v)}
                 className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
                   isInsurancePage || dropdownOpen
-                    ? "text-ergo-red bg-red-50"
-                    : "text-gray-700 hover:text-ergo-red hover:bg-gray-50"
+                     ? "text-[#1d5558] bg-[#e3efeb]"
+                     : "text-gray-700 hover:text-[#1d5558] hover:bg-[#f5f2eb]"
                 }`}
               >
                 Versicherungen
@@ -100,26 +98,26 @@ export default function Header() {
                     <Link
                       key={href}
                       href={href}
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-red-50 group transition-colors"
+                     className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#e3efeb] group transition-colors"
                     >
-                      <div className="w-8 h-8 rounded-lg bg-red-50 group-hover:bg-ergo-red/20 flex items-center justify-center shrink-0 transition-colors mt-0.5">
-                        <Icon className="w-4 h-4 text-ergo-red" />
+                       <div className="w-8 h-8 rounded-lg bg-[#e3efeb] group-hover:bg-[#c9dfd8] flex items-center justify-center shrink-0 transition-colors mt-0.5">
+                         <Icon className="w-4 h-4 text-[#1d5558]" />
                       </div>
                       <div>
-                        <div className="text-sm font-semibold text-gray-900 group-hover:text-ergo-red transition-colors">{label}</div>
+                         <div className="text-sm font-semibold text-gray-900 group-hover:text-[#1d5558] transition-colors">{label}</div>
                         <div className="text-xs text-gray-500">{desc}</div>
                       </div>
                     </Link>
                   ))}
                   <Link
                     href="/leben-vorsorge"
-                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-red-50 group transition-colors"
+                    className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-[#e3efeb] group transition-colors"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-red-50 group-hover:bg-ergo-red/20 flex items-center justify-center shrink-0 transition-colors mt-0.5">
-                      <HeartHandshake className="w-4 h-4 text-ergo-red" />
+                    <div className="w-8 h-8 rounded-lg bg-[#e3efeb] group-hover:bg-[#c9dfd8] flex items-center justify-center shrink-0 transition-colors mt-0.5">
+                      <HeartHandshake className="w-4 h-4 text-[#1d5558]" />
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-gray-900 group-hover:text-ergo-red transition-colors">Leben & Vorsorge</div>
+                      <div className="text-sm font-semibold text-gray-900 group-hover:text-[#1d5558] transition-colors">Leben & Vorsorge</div>
                       <div className="text-xs text-gray-500">BU, Rente & Altersvorsorge</div>
                     </div>
                   </Link>
@@ -131,8 +129,8 @@ export default function Header() {
               href="/bestandskunden"
               className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
                 location === "/bestandskunden"
-                  ? "text-[#003781] bg-blue-50"
-                  : "text-[#003781] hover:bg-blue-50"
+                  ? "text-[#1d5558] bg-[#e3efeb]"
+                  : "text-[#1d5558] hover:bg-[#e3efeb]"
               }`}
             >
               Mein Service
@@ -142,8 +140,8 @@ export default function Header() {
               href="/termin"
               className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                 location === "/termin"
-                  ? "text-ergo-red bg-red-50"
-                  : "text-gray-700 hover:text-ergo-red hover:bg-gray-50"
+                  ? "text-[#c26b45] bg-[#f7e8df]"
+                  : "text-gray-700 hover:text-[#c26b45] hover:bg-[#f5f2eb]"
               }`}
             >
               Termin
@@ -163,14 +161,14 @@ export default function Header() {
             <div className="hidden lg:flex flex-col items-end gap-0.5">
               <a
                 href="tel:015566771019"
-                className="flex items-center gap-1.5 text-gray-700 hover:text-ergo-red transition-colors text-sm"
+                className="flex items-center gap-1.5 text-gray-700 hover:text-[#c26b45] transition-colors text-sm"
               >
                 <Phone className="w-3.5 h-3.5" />
                 <span className="font-medium">015566 771019</span>
               </a>
               <a
                 href="tel:042212959999"
-                className="flex items-center gap-1.5 text-gray-500 hover:text-ergo-red transition-colors text-xs"
+                className="flex items-center gap-1.5 text-gray-500 hover:text-[#c26b45] transition-colors text-xs"
               >
                 <Phone className="w-3 h-3" />
                 <span>04221 2959999</span>
@@ -179,7 +177,7 @@ export default function Header() {
 
             <a
               href="tel:015566771019"
-              className="flex lg:hidden items-center text-ergo-red p-2 rounded-lg hover:bg-red-50 transition-colors"
+              className="flex lg:hidden items-center text-[#c26b45] p-2 rounded-lg hover:bg-[#f7e8df] transition-colors"
               aria-label="Anrufen"
             >
               <Phone className="w-5 h-5" />
@@ -197,8 +195,7 @@ export default function Header() {
                 {/* Sheet Header */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
                   <div>
-                    <div className="text-lg font-bold text-ergo-red">ERGO</div>
-                    <div className="text-xs text-gray-500">Agentur Stübe · Ganderkesee</div>
+                    <img src="/agentur-stuebe-logo.svg" alt="Agentur Stübe" className="h-11 w-auto" />
                   </div>
                 </div>
 
@@ -215,10 +212,10 @@ export default function Header() {
                           onClick={() => setIsOpen(false)}
                           className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 group transition-colors"
                         >
-                          <div className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
-                            <Icon className="w-3.5 h-3.5 text-ergo-red" />
+                          <div className="w-7 h-7 rounded-lg bg-[#e3efeb] flex items-center justify-center shrink-0">
+                            <Icon className="w-3.5 h-3.5 text-[#1d5558]" />
                           </div>
-                          <span className="text-sm font-medium text-gray-800 group-hover:text-ergo-red transition-colors">{label}</span>
+                          <span className="text-sm font-medium text-gray-800 group-hover:text-[#1d5558] transition-colors">{label}</span>
                         </Link>
                       ))}
                       <Link
@@ -226,10 +223,10 @@ export default function Header() {
                         onClick={() => setIsOpen(false)}
                         className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 group transition-colors"
                       >
-                        <div className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
-                          <HeartHandshake className="w-3.5 h-3.5 text-ergo-red" />
+                        <div className="w-7 h-7 rounded-lg bg-[#e3efeb] flex items-center justify-center shrink-0">
+                          <HeartHandshake className="w-3.5 h-3.5 text-[#1d5558]" />
                         </div>
-                        <span className="text-sm font-medium text-gray-800 group-hover:text-ergo-red transition-colors">Leben & Vorsorge</span>
+                        <span className="text-sm font-medium text-gray-800 group-hover:text-[#1d5558] transition-colors">Leben & Vorsorge</span>
                       </Link>
                     </div>
                   </div>
@@ -248,7 +245,7 @@ export default function Header() {
                           <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
                             <Icon className="w-3.5 h-3.5 text-gray-600" />
                           </div>
-                          <span className="text-sm font-medium text-gray-800 group-hover:text-ergo-red transition-colors">{label}</span>
+                          <span className="text-sm font-medium text-gray-800 group-hover:text-[#1d5558] transition-colors">{label}</span>
                         </Link>
                       ))}
                     </div>
@@ -260,12 +257,12 @@ export default function Header() {
                     <Link
                       href="/bestandskunden"
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-[#e3efeb] hover:bg-[#c9dfd8] transition-colors"
                     >
-                      <div className="w-7 h-7 rounded-lg bg-[#003781]/10 flex items-center justify-center shrink-0">
-                        <span className="text-[#003781] text-xs font-bold">✓</span>
+                      <div className="w-7 h-7 rounded-lg bg-[#1d5558]/10 flex items-center justify-center shrink-0">
+                        <span className="text-[#1d5558] text-xs font-bold">✓</span>
                       </div>
-                      <span className="text-sm font-semibold text-[#003781]">Mein Service-Portal</span>
+                      <span className="text-sm font-semibold text-[#1d5558]">Mein Service-Portal</span>
                     </Link>
                   </div>
                 </div>
@@ -274,7 +271,7 @@ export default function Header() {
                 <div className="px-4 py-4 border-t border-gray-100 space-y-2">
                   <a
                     href="tel:015566771019"
-                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-ergo-red text-white font-semibold text-sm hover:bg-red-700 transition-colors"
+                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#c26b45] text-white font-semibold text-sm hover:bg-[#985039] transition-colors"
                   >
                     <Phone className="w-4 h-4" />
                     015566 771019 · Mobil

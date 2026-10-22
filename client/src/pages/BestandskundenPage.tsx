@@ -124,8 +124,8 @@ const faqItems = [
     answer: 'Klicken Sie oben auf „Schaden melden" und wählen Sie die passende Schadensart. Das Online-Formular führt Sie Schritt für Schritt durch die Meldung. Alternativ erreichen Sie uns telefonisch unter 01556 6771019 oder per WhatsApp.',
   },
   {
-    question: 'Was ist die ERGO-Notfallnummer?',
-    answer: 'Die ERGO-Schaden-Hotline ist 0800 3746-000. Sie ist kostenlos und rund um die Uhr (24/7) erreichbar – bei Kfz-Unfällen, Einbruch, Wasserschäden oder anderen dringenden Schadenfällen.',
+    question: 'Was ist die Notfallnummer?',
+    answer: 'Die Schaden-Hotline ist 0800 3746-000. Sie ist kostenlos und rund um die Uhr (24/7) erreichbar – bei Kfz-Unfällen, Einbruch, Wasserschäden oder anderen dringenden Schadenfällen.',
   },
   {
     question: 'Wie ändere ich meine Bankverbindung?',
@@ -137,11 +137,11 @@ const faqItems = [
   },
   {
     question: 'Was ist der Bündelrabatt und wie berechne ich ihn?',
-    answer: 'Ab 5 ERGO-Verträgen erhalten Sie einen Bündelrabatt von bis zu 15 % auf alle Beitragszahlungen. Der genaue Rabatt hängt von Ihren Vertragsarten ab. Im kostenlosen Jahrescheck ermitteln wir Ihr persönliches Sparpotenzial.',
+    answer: 'Bei mehreren passenden Verträgen kann ein Bündelrabatt möglich sein. Der genaue Nachlass hängt von Ihren Vertragsarten ab. Im kostenlosen Jahrescheck ermitteln wir Ihr persönliches Sparpotenzial.',
   },
   {
     question: 'Wie kann ich meinen Berater wechseln?',
-    answer: 'Unter „Dokument einreichen" finden Sie den Beraterwechsel-Antrag. Mit wenigen Klicks können Sie Ihre ERGO-Verträge zu Morino Stübe übertragen – kostenlos und ohne Kündigung Ihrer bestehenden Verträge.',
+    answer: 'Unter „Dokument einreichen“ finden Sie den Beraterwechsel-Antrag. Mit wenigen Klicks können Sie die Betreuung Ihrer bestehenden Verträge zu Morino Stübe übertragen – kostenlos und ohne Kündigung.',
   },
   {
     question: 'Wie lange dauert die Schadenbearbeitung?',
@@ -188,9 +188,9 @@ export default function BestandskundenPage() {
   return (
     <>
       <SEO
-        title="Ihr Service-Bereich – ERGO Agentur Stübe | Bestandskunden"
-        description="Alle Services für ERGO-Kunden auf einen Blick: Schaden melden, Dokumente einreichen, Jahrescheck buchen, Lebenslagen-Beratung. Persönlicher Service von Morino Stübe."
-        keywords="ERGO Kundenservice, Bestandskunden Service, Versicherung Ganderkesee, Jahrescheck, Lebenslagen Versicherung"
+        title="Ihr Service-Bereich – Agentur Stübe | Bestandskunden"
+        description="Alle Services auf einen Blick: Schaden melden, Dokumente einreichen, Jahrescheck buchen, Lebenslagen-Beratung. Persönlicher Service von Morino Stübe."
+        keywords="Kundenservice, Bestandskunden Service, Versicherung Ganderkesee, Jahrescheck, Lebenslagen Versicherung"
       />
 
       <div className="ds-service min-h-screen bg-white">
@@ -198,7 +198,7 @@ export default function BestandskundenPage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-white/15 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
               <Star className="w-4 h-4 text-yellow-300" />
-              Exklusiv für ERGO-Kunden
+              Für Kundinnen und Kunden
             </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 leading-tight">
               Ihr persönlicher Service-Bereich
@@ -217,7 +217,7 @@ export default function BestandskundenPage() {
             </div>
             <div className="flex-1 text-center sm:text-left">
               <p className="text-sm text-red-100 leading-snug">
-                Bei Kfz-Unfall, Einbruch oder Wasserschaden: Sofort die ERGO-Schadenhotline anrufen
+                Bei Kfz-Unfall, Einbruch oder Wasserschaden: Sofort die Schaden-Hotline anrufen
               </p>
             </div>
             <a
@@ -458,7 +458,7 @@ export default function BestandskundenPage() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-                Ihre Vorteile als ERGO-Kunde
+                Ihre Vorteile bei Agentur Stübe
               </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -490,7 +490,7 @@ export default function BestandskundenPage() {
                 Häufige Fragen (FAQ)
               </h2>
               <p className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">
-                Antworten auf die wichtigsten Fragen rund um Ihren ERGO-Versicherungsschutz.
+                Antworten auf die wichtigsten Fragen rund um Ihren Versicherungsschutz.
               </p>
             </div>
             <Accordion type="single" collapsible className="space-y-2">
@@ -552,7 +552,7 @@ export default function BestandskundenPage() {
         <section className="py-10 md:py-14 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h3 className="text-lg font-bold text-gray-900 mb-2">Ihr Berater</h3>
-            <p className="text-gray-600 text-sm mb-4">Morino Stübe – ERGO Agentur Ganderkesee</p>
+            <p className="text-gray-600 text-sm mb-4">Morino Stübe – Agentur Stübe Ganderkesee</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
                 href="tel:015566771019"

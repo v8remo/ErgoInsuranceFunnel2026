@@ -900,7 +900,7 @@ function Step6Analysis({ showResult, onShowResult, onContinue }: {
       </p>
       <div className="funnel-trust-items">
         {[
-          { icon: '🏆', text: 'ERGO – seit 1906 einer der größten Versicherungskonzerne' },
+          { icon: '🏆', text: 'Agentur Stübe – persönlich für Sie da' },
           { icon: '🕐', text: 'Termin in 15 Min. – bequem per Video oder persönlich' },
           { icon: '🔒', text: '100% kostenlos & unverbindlich' },
         ].map((item, i) => (

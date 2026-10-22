@@ -38,7 +38,7 @@ const SpartenLandingPage = lazy(() => import("@/pages/SpartenLandingPage"));
 function PageLoader() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="w-8 h-8 border-4 border-ergo-red border-t-transparent rounded-full animate-spin" />
+      <div className="w-8 h-8 border-4 border-[#1d5558] border-t-transparent rounded-full animate-spin" />
     </div>
   );
 }

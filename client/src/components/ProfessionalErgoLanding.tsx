@@ -83,7 +83,7 @@ const faqItems = [
     a: 'Selbstverständlich. Wir analysieren Ihre bestehenden Verträge und zeigen Ihnen transparent, ob und wo Optimierungspotenzial besteht – ohne Wechselzwang.'
   },
   {
-    q: 'Welche Versicherungen kann ich bei der ERGO Agentur Stübe abschließen?',
+    q: 'Zu welchen Versicherungen berät mich die Agentur Stübe?',
     a: 'Wir beraten zu allen gängigen Versicherungsprodukten: Kfz, Hausrat, Haftpflicht, Wohngebäude, Rechtsschutz, Zahnzusatz, Berufsunfähigkeit, Lebens- und Rentenversicherung.'
   },
 ];
@@ -182,7 +182,9 @@ export default function ProfessionalErgoLanding() {
           <div className="ergo-promo mx-4 mt-3 md:mt-5 max-w-6xl md:mx-auto rounded-2xl p-3.5 md:p-4 flex items-center gap-3 md:gap-5 cursor-pointer active:scale-[0.99] transition-transform group relative overflow-hidden">
             <div className="absolute inset-0 bg-white/5 group-hover:bg-white/10 transition-colors" />
             <div className="relative flex items-center gap-3 md:gap-5 w-full">
-              <div className="ergo-promo-mark w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center shrink-0"><span className="text-xs font-black leading-tight text-center">E-<br />SCOOTER</span></div>
+              <div className="ergo-promo-mark w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center shrink-0">
+                <span aria-hidden="true" className="text-xl md:text-2xl leading-none">🛴</span>
+              </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="inline-block bg-white text-green-700 text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Ab 01.03.2026</span>
@@ -211,7 +213,7 @@ export default function ProfessionalErgoLanding() {
               transition={{ duration: 0.5, delay: 0.1 }}
                className="inline-flex items-center gap-2 ergo-eyebrow text-xs font-bold tracking-wide uppercase px-3.5 py-1.5 rounded-full mb-5 md:text-sm"
             >
-              ERGO Versicherungsfachmann · Ganderkesee
+               Persönliche Versicherungsberatung · Ganderkesee
             </motion.span>
 
             <motion.h1
@@ -220,7 +222,7 @@ export default function ProfessionalErgoLanding() {
               transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
                className="text-3xl font-extrabold text-white leading-[1.05] mb-4 sm:text-4xl md:text-5xl lg:text-[3.65rem]"
             >
-              Ihre ERGO Agentur in Ganderkesee –{' '}
+              Ihre Agentur Stübe in Ganderkesee –{' '}
                <span className="ergo-hero-highlight">
                 Persönliche Beratung rund um Ihre Absicherung
               </span>
@@ -327,6 +329,9 @@ export default function ProfessionalErgoLanding() {
               transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                className="ergo-video rounded-2xl overflow-hidden aspect-video relative"
             >
+              <div className="absolute right-0 top-0 z-20 flex h-14 w-36 items-end justify-center rounded-bl-2xl bg-[#f7f4ed] px-3 pb-2 text-xs font-bold text-[#133f42] shadow-sm">
+                Agentur Stübe
+              </div>
               {!videoPlaying ? (
                 <button
                   onClick={handlePlayVideo}
@@ -335,7 +340,7 @@ export default function ProfessionalErgoLanding() {
                 >
                   <img
                     src={ichBinDaPhoto}
-                    alt="Morino Stübe – ERGO Versicherungsberater Ganderkesee stellt sich vor"
+                    alt="Morino Stübe stellt seine persönliche Versicherungsberatung in Ganderkesee vor"
                     className="absolute inset-0 w-full h-full object-cover object-top opacity-70"
                     width={640}
                     height={360}
@@ -368,7 +373,7 @@ export default function ProfessionalErgoLanding() {
                 </video>
               )}
             </motion.div>
-             <div className="ergo-video-caption flex items-center justify-between text-xs mt-3"><span>Morino Stübe – Ihr ERGO Berater</span><span className="flex items-center gap-1"><Clock3 className="w-3.5 h-3.5" /> Antwort innerhalb 24 h</span></div>
+             <div className="ergo-video-caption flex items-center justify-between text-xs mt-3"><span>Morino Stübe – Ihr persönlicher Ansprechpartner</span><span className="flex items-center gap-1"><Clock3 className="w-3.5 h-3.5" /> Antwort innerhalb 24 h</span></div>
           </motion.div>
         </div>
       </section>
@@ -415,7 +420,7 @@ export default function ProfessionalErgoLanding() {
               whileHover={{ scale: 1.03 }}
               transition={{ duration: 0.3 }}
               src={beraterPhoto}
-              alt="Morino Stübe - ERGO Versicherungsfachmann in Ganderkesee"
+              alt="Morino Stübe - persönlicher Versicherungsfachmann in Ganderkesee"
               className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-lg shrink-0 bg-white"
               width={160}
               height={208}
@@ -423,7 +428,7 @@ export default function ProfessionalErgoLanding() {
 
             <div className="flex-1">
               <h2 className="text-xl font-bold text-gray-900 mb-1 md:text-2xl">Morino Stübe</h2>
-              <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann</p>
+              <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">Persönlicher Versicherungsfachmann</p>
               <p className="text-gray-600 text-sm leading-relaxed mb-4 md:text-base">
                 Mit über 3 Jahren Erfahrung in der Versicherungsbranche berate ich Sie kompetent und verständlich zu allen Fragen rund um Ihre Absicherung.
               </p>
@@ -435,20 +440,11 @@ export default function ProfessionalErgoLanding() {
                 </span>
                 <span className="flex items-center justify-center md:justify-start gap-1.5">
                   <Star className="w-4 h-4 text-yellow-500 shrink-0" />
-                  ERGO als starker Partner seit 1906
+                  Persönliche Betreuung statt anonymer Hotline
                 </span>
               </div>
             </div>
 
-            <img
-              src="/attached_assets/ergo-logo-hq.svg"
-              alt="ERGO Logo"
-              className="h-10 md:h-14 w-auto shrink-0 hidden md:block"
-              width={100}
-              height={56}
-              loading="lazy"
-              decoding="async"
-            />
           </div>
         </div>
       </motion.section>
@@ -456,7 +452,7 @@ export default function ProfessionalErgoLanding() {
       {/* ──────── VORTEILE ──────── */}
       <motion.section {...fadeInUp} className="px-4 pb-10 md:pb-16 max-w-3xl mx-auto">
         <h2 className="text-lg font-bold text-gray-900 text-center mb-6 sm:text-xl md:text-3xl md:mb-8">
-          Ihre Vorteile bei der ERGO Agentur Stübe
+          Ihre Vorteile bei der Agentur Stübe
         </h2>
 
         <motion.div
@@ -542,7 +538,7 @@ export default function ProfessionalErgoLanding() {
                 className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-2xl mb-3"
               >💰</motion.div>
               <h3 className="font-bold text-gray-900 text-base md:text-lg">Bündel-Sparrechner</h3>
-              <p className="text-sm text-gray-500 mt-1 leading-relaxed">Berechnen Sie Ihre Ersparnis mit dem ERGO Bündelnachlass</p>
+              <p className="text-sm text-gray-500 mt-1 leading-relaxed">Berechnen Sie Ihre mögliche Ersparnis durch gebündelte Verträge</p>
               <div className="mt-3 inline-flex items-center gap-1 text-green-600 font-semibold text-sm group-hover:gap-2 transition-all">
                 Jetzt berechnen <ChevronRight className="w-4 h-4" />
               </div>
@@ -559,10 +555,10 @@ export default function ProfessionalErgoLanding() {
             Ausgezeichnet
           </span>
           <h2 className="text-lg font-bold text-gray-900 sm:text-xl md:text-3xl">
-            ERGO – Vielfach ausgezeichnet & getestet
+            Versicherungsleistungen im unabhängigen Vergleich
           </h2>
           <p className="text-sm text-gray-500 mt-2 md:text-base max-w-xl mx-auto">
-            Unabhängige Tests bestätigen: ERGO bietet Top-Leistungen zu fairen Konditionen.
+            Unabhängige Tests helfen dabei, Leistungen und Konditionen transparent einzuordnen.
           </p>
         </div>
 

@@ -171,7 +171,7 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
         <div className="bg-ergo-gray px-4 sm:px-6 py-4 sm:py-5 border-b">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg sm:text-2xl font-bold text-ergo-dark leading-tight">ERGO Versicherungsberatung</h2>
+              <h2 className="text-lg sm:text-2xl font-bold text-ergo-dark leading-tight">Beratung der Agentur Stübe</h2>
               <p className="text-sm sm:text-base text-gray-600 mt-1">Kostenlose Analyse & 15% Bündelnachlass</p>
             </div>
             <Button variant="ghost" size="sm" onClick={onClose} className="flex-shrink-0 p-2">
@@ -201,7 +201,7 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
                   Wie alt sind Sie?
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600">
-                  Ihr Alter hilft uns, die passenden ERGO-Produkte für Sie zu finden
+                  Ihr Alter hilft uns, passende Absicherungslösungen für Sie zu finden
                 </p>
               </div>
 
@@ -242,7 +242,7 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
                   Welche Versicherungen interessieren Sie?
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600">
-                  Wählen Sie alle ERGO-Produkte aus, für die Sie sich interessieren
+                  Wählen Sie alle Versicherungsbereiche aus, für die Sie sich interessieren
                 </p>
               </div>
 
@@ -280,7 +280,7 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
 
               <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-blue-800">
-                  <strong>15% Bündelnachlass:</strong> Bei 5 oder mehr ERGO-Versicherungen erhalten Sie automatisch 15% Rabatt!
+                  <strong>Bündelnachlass:</strong> Bei mehreren passenden Verträgen kann ein zusätzlicher Nachlass möglich sein.
                 </p>
               </div>
             </div>
@@ -389,7 +389,7 @@ export default function GeneralInsuranceFunnel({ onClose, directAccess = false }
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-ergo-red text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
-                    <span className="text-sm">Persönliche Beratung zu ERGO-Produkten</span>
+                    <span className="text-sm">Persönliche Beratung zu passenden Versicherungslösungen</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-ergo-red text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>

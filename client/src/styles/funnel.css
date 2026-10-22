@@ -68,7 +68,7 @@
 /* Framer Motion handles the progress animation */
 .funnel-progress-fill {
   height: 100%;
-  background: #E2001A;
+  background: #c26b45;
   border-radius: 0 2px 2px 0;
 }
 
@@ -146,7 +146,7 @@
 
 /* ═══════ STEP 1 – Hook ═══════ */
 .funnel-step-hook {
-  background: linear-gradient(135deg, #003781, #0052A5);
+  background: linear-gradient(135deg, #123d41, #1d5558);
   color: white;
   margin: 0 -20px;
   padding: 32px 20px 40px;
@@ -162,7 +162,7 @@
 
 .funnel-badge-pill {
   display: inline-block;
-  background: #E2001A;
+  background: #c26b45;
   color: white;
   padding: 5px 14px;
   border-radius: 999px;
@@ -206,7 +206,7 @@
   justify-content: center;
   width: 100%;
   padding: 16px 20px;
-  background: #E2001A;
+  background: #c26b45;
   color: white;
   border: none;
   border-radius: 14px;
@@ -309,20 +309,20 @@
 
 .funnel-option-card:active {
   background: #f0f4ff;
-  border-color: #003781;
+  border-color: #1d5558;
 }
 
 @media (hover: hover) {
   .funnel-option-card:hover {
-    border-color: #003781;
+    border-color: #1d5558;
     background: #f0f4ff;
   }
 }
 
 .funnel-option-card.selected {
-  border-color: #E2001A;
+  border-color: #c26b45;
   background: #fff5f5;
-  box-shadow: 0 0 0 1px #E2001A;
+  box-shadow: 0 0 0 1px #c26b45;
 }
 
 .funnel-option-icon {
@@ -350,7 +350,7 @@
   position: absolute;
   top: 6px;
   right: 6px;
-  background: #E2001A;
+  background: #c26b45;
   color: white;
   width: 20px;
   height: 20px;
@@ -388,19 +388,19 @@
 }
 
 .funnel-full-option:active {
-  border-color: #003781;
+  border-color: #1d5558;
   background: #f0f4ff;
 }
 
 @media (hover: hover) {
   .funnel-full-option:hover {
-    border-color: #003781;
+    border-color: #1d5558;
     background: #f0f4ff;
   }
 }
 
 .funnel-full-option.selected {
-  border-color: #E2001A;
+  border-color: #c26b45;
   background: #fff5f5;
 }
 
@@ -425,7 +425,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #003781;
+  background: #1d5558;
   animation: funnel-pulse 1.4s infinite ease-in-out both;
 }
 
@@ -511,15 +511,15 @@
 }
 
 .funnel-form-field input:focus {
-  border-color: #003781;
+  border-color: #1d5558;
 }
 
 .funnel-form-field input.error {
-  border-color: #E2001A;
+  border-color: #985039;
 }
 
 .funnel-error {
-  color: #E2001A;
+  color: #985039;
   font-size: 12px;
   font-weight: 500;
 }
@@ -541,17 +541,17 @@
   flex-shrink: 0;
   width: 22px;
   height: 22px;
-  accent-color: #E2001A;
+  accent-color: #c26b45;
   cursor: pointer;
 }
 
 .funnel-checkbox a {
-  color: #003781;
+  color: #1d5558;
   text-decoration: underline;
 }
 
 .funnel-checkbox.error {
-  color: #E2001A;
+  color: #985039;
 }
 
 /* ═══════ Step 9 – Thank You ═══════ */
@@ -609,7 +609,7 @@
   border-radius: 50%;
   object-fit: contain;
   background: white;
-  border: 2px solid #E2001A;
+  border: 2px solid #c26b45;
   flex-shrink: 0;
 }
 
@@ -645,8 +645,8 @@
   width: 100%;
   padding: 14px 20px;
   background: transparent;
-  color: #003781;
-  border: 2px solid #003781;
+  color: #1d5558;
+  border: 2px solid #1d5558;
   border-radius: 14px;
   font-size: 15px;
   font-weight: 600;
@@ -698,3 +698,50 @@
 .safe-area-bottom {
   padding-bottom: max(12px, env(safe-area-inset-bottom));
 }
+
+/* Agentur Stübe funnel skin: warm, local and deliberately separate from
+   insurer brand palettes. The component contract above stays unchanged. */
+.funnel-overlay { background: rgba(18, 61, 65, .64); }
+.funnel-card { background: #fffdf8; color: #263333; }
+.funnel-progress-bar { background: #d9ded8; }
+.funnel-progress-fill { background: #c26b45; }
+.funnel-nav { background: #fffdf8; border-bottom: 1px solid #edf0eb; }
+.funnel-back-btn, .funnel-close-btn { color: #596866; }
+.funnel-back-btn:hover, .funnel-close-btn:hover { background: #e3efeb; color: #1d5558; }
+.funnel-step-hook {
+  background: linear-gradient(135deg, #123d41, #1d5558);
+}
+.funnel-badge-pill { background: #c26b45; }
+.funnel-cta-btn { background: #c26b45; border-radius: 10px; }
+.funnel-cta-btn:hover { background: #985039; box-shadow: 0 5px 15px rgba(194,107,69,.22); }
+.funnel-headline, .funnel-sub-headline { color: #263333; }
+.funnel-subtext, .funnel-small-text { color: #596866; }
+.funnel-option-card, .funnel-full-option {
+  border-color: #d9ded8; background: #fffdf8; color: #263333; border-radius: 10px;
+}
+.funnel-option-card:hover, .funnel-full-option:hover,
+.funnel-option-card:active, .funnel-full-option:active {
+  border-color: #1d5558; background: #e3efeb;
+}
+.funnel-option-card.selected, .funnel-full-option.selected {
+  border-color: #c26b45; background: #f7e8df; box-shadow: 0 0 0 1px #c26b45;
+}
+.funnel-option-label, .funnel-full-option { color: #263333; }
+.funnel-option-sub { color: #71807d; }
+.funnel-checkmark { background: #c26b45; }
+.funnel-dots span { background: #1d5558; }
+.funnel-analysis-text, .funnel-trust-item { color: #405250; }
+.funnel-form-field label { color: #263333; }
+.funnel-form-field input { border-color: #cbd4cf; background: #fffdf8; color: #263333; border-radius: 9px; }
+.funnel-form-field input:focus { border-color: #c26b45; box-shadow: 0 0 0 3px rgba(194,107,69,.16); }
+.funnel-form-field input.error, .funnel-error, .funnel-checkbox.error { border-color: #985039; color: #985039; }
+.funnel-checkbox { color: #596866; }
+.funnel-checkbox input[type="checkbox"] { accent-color: #c26b45; }
+.funnel-checkbox a, .funnel-outline-btn { color: #1d5558; }
+.funnel-advisor-mini { background: #f5f2eb; }
+.funnel-advisor-mini strong { color: #263333; }
+.funnel-advisor-mini span { color: #596866; }
+.funnel-advisor-img { border-color: #c26b45; background: #fffdf8; }
+.funnel-outline-btn { border-color: #1d5558; border-radius: 10px; }
+.funnel-outline-btn:hover, .funnel-outline-btn:active { background: #e3efeb; }
+.funnel-checkmark-circle, .funnel-checkmark-check { stroke: #2e725f; }

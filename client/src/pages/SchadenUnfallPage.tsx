@@ -334,9 +334,9 @@ export default function SchadenUnfallPage() {
   return (
     <div className="ds-form-flow min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <SEO
-        title="Unfallschaden melden – ERGO Agentur Stübe Ganderkesee"
-        description="Unfallversicherungsschaden bequem online melden. Strukturiertes Formular für Ihre ERGO Unfallversicherung – Agentur Morino Stübe, Ganderkesee."
-        keywords="Unfallversicherung Schaden melden, ERGO Unfall, Schadensmeldung Unfallversicherung, Ganderkesee"
+        title="Unfallschaden melden – Agentur Stübe Ganderkesee"
+        description="Unfallversicherungsschaden bequem online melden. Strukturiertes Formular für Ihre Unfallversicherung – Agentur Morino Stübe, Ganderkesee."
+        keywords="Unfallversicherung Schaden melden, Schadensmeldung Unfallversicherung, Ganderkesee"
         noIndex
       />
       <Breadcrumb items={[{ label: 'Service', href: '/bestandskunden' }, { label: 'Unfall melden' }]} />
@@ -401,7 +401,7 @@ export default function SchadenUnfallPage() {
 
               <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 text-sm text-blue-800">
                 <strong>Wichtig:</strong> Bei schweren Verletzungen oder Notfällen rufen Sie bitte zuerst <strong>112</strong> an.
-                Die ERGO-Schaden-Hotline erreichen Sie kostenlos unter <strong>0800 3746-000</strong>.
+                Die Schaden-Hotline erreichen Sie kostenlos unter <strong>0800 3746-000</strong>.
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -421,7 +421,7 @@ export default function SchadenUnfallPage() {
                 <input type="email" inputMode="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} autoComplete="email" />
               </Field>
 
-              <Field errors={errors} label="ERGO Versicherungsnummer" field="versicherungsnummer" hint="Falls bekannt – steht auf Ihrem Versicherungsschein">
+              <Field errors={errors} label="Versicherungsnummer" field="versicherungsnummer" hint="Falls bekannt – steht auf Ihrem Versicherungsschein">
                 <input type="text" value={formData.versicherungsnummer} onChange={e => updateField('versicherungsnummer', e.target.value)} className={inputCls('versicherungsnummer')} placeholder="z.B. 12345678" />
               </Field>
 
@@ -828,14 +828,14 @@ export default function SchadenUnfallPage() {
               </div>
 
               <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800">
-                <strong>Schweigepflichtentbindung:</strong> Für die Schadenbearbeitung benötigt ERGO ggf. ärztliche Auskünfte.{' '}
+                <strong>Schweigepflichtentbindung:</strong> Für die Schadenbearbeitung werden ggf. ärztliche Auskünfte benötigt.{' '}
                 <a
                   href="https://www.ergo.de/de/Service/Schaden/Unfallversicherung"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline font-semibold"
                 >
-                  Das offizielle ERGO-Formular zur Schweigepflichtentbindung
+                  Das offizielle Formular zur Schweigepflichtentbindung
                 </a>{' '}
                 können Sie vorab herunterladen oder Ihr Berater Morino Stübe schickt es Ihnen zu.
               </div>
@@ -900,7 +900,7 @@ export default function SchadenUnfallPage() {
                   {[
                     { icon: '📋', text: 'Bereiten Sie alle ärztlichen Dokumente vor (Atteste, Arztberichte, Befunde).' },
                     { icon: '📝', text: 'Füllen Sie ggf. die Schweigepflichtentbindung aus – Ihr Berater schickt Ihnen das Formular.' },
-                    { icon: '💬', text: 'Bei dringenden Fragen: WhatsApp an Morino Stübe oder ERGO-Hotline 0800 3746-000.' },
+                    { icon: '💬', text: 'Bei dringenden Fragen: WhatsApp an Morino Stübe oder die Schaden-Hotline 0800 3746-000.' },
                   ].map((item, i) => (
                     <div key={i} className="flex gap-3 items-start">
                       <span className="text-lg shrink-0">{item.icon}</span>

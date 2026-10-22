@@ -113,7 +113,7 @@ function getRecommendations(answers: Record<string, string>): Recommendation[] {
     recs.push({ name: 'Unfallversicherung (Familie)', priority: 'mittel', reason: 'Zusätzlicher Schutz für die ganze Familie bei Unfällen im Alltag und Freizeit.', link: '/leben-vorsorge' });
   }
 
-  recs.push({ name: 'Zahnzusatzversicherung', priority: 'mittel', reason: 'ERGO Testsieger – SEHR GUT (0,5). Spart hohe Zahnarztkosten.', link: '/versicherung/zahnzusatz' });
+  recs.push({ name: 'Zahnzusatzversicherung', priority: 'mittel', reason: 'Leistungsstarker Zusatzschutz kann hohe Zahnarztkosten deutlich reduzieren.', link: '/versicherung/zahnzusatz' });
 
   if (['nein', 'unsicher', 'teilweise'].includes(answers.vorsorge || '')) {
     recs.push({ name: 'Private Altersvorsorge', priority: 'hoch', reason: 'Die gesetzliche Rente reicht oft nicht – sorgen Sie jetzt vor.', link: '/leben-vorsorge' });
@@ -164,9 +164,9 @@ export default function VersicherungsCheck() {
   return (
     <>
       <SEO
-        title="Versicherungscheck – Bin ich richtig versichert? | ERGO Agentur Stübe"
-        description="Kostenloser Versicherungscheck in 2 Minuten. Finden Sie heraus, welche Versicherungen Ihnen fehlen. Persönliche Empfehlung von ERGO Berater Morino Stübe."
-        keywords="Versicherungscheck, Versicherung prüfen, welche Versicherung brauche ich, Versicherungslücken, ERGO Ganderkesee"
+        title="Versicherungscheck – Bin ich richtig versichert? | Agentur Stübe"
+        description="Kostenloser Versicherungscheck in 2 Minuten. Finden Sie heraus, welche Versicherungen Ihnen fehlen. Persönliche Empfehlung von Morino Stübe."
+        keywords="Versicherungscheck, Versicherung prüfen, welche Versicherung brauche ich, Versicherungslücken, Agentur Stübe Ganderkesee"
       />
 
       <div className="ds-form-flow min-h-screen bg-gradient-to-b from-gray-50 to-white">

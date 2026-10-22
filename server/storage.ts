@@ -1,6 +1,6 @@
 import { users, leads, content, adminConfig, submissions, type User, type InsertUser, type Lead, type InsertLead, type Content, type InsertContent, type AdminConfig, type InsertAdminConfig, type Submission, type InsertSubmission } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, gte, desc, sql } from "drizzle-orm";
+import { eq, and, gte, desc, sql, inArray } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -34,7 +34,7 @@ export interface IStorage {
 
   // Submission methods
   createSubmission(submission: InsertSubmission): Promise<Submission>;
-  getSubmissions(filters?: { type?: string; status?: string }): Promise<Submission[]>;
+  getSubmissions(filters?: { type?: string; status?: string; subject?: string; subjectIn?: string[] }): Promise<Submission[]>;
   getSubmission(id: number): Promise<Submission | undefined>;
   updateSubmission(id: number, updates: Partial<Submission>): Promise<Submission | undefined>;
   deleteSubmission(id: number): Promise<void>;
@@ -224,10 +224,15 @@ export class DatabaseStorage implements IStorage {
     return result;
   }
 
-  async getSubmissions(filters?: { type?: string; status?: string }): Promise<Submission[]> {
+  async getSubmissions(filters?: { type?: string; status?: string; subject?: string; subjectIn?: string[] }): Promise<Submission[]> {
     const conditions = [];
     if (filters?.type) conditions.push(eq(submissions.type, filters.type));
     if (filters?.status) conditions.push(eq(submissions.status, filters.status));
+    if (filters?.subjectIn && filters.subjectIn.length > 0) {
+      conditions.push(inArray(submissions.subject, filters.subjectIn));
+    } else if (filters?.subject) {
+      conditions.push(eq(submissions.subject, filters.subject));
+    }
     if (conditions.length > 0) {
       return db.select().from(submissions).where(and(...conditions)).orderBy(desc(submissions.createdAt));
     }

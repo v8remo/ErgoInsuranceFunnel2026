@@ -5,692 +5,196 @@
 @tailwind utilities;
 
 :root {
-  /*
-   * ERGO Versicherungs Designsystem
-   * Core colour, type and interaction tokens are intentionally centralised here
-   * so every existing service, form and landing page shares one visual language.
-   */
-  --ds-navy: #5d0739;
-  --ds-navy-deep: #420326;
-  --ds-blue: #a9e5e8;
-  --ds-red: #a50046;
-  --ds-red-dark: #810035;
-  --ds-ink: #29272b;
-  --ds-body: #5b5960;
-  --ds-canvas: #f8f8f6;
-  --ds-paper: #fffefd;
-  --ds-line: #dedde0;
-  --ds-soft-red: #f8e5ed;
-  --ds-soft-blue: #e2f6f7;
-  --ds-soft-peach: #ffe7d6;
-  --ds-success: #087443;
-  --ds-radius-sm: 0.35rem;
-  --ds-radius: 0.55rem;
-  --ds-radius-lg: 0.7rem;
-  --ds-shadow-sm: 0 1px 4px rgba(41, 39, 43, 0.06);
-  --ds-shadow: 0 5px 18px rgba(41, 39, 43, 0.09);
-  --ds-shadow-lg: 0 14px 32px rgba(41, 39, 43, 0.12);
-
-  --background: hsl(45, 20%, 98%);
-  --foreground: hsl(300, 5%, 16%);
-  --muted: hsl(36, 20%, 96%);
-  --muted-foreground: hsl(300, 4%, 43%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
-  --card: hsl(45, 100%, 99.5%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(300, 5%, 86%);
-  --input: hsl(300, 5%, 82%);
-  --primary: hsl(334, 100%, 32%);
-  --primary-foreground: hsl(0, 0%, 98%);
-  --secondary: hsl(184, 54%, 88%);
-  --secondary-foreground: hsl(300, 5%, 16%);
-  --accent: hsl(24, 100%, 92%);
-  --accent-foreground: hsl(300, 5%, 16%);
-  --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(20, 14.3%, 4.1%);
-  --radius: 0.5rem;
-
-  --ergo-red: hsl(334, 100%, 32%);
-  --ergo-red-hover: hsl(334, 100%, 26%);
-  --ergo-red-light: hsl(335, 100%, 97%);
-  --ergo-red-dark: hsl(335, 95%, 25%);
-  --ergo-dark: hsl(300, 5%, 16%);
-  --ergo-dark-light: hsl(300, 4%, 32%);
-  --ergo-gray: hsl(36, 20%, 96%);
-  --ergo-gray-light: hsl(36, 25%, 99%);
-  --ergo-blue: hsl(184, 54%, 44%);
-  --ergo-blue-light: hsl(184, 54%, 94%);
+  --ds-ink: #263333;
+  --ds-body: #596866;
+  --ds-canvas: #f5f2eb;
+  --ds-paper: #fffdf8;
+  --ds-line: #d9ded8;
+  --ds-petrol: #1d5558;
+  --ds-petrol-deep: #123d41;
+  --ds-accent: #c26b45;
+  --ds-accent-dark: #985039;
+  --ds-soft-petrol: #e3efeb;
+  --ds-soft-accent: #f7e8df;
+  --ds-success: #2e725f;
+  --ds-radius-sm: .45rem;
+  --ds-radius: .75rem;
+  --ds-radius-lg: 1.1rem;
+  --ds-shadow-sm: 0 2px 8px rgba(38, 51, 51, .06);
+  --ds-shadow: 0 10px 26px rgba(38, 51, 51, .10);
+  --ds-shadow-lg: 0 18px 44px rgba(38, 51, 51, .14);
+  --background: 42 33% 95%;
+  --foreground: 180 14% 17%;
+  --muted: 42 25% 91%;
+  --muted-foreground: 170 10% 40%;
+  --popover: 45 100% 99%;
+  --popover-foreground: 180 14% 17%;
+  --card: 45 100% 99%;
+  --card-foreground: 180 14% 17%;
+  --border: 135 10% 85%;
+  --input: 135 10% 78%;
+  --primary: 183 50% 23%;
+  --primary-foreground: 45 100% 99%;
+  --secondary: 155 28% 90%;
+  --secondary-foreground: 180 14% 17%;
+  --accent: 18 51% 52%;
+  --accent-foreground: 45 100% 99%;
+  --destructive: 6 58% 44%;
+  --destructive-foreground: 45 100% 99%;
+  --ring: 18 51% 52%;
+  --radius: .65rem;
+  /* Legacy aliases keep older route utilities visually coherent. */
+  --ergo-red: var(--ds-accent);
+  --ergo-red-hover: var(--ds-accent-dark);
+  --ergo-red-light: var(--ds-soft-accent);
+  --ergo-red-dark: var(--ds-accent-dark);
+  --ergo-dark: var(--ds-ink);
+  --ergo-dark-light: var(--ds-body);
+  --ergo-gray: var(--ds-canvas);
+  --ergo-gray-light: var(--ds-paper);
+  --ergo-blue: var(--ds-petrol);
+  --ergo-blue-light: var(--ds-soft-petrol);
 }
 
 .dark {
-  --background: hsl(240, 10%, 3.9%);
-  --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(240, 3.7%, 15.9%);
-  --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(240, 10%, 3.9%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(240, 10%, 3.9%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(240, 3.7%, 15.9%);
-  --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(355, 95%, 44%);
-  --primary-foreground: hsl(0, 0%, 98%);
-  --secondary: hsl(240, 3.7%, 15.9%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(240, 3.7%, 15.9%);
-  --accent-foreground: hsl(0, 0%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(240, 4.9%, 83.9%);
+  --background: 180 14% 17%;
+  --foreground: 42 33% 95%;
+  --card: 180 14% 20%;
+  --card-foreground: 42 33% 95%;
+  --muted: 180 12% 24%;
+  --muted-foreground: 135 10% 72%;
+  --border: 180 10% 31%;
+  --input: 180 10% 34%;
+  --primary: 155 28% 74%;
+  --primary-foreground: 180 14% 17%;
+  --accent: 18 51% 62%;
+  --accent-foreground: 180 14% 17%;
+  --ring: 18 51% 62%;
 }
 
 @layer base {
-  * {
-    @apply border-border;
-    box-sizing: border-box;
-  }
-
-  html, body {
-    overflow-x: hidden;
-    width: 100%;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
+  * { @apply border-border; box-sizing: border-box; }
+  html, body { overflow-x: hidden; width: 100%; }
+  html { scroll-behavior: smooth; }
   body {
     @apply font-sans antialiased bg-background text-foreground;
     color: var(--ds-ink);
     font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-    letter-spacing: -0.008em;
+    letter-spacing: -.008em;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
-
-  h1, h2, h3, h4, h5, h6, p, span, div, a, button, label {
-    word-break: normal;
-    overflow-wrap: break-word;
-    hyphens: none;
-    -webkit-hyphens: none;
+  h1, h2, h3, h4, h5, h6 { font-family: "Space Grotesk", "DM Sans", sans-serif; letter-spacing: -.035em; }
+  h1, h2 { font-weight: 700; }
+  input, textarea, select { font-size: 16px; border-color: var(--ds-line); border-radius: var(--ds-radius-sm); background: var(--ds-paper); }
+  input[type="date"] { color-scheme: light; min-height: 48px; color: var(--ds-ink); }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible {
+    outline: 3px solid rgba(194,107,69,.46); outline-offset: 3px;
   }
-
-  input, textarea, select {
-    font-size: 16px;
-  }
-
-  input[type="date"] {
-    color-scheme: light;
-    -webkit-appearance: none;
-    appearance: none;
-    min-height: 48px;
-    background-color: white;
-    color: #111827;
-  }
-
-  input[type="date"]::-webkit-date-and-time-value {
-    text-align: left;
-  }
-
-  button:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible,
-  a:focus-visible {
-    outline: 2px solid var(--ergo-red);
-    outline-offset: 2px;
-  }
-
-  .fade-in {
-    animation: fadeIn 0.3s ease-in-out;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Selection color */
-  ::selection {
-    background-color: var(--ds-red);
-    color: white;
-  }
-
-  h1, h2, h3 {
-    letter-spacing: -0.035em;
-    font-family: "Space Grotesk", "DM Sans", sans-serif;
-  }
-
-  h1, h2 {
-    font-weight: 750;
-  }
-
-  input, select, textarea {
-    border-color: var(--ds-line);
-    border-radius: var(--ds-radius-sm);
-    box-shadow: inset 0 1px 1px rgba(18, 39, 77, 0.02);
-  }
-
-  input:hover, select:hover, textarea:hover {
-    border-color: #b7c3d5;
-  }
-
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--ds-blue) !important;
-    box-shadow: 0 0 0 3px rgba(0, 79, 158, 0.12) !important;
-  }
+  input:focus, select:focus, textarea:focus { border-color: var(--ds-accent) !important; box-shadow: 0 0 0 3px rgba(194,107,69,.16) !important; }
+  ::selection { background: var(--ds-petrol); color: var(--ds-paper); }
+  .fade-in { animation: fadeIn .3s ease-in-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 }
 
 @layer components {
-  .ergo-red { color: var(--ergo-red); }
-  .bg-ergo-red { background-color: var(--ergo-red); color: white; }
-  .border-ergo-red { border-color: var(--ergo-red); }
-  .text-ergo-red { color: var(--ergo-red); }
-  .text-ergo-dark { color: var(--ergo-dark); }
-  .bg-ergo-dark { background-color: var(--ergo-dark); color: white; }
-  .bg-ergo-gray { background-color: var(--ergo-gray); color: var(--ergo-dark); }
-  .bg-ergo-blue { background-color: var(--ergo-blue); color: white; }
-  .bg-ergo-blue-light { background-color: var(--ergo-blue-light); color: var(--ergo-dark); }
-
-  .insurance-card {
-    transition: all 0.3s ease;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  .ergo-red, .text-ergo-red { color: var(--ds-accent); }
+  .bg-ergo-red { background-color: var(--ds-accent); color: var(--ds-paper); }
+  .border-ergo-red { border-color: var(--ds-accent); }
+  .text-ergo-dark { color: var(--ds-ink); }
+  .bg-ergo-dark { background-color: var(--ds-petrol-deep); color: var(--ds-paper); }
+  .bg-ergo-gray { background-color: var(--ds-canvas); color: var(--ds-ink); }
+  .bg-ergo-blue { background-color: var(--ds-petrol); color: var(--ds-paper); }
+  .bg-ergo-blue-light { background-color: var(--ds-soft-petrol); color: var(--ds-ink); }
+  .insurance-card { transition: transform .25s ease, box-shadow .25s ease; height: 100%; display: flex; flex-direction: column; }
+  @media (hover:hover) { .insurance-card:hover { transform: translateY(-4px); box-shadow: var(--ds-shadow-lg); } }
+  .insurance-card img { aspect-ratio: 400/250; }
+  .ds-page { min-height: calc(100vh - 4rem); background: var(--ds-canvas); color: var(--ds-ink); }
+  .ds-surface { border: 1px solid var(--ds-line); border-radius: var(--ds-radius); background: var(--ds-paper); box-shadow: var(--ds-shadow-sm); }
+  .ds-hero { border-bottom: 2px solid var(--ds-accent); }
+  .ds-marketing .ds-hero {
+    background: linear-gradient(135deg, #133f42 0%, #1d5558 58%, #2f6867 100%) !important;
   }
-
-  @media (hover: hover) {
-    .insurance-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    }
+  .ds-service .ds-hero,
+  .ds-form-flow .ds-hero {
+    background: linear-gradient(135deg, #133f42 0%, #1d5558 58%, #2f6867 100%) !important;
   }
-
-  .insurance-card img {
-    aspect-ratio: 400/250;
+  .ds-hero h1 { max-width: 18ch; }
+  .ds-eyebrow { display: inline-flex; align-items: center; gap: .5rem; color: var(--ds-accent); font-size: .72rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+  .ds-primary-action { background: var(--ds-accent); color: var(--ds-paper); border-radius: var(--ds-radius-sm); box-shadow: 0 7px 16px rgba(194,107,69,.20); font-weight: 700; transition: transform .16s ease, background-color .16s ease; }
+  .ds-primary-action:hover { background: var(--ds-accent-dark); transform: translateY(-1px); }
+  .ds-secondary-action { border: 1px solid var(--ds-petrol); border-radius: var(--ds-radius-sm); color: var(--ds-petrol); font-weight: 700; }
+  .ds-secondary-action:hover { background: var(--ds-soft-petrol); }
+  .ds-site-header { background: rgba(255,253,248,.95); border-bottom-color: var(--ds-line); }
+  .ds-site-footer { background: var(--ds-petrol-deep); border-top: 4px solid var(--ds-accent); }
+  .ds-breadcrumb { background: rgba(245,242,235,.9); border-color: var(--ds-line); font-size: .76rem; }
+  .ds-page .bg-white, .ds-page .bg-gray-50, .ds-page .bg-gray-100 { background-color: var(--ds-paper); }
+  .ds-page .bg-gray-50, .ds-page .bg-gray-100 { background-color: var(--ds-canvas); }
+  .ds-page .border-gray-100, .ds-page .border-gray-200, .ds-page .border-gray-300, .ds-page .border-slate-200 { border-color: var(--ds-line); }
+  .ds-page .text-gray-900, .ds-page .text-gray-800, .ds-page .text-gray-700 { color: var(--ds-ink); }
+  .ds-page .text-gray-600, .ds-page .text-gray-500, .ds-page .text-gray-400 { color: var(--ds-body); }
+  .ds-page .bg-\[\#E2001A\], .ds-page .bg-\[\#e2001a\], .ds-page .bg-red-600, .ds-page .bg-red-700 { background-color: var(--ds-accent); }
+  .ds-page .text-\[\#E2001A\], .ds-page .text-\[\#e2001a\], .ds-page .text-red-600, .ds-page .text-red-700 { color: var(--ds-accent); }
+  .ds-page .bg-\[\#003781\], .ds-page .bg-blue-700, .ds-page .bg-blue-800 { background-color: var(--ds-petrol); }
+  .ds-page .text-\[\#003781\], .ds-page .text-blue-700, .ds-page .text-blue-800 { color: var(--ds-petrol); }
+  .ds-site-footer .text-blue-100\/80, .ds-site-footer .text-gray-300, .ds-site-footer .text-gray-400 { color: rgba(245,242,235,.72); }
+  .ds-site-footer a:hover, .ds-site-footer button:hover { color: #f1c2a8; }
+  .ds-form-flow label { color: var(--ds-ink); font-weight: 650; }
+  .ds-form-flow input, .ds-form-flow select, .ds-form-flow textarea { border-color: var(--ds-line); background: var(--ds-paper); }
+  .ds-service [class*="bg-[#003781]"],
+  .ds-service [class*="bg-[#005ab4]"],
+  .ds-form-flow [class*="bg-[#003781]"],
+  .ds-form-flow [class*="bg-[#005ab4]"] {
+    background-color: var(--ds-petrol) !important;
   }
-
-  /* Shared page anatomy */
-  .ds-page {
-    min-height: calc(100vh - 4rem);
-    background: var(--ds-canvas);
+  .ds-service [class*="text-[#003781]"],
+  .ds-form-flow [class*="text-[#003781]"] {
+    color: var(--ds-petrol) !important;
   }
-
-  .ds-page > * {
-    position: relative;
+  .ds-service [class*="border-[#003781]"],
+  .ds-service [class*="ring-[#003781]"],
+  .ds-form-flow [class*="border-[#003781]"],
+  .ds-form-flow [class*="ring-[#003781]"] {
+    border-color: var(--ds-petrol) !important;
+    --tw-ring-color: rgba(29, 85, 88, .35) !important;
   }
-
-  .ds-marketing,
-  .ds-service,
-  .ds-form-flow {
-    background: transparent;
+  .ds-service [class*="bg-[#E2001A]"],
+  .ds-service [class*="bg-[#c5001a]"],
+  .ds-form-flow [class*="bg-[#E2001A]"],
+  .ds-form-flow [class*="bg-[#c5001a]"] {
+    background-color: var(--ds-accent) !important;
   }
-
-  .ds-surface {
-    border: 1px solid var(--ds-line);
-    border-radius: var(--ds-radius);
-    background: var(--ds-paper);
-    box-shadow: var(--ds-shadow-sm);
+  .ds-service [class*="text-[#E2001A]"],
+  .ds-form-flow [class*="text-[#E2001A]"] {
+    color: var(--ds-accent) !important;
   }
-
-  .ds-hero {
-    border-bottom: 2px solid var(--ds-red);
-    box-shadow: inset 0 -1px rgba(255, 255, 255, 0.18);
+  .ds-service [class*="border-[#E2001A]"],
+  .ds-form-flow [class*="border-[#E2001A]"] {
+    border-color: var(--ds-accent) !important;
   }
-
-  .ds-hero h1 {
-    max-width: 18ch;
+  .ds-service [class*="from-[#003781]"],
+  .ds-service [class*="from-[#005ab4]"],
+  .ds-form-flow [class*="from-[#003781]"],
+  .ds-form-flow [class*="from-[#005ab4]"] {
+    background-image: linear-gradient(135deg, var(--ds-petrol-deep), var(--ds-petrol)) !important;
   }
-
-  .ds-form-flow .max-w-\[600px\],
-  .ds-form-flow .max-w-\[640px\],
-  .ds-form-flow .max-w-2xl {
-    position: relative;
+  .ds-service [class*="from-[#E2001A]"],
+  .ds-service [class*="from-[#c5001a]"],
+  .ds-form-flow [class*="from-[#E2001A]"],
+  .ds-form-flow [class*="from-[#c5001a]"],
+  .ds-service [class*="from-red-"],
+  .ds-service [class*="from-orange-"] {
+    background-image: linear-gradient(135deg, var(--ds-accent), var(--ds-accent-dark)) !important;
   }
-
-  .ds-form-flow .bg-white.rounded-xl,
-  .ds-form-flow .bg-white.rounded-2xl {
-    border: 1px solid var(--ds-line);
-    box-shadow: var(--ds-shadow-sm);
-  }
-
-  .ds-form-flow .bg-\[\#E2001A\] {
-    background-color: var(--ds-red);
-  }
-
-  .ds-form-flow label {
-    color: var(--ds-ink);
-    font-weight: 650;
-  }
-
-  .ds-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--ds-red);
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-  }
-
-  .ds-primary-action {
-    background: var(--ds-red);
-    border-radius: var(--ds-radius-sm);
-    box-shadow: 0 8px 18px rgba(226, 0, 26, 0.18);
-    color: #fff;
-    font-weight: 750;
-    transition: transform 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
-  }
-
-  .ds-primary-action:hover {
-    background: var(--ds-red-dark);
-    box-shadow: 0 12px 24px rgba(226, 0, 26, 0.24);
-    transform: translateY(-1px);
-  }
-
-  .ds-secondary-action {
-    border: 1px solid var(--ds-red);
-    border-radius: var(--ds-radius-sm);
-    color: var(--ds-red);
-    font-weight: 750;
-    transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
-  }
-
-  .ds-secondary-action:hover {
-    background: var(--ds-soft-red);
-    transform: translateY(-1px);
-  }
-
-  .ds-site-header {
-    background: rgba(255, 254, 253, 0.96);
-    border-bottom-color: var(--ds-line);
-  }
-
-  .ds-site-footer {
-    background: var(--ds-navy-deep);
-  }
-
-  .ds-breadcrumb {
-    background: rgba(248, 248, 246, 0.92);
-    border-color: var(--ds-line);
-  }
-
-  .ds-marketing .bg-white.rounded-2xl,
-  .ds-service .bg-white.rounded-2xl,
-  .ds-form-flow .bg-white.rounded-2xl,
-  .ds-page .bg-white.rounded-lg {
-    border-color: var(--ds-line);
-    box-shadow: var(--ds-shadow-sm);
-  }
-
-  .ds-marketing .bg-gray-50,
-  .ds-service .bg-gray-50,
-  .ds-form-flow .bg-gray-50 {
-    background-color: var(--ds-canvas);
-  }
-
-  .ds-marketing .bg-gradient-to-br.from-\[\#003781\],
-  .ds-marketing .bg-gradient-to-br.from-\[\#E2001A\],
-  .ds-service .bg-gradient-to-br.from-\[\#003781\] {
-    position: relative;
-    isolation: isolate;
-  }
-
-  .ds-marketing .bg-gradient-to-br.from-\[\#003781\]::after,
-  .ds-marketing .bg-gradient-to-br.from-\[\#E2001A\]::after,
-  .ds-service .bg-gradient-to-br.from-\[\#003781\]::after {
-    content: "";
-    position: absolute;
-    inset: auto -12% -70% auto;
-    z-index: -1;
-    width: 29rem;
-    height: 29rem;
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 50%;
-  }
-
-  .ds-page .bg-white.rounded-xl,
-  .ds-page .bg-white.rounded-2xl {
-    border-color: var(--ds-line);
-  }
-
-  .ds-page .shadow-lg,
-  .ds-page .shadow-xl {
-    box-shadow: var(--ds-shadow);
-  }
-
-  @media (min-width: 768px) {
-    .ds-page {
-      min-height: calc(100vh - 4.5rem);
-    }
-  }
-
-  .funnel-step {
-    min-height: 260px;
-  }
-
-  .progress-bar-animation {
-    transition: width 0.3s ease-in-out;
-  }
-
-  img[loading="lazy"] {
-    content-visibility: auto;
-  }
-
-  /* Content visibility for below-the-fold sections */
-  .cv-auto {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 500px;
-  }
+  .ds-rule { height: 2px; width: 3rem; background: var(--ds-accent); border-radius: 999px; }
+  .progress-bar-animation { transition: width .3s ease-in-out; }
+  img[loading="lazy"] { content-visibility: auto; }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  .safe-area-bottom {
-    padding-bottom: max(12px, env(safe-area-inset-bottom));
-  }
-
-  .animate-pulse-subtle {
-    animation: pulse-subtle 2.5s ease-in-out infinite;
-  }
-
-  @keyframes pulse-subtle {
-    0%, 100% { box-shadow: 0 4px 14px rgba(226, 0, 26, 0.2); }
-    50% { box-shadow: 0 4px 20px rgba(226, 0, 26, 0.4); }
-  }
-
-  .section-divider {
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgb(229 231 235 / 0.6), transparent);
-  }
-
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-
-  .ds-rule {
-    height: 2px;
-    width: 3rem;
-    background: var(--ds-red);
-    border-radius: 999px;
-  }
+  .text-balance { text-wrap: balance; }
+  .safe-area-bottom { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
 }
 
-/* Shared ERGO design language: deliberately overrides legacy utility colour
-   choices across older marketing, service, legal and admin screens. */
-.ds-page {
-  background: var(--ds-canvas);
-  color: var(--ds-ink);
-}
-
-.ds-page .bg-white,
-.ds-page .bg-gray-50,
-.ds-page .bg-gray-100 {
-  background-color: var(--ds-paper);
-}
-
-.ds-page .bg-gray-50,
-.ds-page .bg-gray-100 {
-  background-color: var(--ds-canvas);
-}
-
-.ds-page .border-gray-100,
-.ds-page .border-gray-200,
-.ds-page .border-gray-300,
-.ds-page .border-slate-200 {
-  border-color: var(--ds-line);
-}
-
-.ds-page .text-gray-900,
-.ds-page .text-gray-800,
-.ds-page .text-gray-700 {
-  color: var(--ds-ink);
-}
-
-.ds-page .text-gray-600,
-.ds-page .text-gray-500,
-.ds-page .text-gray-400 {
-  color: var(--ds-body);
-}
-
-.ds-page .bg-\[\#E2001A\],
-.ds-page .bg-\[\#e2001a\],
-.ds-page .bg-red-600,
-.ds-page .bg-red-700 {
-  background-color: var(--ds-red);
-}
-
-.ds-page .text-\[\#E2001A\],
-.ds-page .text-\[\#e2001a\],
-.ds-page .text-red-600,
-.ds-page .text-red-700 {
-  color: var(--ds-red);
-}
-
-.ds-page .rounded-2xl {
-  border-radius: var(--ds-radius-lg);
-}
-
-.ds-page .rounded-xl {
-  border-radius: var(--ds-radius);
-}
-
-.ds-page .shadow-lg,
-.ds-page .shadow-xl,
-.ds-page .shadow-2xl {
-  box-shadow: var(--ds-shadow);
-}
-
-.ds-site-header a,
-.ds-site-header button {
-  letter-spacing: .005em;
-}
-
-.ds-site-footer {
-  background: var(--ds-navy-deep);
-  border-top: 4px solid var(--ds-red);
-}
-
-.ds-site-footer .text-blue-100\/80,
-.ds-site-footer .text-gray-300,
-.ds-site-footer .text-gray-400 {
-  color: rgba(255, 245, 248, .72);
-}
-
-.ds-site-footer a:hover,
-.ds-site-footer button:hover {
-  color: #a9e5e8;
-}
-
-.ds-breadcrumb {
-  font-size: .76rem;
-  letter-spacing: .025em;
-}
-
-/* Light hero contract. These selectors intentionally sit after the legacy
-   utility palette so route-specific gradient classes cannot win. */
-.ds-marketing .ds-hero,
-.ds-service .ds-hero,
-.ds-form-flow .ds-hero,
-.ds-marketing > section:first-of-type {
-  color: var(--ds-ink) !important;
-  background-color: var(--ds-paper) !important;
-  background-image:
-    radial-gradient(circle at 88% 10%, rgba(169, 229, 232, .34), transparent 22rem),
-    linear-gradient(112deg, #fffefd 0%, #fffefd 68%, #e5f6f7 100%) !important;
-  border-top: 5px solid var(--ds-red);
-  border-bottom: 1px solid var(--ds-line);
-  box-shadow: 0 10px 26px rgba(41, 39, 43, .07);
-}
-
-.ds-marketing .ds-hero h1,
-.ds-service .ds-hero h1,
-.ds-form-flow .ds-hero h1,
-.ds-marketing > section:first-of-type h1 {
-  color: var(--ds-ink) !important;
-}
-
-.ds-marketing .ds-hero .text-white,
-.ds-service .ds-hero .text-white,
-.ds-form-flow .ds-hero .text-white,
-.ds-marketing > section:first-of-type .text-white {
-  color: var(--ds-ink) !important;
-}
-
-.ds-marketing .ds-hero .text-white\/90,
-.ds-marketing .ds-hero .text-white\/80,
-.ds-service .ds-hero .text-white\/90,
-.ds-service .ds-hero .text-white\/80,
-.ds-form-flow .ds-hero .text-white\/90,
-.ds-form-flow .ds-hero .text-white\/80,
-.ds-marketing > section:first-of-type .text-white\/90,
-.ds-marketing > section:first-of-type .text-white\/80 {
-  color: var(--ds-body) !important;
-}
-
-.ds-marketing .ds-hero .bg-white\/15,
-.ds-service .ds-hero .bg-white\/15,
-.ds-form-flow .ds-hero .bg-white\/15,
-.ds-marketing > section:first-of-type .bg-white\/15 {
-  background: var(--ds-soft-red) !important;
-  border: 1px solid #eac4d4;
-  color: var(--ds-red) !important;
-}
-
-.ds-marketing .ds-hero .text-yellow-300,
-.ds-service .ds-hero .text-yellow-300,
-.ds-form-flow .ds-hero .text-yellow-300,
-.ds-marketing > section:first-of-type .text-yellow-300 {
-  color: var(--ds-red) !important;
-}
-
-.ds-marketing .ds-hero .text-green-300,
-.ds-service .ds-hero .text-green-300,
-.ds-form-flow .ds-hero .text-green-300,
-.ds-marketing > section:first-of-type .text-green-300 {
-  color: var(--ds-success) !important;
-}
-
-/* Keep actual action controls high contrast after the hero text reset. */
-.ds-marketing .ds-hero button.text-white,
-.ds-service .ds-hero button.text-white,
-.ds-form-flow .ds-hero button.text-white,
-.ds-marketing > section:first-of-type button.text-white {
-  color: #fff !important;
-  background: var(--ds-red) !important;
-}
-
-.ds-marketing .ds-hero button.text-white *,
-.ds-service .ds-hero button.text-white *,
-.ds-form-flow .ds-hero button.text-white *,
-.ds-marketing > section:first-of-type button.text-white * {
-  color: #fff !important;
-}
-
-.ds-marketing .ds-hero .text-transparent,
-.ds-service .ds-hero .text-transparent,
-.ds-form-flow .ds-hero .text-transparent,
-.ds-marketing > section:first-of-type .text-transparent {
-  color: var(--ds-red) !important;
-  background-image: none !important;
-  -webkit-text-fill-color: var(--ds-red);
-}
-
-.ds-marketing .ds-hero [class*="bg-gradient-to-r"],
-.ds-service .ds-hero [class*="bg-gradient-to-r"],
-.ds-form-flow .ds-hero [class*="bg-gradient-to-r"],
-.ds-marketing > section:first-of-type [class*="bg-gradient-to-r"] {
-  background: var(--ds-red) !important;
-}
-
-/* Shared surfaces on product, service and funnel screens. */
-.ds-marketing .bg-white.rounded-xl,
-.ds-marketing .bg-white.rounded-2xl,
-.ds-service .bg-white.rounded-xl,
-.ds-service .bg-white.rounded-2xl,
-.ds-form-flow .bg-white.rounded-xl,
-.ds-form-flow .bg-white.rounded-2xl,
-.ds-form-flow .bg-white.rounded-lg,
-.ds-page .bg-white.rounded-lg {
-  background: var(--ds-paper) !important;
-  border: 1px solid var(--ds-line);
-  box-shadow: var(--ds-shadow-sm);
-}
-
-.ds-marketing .bg-blue-50,
-.ds-service .bg-blue-50,
-.ds-form-flow .bg-blue-50 {
-  background: var(--ds-soft-blue) !important;
-}
-
-.ds-marketing .bg-red-50,
-.ds-service .bg-red-50,
-.ds-form-flow .bg-red-50 {
-  background: var(--ds-soft-red) !important;
-}
-
-.ds-marketing .bg-yellow-50,
-.ds-service .bg-yellow-50,
-.ds-form-flow .bg-yellow-50 {
-  background: var(--ds-soft-peach) !important;
-}
-
-.ds-form-flow input,
-.ds-form-flow select,
-.ds-form-flow textarea {
-  border-color: var(--ds-line);
-  background: var(--ds-paper);
-  border-radius: var(--ds-radius-sm);
-}
-
-/* Legacy end-of-page promotion bands use the same calm surface treatment as
-   the reference system instead of reintroducing the former dark-blue theme. */
-.ds-marketing section[class*="bg-gradient-to-br"],
-.ds-service section[class*="bg-gradient-to-br"],
-.ds-form-flow section[class*="bg-gradient-to-br"] {
-  color: var(--ds-ink) !important;
-  background: linear-gradient(112deg, #fffefd 0%, #fffefd 66%, var(--ds-soft-blue) 100%) !important;
-  border-top: 4px solid var(--ds-red);
-  border-bottom: 1px solid var(--ds-line);
-}
-
-.ds-marketing section[class*="bg-gradient-to-br"] .text-blue-100,
-.ds-marketing section[class*="bg-gradient-to-br"] .text-white\/90,
-.ds-marketing section[class*="bg-gradient-to-br"] .text-white\/80,
-.ds-service section[class*="bg-gradient-to-br"] .text-blue-100,
-.ds-service section[class*="bg-gradient-to-br"] .text-white\/90,
-.ds-service section[class*="bg-gradient-to-br"] .text-white\/80 {
-  color: var(--ds-body) !important;
-}
-
-.ds-marketing section[class*="bg-gradient-to-br"] .bg-white\/15,
-.ds-service section[class*="bg-gradient-to-br"] .bg-white\/15 {
-  background: var(--ds-soft-peach) !important;
-  border: 1px solid #edcfbd;
-  color: var(--ds-red) !important;
-}
-
-.ds-marketing section[class*="bg-gradient-to-br"] a.bg-white,
-.ds-marketing section[class*="bg-gradient-to-br"] button.bg-white,
-.ds-service section[class*="bg-gradient-to-br"] a.bg-white,
-.ds-service section[class*="bg-gradient-to-br"] button.bg-white {
-  color: #fff !important;
-  background: var(--ds-red) !important;
-  box-shadow: none;
-}
-
-.ds-marketing footer.bg-gray-900,
-.ds-service footer.bg-gray-900 {
-  background: var(--ds-navy-deep) !important;
-  border-top: 4px solid var(--ds-red);
-}
+@media (min-width: 768px) { .ds-page { min-height: calc(100vh - 4.5rem); } }

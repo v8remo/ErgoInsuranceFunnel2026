@@ -69,14 +69,14 @@ const testimonials = [
 const faqItems = [
   {
     q: 'Was kostet die Beratung?',
-    a: 'Die Beratung ist 100 % kostenlos und unverbindlich. Ich werde für meine Dienstleistung von ERGO vergütet – Sie zahlen nichts extra.',
+    a: 'Die Beratung ist 100 % kostenlos und unverbindlich. Die Vergütung ist bereits berücksichtigt – Sie zahlen nichts extra.',
   },
   {
     q: 'Wie läuft die Beratung ab?',
     a: 'Nach Ihrer Anfrage melde ich mich innerhalb von 24 Stunden. Wir besprechen alles telefonisch, per Videocall oder persönlich in meinem Büro in Ganderkesee – ganz wie es Ihnen passt.',
   },
   {
-    q: 'Muss ich ERGO-Kunde werden?',
+    q: 'Muss ich einen Vertrag abschließen?',
     a: 'Nein. Die Analyse zeigt Ihnen zuerst, wo Sie stehen. Ein Abschluss ist nie Bedingung und entsteht nur, wenn Sie wirklich überzeugt sind.',
   },
   {
@@ -397,9 +397,9 @@ export default function PerspectiveFunnelPage() {
   return (
     <>
       <SEO
-        title="Kostenlose Versicherungsberatung – ERGO Agentur Stübe Ganderkesee"
-        description="Starten Sie jetzt Ihre kostenlose Versicherungsanalyse. In wenigen Schritten zum persönlichen Angebot von Ihrem ERGO Berater Morino Stübe in Ganderkesee."
-        keywords="Versicherungsberatung kostenlos, ERGO Beratung Ganderkesee, Versicherungsvergleich, kostenlose Analyse"
+        title="Kostenlose Versicherungsberatung – Agentur Stübe Ganderkesee"
+        description="Starten Sie jetzt Ihre kostenlose Versicherungsanalyse. In wenigen Schritten zum persönlichen Angebot von Morino Stübe in Ganderkesee."
+        keywords="Versicherungsberatung kostenlos, Beratung Ganderkesee, Versicherungsvergleich, kostenlose Analyse, Morino Stübe"
       />
 
       {/* Sticky header */}
@@ -408,7 +408,7 @@ export default function PerspectiveFunnelPage() {
           <Link href="/">
             <span className="flex items-center gap-2 cursor-pointer">
               <Shield className="w-6 h-6 text-ergo-red flex-shrink-0" />
-              <span className="font-bold text-gray-900 text-sm">ERGO Stübe</span>
+              <span className="font-bold text-gray-900 text-sm">Agentur Stübe</span>
             </span>
           </Link>
           <div className="hidden sm:flex flex-1 items-center gap-3 max-w-xs">
@@ -763,7 +763,7 @@ export default function PerspectiveFunnelPage() {
             {!quizDone && (
               <div className="mt-8 flex flex-wrap justify-center gap-5 sm:gap-8">
                 {[
-                  { emoji: '🏆', label: 'ERGO Testsieger 2024' },
+                  { emoji: '🏆', label: 'Ausgezeichneter Versicherungsschutz' },
                   { emoji: '⭐', label: '4,9/5 Sterne' },
                   { emoji: '🤝', label: '100% kostenlos' },
                   { emoji: '📍', label: 'Vor Ort Ganderkesee' },
@@ -809,7 +809,7 @@ export default function PerspectiveFunnelPage() {
                 { icon: '🎯', text: 'Lücken erkennen – keine Doppelversicherungen' },
                 { icon: '🤝', text: 'Persönliche Beratung – kein anonymes Call-Center' },
                 { icon: '📱', text: 'Vor Ort, per Video oder WhatsApp – Sie wählen' },
-                { icon: '🛡️', text: 'ERGO – eine der größten deutschen Versicherungen' },
+                { icon: '🛡️', text: 'Verlässlicher Versicherungsschutz für Ihre Bedürfnisse' },
               ].map(b => (
                 <div key={b.text} className="flex items-start gap-3 bg-gray-50 rounded-xl p-4 border border-gray-100">
                   <span className="text-2xl flex-shrink-0">{b.icon}</span>
@@ -842,7 +842,7 @@ export default function PerspectiveFunnelPage() {
         <section className="py-14 sm:py-20 px-4 bg-gray-50">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-10">
-              <p className="text-xs font-semibold text-ergo-red uppercase tracking-widest mb-2">Warum ERGO Stübe?</p>
+              <p className="text-xs font-semibold text-ergo-red uppercase tracking-widest mb-2">Warum Agentur Stübe?</p>
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Was Sie woanders <span className="text-ergo-red">nicht bekommen</span>
               </h2>
@@ -850,7 +850,7 @@ export default function PerspectiveFunnelPage() {
             <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
               <div className="grid grid-cols-3 bg-white border-b border-gray-200">
                 <div className="p-4 text-sm font-semibold text-gray-500">Leistung</div>
-                <div className="p-4 text-center text-sm font-bold text-ergo-red">ERGO Stübe</div>
+                <div className="p-4 text-center text-sm font-bold text-ergo-red">Agentur Stübe</div>
                 <div className="p-4 text-center text-sm font-semibold text-gray-400">Andere</div>
               </div>
               {comparisonRows.map((row, i) => (
@@ -892,7 +892,7 @@ export default function PerspectiveFunnelPage() {
                 <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full overflow-hidden border-4 border-gray-100 shadow-xl">
                   <img
                     src={advisorPhoto}
-                    alt="Morino Stübe – Ihr ERGO Berater"
+                    alt="Morino Stübe – Ihr persönlicher Berater"
                     className="w-full h-full object-cover object-top"
                   />
                 </div>
@@ -901,7 +901,7 @@ export default function PerspectiveFunnelPage() {
                 <p className="text-xs font-semibold text-ergo-red uppercase tracking-widest mb-2">Ihr persönlicher Berater</p>
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Morino Stübe</h2>
                 <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6">
-                  Ich bin seit über 15 Jahren selbstständiger ERGO Agenturinhaber in Ganderkesee. Mein Ziel ist es, Sie wirklich optimal abzusichern – ehrlich, transparent und ohne Druck.
+                  Ich bin seit über 15 Jahren selbstständig als Versicherungsberater in Ganderkesee tätig. Mein Ziel ist es, Sie wirklich optimal abzusichern – ehrlich, transparent und ohne Druck.
                 </p>
                 <div className="flex flex-wrap justify-center sm:justify-start gap-6">
                   {ADVISOR_STATS.map(s => (
@@ -1157,7 +1157,7 @@ export default function PerspectiveFunnelPage() {
             <Link href="/erstinformation"><span className="hover:text-white cursor-pointer">Erstinformation</span></Link>
             <Link href="/"><span className="hover:text-white cursor-pointer">Startseite</span></Link>
           </div>
-          <p className="text-xs text-white/30">© {new Date().getFullYear()} ERGO Versicherung Morino Stübe · Bergedorfer Str. 11, 27777 Ganderkesee</p>
+          <p className="text-xs text-white/30">© {new Date().getFullYear()} Agentur Stübe · Bergedorfer Str. 11, 27777 Ganderkesee</p>
         </footer>
       </div>
 

@@ -11,6 +11,7 @@ import {
   MessageCircle, Award, ArrowRight, ChevronRight, MessageSquare
 } from 'lucide-react';
 import beraterPhoto from '@assets/optimized/ich_bin_da.webp';
+import { neutralizePublicBranding } from '@/lib/public-brand';
 
 interface SpartenLandingPageProps {
   config: SpartenConfig;
@@ -129,7 +130,7 @@ function ExplainerVideo({ src }: { src: string }) {
                 </div>
                 <div className="text-center">
                   <p className="text-white font-bold text-base sm:text-lg">Video abspielen</p>
-                  <p className="text-white/70 text-xs sm:text-sm mt-0.5">Zahnzusatz-Leitfaden · ERGO Stübe</p>
+                  <p className="text-white/70 text-xs sm:text-sm mt-0.5">Zahnzusatz-Leitfaden · Agentur Stübe</p>
                 </div>
               </div>
               <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5 bg-black/40 text-white/70 text-xs px-2 py-1 rounded-full">
@@ -156,7 +157,37 @@ function ExplainerVideo({ src }: { src: string }) {
   );
 }
 
-export default function SpartenLandingPage({ config }: SpartenLandingPageProps) {
+export default function SpartenLandingPage({ config: rawConfig }: SpartenLandingPageProps) {
+  const config: SpartenConfig = {
+    ...rawConfig,
+    seo: {
+      title: neutralizePublicBranding(rawConfig.seo.title),
+      description: neutralizePublicBranding(rawConfig.seo.description),
+      keywords: neutralizePublicBranding(rawConfig.seo.keywords),
+    },
+    hero: {
+      ...rawConfig.hero,
+      headline: neutralizePublicBranding(rawConfig.hero.headline),
+      subheadline: neutralizePublicBranding(rawConfig.hero.subheadline),
+    },
+    benefits: rawConfig.benefits.map(benefit => ({
+      ...benefit,
+      title: neutralizePublicBranding(benefit.title),
+      description: neutralizePublicBranding(benefit.description),
+    })),
+    reviews: rawConfig.reviews.map(review => ({
+      ...review,
+      text: neutralizePublicBranding(review.text),
+    })),
+    faqs: rawConfig.faqs.map(faq => ({
+      question: neutralizePublicBranding(faq.question),
+      answer: neutralizePublicBranding(faq.answer),
+    })),
+    urgency: {
+      text: neutralizePublicBranding(rawConfig.urgency.text),
+      subtext: neutralizePublicBranding(rawConfig.urgency.subtext),
+    },
+  };
   const [showFunnel, setShowFunnel] = useState(false);
   const [funnelType, setFunnelType] = useState<string | undefined>(config.insuranceType);
   const [funnelLabel, setFunnelLabel] = useState<string | undefined>(config.seo.title.split(' – ')[0]);
@@ -206,7 +237,7 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
     "description": config.seo.description,
     "provider": {
       "@type": "InsuranceAgency",
-      "name": "ERGO Versicherung Morino Stübe",
+      "name": "Agentur Stübe",
       "@id": "https://ergo-ganderkesee.de",
       "url": "https://ergo-ganderkesee.de",
       "address": {
@@ -387,7 +418,7 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
         <motion.section {...fadeInUp} className="py-10 md:py-16 px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-gray-900 mb-3">
-              Ihre Vorteile bei ERGO
+              Ihre Vorteile bei der Agentur Stübe
             </h2>
             <p className="text-center text-gray-500 text-sm mb-10 max-w-xl mx-auto">
               Persönliche Beratung statt anonymer Online-Vergleich – das macht den Unterschied.
@@ -432,12 +463,12 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
                 whileHover={{ scale: 1.03 }}
                 transition={{ duration: 0.3 }}
                 src={beraterPhoto}
-                alt="Morino Stübe - ERGO Versicherungsfachmann in Ganderkesee"
+                alt="Morino Stübe - persönlicher Versicherungsfachmann in Ganderkesee"
                 className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-lg shrink-0 bg-white"
               />
               <div className="flex-1">
                 <h2 className="text-xl font-bold text-gray-900 mb-1 md:text-2xl">Morino Stübe</h2>
-                <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann · Ganderkesee</p>
+                <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">Persönlicher Versicherungsfachmann · Ganderkesee</p>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4 md:text-base">
                   Ich berate Sie persönlich und transparent zur {config.seo.title.split(' – ')[0]}. Gemeinsam finden wir die beste Lösung für Ihre Situation – kostenlos und unverbindlich.
                 </p>
@@ -448,17 +479,10 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
                   </span>
                   <span className="flex items-center justify-center md:justify-start gap-1.5">
                     <Star className="w-4 h-4 text-yellow-500 shrink-0 fill-yellow-500" />
-                    ERGO als starker Partner seit 1906
+                    Direkter Ansprechpartner für Ihre Absicherung
                   </span>
                 </div>
               </div>
-              <img
-                src="/attached_assets/ergo-logo-hq.svg"
-                alt="ERGO Logo"
-                className="h-10 md:h-14 w-auto shrink-0 hidden md:block"
-                loading="lazy"
-                decoding="async"
-              />
             </div>
           </div>
         </motion.section>
@@ -488,7 +512,7 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
         {/* Awards Band */}
         <motion.section {...fadeInUp} className="py-10 md:py-14 px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-lg font-bold text-center text-gray-900 mb-2">ERGO – Mehrfach ausgezeichnet</h2>
+            <h2 className="text-lg font-bold text-center text-gray-900 mb-2">Leistungen im unabhängigen Vergleich</h2>
             <p className="text-center text-gray-500 text-sm mb-8">Von unabhängigen Testinstituten bewertet</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {ergoAwards.map((award) => (
@@ -521,7 +545,7 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
               {config.urgency.text}
             </h2>
             <p className="text-blue-100 text-sm sm:text-base mb-8 max-w-xl mx-auto">
-              Kostenlose, unverbindliche Beratung von Ihrem persönlichen ERGO-Berater Morino Stübe in Ganderkesee.
+              Kostenlose, unverbindliche Beratung durch Morino Stübe in Ganderkesee.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
@@ -547,7 +571,7 @@ export default function SpartenLandingPage({ config }: SpartenLandingPageProps) 
             <Link href="/impressum" className="hover:text-white transition-colors">Impressum</Link>
             <Link href="/datenschutz" className="hover:text-white transition-colors">Datenschutz</Link>
           </div>
-          <p className="mt-3">&copy; 2026 ERGO Versicherung - Morino Stübe</p>
+          <p className="mt-3">&copy; 2026 Agentur Stübe - Morino Stübe</p>
         </footer>
       </div>
 

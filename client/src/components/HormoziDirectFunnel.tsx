@@ -52,12 +52,12 @@ export default function HormoziDirectFunnel() {
 
   // SEO Tags direkt eingebettet
   useEffect(() => {
-    document.title = "ERGO Versicherungsberatung - Kostenlose Analyse | Morino Stübe";
+    document.title = "Versicherungsberatung - Kostenlose Analyse | Agentur Stübe";
     
     // Meta Description - rechtlich korrekt
     const metaDescription = document.querySelector('meta[name="description"]') || document.createElement('meta');
     metaDescription.setAttribute('name', 'description');
-    metaDescription.setAttribute('content', 'Kostenlose Versicherungsberatung & unverbindliche Analyse Ihrer bestehenden Verträge. ERGO-Berater Morino Stübe - Ganderkesee. Jetzt Beratungstermin anfragen.');
+    metaDescription.setAttribute('content', 'Kostenlose Versicherungsberatung & unverbindliche Analyse Ihrer bestehenden Verträge. Agentur Stübe – Morino Stübe in Ganderkesee. Jetzt Beratungstermin anfragen.');
     if (!document.querySelector('meta[name="description"]')) {
       document.head.appendChild(metaDescription);
     }
@@ -65,7 +65,7 @@ export default function HormoziDirectFunnel() {
     // Keywords - rechtlich unbedenklich
     const metaKeywords = document.querySelector('meta[name="keywords"]') || document.createElement('meta');
     metaKeywords.setAttribute('name', 'keywords');
-    metaKeywords.setAttribute('content', 'ERGO Versicherungsberatung, kostenlose Analyse, Morino Stübe, Ganderkesee, Versicherungsmakler, unverbindlich');
+    metaKeywords.setAttribute('content', 'Versicherungsberatung, kostenlose Analyse, Morino Stübe, Agentur Stübe, Ganderkesee, Versicherungsberatung, unverbindlich');
     if (!document.querySelector('meta[name="keywords"]')) {
       document.head.appendChild(metaKeywords);
     }
@@ -73,14 +73,14 @@ export default function HormoziDirectFunnel() {
     // Open Graph - seriös
     const ogTitle = document.querySelector('meta[property="og:title"]') || document.createElement('meta');
     ogTitle.setAttribute('property', 'og:title');
-    ogTitle.setAttribute('content', 'ERGO Versicherungsberatung - Kostenlose Analyse');
+    ogTitle.setAttribute('content', 'Versicherungsberatung - Kostenlose Analyse | Agentur Stübe');
     if (!document.querySelector('meta[property="og:title"]')) {
       document.head.appendChild(ogTitle);
     }
 
     const ogDescription = document.querySelector('meta[property="og:description"]') || document.createElement('meta');
     ogDescription.setAttribute('property', 'og:description');
-    ogDescription.setAttribute('content', 'Kostenlose und unverbindliche Versicherungsberatung von Ihrem ERGO-Berater in Ganderkesee.');
+    ogDescription.setAttribute('content', 'Kostenlose und unverbindliche Versicherungsberatung von Agentur Stübe in Ganderkesee.');
     if (!document.querySelector('meta[property="og:description"]')) {
       document.head.appendChild(ogDescription);
     }
@@ -183,7 +183,7 @@ export default function HormoziDirectFunnel() {
     }));
   };
 
-  // Realistische Ersparnisberechnung basierend auf echten ERGO-Preisen 2025
+  // Ersparnisberechnung basierend auf aktuellen Tarifwerten 2025
   const savingsPerProduct = {
     haftpflicht: 81,
     hausrat: 149, 
@@ -255,12 +255,12 @@ export default function HormoziDirectFunnel() {
                   <div className="flex flex-col sm:flex-row items-center gap-4">
                     <img 
                       src="/attached_assets/089-Ti9r4yWZjrM_1756458595368.jpeg"
-                      alt="Morino Stübe - Ihr ERGO Berater"
+                      alt="Morino Stübe - Ihr Versicherungsberater"
                       className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-contain bg-white border-4 border-ergo-red shadow-lg"
                     />
                     <div className="text-center sm:text-left">
                       <h3 className="text-xl font-bold text-gray-800 mb-1">Morino Stübe</h3>
-                      <p className="text-ergo-red font-semibold mb-2">🏆 Ihr persönlicher ERGO-Berater</p>
+                      <p className="text-ergo-red font-semibold mb-2">🏆 Ihr persönlicher Berater bei Agentur Stübe</p>
                       <p className="text-sm text-gray-600">✅ Zertifiziert • ✅ 3 Jahre Erfahrung • ✅ Über 500 zufriedene Kunden</p>
                     </div>
                   </div>
@@ -473,7 +473,7 @@ export default function HormoziDirectFunnel() {
                     
                     <div className="text-base text-gray-700 font-medium space-y-1">
                       <div>✅ {formData.interests.length} von 8 Versicherungen ausgewählt</div>
-                      <div className="text-sm text-gray-600">💡 Echte ERGO-Preise mit authentischen Ersparnissen</div>
+                      <div className="text-sm text-gray-600">💡 Tarifwerte mit transparenten Ersparnisbeispielen</div>
                     </div>
                   </div>
                 </div>
@@ -500,12 +500,12 @@ export default function HormoziDirectFunnel() {
                     <div className="flex flex-col sm:flex-row items-center gap-4">
                       <img 
                         src="/attached_assets/089-Ti9r4yWZjrM_1756458595368.jpeg"
-                        alt="Morino Stübe - Ihr ERGO Berater"
+                        alt="Morino Stübe - Ihr Versicherungsberater"
                         className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-contain bg-white border-4 border-ergo-red shadow-lg"
                       />
                       <div className="text-center sm:text-left">
                         <h4 className="text-lg font-bold text-gray-800 mb-1">👋 Ich bin Morino Stübe</h4>
-                        <p className="text-ergo-red font-semibold mb-2">Ihr persönlicher Berater bei ERGO</p>
+                        <p className="text-ergo-red font-semibold mb-2">Ihr persönlicher Berater bei Agentur Stübe</p>
                         <p className="text-sm text-gray-700">
                           📞 Ich rufe Sie heute noch zurück für Ihre kostenlose Versicherungsanalyse!
                         </p>
@@ -632,7 +632,7 @@ export default function HormoziDirectFunnel() {
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center text-lg font-black">2</div>
-                      <span className="text-lg font-bold">Persönliche Beratung zu ERGO-Produkten</span>
+                      <span className="text-lg font-bold">Persönliche Beratung zu Versicherungsprodukten</span>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center text-lg font-black">3</div>
@@ -652,7 +652,7 @@ export default function HormoziDirectFunnel() {
                       <span className="truncate">015566771019</span>
                     </a>
                     <a 
-                      href="https://wa.me/4915566771019?text=Hallo! Ich habe mich für die ERGO-Versicherungsanalyse angemeldet und möchte meine Ersparnisse besprechen."
+                      href="https://wa.me/4915566771019?text=Hallo! Ich habe mich für die kostenlose Versicherungsanalyse angemeldet und möchte meine Ersparnisse besprechen."
                       target="_blank"
                       className="inline-flex items-center justify-center text-green-600 font-bold text-lg sm:text-xl hover:text-green-700 bg-white px-6 py-4 h-12 sm:h-14 rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-95"
                     >
@@ -734,7 +734,7 @@ export default function HormoziDirectFunnel() {
         {/* INFORMATIONEN UNTER DEM FUNNEL */}
         <div className="text-center mt-8 mb-8">
           <div className="bg-ergo-red text-white px-6 py-3 rounded-lg inline-block font-bold mb-6 text-lg">
-            ERGO Versicherungsberatung - Morino Stübe, Ganderkesee
+            Agentur Stübe – Morino Stübe, Ganderkesee
           </div>
           
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 sm:mb-6 leading-tight px-2">
@@ -746,8 +746,8 @@ export default function HormoziDirectFunnel() {
           <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-8 mb-4 sm:mb-8 border-2 border-gray-200 shadow-lg mx-1 sm:mx-0">
             <div className="text-base sm:text-lg md:text-xl text-gray-800 font-bold mb-4 sm:mb-6 leading-relaxed">
               ✓ Kostenlose Beratung und Analyse Ihrer bestehenden Verträge<br/>
-              ✓ Unverbindliches Angebot für ERGO-Versicherungen<br/>
-              ✓ Kompetente Beratung von Ihrem zertifizierten ERGO-Berater
+              ✓ Unverbindliches Angebot für passende Versicherungen<br/>
+              ✓ Kompetente Beratung von Ihrem zertifizierten Versicherungsberater
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-center">

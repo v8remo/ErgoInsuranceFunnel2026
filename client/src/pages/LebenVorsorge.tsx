@@ -20,7 +20,7 @@ const products = [
     icon: Wallet,
     iconColor: "text-blue-600",
     bgColor: "bg-blue-50",
-    name: "ERGO Private Rentenversicherung",
+    name: "Private Rentenversicherung",
     short: "3 Produktfamilien: Chance, Balance und Index – passend zu Ihrer Risikobereitschaft und Ihren Zielen.",
     highlights: ["Ab 25€/Monat", "100% Beitragsgarantie (Balance/Index)", "FFF+ Bestnote Franke & Bornberg", "Flexible Auszahlung"],
     target: "Alle Altersgruppen",
@@ -53,7 +53,7 @@ const products = [
     icon: Building2,
     iconColor: "text-indigo-600",
     bgColor: "bg-indigo-50",
-    name: "ERGO Basis-Rente (Rürup)",
+    name: "Basis-Rente (Rürup)",
     short: "Staatlich geförderte Basisversorgung – Beiträge zu 100% steuerlich absetzbar. Ideal für Selbstständige und Gutverdiener.",
     highlights: ["100% steuerlich absetzbar", "Max. 27.565€/Jahr absetzbar", "Pfändungssicher", "Lebenslange Rente"],
     target: "Selbstständige & Gutverdiener",
@@ -81,7 +81,7 @@ const products = [
     icon: Briefcase,
     iconColor: "text-emerald-600",
     bgColor: "bg-emerald-50",
-    name: "ERGO Betriebliche Altersvorsorge",
+    name: "Betriebliche Altersvorsorge",
     short: "Vom Bruttoeinkommen sparen – mit verpflichtendem Arbeitgeberzuschuss von mindestens 15%.",
     highlights: ["Mind. 15% AG-Zuschuss", "Steuer- & SV-frei bis 302€/Monat", "Portabel bei Jobwechsel", "BU integrierbar"],
     target: "Angestellte",
@@ -108,7 +108,7 @@ const products = [
     icon: Shield,
     iconColor: "text-red-600",
     bgColor: "bg-red-50",
-    name: "ERGO Risikolebensversicherung",
+    name: "Risikolebensversicherung",
     short: "Finanzielle Absicherung Ihrer Familie im Todesfall. 3 Tarifvarianten: Grundschutz, Komfort, Premium.",
     highlights: ["Ab 1,97€/Monat", "Focus Money: Hervorragend", "Kinderschutz Plus (Premium)", "Nachversicherungsgarantie"],
     target: "Familien & Immobilienbesitzer",
@@ -135,7 +135,7 @@ const products = [
     icon: Umbrella,
     iconColor: "text-amber-600",
     bgColor: "bg-amber-50",
-    name: "ERGO Berufsunfähigkeitsversicherung",
+    name: "Berufsunfähigkeitsversicherung",
     short: "Sichern Sie Ihr wichtigstes Kapital: Ihre Arbeitskraft. Jeder Vierte wird im Berufsleben berufsunfähig.",
     highlights: ["Kein Verweis auf andere Berufe", "Ab 6 Monate Prognose", "Komfort & Premium Tarife", "Weltweiter Schutz"],
     target: "Alle Berufstätigen",
@@ -162,7 +162,7 @@ const products = [
     icon: Heart,
     iconColor: "text-pink-600",
     bgColor: "bg-pink-50",
-    name: "ERGO Body Protect",
+    name: "Grundfähigkeitsversicherung",
     short: "Grundfähigkeitsversicherung – die clevere und günstigere Alternative zur BU. Bis zu 40 versicherte Fähigkeiten.",
     highlights: ["Günstiger als BU", "Weniger Gesundheitsfragen", "3 Tarife: Basis/Komfort/Premium", "Sport Plus einmalig am Markt"],
     target: "Handwerker & körperlich Tätige",
@@ -176,7 +176,7 @@ const products = [
       { title: "3 Tarifvarianten", description: "Grundschutz (körperlich), Komfort (+erweitert), Premium (+kognitiv)" },
       { title: "Psyche Plus Baustein", description: "Leistung bei psychischen Erkrankungen wie Depression oder PTBS" },
       { title: "Pflege Plus Baustein", description: "Verdopplung der Leistung bei Pflegebedürftigkeit – lebenslang" },
-      { title: "Umwandlungsoption zur BU", description: "Später zur ERGO BU wechseln – ohne erneute Gesundheitsprüfung" },
+      { title: "Umwandlungsoption zur BU", description: "Später zur Berufsunfähigkeitsversicherung wechseln – ohne erneute Gesundheitsprüfung" },
       { title: "Berufsunabhängig", description: "Schutz für jeden – Angestellte, Selbstständige, Studierende, Hausfrauen/-männer" }
     ],
     questions: [
@@ -189,7 +189,7 @@ const products = [
     icon: Users,
     iconColor: "text-gray-600",
     bgColor: "bg-gray-100",
-    name: "ERGO Sterbegeldversicherung",
+    name: "Sterbegeldversicherung",
     short: "Entlasten Sie Ihre Angehörigen von den finanziellen Belastungen einer Bestattung. Ohne Gesundheitsfragen.",
     highlights: ["Keine Gesundheitsfragen", "Bis 20.000€ Versicherungssumme", "Doppelte Summe bei Unfall", "3 Tarifvarianten"],
     target: "Ältere Kunden & Familien",
@@ -237,8 +237,8 @@ const faqs = [
   },
   {
     id: "ergo-vs-etf",
-    question: "Warum ERGO Rentenversicherung statt ETF-Depot?",
-    answer: "Die ERGO Rentenversicherung bietet steuerliche Vorteile, die ein ETF-Depot nicht hat: Fondswechsel sind steuerfrei, bei Auszahlung als Rente wird nur der geringe Ertragsanteil besteuert, und bei Kapitalauszahlung gilt das Halbeinkünfteverfahren. Zudem bietet die Versicherung eine lebenslange Rente – das Langlebigkeitsrisiko ist abgesichert."
+    question: "Warum eine Rentenversicherung statt ETF-Depot?",
+    answer: "Eine Rentenversicherung kann steuerliche Vorteile bieten, die ein ETF-Depot nicht hat: Fondswechsel sind steuerfrei, bei Auszahlung als Rente wird nur der geringe Ertragsanteil besteuert, und bei Kapitalauszahlung gilt das Halbeinkünfteverfahren. Zudem kann die Versicherung eine lebenslange Rente bieten – das Langlebigkeitsrisiko ist abgesichert."
   },
   {
     id: "bu-wichtig",
@@ -351,17 +351,17 @@ export default function LebenVorsorge() {
   return (
     <>
       <SEO
-        title="Leben & Vorsorge – Private Altersvorsorge & Absicherung | ERGO Agentur Stübe Ganderkesee"
-        description="Private Rentenversicherung, Berufsunfähigkeit, Risikoleben & betriebliche Altersvorsorge bei ERGO. Persönliche Beratung von Morino Stübe in Ganderkesee, Delmenhorst und Oldenburg."
-        keywords="Leben Vorsorge, Private Rentenversicherung, Altersvorsorge, Berufsunfähigkeitsversicherung, Risikolebensversicherung, Rürup Rente, betriebliche Altersvorsorge, Body Protect, Sterbegeldversicherung, ERGO Ganderkesee, Morino Stübe"
+        title="Leben & Vorsorge – Private Altersvorsorge & Absicherung | Agentur Stübe Ganderkesee"
+        description="Private Rentenversicherung, Berufsunfähigkeit, Risikoleben und betriebliche Altersvorsorge. Persönliche Beratung von Morino Stübe in Ganderkesee, Delmenhorst und Oldenburg."
+        keywords="Leben Vorsorge, Private Rentenversicherung, Altersvorsorge, Berufsunfähigkeitsversicherung, Risikolebensversicherung, Rürup Rente, betriebliche Altersvorsorge, Grundfähigkeitsversicherung, Sterbegeldversicherung, Ganderkesee, Morino Stübe"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Service",
-          "name": "Leben & Vorsorge – ERGO Agentur Stübe",
-          "description": "Private Rentenversicherung, Berufsunfähigkeit, Risikoleben & betriebliche Altersvorsorge bei ERGO Ganderkesee",
+          "name": "Leben & Vorsorge – Agentur Stübe",
+          "description": "Private Rentenversicherung, Berufsunfähigkeit, Risikoleben und betriebliche Altersvorsorge in Ganderkesee",
           "provider": {
             "@type": "InsuranceAgency",
-            "name": "ERGO Agentur Stübe",
+            "name": "Agentur Stübe",
             "telephone": "+4915566771019",
             "email": "morino.stuebe@ergo.de",
             "address": {
@@ -555,7 +555,7 @@ export default function LebenVorsorge() {
                 7 starke Lösungen für Ihre Zukunft
               </h2>
               <p className="text-sm sm:text-base lg:text-xl text-medium-contrast text-readable px-2">
-                Von der Altersvorsorge bis zur Absicherung – ERGO bietet für jede Lebensphase das passende Produkt
+                Von der Altersvorsorge bis zur Absicherung – wir finden für jede Lebensphase die passende Lösung
               </p>
             </div>
 
@@ -802,7 +802,7 @@ export default function LebenVorsorge() {
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 leading-tight">
-                Steuervorteile: ETF-Depot vs. ERGO Rentenversicherung
+                Steuervorteile: ETF-Depot vs. Rentenversicherung
               </h2>
               <p className="text-sm sm:text-base lg:text-xl text-gray-700 px-2">
                 Warum die Rentenversicherung steuerlich oft die klügere Wahl ist
@@ -836,7 +836,7 @@ export default function LebenVorsorge() {
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3 mb-5">
                     <Star className="w-8 h-8 text-ergo-red" />
-                    <h3 className="text-lg font-bold text-ergo-red">ERGO Rentenversicherung</h3>
+                    <h3 className="text-lg font-bold text-ergo-red">Rentenversicherung</h3>
                   </div>
                   <ul className="space-y-3">
                     {[
@@ -867,13 +867,13 @@ export default function LebenVorsorge() {
                 whileHover={{ scale: 1.03 }}
                 transition={{ duration: 0.3 }}
                 src={beraterPhoto}
-                alt="Morino Stübe - ERGO Versicherungsfachmann in Ganderkesee"
+                alt="Morino Stübe – Versicherungsfachmann in Ganderkesee"
                 className="w-32 h-40 md:w-40 md:h-52 rounded-2xl object-contain border-[3px] border-ergo-red shadow-lg shrink-0 bg-white"
                 loading="lazy"
               />
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-gray-900 mb-1 md:text-2xl">Morino Stübe</h3>
-                <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">ERGO Versicherungsfachmann · Leben & Vorsorge Spezialist</p>
+                <p className="text-ergo-red font-semibold text-sm mb-3 md:text-base">Versicherungsfachmann · Spezialist für Leben & Vorsorge</p>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4 md:text-base">
                   Ich berate Sie persönlich und transparent zu allen Fragen rund um Altersvorsorge und Absicherung – von der privaten Rente über Berufsunfähigkeit bis zur Risikolebensversicherung.
                 </p>
@@ -882,19 +882,8 @@ export default function LebenVorsorge() {
                     <Shield className="w-4 h-4 text-ergo-red shrink-0" />
                     Vermittlerregister-Nr. D-5H7J-7DUI1-10
                   </span>
-                  <span className="flex items-center justify-center md:justify-start gap-1.5">
-                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500 shrink-0" />
-                    ERGO als starker Partner seit 1906
-                  </span>
                 </div>
               </div>
-              <img
-                src="/attached_assets/ergo-logo-hq.svg"
-                alt="ERGO Logo"
-                className="h-10 md:h-14 w-auto shrink-0 hidden md:block"
-                loading="lazy"
-                decoding="async"
-              />
             </div>
           </div>
         </motion.section>
@@ -916,7 +905,7 @@ export default function LebenVorsorge() {
             </h2>
             <p className="text-sm sm:text-base lg:text-xl mb-6 sm:mb-8 px-2 text-white/90">
               <strong>Immer kostenlos:</strong> Vollständige Analyse Ihrer Altersvorsorge und Absicherung.
-              <strong> Persönliche Beratung durch Ihren ERGO-Experten vor Ort.</strong>
+              <strong> Persönliche Beratung durch Morino Stübe vor Ort.</strong>
             </p>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">

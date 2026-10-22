@@ -410,9 +410,9 @@ export default function SchadenPage() {
   return (
     <div className="ds-form-flow min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <SEO
-        title="Schaden melden – ERGO Agentur Stübe Ganderkesee"
-        description="Versicherungsschaden schnell und einfach online melden. Kfz-Schaden, Glasschaden, Hausrat oder Haftpflicht – Ihre ERGO Agentur Stübe in Ganderkesee hilft sofort."
-        keywords="Schaden melden, Versicherungsschaden, ERGO Ganderkesee, Kfz-Schaden, Glasschaden melden, Schadensmeldung"
+        title="Schaden melden – Agentur Stübe Ganderkesee"
+        description="Versicherungsschaden schnell und einfach online melden. Kfz-Schaden, Glasschaden, Hausrat oder Haftpflicht – die Agentur Stübe in Ganderkesee hilft sofort."
+        keywords="Schaden melden, Versicherungsschaden, Ganderkesee, Kfz-Schaden, Glasschaden melden, Schadensmeldung"
       />
       <Breadcrumb items={[{ label: "Schaden melden" }]} />
       <div className="max-w-[600px] mx-auto px-5 py-6">
@@ -448,7 +448,7 @@ export default function SchadenPage() {
           {step === 1 && (
             <div>
               <div className="text-center mb-6">
-                <div className="inline-block bg-[#E2001A] text-white text-xs font-bold px-3 py-1 rounded-full mb-3">ERGO</div>
+                <div className="inline-block bg-[#E2001A] text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Agentur Stübe</div>
                 <h1 className="text-2xl font-extrabold text-gray-900 mb-2">Schaden melden</h1>
                 <p className="text-sm text-gray-500">Wählen Sie die Art des Schadens aus</p>
               </div>
@@ -1019,7 +1019,7 @@ export default function SchadenPage() {
               <div className="flex items-center justify-center gap-3 mb-5 text-xs text-gray-500">
                 <span className="flex items-center gap-1">⭐ 4,9/5 Bewertung</span>
                 <span>·</span>
-                <span>ERGO Versicherungsfachmann</span>
+                <span>Versicherungsfachmann</span>
               </div>
 
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 text-left">

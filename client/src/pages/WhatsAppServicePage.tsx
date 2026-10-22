@@ -89,12 +89,12 @@ export default function WhatsAppServicePage() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    "name": "WhatsApp Kundenservice – ERGO Agentur Stübe Ganderkesee",
-    "description": "Direkter WhatsApp-Service der ERGO Agentur Stübe in Ganderkesee. 24/7 erreichbar für Fragen, Schadenmeldungen und Angebote.",
+    "name": "WhatsApp Kundenservice – Agentur Stübe Ganderkesee",
+    "description": "Direkter WhatsApp-Service der Agentur Stübe in Ganderkesee für Fragen, Schadenmeldungen und Angebote.",
     "url": "https://ergo-ganderkesee.de/whatsapp",
     "mainEntity": {
       "@type": "InsuranceAgency",
-      "name": "ERGO Agentur Stübe",
+      "name": "Agentur Stübe",
       "telephone": `+49${HAUS_NUMBER}`,
       "address": {
         "@type": "PostalAddress",
@@ -109,9 +109,9 @@ export default function WhatsAppServicePage() {
   return (
     <>
       <SEO
-        title="WhatsApp Service – ERGO Agentur Stübe Ganderkesee | Direkt schreiben"
-        description="Chatte direkt mit ERGO Agentur Stübe in Ganderkesee über WhatsApp. 24/7 Support, Rechnungen als Foto, Angebote & mehr. Antwort meist in unter 1 Stunde."
-        keywords="WhatsApp Versicherung, ERGO WhatsApp, Versicherung Chat, ERGO Ganderkesee Kontakt, WhatsApp Service"
+        title="WhatsApp Service – Agentur Stübe Ganderkesee | Direkt schreiben"
+        description="Schreiben Sie der Agentur Stübe in Ganderkesee direkt über WhatsApp. Fragen, Rechnungen als Foto, Angebote und mehr."
+        keywords="WhatsApp Versicherung, Versicherung Chat, Agentur Stübe Ganderkesee Kontakt, WhatsApp Service"
         structuredData={structuredData}
       />
 

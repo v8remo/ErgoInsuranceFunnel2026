@@ -343,7 +343,7 @@ export default function InstagramGenerator() {
             ← Admin
           </a>
           <span style={{ fontFamily: ERGO.fontHeadline, fontSize: isMobile ? 18 : 24, fontWeight: 900, color: '#FFFFFF', letterSpacing: ERGO.logoSpacing }}>
-            ERGO
+            {ERGO.logoText}
           </span>
           <span style={{ fontSize: isMobile ? 14 : 18, fontWeight: 600, color: 'rgba(255,255,255,0.9)' }}>
             Instagram Generator

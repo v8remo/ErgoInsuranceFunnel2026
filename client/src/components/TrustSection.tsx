@@ -7,7 +7,7 @@ const testimonials = [
     name: "Michael K.",
     location: "Hamburg",
     rating: 5,
-    text: "Hervorragende Beratung durch ERGO! Schnell, kompetent und immer erreichbar. Meine Hausratversicherung war in wenigen Tagen abgeschlossen.",
+    text: "Hervorragende Beratung! Schnell, kompetent und immer erreichbar. Meine Hausratversicherung war in wenigen Tagen abgeschlossen.",
     initials: "MK"
   },
   {
@@ -21,7 +21,7 @@ const testimonials = [
     name: "Thomas W.",
     location: "Berlin",
     rating: 5,
-    text: "Perfekte Betreuung! Als Hausbesitzer brauchte ich eine umfassende Beratung. ERGO hat alle meine Fragen beantwortet.",
+    text: "Perfekte Betreuung! Als Hausbesitzer brauchte ich eine umfassende Beratung. Alle meine Fragen wurden beantwortet.",
     initials: "TW"
   }
 ];
@@ -29,7 +29,7 @@ const testimonials = [
 const trustBadges = [
   {
     icon: Award,
-    title: "ERGO Partner",
+    title: "Agentur Stübe",
     description: "Zertifizierter Versicherungsexperte"
   },
   {
@@ -58,7 +58,7 @@ export default function TrustSection() {
             Über 1000 zufriedene Kunden vertrauen uns
           </h2>
           <p className="text-sm sm:text-base lg:text-xl text-gray-600 px-2">
-            Erfahren Sie, warum sich unsere Kunden für ERGO entscheiden
+            Erfahren Sie, warum sich unsere Kunden für Agentur Stübe entscheiden
           </p>
         </div>
 
@@ -86,7 +86,7 @@ export default function TrustSection() {
                   <div className="text-gray-600 mb-4">
                     <p className="mb-2">
                       <span className="font-semibold">Versicherungsfachmann nach § 84 HGB</span><br />
-                      ERGO Ganderkesee
+                      Agentur Stübe, Ganderkesee
                     </p>
                     <p className="text-sm">
                       Reg.-Nr.: D-5H7J-7DUI1-10

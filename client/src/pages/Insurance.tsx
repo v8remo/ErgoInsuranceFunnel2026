@@ -35,7 +35,7 @@ const insuranceFAQs: Record<string, { question: string; answer: string }[]> = {
     { question: "Wie wird die Versicherungssumme berechnet?", answer: "Die Versicherungssumme orientiert sich am Wiederaufbauwert Ihres Gebäudes (Wert 1914). Wir berechnen diesen Wert exakt anhand Ihrer Gebäudedaten, damit Sie weder unter- noch überversichert sind." },
   ],
   rechtsschutz: [
-    { question: "Welche Bereiche deckt die Rechtsschutzversicherung ab?", answer: "Die ERGO Rechtsschutzversicherung umfasst Privatrecht, Berufsrecht, Verkehrsrecht und Wohnrecht. Anwalts-, Gerichts- und Gutachterkosten werden übernommen – deutschlandweit und oft auch im Ausland." },
+    { question: "Welche Bereiche deckt die Rechtsschutzversicherung ab?", answer: "Je nach Tarif umfasst die Rechtsschutzversicherung Privatrecht, Berufsrecht, Verkehrsrecht und Wohnrecht. Anwalts-, Gerichts- und Gutachterkosten können deutschlandweit und oft auch im Ausland übernommen werden." },
     { question: "Gibt es eine Wartezeit?", answer: "Ja, bei den meisten Rechtsschutzversicherungen gilt eine Wartezeit von 3 Monaten. Verkehrsrechtsschutz ist davon oft ausgenommen. Strafrechtliche Angelegenheiten sind nicht versichert." },
     { question: "Lohnt sich eine Rechtsschutzversicherung?", answer: "Bereits ein einfacher Rechtsstreit kann schnell 5.000 bis 10.000 Euro kosten. Die Rechtsschutzversicherung gibt Ihnen die Sicherheit, Ihr Recht durchzusetzen, ohne finanzielle Risiken." },
   ],
@@ -153,9 +153,9 @@ export default function Insurance() {
   return (
     <>
       <SEO
-        title={`${insurance.title} – ERGO Agentur Stübe Ganderkesee`}
-        description={`${insurance.title} bei Ihrer ERGO Agentur in Ganderkesee. Persönliche Beratung, kostenlose Analyse bestehender Verträge und 15% Bündelnachlass ab 5 Versicherungen.`}
-        keywords={`${insurance.title}, ERGO ${insurance.title}, ${insurance.title} Ganderkesee, ${insurance.title} Delmenhorst, ${insurance.title} Oldenburg, Versicherungsvergleich, Morino Stübe`}
+        title={`${insurance.title} – Agentur Stübe Ganderkesee`}
+        description={`${insurance.title} bei der Agentur Stübe in Ganderkesee. Persönliche Beratung und kostenlose Analyse bestehender Verträge.`}
+        keywords={`${insurance.title}, ${insurance.title} Ganderkesee, ${insurance.title} Delmenhorst, ${insurance.title} Oldenburg, Versicherungsvergleich, Agentur Stübe, Morino Stübe`}
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Service",
@@ -163,7 +163,7 @@ export default function Insurance() {
           "description": insurance.description,
           "provider": {
             "@type": "InsuranceAgency",
-            "name": "ERGO Agentur Stübe",
+            "name": "Agentur Stübe",
             "telephone": "+4915566771019",
             "email": "morino.stuebe@ergo.de",
             "address": {
@@ -229,7 +229,7 @@ export default function Insurance() {
                 >
                   {insurance.title} –{' '}
                   <span className="bg-gradient-to-r from-yellow-200 to-white bg-clip-text text-transparent">
-                    Optimal versichert mit ERGO
+                    Persönlich und verständlich beraten
                   </span>
                 </motion.h1>
 
@@ -239,7 +239,7 @@ export default function Insurance() {
                   transition={{ duration: 0.5, delay: 0.35 }}
                   className="text-base sm:text-lg text-white/90 max-w-xl mx-auto lg:mx-0 mb-3 leading-relaxed"
                 >
-                  Persönliche Beratung, kostenlose Analyse und 15% Bündelnachlass ab 5 ERGO-Versicherungen.
+                  Persönliche Beratung, kostenlose Analyse und transparente Empfehlungen für Ihre Situation.
                 </motion.p>
 
                 <motion.div
@@ -455,7 +455,7 @@ export default function Insurance() {
                     </p>
                     <div className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
                       <p className="mb-2">
-                        <span className="font-semibold">ERGO Ganderkesee</span><br />
+                        <span className="font-semibold">Agentur Stübe · Ganderkesee</span><br />
                         Friedensstraße 91 A, 27777 Ganderkesee
                       </p>
                       <p className="text-xs sm:text-sm">
@@ -496,14 +496,14 @@ export default function Insurance() {
               <div className="flex-shrink-0">
                 <img
                   src={beraterBranding}
-                  alt="Morino Stübe – Ihr ERGO Berater"
+                  alt="Morino Stübe – Ihr persönlicher Versicherungsberater"
                   className="w-32 h-40 sm:w-40 sm:h-52 rounded-2xl object-contain shadow-lg border-2 border-gray-100 bg-white"
                   loading="lazy"
                 />
               </div>
               <div className="flex-1">
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Ihr Berater: Morino Stübe</h2>
-                <p className="text-ergo-red font-semibold text-sm mb-3">ERGO Versicherungsfachmann · Ganderkesee</p>
+                <p className="text-ergo-red font-semibold text-sm mb-3">Persönlicher Versicherungsfachmann · Ganderkesee</p>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
                   Ich berate Sie persönlich und transparent zur {insurance.title}. Gemeinsam finden wir die beste Lösung für Ihre Situation – kostenlos und unverbindlich. Besuchen Sie mich in Ganderkesee oder wir beraten Sie digital per Video oder WhatsApp.
                 </p>

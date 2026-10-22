@@ -34,7 +34,7 @@ interface ContactData {
 
 const contextQuestions: Record<BestandskundenContext, Question[]> = {
   jahrescheck: [
-    { question: 'Wie viele ERGO-Verträge haben Sie?', options: ['1', '2–3', '4–5', 'Mehr als 5'] },
+    { question: 'Wie viele Versicherungsverträge haben Sie?', options: ['1', '2–3', '4–5', 'Mehr als 5'] },
     { question: 'Hat sich Ihre Lebenssituation im letzten Jahr verändert?', options: ['Ja', 'Nein', 'Nicht wesentlich'] },
     { question: 'Wie zufrieden sind Sie mit Ihrem aktuellen Versicherungsschutz?', options: ['Sehr zufrieden', 'Eher zufrieden', 'Unsicher', 'Nicht zufrieden'] },
     { question: 'Wie möchten Sie den Jahrescheck durchführen?', options: ['Telefonat', 'Persönliches Treffen', 'Video-Call'] },
@@ -51,7 +51,7 @@ const contextQuestions: Record<BestandskundenContext, Question[]> = {
   ],
   hauskauf: [
     { question: 'Handelt es sich um eine selbstgenutzte oder vermietete Immobilie?', options: ['Selbstgenutzt', 'Vermietet', 'Beides'] },
-    { question: 'Haben Sie bereits eine Wohngebäudeversicherung?', options: ['Ja, über ERGO', 'Ja, anderer Anbieter', 'Noch nicht'] },
+    { question: 'Haben Sie bereits eine Wohngebäudeversicherung?', options: ['Ja, bei Agentur Stübe', 'Ja, anderer Anbieter', 'Noch nicht'] },
     { question: 'Besteht Elementarschutz (Überschwemmung, Starkregen)?', options: ['Ja', 'Nein', 'Weiß nicht'] },
   ],
   umzug: [
@@ -303,7 +303,7 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
                     transition={{ delay: 0.15, duration: 0.4 }}
                     className="funnel-badge-pill"
                   >
-                    {emoji} Für ERGO-Bestandskunden
+                    {emoji} Für Bestandskunden der Agentur Stübe
                   </motion.div>
                   <h2 className="funnel-hook-headline">
                     {context === 'jahrescheck'

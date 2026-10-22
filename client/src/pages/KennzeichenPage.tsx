@@ -365,9 +365,9 @@ export default function KennzeichenPage() {
   return (
     <div className="ds-form-flow min-h-screen bg-gray-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <SEO
-        title="eVB-Nummer & Versicherungskennzeichen – ERGO Agentur Stübe Ganderkesee"
-        description="eVB-Nummer für Kfz-Zulassung oder Versicherungskennzeichen für Kleinkraftrad anfragen. Schnell und unkompliziert bei Ihrer ERGO Agentur Stübe in Ganderkesee."
-        keywords="eVB-Nummer, Versicherungskennzeichen, Kfz-Zulassung, ERGO Ganderkesee, Kleinkraftrad Versicherung"
+        title="eVB-Nummer & Versicherungskennzeichen – Agentur Stübe Ganderkesee"
+        description="eVB-Nummer für Kfz-Zulassung oder Versicherungskennzeichen für Kleinkraftrad anfragen. Schnell und unkompliziert bei der Agentur Stübe in Ganderkesee."
+        keywords="eVB-Nummer, Versicherungskennzeichen, Kfz-Zulassung, Ganderkesee, Kleinkraftrad Versicherung"
       />
       <Breadcrumb items={[{ label: "eVB & Kennzeichen" }]} />
       <div className="max-w-[600px] mx-auto px-5 py-6">
@@ -393,7 +393,7 @@ export default function KennzeichenPage() {
               <span>·</span>
               <span>⚡ Schnelle Bearbeitung</span>
               <span>·</span>
-              <span>✅ ERGO Partner</span>
+              <span>✅ Persönlicher Service</span>
             </div>
           </>
         )}
@@ -403,7 +403,7 @@ export default function KennzeichenPage() {
           {step === 1 && (
             <div>
               <div className="text-center mb-6">
-                <div className="inline-block bg-[#E2001A] text-white text-xs font-bold px-3 py-1 rounded-full mb-3">ERGO</div>
+                <div className="inline-block bg-[#E2001A] text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Agentur Stübe</div>
                 <h1 className="text-2xl font-extrabold text-gray-900 mb-2">Was benötigen Sie?</h1>
                 <p className="text-sm text-gray-500">Morino Stübe stellt Ihnen die Unterlagen schnell und unkompliziert aus.</p>
               </div>
@@ -1143,7 +1143,7 @@ export default function KennzeichenPage() {
                   ? 'Bitte versuchen Sie es erneut oder kontaktieren Sie uns per WhatsApp.'
                   : selectedType === 'evb'
                     ? 'Morino Stübe meldet sich schnellstmöglich bei Ihnen, um die eVB-Nummer auszustellen. In der Regel noch am selben Werktag.'
-                    : 'Morino Stübe meldet sich bei Ihnen zur Abwicklung. Das Kennzeichen (SCHWARZ, gültig bis 28.02.2027) erhalten Sie direkt von Ihrem ERGO Berater.'}
+                    : 'Morino Stübe meldet sich bei Ihnen zur Abwicklung. Das Kennzeichen (SCHWARZ, gültig bis 28.02.2027) erhalten Sie direkt von Ihrem Berater.'}
               </p>
 
               {!submitError && selectedType === 'evb' && (
@@ -1197,7 +1197,7 @@ export default function KennzeichenPage() {
                           <p className="font-extrabold text-xl text-green-700">{currentPremium.toFixed(2).replace('.', ',')} €</p>
                         </div>
                       </div>
-                      <p className="text-xs text-gray-500 mt-4 leading-relaxed">Bitte überweisen Sie den Betrag innerhalb von 7 Tagen. Nach Zahlungseingang erhalten Sie Ihr Versicherungskennzeichen bzw. Ihre Versicherungsplakette von Ihrem ERGO Berater.</p>
+                      <p className="text-xs text-gray-500 mt-4 leading-relaxed">Bitte überweisen Sie den Betrag innerhalb von 7 Tagen. Nach Zahlungseingang erhalten Sie Ihr Versicherungskennzeichen bzw. Ihre Versicherungsplakette von Ihrem Berater.</p>
                     </div>
                   )}
                 </>
