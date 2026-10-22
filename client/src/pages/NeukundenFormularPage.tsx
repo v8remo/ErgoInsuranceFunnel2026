@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { Link } from 'wouter';
+import { ArrowRight, ChevronLeft, MessageCircle, Plus, X } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
+import ServiceLayout, { WHATSAPP_URL } from "@/components/service/ServiceLayout";
 
 interface VersicherungEntry {
   art: string;
@@ -100,33 +103,15 @@ const initial: FormData = {
   notiz: '',
 };
 
-function SectionHeader({ title }: { title: string }) {
-  return (
-    <div className="flex items-center gap-3 pt-6 pb-2 border-b border-gray-200">
-      <div className="w-1 h-6 bg-[#E2001A] rounded-full" />
-      <h2 className="text-base font-bold text-gray-800 uppercase tracking-wide">{title}</h2>
-    </div>
-  );
-}
+const ANREDEN = ['Herr', 'Frau', 'Divers'];
+const TITEL = ['Dr.', 'Dr. med.', 'Prof.', 'Prof. Dr.', 'Dipl.-Ing.'];
+const ADELSPRAEDIKATE = ['von', 'van', 'de', 'zu'];
+const STELLUNGEN = [
+  'Angestellte/r', 'Beamte/r', 'Selbstständig', 'Freiberuflich', 'Rentner/in', 'Student/in',
+  'Schüler/in', 'Nicht erwerbstätig', 'Hausfrau/-mann', 'Auszubildende/r', 'Geschäftsführer/in',
+];
 
-function Field({
-  label, required, hint, children,
-}: {
-  label: string; required?: boolean; hint?: string; children: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col gap-1">
-      <label className="text-sm font-semibold text-gray-700">
-        {label}{required && <span className="text-red-500 ml-0.5">*</span>}
-      </label>
-      {hint && <p className="text-xs text-gray-400">{hint}</p>}
-      {children}
-    </div>
-  );
-}
-
-const inputCls = "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm outline-none focus:border-[#003781] focus:ring-1 focus:ring-[#003781]/20 transition-colors bg-white";
-const selectCls = `${inputCls} cursor-pointer`;
+const cardStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 16 };
 
 export default function NeukundenFormularPage() {
   const [form, setForm] = useState<FormData>({ ...initial });
@@ -134,6 +119,7 @@ export default function NeukundenFormularPage() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [reference, setReference] = useState<string | null>(null);
   const [versicherungen, setVersicherungen] = useState<VersicherungEntry[]>([emptyVersicherung()]);
 
   const set = <K extends keyof FormData>(field: K, value: string) => {
@@ -165,10 +151,12 @@ export default function NeukundenFormularPage() {
     setSubmitting(true);
     setSubmitError(null);
     try {
-      await apiRequest('POST', '/api/neukunden/submit', {
+      const res = await apiRequest('POST', '/api/neukunden/submit', {
         ...form,
         versicherungen: versicherungen.filter(v => v.art || v.gesellschaft || v.nummer),
       });
+      const data = await res.json().catch(() => ({}));
+      setReference(typeof data?.reference === 'string' ? data.reference : null);
       setSuccess(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: unknown) {
@@ -178,361 +166,265 @@ export default function NeukundenFormularPage() {
     }
   };
 
-  if (success) {
+  // Ein Kontakt-Fehler markiert alle drei privaten Kontaktfelder.
+  const contactInvalid = !!errors.emailPrivat;
+
+  const renderField = (
+    label: string,
+    field: keyof FormData,
+    opts: {
+      type?: string; required?: boolean; placeholder?: string; hint?: string; invalid?: boolean;
+      extra?: React.InputHTMLAttributes<HTMLInputElement>;
+    } = {},
+  ) => {
+    const id = `f-${field}`;
+    const invalid = opts.invalid ?? !!errors[field];
     return (
-      <div className="ds-form-flow min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <SEO title="Danke – Daten übermittelt | Agentur Stübe" description="Ihre Angaben wurden erfolgreich an die Agentur Stübe übermittelt." noIndex />
-        <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
-          <div className="text-5xl mb-4">✅</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Vielen Dank!</h1>
-          <p className="text-gray-600 mb-6">
-            Ihre Daten wurden erfolgreich an die Agentur Stübe übermittelt. Wir melden uns schnellstmöglich bei Ihnen.
-          </p>
-          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
-            <strong>Ihre Agentur:</strong><br />
-            Morino Stübe · Agentur Stübe<br />
-            📞 015566 771019<br />
-            📧 morino.stuebe@ergo.de
-          </div>
-        </div>
+      <div className="sv-field">
+        <label className="sv-label" htmlFor={id}>{label}{!opts.required && <span className="sv-hint"> (optional)</span>}</label>
+        {opts.hint && <span className="sv-hint">{opts.hint}</span>}
+        <input
+          id={id}
+          type={opts.type || 'text'}
+          value={form[field]}
+          onChange={e => set(field, e.target.value)}
+          placeholder={opts.placeholder}
+          className="sv-input"
+          aria-invalid={invalid}
+          {...opts.extra}
+        />
+        {errors[field] && <span className="sv-error">{errors[field]}</span>}
       </div>
     );
-  }
+  };
+
+  const renderSelect = (label: string, field: keyof FormData, options: string[], required = false) => {
+    const id = `f-${field}`;
+    return (
+      <div className="sv-field">
+        <label className="sv-label" htmlFor={id}>{label}{!required && <span className="sv-hint"> (optional)</span>}</label>
+        <select id={id} value={form[field]} onChange={e => set(field, e.target.value)} className="sv-input" aria-invalid={!!errors[field]}>
+          <option value="">Bitte auswählen</option>
+          {options.map(o => <option key={o} value={o}>{o}</option>)}
+        </select>
+        {errors[field] && <span className="sv-error">{errors[field]}</span>}
+      </div>
+    );
+  };
+
+  const renderVField = (i: number, label: string, field: keyof VersicherungEntry, opts: { placeholder?: string; inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'] } = {}) => {
+    const id = `f-v${i}-${field}`;
+    return (
+      <div className="sv-field">
+        <label className="sv-label" htmlFor={id}>{label}</label>
+        {field === 'art' ? (
+          <select id={id} value={versicherungen[i].art} onChange={e => setVersicherung(i, 'art', e.target.value)} className="sv-input">
+            <option value="">Bitte auswählen</option>
+            {VERSICHERUNGSARTEN.map(art => <option key={art} value={art}>{art}</option>)}
+          </select>
+        ) : (
+          <input id={id} type="text" inputMode={opts.inputMode} value={versicherungen[i][field]} onChange={e => setVersicherung(i, field, e.target.value)} placeholder={opts.placeholder} className="sv-input" />
+        )}
+      </div>
+    );
+  };
+
+  const stepNames = ['Angaben', 'Fertig'];
+  const currentStepName = success ? 'Fertig' : 'Angaben';
+  const whatsappText = `Hallo Herr Stübe, ich habe meine Stammdaten über das Service-Center eingereicht${reference ? ` (Vorgang ${reference})` : ''}. Viele Grüße, ${form.vorname} ${form.nachname}`;
 
   return (
-    <>
-      <SEO
-        title="Kundendaten mitteilen – Agentur Stübe Ganderkesee"
-        description="Bitte füllen Sie das Formular aus, damit wir Ihre Daten für eine persönliche Beratung erfassen können."
-        noIndex
-      />
-      <div className="ds-form-flow min-h-screen bg-gray-50">
-        {/* Mini-Header */}
-        <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
-          <div>
-            <div className="text-lg font-bold text-[#E2001A] leading-tight">Agentur Stübe</div>
-            <div className="text-[10px] text-gray-500">Agentur Stübe · Ganderkesee</div>
+    <ServiceLayout>
+      {success ? (
+        <SEO title="Danke – Daten übermittelt | Agentur Stübe" description="Ihre Angaben sind bei der Agentur Stübe angekommen." noIndex />
+      ) : (
+        <SEO
+          title="Kundendaten mitteilen – Agentur Stübe Ganderkesee"
+          description="Bitte füllen Sie das Formular aus, damit wir Ihre Daten für eine persönliche Beratung erfassen können."
+          noIndex
+        />
+      )}
+      <div className="sv-wrap" style={{ display: 'flex', flexDirection: 'column', gap: 20, paddingTop: 4 }}>
+        {!success && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <Link href="/service" className="sv-link-btn" style={{ textDecoration: 'none', alignSelf: 'flex-start' }}>
+              <ChevronLeft size={18} aria-hidden="true" /> Alle Anliegen
+            </Link>
+            <ol className="sv-steps" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+              {stepNames.map((name, i) => (
+                <li key={name} aria-current={name === currentStepName ? 'step' : undefined} style={{ display: 'flex', gap: 8 }}>
+                  {i > 0 && <span aria-hidden="true">·</span>}
+                  {name}
+                </li>
+              ))}
+            </ol>
           </div>
-          <div className="ml-auto text-right">
-            <div className="text-xs text-gray-500">Fragen? Rufen Sie uns an:</div>
-            <a href="tel:015566771019" className="text-sm font-semibold text-[#003781]">015566 771019</a>
-            <div className="text-xs text-gray-400 mt-0.5">
-              Büro: <a href="tel:042212959999" className="hover:text-[#003781] transition-colors">04221 2959999</a>
-            </div>
-          </div>
-        </div>
+        )}
 
-        <div className="max-w-2xl mx-auto px-4 py-6 pb-16">
-
-          {/* Intro */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4 text-center">
-            <div className="inline-block bg-[#E2001A] text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Agentur Stübe</div>
-            <h1 className="text-xl font-extrabold text-gray-900 mb-2">Ihre Kontaktdaten</h1>
-            <p className="text-sm text-gray-500 leading-relaxed">
-              Bitte füllen Sie das Formular so vollständig wie möglich aus. Ihre Daten werden sicher übermittelt und ausschließlich für Ihre persönliche Beratung genutzt.
+        {success ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <h1 className="sv-h1">Vielen Dank – <em>ist angekommen.</em></h1>
+            <p style={{ margin: 0, color: 'var(--sv-body)' }}>
+              Ihre Daten liegen jetzt bei Morino Stübe. Wir melden uns, falls wir noch etwas brauchen.
+              {(form.emailPrivat || form.emailDienstlich) && <> Eine Eingangsbestätigung geht an <strong>{form.emailPrivat || form.emailDienstlich}</strong>.</>}
             </p>
-            <div className="flex items-center justify-center gap-4 mt-3 text-xs text-gray-400">
-              <span>🔒 SSL-verschlüsselt</span>
-              <span>·</span>
-              <span>🇩🇪 DSGVO-konform</span>
-              <span>·</span>
-              <span>✅ Kostenlos</span>
+            {reference && (
+              <div className="sv-card" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <span className="sv-hint">Ihre Vorgangsnummer</span>
+                <span className="sv-ref">{reference}</span>
+              </div>
+            )}
+            <div className="sv-card">
+              <dl className="sv-dl">
+                <dt>Anliegen</dt><dd>Stammdaten</dd>
+                <dt>Name</dt><dd>{form.vorname} {form.nachname}</dd>
+                <dt>Verträge</dt><dd>{versicherungen.filter(v => v.art || v.gesellschaft || v.nummer).length}</dd>
+              </dl>
             </div>
+            <a href={`${WHATSAPP_URL}?text=${encodeURIComponent(whatsappText)}`} target="_blank" rel="noopener noreferrer" className="sv-btn sv-btn--ghost">
+              <MessageCircle size={18} aria-hidden="true" /> Per WhatsApp nachfragen
+            </a>
+            <Link href="/service" className="sv-link-btn" style={{ alignSelf: 'center' }}>Weiteres Anliegen erledigen</Link>
           </div>
+        ) : (
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <h1 className="sv-h1">Ihre <em>Stammdaten</em></h1>
+            <p style={{ margin: 0, color: 'var(--sv-body)' }}>
+              Bitte füllen Sie das Formular so vollständig wie möglich aus. Wir nutzen Ihre Angaben ausschließlich für Ihre persönliche Beratung.
+            </p>
 
-          <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-col gap-4">
-
-            {/* ── Allgemeine Daten ── */}
-            <SectionHeader title="Allgemeine Daten" />
-
-            <Field label="Anrede" required>
-              <select value={form.anrede} onChange={e => set('anrede', e.target.value)} className={`${selectCls} ${errors.anrede ? 'border-red-400' : ''}`}>
-                <option value="">– Bitte auswählen –</option>
-                <option value="Herr">Herr</option>
-                <option value="Frau">Frau</option>
-                <option value="Divers">Divers</option>
-              </select>
-              {errors.anrede && <span className="text-xs text-red-500">{errors.anrede}</span>}
-            </Field>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Akademischer Titel">
-                <select value={form.titel} onChange={e => set('titel', e.target.value)} className={selectCls}>
-                  <option value="">– Bitte auswählen –</option>
-                  <option value="Dr.">Dr.</option>
-                  <option value="Dr. med.">Dr. med.</option>
-                  <option value="Prof.">Prof.</option>
-                  <option value="Prof. Dr.">Prof. Dr.</option>
-                  <option value="Dipl.-Ing.">Dipl.-Ing.</option>
-                </select>
-              </Field>
-              <Field label="Adelsprädikat">
-                <select value={form.adelspraedikat} onChange={e => set('adelspraedikat', e.target.value)} className={selectCls}>
-                  <option value="">– Bitte auswählen –</option>
-                  <option value="von">von</option>
-                  <option value="van">van</option>
-                  <option value="de">de</option>
-                  <option value="zu">zu</option>
-                </select>
-              </Field>
-            </div>
-
-            <Field label="Berufstitel">
-              <input type="text" value={form.berufstitel} onChange={e => set('berufstitel', e.target.value)} className={inputCls} placeholder="z.B. Direktor, Leiterin" />
-            </Field>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Nachname" required>
-                <input type="text" value={form.nachname} onChange={e => set('nachname', e.target.value)} className={`${inputCls} ${errors.nachname ? 'border-red-400' : ''}`} autoComplete="family-name" />
-                {errors.nachname && <span className="text-xs text-red-500">{errors.nachname}</span>}
-              </Field>
-              <Field label="Vorname" required>
-                <input type="text" value={form.vorname} onChange={e => set('vorname', e.target.value)} className={`${inputCls} ${errors.vorname ? 'border-red-400' : ''}`} autoComplete="given-name" />
-                {errors.vorname && <span className="text-xs text-red-500">{errors.vorname}</span>}
-              </Field>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Geburtsdatum">
-                <input type="date" value={form.geburtsdatum} onChange={e => set('geburtsdatum', e.target.value)} max={new Date().toISOString().split('T')[0]} className={inputCls} />
-              </Field>
-              <Field label="Staatsangehörigkeit">
-                <input type="text" value={form.staatsangehoerigkeit} onChange={e => set('staatsangehoerigkeit', e.target.value)} className={inputCls} />
-              </Field>
-            </div>
-
-            {/* ── Zusätzliche Personendaten ── */}
-            <SectionHeader title="Zusätzliche Personendaten" />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Geburtsname">
-                <input type="text" value={form.geburtsname} onChange={e => set('geburtsname', e.target.value)} className={inputCls} placeholder="Falls abweichend" />
-              </Field>
-              <Field label="Geburtsort">
-                <input type="text" value={form.geburtsort} onChange={e => set('geburtsort', e.target.value)} className={inputCls} />
-              </Field>
-            </div>
-            <Field label="Geburtsland">
-              <input type="text" value={form.geburtsland} onChange={e => set('geburtsland', e.target.value)} className={inputCls} />
-            </Field>
-
-            {/* ── Kommunikation ── */}
-            <SectionHeader title="Kommunikation" />
-            <p className="text-xs text-gray-400 -mt-2">Bitte mindestens eine Kontaktmöglichkeit angeben.</p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Mobilfunk privat">
-                <input type="tel" value={form.mobilPrivat} onChange={e => set('mobilPrivat', e.target.value)} className={`${inputCls} ${errors.emailPrivat ? 'border-red-400' : ''}`} placeholder="z.B. 0151 12345678" autoComplete="tel" />
-              </Field>
-              <Field label="Mobilfunk dienstlich">
-                <input type="tel" value={form.mobilDienstlich} onChange={e => set('mobilDienstlich', e.target.value)} className={inputCls} />
-              </Field>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Telefon privat">
-                <input type="tel" value={form.telefonPrivat} onChange={e => set('telefonPrivat', e.target.value)} className={`${inputCls} ${errors.emailPrivat ? 'border-red-400' : ''}`} />
-              </Field>
-              <Field label="Telefon dienstlich">
-                <input type="tel" value={form.telefonDienstlich} onChange={e => set('telefonDienstlich', e.target.value)} className={inputCls} />
-              </Field>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="E-Mail privat">
-                <input type="email" value={form.emailPrivat} onChange={e => set('emailPrivat', e.target.value)} className={`${inputCls} ${errors.emailPrivat ? 'border-red-400' : ''}`} autoComplete="email" />
-                {errors.emailPrivat && <span className="text-xs text-red-500">{errors.emailPrivat}</span>}
-              </Field>
-              <Field label="E-Mail dienstlich">
-                <input type="email" value={form.emailDienstlich} onChange={e => set('emailDienstlich', e.target.value)} className={inputCls} />
-              </Field>
-            </div>
-
-            {/* ── Beruf ── */}
-            <SectionHeader title="Beruf" />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Beruf">
-                <input type="text" value={form.beruf} onChange={e => set('beruf', e.target.value)} className={inputCls} placeholder="z.B. Ingenieurin, Lehrer" />
-              </Field>
-              <Field label="Stellung">
-                <select value={form.stellung} onChange={e => set('stellung', e.target.value)} className={selectCls}>
-                  <option value="">– Bitte auswählen –</option>
-                  <option value="Angestellte/r">Angestellte/r</option>
-                  <option value="Beamte/r">Beamte/r</option>
-                  <option value="Selbstständig">Selbstständig</option>
-                  <option value="Freiberuflich">Freiberuflich</option>
-                  <option value="Rentner/in">Rentner/in</option>
-                  <option value="Student/in">Student/in</option>
-                  <option value="Schüler/in">Schüler/in</option>
-                  <option value="Nicht erwerbstätig">Nicht erwerbstätig</option>
-                  <option value="Hausfrau/-mann">Hausfrau/-mann</option>
-                  <option value="Auszubildende/r">Auszubildende/r</option>
-                  <option value="Geschäftsführer/in">Geschäftsführer/in</option>
-                </select>
-              </Field>
-            </div>
-
-            <Field label="Sozialversicherungsnummer" hint="Für bestimmte Produkte erforderlich (optional)">
-              <input type="text" value={form.sozialversicherungsnummer} onChange={e => set('sozialversicherungsnummer', e.target.value)} className={inputCls} placeholder="z.B. 65 170890 B 233" />
-            </Field>
-
-            {/* ── Adresse ── */}
-            <SectionHeader title="Hauptadresse" />
-
-            <Field label="Straße und Hausnummer">
-              <input type="text" value={form.strasseHausnr} onChange={e => set('strasseHausnr', e.target.value)} className={inputCls} autoComplete="street-address" placeholder="z.B. Musterstraße 12" />
-            </Field>
-
-            <Field label="Adressergänzung" hint="z.B. Wohnung, Etage, c/o">
-              <input type="text" value={form.adressergaenzung} onChange={e => set('adressergaenzung', e.target.value)} className={inputCls} />
-            </Field>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <Field label="PLZ">
-                <input type="text" inputMode="numeric" value={form.plz} onChange={e => set('plz', e.target.value)} className={inputCls} maxLength={5} autoComplete="postal-code" placeholder="27777" />
-              </Field>
-              <div className="col-span-1 sm:col-span-2">
-                <Field label="Ort">
-                  <input type="text" value={form.ort} onChange={e => set('ort', e.target.value)} className={inputCls} autoComplete="address-level2" placeholder="Ganderkesee" />
-                </Field>
+            <div className="sv-card" style={cardStyle}>
+              <h2 className="sv-section-title" style={{ marginTop: 0 }}>Allgemeine Daten</h2>
+              {renderSelect('Anrede', 'anrede', ANREDEN, true)}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {renderSelect('Akademischer Titel', 'titel', TITEL)}
+                {renderSelect('Adelsprädikat', 'adelspraedikat', ADELSPRAEDIKATE)}
+              </div>
+              {renderField('Berufstitel', 'berufstitel', { placeholder: 'z. B. Direktor, Leiterin' })}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {renderField('Vorname', 'vorname', { required: true, extra: { autoComplete: 'given-name' } })}
+                {renderField('Nachname', 'nachname', { required: true, extra: { autoComplete: 'family-name' } })}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {renderField('Geburtsdatum', 'geburtsdatum', { type: 'date', extra: { max: new Date().toISOString().split('T')[0], autoComplete: 'bday' } })}
+                {renderField('Staatsangehörigkeit', 'staatsangehoerigkeit')}
               </div>
             </div>
 
-            <Field label="Land">
-              <input type="text" value={form.land} onChange={e => set('land', e.target.value)} className={inputCls} />
-            </Field>
-
-            <Field label="Besuchszeit" hint="Wann sind Sie am besten erreichbar / zuhause?">
-              <input type="text" value={form.besuchszeit} onChange={e => set('besuchszeit', e.target.value)} className={inputCls} placeholder="z.B. Montag–Freitag 17–20 Uhr" />
-            </Field>
-
-            {/* ── Bestehende Versicherungen ── */}
-            <SectionHeader title="Bestehende Versicherungen" />
-            <p className="text-xs text-gray-400 -mt-2">
-              Tragen Sie Ihre vorhandenen Versicherungsverträge ein – auch bei anderen Gesellschaften. Das hilft uns, Lücken zu erkennen und Doppelversicherungen zu vermeiden.
-            </p>
-
-            <div className="flex flex-col gap-4">
-              {versicherungen.map((v, i) => (
-                <div key={i} className="relative bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col gap-3">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
-                      Vertrag {i + 1}
-                    </span>
-                    {versicherungen.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeVersicherung(i)}
-                        className="text-xs text-red-500 hover:text-red-700 font-medium transition-colors"
-                      >
-                        ✕ Entfernen
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs font-semibold text-gray-600">Versicherungsart</label>
-                      <select
-                        value={v.art}
-                        onChange={e => setVersicherung(i, 'art', e.target.value)}
-                        className={selectCls}
-                      >
-                        <option value="">– Bitte auswählen –</option>
-                        {VERSICHERUNGSARTEN.map(art => (
-                          <option key={art} value={art}>{art}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs font-semibold text-gray-600">Versicherungsgesellschaft</label>
-                      <input
-                        type="text"
-                        value={v.gesellschaft}
-                        onChange={e => setVersicherung(i, 'gesellschaft', e.target.value)}
-                        className={inputCls}
-                        placeholder="z.B. Allianz, HUK, AXA …"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs font-semibold text-gray-600">Versicherungsnummer</label>
-                      <input
-                        type="text"
-                        value={v.nummer}
-                        onChange={e => setVersicherung(i, 'nummer', e.target.value)}
-                        className={inputCls}
-                        placeholder="z.B. 123456789"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs font-semibold text-gray-600">Jahresbeitrag (€)</label>
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        value={v.beitrag}
-                        onChange={e => setVersicherung(i, 'beitrag', e.target.value)}
-                        className={inputCls}
-                        placeholder="z.B. 240,00"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs font-semibold text-gray-600">Kündigungstermin</label>
-                      <input
-                        type="text"
-                        value={v.kuendigungstermin}
-                        onChange={e => setVersicherung(i, 'kuendigungstermin', e.target.value)}
-                        className={inputCls}
-                        placeholder="z.B. 31.12.2025"
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              <button
-                type="button"
-                onClick={addVersicherung}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border-2 border-dashed border-gray-300 text-sm font-semibold text-gray-500 hover:border-[#003781] hover:text-[#003781] transition-colors"
-              >
-                + Weiteren Vertrag hinzufügen
-              </button>
+            <div className="sv-card" style={cardStyle}>
+              <h2 className="sv-section-title" style={{ marginTop: 0 }}>Zusätzliche Personendaten</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {renderField('Geburtsname', 'geburtsname', { placeholder: 'Falls abweichend' })}
+                {renderField('Geburtsort', 'geburtsort')}
+              </div>
+              {renderField('Geburtsland', 'geburtsland')}
             </div>
 
-            <Field label="Notiz / Anmerkungen">
-              <textarea value={form.notiz} onChange={e => set('notiz', e.target.value)} rows={3} className={inputCls} placeholder="Besonderheiten, Wünsche oder weitere Informationen …" />
-            </Field>
+            <div className="sv-card" style={cardStyle}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <h2 className="sv-section-title" style={{ marginTop: 0 }}>Kommunikation</h2>
+                <span className="sv-hint">Bitte geben Sie mindestens eine private Kontaktmöglichkeit an.</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {renderField('Mobilfunk privat', 'mobilPrivat', { type: 'tel', placeholder: 'z. B. 0151 12345678', invalid: contactInvalid, extra: { autoComplete: 'tel', inputMode: 'tel' } })}
+                {renderField('Mobilfunk dienstlich', 'mobilDienstlich', { type: 'tel', extra: { inputMode: 'tel' } })}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {renderField('Telefon privat', 'telefonPrivat', { type: 'tel', invalid: contactInvalid, extra: { inputMode: 'tel' } })}
+                {renderField('Telefon dienstlich', 'telefonDienstlich', { type: 'tel', extra: { inputMode: 'tel' } })}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {renderField('E-Mail privat', 'emailPrivat', { type: 'email', placeholder: 'name@beispiel.de', extra: { autoComplete: 'email', inputMode: 'email' } })}
+                {renderField('E-Mail dienstlich', 'emailDienstlich', { type: 'email', extra: { inputMode: 'email' } })}
+              </div>
+            </div>
+
+            <div className="sv-card" style={cardStyle}>
+              <h2 className="sv-section-title" style={{ marginTop: 0 }}>Beruf</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {renderField('Beruf', 'beruf', { placeholder: 'z. B. Ingenieurin, Lehrer', extra: { autoComplete: 'organization-title' } })}
+                {renderSelect('Stellung', 'stellung', STELLUNGEN)}
+              </div>
+              {renderField('Sozialversicherungsnummer', 'sozialversicherungsnummer', { hint: 'Nur für bestimmte Produkte erforderlich.', placeholder: 'z. B. 65 170890 B 233', extra: { autoComplete: 'off' } })}
+            </div>
+
+            <div className="sv-card" style={cardStyle}>
+              <h2 className="sv-section-title" style={{ marginTop: 0 }}>Hauptadresse</h2>
+              {renderField('Straße und Hausnummer', 'strasseHausnr', { placeholder: 'z. B. Musterstraße 12', extra: { autoComplete: 'street-address' } })}
+              {renderField('Adressergänzung', 'adressergaenzung', { hint: 'z. B. Wohnung, Etage, c/o', extra: { autoComplete: 'address-line2' } })}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {renderField('PLZ', 'plz', { placeholder: '27777', extra: { inputMode: 'numeric', maxLength: 5, autoComplete: 'postal-code' } })}
+                <div className="sm:col-span-2">
+                  {renderField('Ort', 'ort', { placeholder: 'Ganderkesee', extra: { autoComplete: 'address-level2' } })}
+                </div>
+              </div>
+              {renderField('Land', 'land', { extra: { autoComplete: 'country-name' } })}
+              {renderField('Besuchszeit', 'besuchszeit', { hint: 'Wann sind Sie am besten erreichbar oder zu Hause?', placeholder: 'z. B. Montag–Freitag 17–20 Uhr' })}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <h2 className="sv-section-title" style={{ marginTop: 0 }}>Bestehende Versicherungen <span className="sv-hint" style={{ fontFamily: 'inherit' }}>(optional)</span></h2>
+              <p className="sv-hint" style={{ margin: 0, fontSize: 15 }}>
+                Tragen Sie Ihre vorhandenen Verträge ein – auch bei anderen Gesellschaften. So erkennen wir Lücken und vermeiden Doppelversicherungen.
+              </p>
+            </div>
+
+            {versicherungen.map((_, i) => (
+              <div key={i} className="sv-card" style={cardStyle}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h3 className="sv-section-title" style={{ marginTop: 0, fontSize: 17 }}>Vertrag {i + 1}</h3>
+                  {versicherungen.length > 1 && (
+                    <button type="button" onClick={() => removeVersicherung(i)} className="sv-link-btn" style={{ fontSize: 14 }}>
+                      <X size={16} aria-hidden="true" /> Entfernen
+                    </button>
+                  )}
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {renderVField(i, 'Versicherungsart', 'art')}
+                  {renderVField(i, 'Versicherungsgesellschaft', 'gesellschaft', { placeholder: 'z. B. Muster Versicherung AG' })}
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {renderVField(i, 'Versicherungsnummer', 'nummer', { placeholder: 'z. B. 123456789' })}
+                  {renderVField(i, 'Jahresbeitrag (€)', 'beitrag', { placeholder: 'z. B. 240,00', inputMode: 'decimal' })}
+                  {renderVField(i, 'Kündigungstermin', 'kuendigungstermin', { placeholder: 'z. B. 31.12.2025' })}
+                </div>
+              </div>
+            ))}
+            <button type="button" onClick={addVersicherung} className="sv-btn sv-btn--ghost">
+              <Plus size={18} aria-hidden="true" /> Weiteren Vertrag hinzufügen
+            </button>
+
+            <div className="sv-card" style={cardStyle}>
+              <div className="sv-field">
+                <label className="sv-label" htmlFor="f-notiz">Notiz / Anmerkungen <span className="sv-hint">(optional)</span></label>
+                <textarea id="f-notiz" value={form.notiz} onChange={e => set('notiz', e.target.value)} rows={3} className="sv-input" placeholder="Besonderheiten, Wünsche oder weitere Informationen …" />
+              </div>
+            </div>
 
             {submitError && (
-              <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
-                ⚠️ {submitError}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div className="sv-notice sv-notice--error" role="alert">{submitError}</div>
+                <p style={{ margin: 0, color: 'var(--sv-body)', fontSize: 15 }}>
+                  Bitte versuchen Sie es erneut oder schreiben Sie uns per{' '}
+                  <a href={`${WHATSAPP_URL}?text=${encodeURIComponent('Hallo Herr Stübe, ich möchte Ihnen meine Stammdaten zusenden.')}`} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>WhatsApp</a>.
+                </p>
               </div>
             )}
 
-            <div className="text-xs text-gray-400 leading-relaxed pt-2">
-              Mit dem Absenden stimmen Sie zu, dass Ihre Daten zum Zweck der Beratung durch die Agentur Stübe verarbeitet werden. Weitere Informationen in der{' '}
-              <a href="/datenschutz" target="_blank" className="text-[#003781] underline">Datenschutzerklärung</a>.
-            </div>
+            <p className="sv-hint" style={{ margin: 0, fontSize: 14 }}>
+              Mit dem Absenden stimmen Sie zu, dass Ihre Daten zum Zweck der Beratung durch die Agentur Stübe verarbeitet werden. Mehr dazu in den{' '}
+              <Link href="/datenschutz" style={{ fontWeight: 600 }}>Datenschutzhinweisen</Link>.
+            </p>
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full py-4 rounded-xl bg-gradient-to-r from-[#E2001A] to-[#c5001a] text-white font-bold text-base hover:shadow-lg hover:shadow-red-500/25 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {submitting ? '⏳ Wird übermittelt …' : '✅ Daten jetzt übermitteln'}
+            <button type="submit" disabled={submitting} className="sv-btn">
+              {submitting ? <><span className="sv-spin" aria-hidden="true" /> Wird gesendet …</> : <>Daten übermitteln <ArrowRight size={18} aria-hidden="true" /></>}
             </button>
-
+            {Object.keys(errors).length > 0 && (
+              <p className="sv-error" role="alert" style={{ margin: 0, textAlign: 'center' }}>Bitte prüfen Sie die markierten Felder.</p>
+            )}
           </form>
-
-          <p className="text-center text-xs text-gray-400 mt-4">
-            🔒 Ihre Daten werden SSL-verschlüsselt übertragen und nicht an Dritte weitergegeben.
-          </p>
-        </div>
+        )}
       </div>
-    </>
+    </ServiceLayout>
   );
 }

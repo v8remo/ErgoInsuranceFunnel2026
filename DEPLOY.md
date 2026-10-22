@@ -49,7 +49,7 @@ zeigt es die Anzahl der Einträge pro Tabelle.
 
 - `/admin` – Login, Leads und Einreichungen sichtbar?
 - `/service` – je ein Anliegen testweise absenden: Mail an dich mit Vorgangsnummer, Eingangsbestätigung an die angegebene Adresse?
-- `/schaden`, `/kennzeichen`, `/neukunden` – je einmal testweise absenden, Mail kommt an?
+- `/schaden`, `/schaden-unfall`, `/kennzeichen`, `/neukunden` – ebenso je einmal testweise absenden
 - `https://<DOMAIN>/api/submissions` ohne Login aufrufen → muss `401` liefern
 
 ## 4. Domain umstellen
