@@ -1,24 +1,36 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import express from "express";
+import fs from "fs";
 import path from "path";
 import multer from "multer";
 import { storage } from "./storage";
-import { insertLeadSchema, insertContentSchema } from "../shared/schema";
+import { insertLeadSchema, insertContentSchema } from "@shared/schema";
 import { z } from "zod";
-import { sendLeadNotification } from "./email";
+import { sendLeadNotification, esc, referenceFor, sendReceipt } from "./email";
+import { requireAdmin, rateLimit, startAdminSession } from "./auth";
 import bcrypt from "bcryptjs";
 
-// Multer im Memory-Modus: funktioniert auch auf read-only Dateisystemen
-// (Vercel Functions). Bilder werden als Data-URI zurückgegeben und im
-// Content-Datensatz gespeichert statt auf Platte geschrieben.
+// Admin-Bild-Uploads landen im beschreibbaren uploads/-Verzeichnis (Docker-Volume).
+const UPLOAD_DIR = path.join(process.cwd(), 'uploads');
+fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 const upload = multer({
-  storage: multer.memoryStorage(),
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, UPLOAD_DIR);
+    },
+    filename: (req, file, cb) => {
+      const timestamp = Date.now();
+      const originalName = path.basename(file.originalname).replace(/[^\w.-]+/g, '_');
+      cb(null, `${timestamp}_${originalName}`);
+    }
+  }),
   limits: {
-    fileSize: 3 * 1024 * 1024 // 3MB – bleibt unter dem 4,5-MB-Request-Limit von Vercel
+    fileSize: 5 * 1024 * 1024 // 5MB limit
   },
   fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
+    // Kein SVG: könnte Skripte enthalten und liefe unter der eigenen Domain.
+    if (/^image\/(jpeg|png|webp|gif)$/.test(file.mimetype)) {
       cb(null, true);
     } else {
       cb(new Error('Only image files are allowed'));
@@ -29,19 +41,23 @@ const upload = multer({
 export async function registerRoutes(app: Express): Promise<Server> {
   // Static file serving for attached assets
   app.use('/attached_assets', express.static(path.join(process.cwd(), 'attached_assets')));
+  app.use('/uploads', express.static(UPLOAD_DIR));
+
+  // Öffentliche Formulare: großzügiges Limit gegen Spam/Missbrauch.
+  const formLimit = rateLimit(30, 60 * 60 * 1000);
   
   // Image upload endpoint
-  app.post('/api/upload-image', upload.single('image'), (req, res) => {
+  app.post('/api/upload-image', requireAdmin, upload.single('image'), (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ message: 'No image file provided' });
       }
-
-      const imageUrl = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
-      res.json({
-        success: true,
+      
+      const imageUrl = `/uploads/${req.file.filename}`;
+      res.json({ 
+        success: true, 
         imageUrl,
-        filename: req.file.originalname
+        filename: req.file.filename 
       });
     } catch (error) {
       res.status(500).json({ message: 'Failed to upload image' });
@@ -49,7 +65,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Lead management routes
-  app.post("/api/leads", async (req, res) => {
+  app.post("/api/leads", formLimit, async (req, res) => {
     try {
       const leadData = insertLeadSchema.parse(req.body);
       const lead = await storage.createLead(leadData);
@@ -69,7 +85,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/leads", async (req, res) => {
+  app.get("/api/leads", requireAdmin, async (req, res) => {
     try {
       const { insuranceType, status } = req.query;
       const leads = await storage.getLeads({
@@ -82,7 +98,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/leads/:id", async (req, res) => {
+  app.get("/api/leads/:id", requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const lead = await storage.getLead(id);
@@ -96,11 +112,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/leads/:id", async (req, res) => {
+  app.patch("/api/leads/:id", requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const updates = req.body;
-      const lead = await storage.updateLead(id, updates);
+      const { status } = req.body;
+      const lead = await storage.updateLead(id, { status });
       if (!lead) {
         res.status(404).json({ message: "Lead not found" });
         return;
@@ -111,7 +127,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/leads/:id", async (req, res) => {
+  app.delete("/api/leads/:id", requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteLead(id);
@@ -122,7 +138,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Dashboard statistics
-  app.get("/api/dashboard/stats", async (req, res) => {
+  app.get("/api/dashboard/stats", requireAdmin, async (req, res) => {
     try {
       const stats = await storage.getDashboardStats();
       res.json(stats);
@@ -132,7 +148,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Export leads as CSV
-  app.get("/api/leads/export/csv", async (req, res) => {
+  app.get("/api/leads/export/csv", requireAdmin, async (req, res) => {
     try {
       const leads = await storage.getLeads();
       
@@ -151,7 +167,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       ]);
       
       const csvContent = [headers, ...csvRows]
-        .map(row => row.map(field => `"${field}"`).join(','))
+        .map(row => row.map(field => {
+          const value = String(field ?? '');
+          const safe = /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
+          return `"${safe.replace(/"/g, '""')}"`;
+        }).join(','))
         .join('\n');
       
       res.setHeader('Content-Type', 'text/csv');
@@ -186,7 +206,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/content", async (req, res) => {
+  app.post("/api/content", requireAdmin, async (req, res) => {
     try {
       const contentData = insertContentSchema.parse(req.body);
       const content = await storage.createContent(contentData);
@@ -200,7 +220,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/content/:id", async (req, res) => {
+  app.put("/api/content/:id", requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const updates = req.body;
@@ -215,7 +235,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/content/:id", async (req, res) => {
+  app.delete("/api/content/:id", requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteContent(id);
@@ -226,7 +246,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin authentication with database stored password (bcrypt hashed)
-  app.post("/api/admin/login", async (req, res) => {
+  app.post("/api/admin/login", rateLimit(10, 15 * 60 * 1000), async (req, res) => {
     try {
       const { password } = req.body;
 
@@ -238,12 +258,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       if (!adminPassword) {
         // No password configured — require ADMIN_PASSWORD env variable as initial password
-        const envPassword = process.env.ADMIN_PASSWORD || "ERGOsicher2025!";
+        const envPassword = process.env.ADMIN_PASSWORD;
+        if (!envPassword) {
+          return res.status(503).json({ success: false, message: "ADMIN_PASSWORD ist nicht gesetzt" });
+        }
         if (password === envPassword) {
           // First login: hash and store the password so it's used from DB going forward
           const hash = await bcrypt.hash(envPassword, 12);
           await storage.updateAdminPassword(hash);
-          return res.json({ success: true, message: "Login successful" });
+          return startAdminSession(req, res);
         }
         return res.status(401).json({ success: false, message: "Invalid password" });
       }
@@ -254,14 +277,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Hashed password — compare with bcrypt
         const match = await bcrypt.compare(password, storedValue);
         if (match) {
-          return res.json({ success: true, message: "Login successful" });
+          return startAdminSession(req, res);
         }
       } else {
         // Legacy plaintext password — verify and migrate to bcrypt hash
         if (password === storedValue) {
           const hash = await bcrypt.hash(password, 12);
           await storage.updateAdminPassword(hash);
-          return res.json({ success: true, message: "Login successful" });
+          return startAdminSession(req, res);
         }
       }
 
@@ -271,8 +294,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/admin/session", (req, res) => {
+    res.json({ isAdmin: !!req.session.isAdmin });
+  });
+
+  app.post("/api/admin/logout", (req, res) => {
+    req.session.destroy(() => {
+      res.clearCookie("stuebe.sid");
+      res.json({ success: true });
+    });
+  });
+
   // Change admin password
-  app.post("/api/admin/change-password", async (req, res) => {
+  app.post("/api/admin/change-password", requireAdmin, async (req, res) => {
     try {
       const { currentPassword, newPassword } = req.body;
 
@@ -314,22 +348,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Submissions API for admin
-  app.get("/api/submissions", async (req, res) => {
+  app.get("/api/submissions", requireAdmin, async (req, res) => {
     try {
       const type = req.query.type as string | undefined;
       const status = req.query.status as string | undefined;
-      const subs = await storage.getSubmissions({ type, status });
+      const subject = req.query.subject as string | undefined;
+      const subjectIn = subject === 'unfall_all'
+        ? ['unfall', 'Unfallversicherung']
+        : undefined;
+      const subs = await storage.getSubmissions({ type, status, subject: subjectIn ? undefined : subject, subjectIn });
       res.json(subs);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch submissions" });
     }
   });
 
-  app.patch("/api/submissions/:id", async (req, res) => {
+  app.patch("/api/submissions/:id", requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const updates = req.body;
-      const sub = await storage.updateSubmission(id, updates);
+      const { status, notes } = req.body;
+      const sub = await storage.updateSubmission(id, { status, notes });
       if (!sub) return res.status(404).json({ message: "Submission not found" });
       res.json(sub);
     } catch (error) {
@@ -337,7 +375,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/submissions/:id", async (req, res) => {
+  app.delete("/api/submissions/:id", requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteSubmission(id);
@@ -348,7 +386,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Document submission endpoint
-  app.post("/api/documents/submit", async (req, res) => {
+  app.post("/api/documents/submit", formLimit, async (req, res) => {
     try {
       const { documentType, customerName, customerEmail, customerPhone, summary, pdfBase64 } = req.body;
 
@@ -356,7 +394,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
-      await storage.createSubmission({
+      const submission = await storage.createSubmission({
         type: 'dokument',
         customerName,
         customerEmail,
@@ -366,6 +404,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         details: { documentType, pdfAttached: !!pdfBase64 },
         pdfData: pdfBase64 || null,
       });
+      const reference = referenceFor(submission.id);
+      sendReceipt(customerEmail, customerName, documentType, reference).catch(err => console.error('Receipt failed:', err));
 
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
 
@@ -377,15 +417,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           </div>
           <div style="padding: 20px; background-color: #f7f7f7;">
             <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-              <p><strong>Dokumenttyp:</strong> ${documentType}</p>
-              <p><strong>Name:</strong> ${customerName}</p>
-              <p><strong>E-Mail:</strong> <a href="mailto:${customerEmail}">${customerEmail}</a></p>
-              <p><strong>Telefon:</strong> ${customerPhone || '-'}</p>
+              <p><strong>Dokumenttyp:</strong> ${esc(documentType)}</p>
+              <p><strong>Name:</strong> ${esc(customerName)}</p>
+              <p><strong>E-Mail:</strong> <a href="mailto:${esc(customerEmail)}">${esc(customerEmail)}</a></p>
+              <p><strong>Telefon:</strong> ${esc(customerPhone || '-')}</p>
               <p><strong>Eingereicht am:</strong> ${now}</p>
             </div>
             <div style="background-color: white; padding: 15px; border-radius: 8px;">
               <h3 style="color: #003781; margin-top: 0;">Zusammenfassung</h3>
-              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${summary || '-'}</pre>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${esc(summary || '-')}</pre>
             </div>
           </div>
           <div style="padding: 10px 20px; font-size: 12px; color: #666; text-align: center;">
@@ -405,21 +445,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { data, error } = await resendClient.emails.send({
           from: 'ERGO Dokumente <dokumente@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
-          subject: `📄 Neues Dokument: ${documentType} – ${customerName} – ${now}`,
+          subject: `[${reference}] 📄 Neues Dokument: ${documentType} – ${customerName} – ${now}`,
           html: emailHtml,
           attachments,
         });
 
         if (error) {
           console.error('Resend email error:', JSON.stringify(error));
-          return res.json({ success: true, emailSent: false, emailError: error.message });
+          return res.json({ success: true, reference, emailSent: false, emailError: error.message });
         }
         console.log('Document email sent successfully:', data?.id);
-        return res.json({ success: true, emailSent: true });
+        return res.json({ success: true, reference, emailSent: true });
       }
 
       console.warn('No RESEND_API_KEY configured, skipping email');
-      res.json({ success: true, emailSent: false });
+      res.json({ success: true, reference, emailSent: false });
     } catch (error) {
       console.error('Document submission error:', error);
       res.status(500).json({ message: "Failed to submit document" });
@@ -427,7 +467,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Schaden (damage report) submission endpoint
-  app.post("/api/schaden/submit", async (req, res) => {
+  app.post("/api/schaden/submit", formLimit, async (req, res) => {
     try {
       const { damageType, customerName, customerEmail, customerPhone, insuranceNumber, damageDate, damageLocation, damageDescription, policeReport, estimatedDamage, extraFields, attachmentsCount, summary, fileAttachments, isGlasschaden, glasScheibe } = req.body;
 
@@ -438,7 +478,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
-      await storage.createSubmission({
+      const submission = await storage.createSubmission({
         type: 'schaden',
         customerName,
         customerEmail,
@@ -447,6 +487,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         summary: damageDescription || '',
         details: { damageType, insuranceNumber, damageDate, damageLocation, policeReport, estimatedDamage, isGlasschaden, glasScheibe, extraFields, attachmentsCount },
       });
+      const reference = referenceFor(submission.id);
+      sendReceipt(customerEmail, customerName, damageType === 'unfall' ? 'Unfallmeldung' : 'Schadenmeldung', reference).catch(err => console.error('Receipt failed:', err));
 
       if (fileAttachments && Array.isArray(fileAttachments)) {
         if (fileAttachments.length > 5) {
@@ -483,27 +525,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
             <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
               <h3 style="color: #003781; margin-top: 0; border-bottom: 2px solid #003781; padding-bottom: 6px;">Kontakt & Vertragsinfo</h3>
               <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                <tr><td style="padding: 4px 0; color: #555; width: 45%;">Name:</td><td style="padding: 4px 0; font-weight: bold;">${customerName}</td></tr>
-                <tr><td style="padding: 4px 0; color: #555;">E-Mail:</td><td style="padding: 4px 0;"><a href="mailto:${customerEmail}">${customerEmail}</a></td></tr>
-                <tr><td style="padding: 4px 0; color: #555;">Telefon:</td><td style="padding: 4px 0;">${customerPhone || '-'}</td></tr>
-                <tr><td style="padding: 4px 0; color: #555;">Versicherungsnummer:</td><td style="padding: 4px 0;">${insuranceNumber || '-'}</td></tr>
+                <tr><td style="padding: 4px 0; color: #555; width: 45%;">Name:</td><td style="padding: 4px 0; font-weight: bold;">${esc(customerName)}</td></tr>
+                <tr><td style="padding: 4px 0; color: #555;">E-Mail:</td><td style="padding: 4px 0;"><a href="mailto:${esc(customerEmail)}">${esc(customerEmail)}</a></td></tr>
+                <tr><td style="padding: 4px 0; color: #555;">Telefon:</td><td style="padding: 4px 0;">${esc(customerPhone || '-')}</td></tr>
+                <tr><td style="padding: 4px 0; color: #555;">Versicherungsnummer:</td><td style="padding: 4px 0;">${esc(insuranceNumber || '-')}</td></tr>
               </table>
             </div>
 
             <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
               <h3 style="color: #003781; margin-top: 0; border-bottom: 2px solid #003781; padding-bottom: 6px;">Unfalldaten</h3>
               <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                <tr><td style="padding: 4px 0; color: #555; width: 45%;">Unfalldatum/-zeitraum:</td><td style="padding: 4px 0;">${damageDate || '-'}</td></tr>
-                <tr><td style="padding: 4px 0; color: #555;">Unfallort:</td><td style="padding: 4px 0;">${damageLocation || '-'}</td></tr>
-                <tr><td style="padding: 4px 0; color: #555;">Polizei gemeldet:</td><td style="padding: 4px 0;">${policeReport || '-'}</td></tr>
+                <tr><td style="padding: 4px 0; color: #555; width: 45%;">Unfalldatum/-zeitraum:</td><td style="padding: 4px 0;">${esc(damageDate || '-')}</td></tr>
+                <tr><td style="padding: 4px 0; color: #555;">Unfallort:</td><td style="padding: 4px 0;">${esc(damageLocation || '-')}</td></tr>
+                <tr><td style="padding: 4px 0; color: #555;">Polizei gemeldet:</td><td style="padding: 4px 0;">${esc(policeReport || '-')}</td></tr>
               </table>
               <p style="margin: 12px 0 4px 0; color: #555; font-size: 14px;"><strong>Unfallhergang:</strong></p>
-              <p style="margin: 0; font-size: 14px; background-color: #f9f9f9; padding: 10px; border-radius: 6px; white-space: pre-wrap;">${damageDescription || '-'}</p>
+              <p style="margin: 0; font-size: 14px; background-color: #f9f9f9; padding: 10px; border-radius: 6px; white-space: pre-wrap;">${esc(damageDescription || '-')}</p>
             </div>
 
             ${extraFields ? `<div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
               <h3 style="color: #003781; margin-top: 0; border-bottom: 2px solid #003781; padding-bottom: 6px;">Alle Angaben (vollständige Zusammenfassung)</h3>
-              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 13px; margin: 0; line-height: 1.6;">${extraFields}</pre>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 13px; margin: 0; line-height: 1.6;">${esc(extraFields)}</pre>
             </div>` : ''}
 
             ${attachmentsCount ? `<div style="background-color: #fff3cd; padding: 12px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 15px;">
@@ -527,13 +569,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           <div style="padding: 20px; background-color: #f7f7f7;">
             <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
               <h3 style="color: #003781; margin-top: 0;">Kontaktdaten</h3>
-              <p><strong>Name:</strong> ${customerName}</p>
-              <p><strong>E-Mail:</strong> <a href="mailto:${customerEmail}">${customerEmail}</a></p>
-              <p><strong>Telefon:</strong> ${customerPhone || '-'}</p>
+              <p><strong>Name:</strong> ${esc(customerName)}</p>
+              <p><strong>E-Mail:</strong> <a href="mailto:${esc(customerEmail)}">${esc(customerEmail)}</a></p>
+              <p><strong>Telefon:</strong> ${esc(customerPhone || '-')}</p>
             </div>
             ${extraFields ? `<div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
               <h3 style="color: #003781; margin-top: 0;">Schadendetails</h3>
-              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${extraFields}</pre>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${esc(extraFields)}</pre>
             </div>` : ''}
             <div style="background-color: #e3f2fd; padding: 10px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 15px;">🔧 Carglass-Reparaturtermin koordinieren</div>
             ${attachmentsCount ? `<div style="background-color: #fff3cd; padding: 10px 15px; border-radius: 8px; font-size: 14px;">📎 ${attachmentsCount} Datei(en) angehängt</div>` : ''}
@@ -551,23 +593,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
           <div style="padding: 20px; background-color: #f7f7f7;">
             <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
               <h3 style="color: #E2001A; margin-top: 0;">Schadendetails</h3>
-              <p><strong>Schadensart:</strong> ${damageType}</p>
-              <p><strong>Name:</strong> ${customerName}</p>
-              <p><strong>E-Mail:</strong> <a href="mailto:${customerEmail}">${customerEmail}</a></p>
-              <p><strong>Telefon:</strong> ${customerPhone || '-'}</p>
-              <p><strong>Versicherungsnummer:</strong> ${insuranceNumber || '-'}</p>
-              <p><strong>Schadendatum:</strong> ${damageDate || '-'}</p>
-              <p><strong>Schadenort:</strong> ${damageLocation || '-'}</p>
-              <p><strong>Polizeilich gemeldet:</strong> ${policeReport || '-'}</p>
-              <p><strong>Geschätzter Schaden:</strong> ${estimatedDamage ? estimatedDamage + ' €' : '-'}</p>
+              <p><strong>Schadensart:</strong> ${esc(damageType)}</p>
+              <p><strong>Name:</strong> ${esc(customerName)}</p>
+              <p><strong>E-Mail:</strong> <a href="mailto:${esc(customerEmail)}">${esc(customerEmail)}</a></p>
+              <p><strong>Telefon:</strong> ${esc(customerPhone || '-')}</p>
+              <p><strong>Versicherungsnummer:</strong> ${esc(insuranceNumber || '-')}</p>
+              <p><strong>Schadendatum:</strong> ${esc(damageDate || '-')}</p>
+              <p><strong>Schadenort:</strong> ${esc(damageLocation || '-')}</p>
+              <p><strong>Polizeilich gemeldet:</strong> ${esc(policeReport || '-')}</p>
+              <p><strong>Geschätzter Schaden:</strong> ${estimatedDamage ? esc(estimatedDamage) + ' €' : '-'}</p>
             </div>
             <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
               <h3 style="color: #003781; margin-top: 0;">Beschreibung</h3>
-              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${damageDescription}</pre>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${esc(damageDescription)}</pre>
             </div>
             ${extraFields ? `<div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
               <h3 style="color: #003781; margin-top: 0;">Zusätzliche Angaben</h3>
-              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${extraFields}</pre>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${esc(extraFields)}</pre>
             </div>` : ''}
             ${attachmentsCount ? `<div style="background-color: #fff3cd; padding: 10px 15px; border-radius: 8px; font-size: 14px;">📎 ${attachmentsCount} Datei(en) angehängt – bitte im Admin-Dashboard prüfen oder Kunden kontaktieren.</div>` : ''}
           </div>
@@ -588,32 +630,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { data, error } = await resendClient.emails.send({
           from: 'ERGO Schadensmeldung <schaden@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
-          subject: isUnfall
+          subject: `[${reference}] ` + (isUnfall
             ? `🚑 Unfallversicherung Schaden: ${customerName} – ${now}`
             : isGlasschaden
             ? `🔲 Kfz-Glasschaden: ${customerName} – ${glasScheibe || 'Scheibe'} – ${now}`
-            : `🚨 Schadensmeldung: ${damageType} – ${customerName} – ${now}`,
+            : `🚨 Schadensmeldung: ${damageType} – ${customerName} – ${now}`),
           html: emailHtml,
           attachments: attachments.length > 0 ? attachments : undefined,
         });
 
         if (error) {
           console.error('Resend schaden email error:', JSON.stringify(error));
-          return res.json({ success: true, emailSent: false, emailError: error.message });
+          return res.json({ success: true, reference, emailSent: false, emailError: error.message });
         }
         console.log('Schaden email sent successfully:', data?.id);
-        return res.json({ success: true, emailSent: true });
+        return res.json({ success: true, reference, emailSent: true });
       }
 
       console.warn('No RESEND_API_KEY configured, skipping schaden email');
-      res.json({ success: true, emailSent: false });
+      res.json({ success: true, reference, emailSent: false });
     } catch (error) {
       console.error('Schaden submission error:', error);
       res.status(500).json({ message: "Failed to submit damage report" });
     }
   });
 
-  app.post("/api/kennzeichen/submit", async (req, res) => {
+  app.post("/api/kennzeichen/submit", formLimit, async (req, res) => {
     try {
       const body = req.body;
       const requestType = body.requestType;
@@ -645,7 +687,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const isEvb = requestType === 'evb';
       const typeLabel = isEvb ? 'eVB-Nummer (Kfz)' : 'Versicherungskennzeichen';
 
-      await storage.createSubmission({
+      const submission = await storage.createSubmission({
         type: 'kennzeichen',
         customerName: `${vorname} ${nachname}`,
         customerEmail: email,
@@ -654,33 +696,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         summary: '',
         details: { requestType, vorname, nachname, geburtsdatum: body.geburtsdatum, strasse: body.strasse, plz: body.plz, ort: body.ort, fahrzeugart: body.fahrzeugart, fahrzeughersteller: body.fahrzeughersteller, fahrzeugmodell: body.fahrzeugmodell, fin: body.fin, erstzulassung: body.erstzulassung, versicherungsbeginn: body.versicherungsbeginn, hinweise: body.hinweise },
       });
+      const reference = referenceFor(submission.id);
+      sendReceipt(email, `${vorname} ${nachname}`, typeLabel, reference).catch(err => console.error('Receipt failed:', err));
 
       const personalRows = [
-        `<p><strong>Name:</strong> ${vorname} ${nachname}</p>`,
-        body.geburtsdatum ? `<p><strong>Geburtsdatum:</strong> ${body.geburtsdatum}</p>` : '',
-        body.strasse ? `<p><strong>Adresse:</strong> ${body.strasse}, ${body.plz || ''} ${body.ort || ''}</p>` : '',
-        `<p><strong>E-Mail:</strong> <a href="mailto:${email}">${email}</a></p>`,
-        telefon ? `<p><strong>Telefon:</strong> <a href="tel:${telefon}">${telefon}</a></p>` : '',
+        `<p><strong>Name:</strong> ${esc(vorname)} ${esc(nachname)}</p>`,
+        body.geburtsdatum ? `<p><strong>Geburtsdatum:</strong> ${esc(body.geburtsdatum)}</p>` : '',
+        body.strasse ? `<p><strong>Adresse:</strong> ${esc(body.strasse)}, ${esc(body.plz || '')} ${esc(body.ort || '')}</p>` : '',
+        `<p><strong>E-Mail:</strong> <a href="mailto:${esc(email)}">${esc(email)}</a></p>`,
+        telefon ? `<p><strong>Telefon:</strong> <a href="tel:${esc(telefon)}">${esc(telefon)}</a></p>` : '',
       ].filter(Boolean).join('');
 
       const vehicleFields: string[] = [];
-      if (body.fahrzeugart) vehicleFields.push(`<p><strong>Fahrzeugart:</strong> ${body.fahrzeugart}</p>`);
-      if (body.fahrzeughersteller) vehicleFields.push(`<p><strong>Hersteller:</strong> ${body.fahrzeughersteller}</p>`);
-      if (body.fahrzeugmodell) vehicleFields.push(`<p><strong>Modell:</strong> ${body.fahrzeugmodell}</p>`);
-      if (body.fin) vehicleFields.push(`<p><strong>FIN:</strong> ${body.fin}</p>`);
-      if (body.erstzulassung) vehicleFields.push(`<p><strong>Erstzulassung:</strong> ${body.erstzulassung}</p>`);
-      if (body.jaehrlicheFahrleistung) vehicleFields.push(`<p><strong>Jährl. Fahrleistung:</strong> ${body.jaehrlicheFahrleistung}</p>`);
+      if (body.fahrzeugart) vehicleFields.push(`<p><strong>Fahrzeugart:</strong> ${esc(body.fahrzeugart)}</p>`);
+      if (body.fahrzeughersteller) vehicleFields.push(`<p><strong>Hersteller:</strong> ${esc(body.fahrzeughersteller)}</p>`);
+      if (body.fahrzeugmodell) vehicleFields.push(`<p><strong>Modell:</strong> ${esc(body.fahrzeugmodell)}</p>`);
+      if (body.fin) vehicleFields.push(`<p><strong>FIN:</strong> ${esc(body.fin)}</p>`);
+      if (body.erstzulassung) vehicleFields.push(`<p><strong>Erstzulassung:</strong> ${esc(body.erstzulassung)}</p>`);
+      if (body.jaehrlicheFahrleistung) vehicleFields.push(`<p><strong>Jährl. Fahrleistung:</strong> ${esc(body.jaehrlicheFahrleistung)}</p>`);
       if (body.hauptfahrer) vehicleFields.push(`<p><strong>Hauptfahrer:</strong> ${body.hauptfahrer === 'selbst' ? 'Versicherungsnehmer selbst' : 'Andere Person'}</p>`);
-      if (body.hauptfahrerName) vehicleFields.push(`<p><strong>Hauptfahrer Name:</strong> ${body.hauptfahrerName}</p>`);
-      if (body.hauptfahrerGeburtsdatum) vehicleFields.push(`<p><strong>Hauptfahrer Geburtsdatum:</strong> ${body.hauptfahrerGeburtsdatum}</p>`);
-      if (body.bisherigVersicherer) vehicleFields.push(`<p><strong>Bisheriger Versicherer:</strong> ${body.bisherigVersicherer}</p>`);
-      if (body.bisherigSfKlasse) vehicleFields.push(`<p><strong>SF-Klasse:</strong> ${body.bisherigSfKlasse}</p>`);
-      if (body.hubraum) vehicleFields.push(`<p><strong>Hubraum:</strong> ${body.hubraum}</p>`);
-      if (body.hoechstgeschwindigkeit) vehicleFields.push(`<p><strong>Höchstgeschwindigkeit:</strong> ${body.hoechstgeschwindigkeit}</p>`);
-      if (body.bisherigVersichert === 'ja' && body.bisherigesKennzeichen) vehicleFields.push(`<p><strong>Bisheriges Kennzeichen:</strong> ${body.bisherigesKennzeichen}</p>`);
+      if (body.hauptfahrerName) vehicleFields.push(`<p><strong>Hauptfahrer Name:</strong> ${esc(body.hauptfahrerName)}</p>`);
+      if (body.hauptfahrerGeburtsdatum) vehicleFields.push(`<p><strong>Hauptfahrer Geburtsdatum:</strong> ${esc(body.hauptfahrerGeburtsdatum)}</p>`);
+      if (body.bisherigVersicherer) vehicleFields.push(`<p><strong>Bisheriger Versicherer:</strong> ${esc(body.bisherigVersicherer)}</p>`);
+      if (body.bisherigSfKlasse) vehicleFields.push(`<p><strong>SF-Klasse:</strong> ${esc(body.bisherigSfKlasse)}</p>`);
+      if (body.hubraum) vehicleFields.push(`<p><strong>Hubraum:</strong> ${esc(body.hubraum)}</p>`);
+      if (body.hoechstgeschwindigkeit) vehicleFields.push(`<p><strong>Höchstgeschwindigkeit:</strong> ${esc(body.hoechstgeschwindigkeit)}</p>`);
+      if (body.bisherigVersichert === 'ja' && body.bisherigesKennzeichen) vehicleFields.push(`<p><strong>Bisheriges Kennzeichen:</strong> ${esc(body.bisherigesKennzeichen)}</p>`);
 
       const insuranceFields: string[] = [];
-      if (body.versicherungsbeginn) insuranceFields.push(`<p><strong>Versicherungsbeginn:</strong> ${body.versicherungsbeginn}</p>`);
+      if (body.versicherungsbeginn) insuranceFields.push(`<p><strong>Versicherungsbeginn:</strong> ${esc(body.versicherungsbeginn)}</p>`);
       if (isEvb) {
         const arten: string[] = ['Kfz-Haftpflicht'];
         if (body.versicherungsartTeilkasko) arten.push('Teilkasko');
@@ -692,7 +736,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const umfangLabel = body.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko';
         insuranceFields.push(`<p><strong>Versicherungsumfang:</strong> ${umfangLabel}</p>`);
       }
-      if (body.hinweise) insuranceFields.push(`<p><strong>Hinweise:</strong> ${body.hinweise}</p>`);
+      if (body.hinweise) insuranceFields.push(`<p><strong>Hinweise:</strong> ${esc(body.hinweise)}</p>`);
 
       const emailHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -740,28 +784,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { data, error } = await resendClient.emails.send({
           from: 'ERGO Kennzeichen <kennzeichen@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
-          subject: `${isEvb ? '🚗 eVB-Anfrage' : '🛵 Versicherungskennzeichen'}: ${vorname} ${nachname} – ${vehicleDesc} – ${now}`,
+          subject: `[${reference}] ${isEvb ? '🚗 eVB-Anfrage' : '🛵 Versicherungskennzeichen'}: ${vorname} ${nachname} – ${vehicleDesc} – ${now}`,
           html: emailHtml,
           attachments: attachments.length > 0 ? attachments : undefined,
         });
 
         if (error) {
           console.error('Resend kennzeichen email error:', JSON.stringify(error));
-          return res.json({ success: true, emailSent: false, emailError: error.message });
+          return res.json({ success: true, reference, emailSent: false, emailError: error.message });
         }
         console.log('Kennzeichen email sent successfully:', data?.id);
-        return res.json({ success: true, emailSent: true });
+        return res.json({ success: true, reference, emailSent: true });
       }
 
       console.warn('No RESEND_API_KEY configured, skipping kennzeichen email');
-      res.json({ success: true, emailSent: false });
+      res.json({ success: true, reference, emailSent: false });
     } catch (error) {
       console.error('Kennzeichen submission error:', error);
       res.status(500).json({ message: "Fehler beim Einreichen der Anfrage" });
     }
   });
 
-  app.post("/api/documents/upload", async (req, res) => {
+  app.post("/api/documents/upload", formLimit, async (req, res) => {
     try {
       let { vorname, nachname, email, telefon, versicherungsnummer, schadennummer, beschreibung, fileAttachments } = req.body;
 
@@ -787,7 +831,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
-      await storage.createSubmission({
+      const submission = await storage.createSubmission({
         type: 'rechnung',
         customerName: `${vorname} ${nachname}`,
         customerEmail: email,
@@ -796,6 +840,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         summary: beschreibung || '',
         details: { versicherungsnummer, schadennummer, fileCount: fileAttachments?.length || 0 },
       });
+      const reference = referenceFor(submission.id);
+      sendReceipt(email, `${vorname} ${nachname}`, 'Rechnung / Beleg einreichen', reference).catch(err => console.error('Receipt failed:', err));
 
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
       const fileCount = fileAttachments?.length || 0;
@@ -809,16 +855,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
           <div style="padding: 20px; background-color: #f7f7f7;">
             <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
               <h3 style="color: #003781; margin-top: 0;">Kundendaten</h3>
-              <p><strong>Name:</strong> ${vorname} ${nachname}</p>
-              <p><strong>E-Mail:</strong> <a href="mailto:${email}">${email}</a></p>
-              <p><strong>Telefon:</strong> ${telefon || '-'}</p>
-              <p><strong>Versicherungsnummer:</strong> ${versicherungsnummer}</p>
-              ${schadennummer ? `<p><strong>Schadennummer:</strong> ${schadennummer}</p>` : ''}
+              <p><strong>Name:</strong> ${esc(vorname)} ${esc(nachname)}</p>
+              <p><strong>E-Mail:</strong> <a href="mailto:${esc(email)}">${esc(email)}</a></p>
+              <p><strong>Telefon:</strong> ${esc(telefon || '-')}</p>
+              <p><strong>Versicherungsnummer:</strong> ${esc(versicherungsnummer)}</p>
+              ${schadennummer ? `<p><strong>Schadennummer:</strong> ${esc(schadennummer)}</p>` : ''}
             </div>
             ${beschreibung ? `
             <div style="background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
               <h3 style="color: #003781; margin-top: 0;">Beschreibung</h3>
-              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${beschreibung}</pre>
+              <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px;">${esc(beschreibung)}</pre>
             </div>` : ''}
             <div style="background-color: ${fileCount > 0 ? '#d4edda' : '#fff3cd'}; padding: 10px 15px; border-radius: 8px; font-size: 14px;">
               📎 ${fileCount} Datei(en) angehängt
@@ -841,28 +887,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { data, error } = await resendClient.emails.send({
           from: 'ERGO Dokumente <dokumente@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
-          subject: `📎 Rechnung/Beleg: ${vorname} ${nachname} – VNR ${versicherungsnummer} – ${now}`,
+          subject: `[${reference}] 📎 Rechnung/Beleg: ${vorname} ${nachname} – VNR ${versicherungsnummer} – ${now}`,
           html: emailHtml,
           attachments: attachments.length > 0 ? attachments : undefined,
         });
 
         if (error) {
           console.error('Resend upload email error:', JSON.stringify(error));
-          return res.json({ success: true, emailSent: false, emailError: error.message });
+          return res.json({ success: true, reference, emailSent: false, emailError: error.message });
         }
         console.log('Document upload email sent successfully:', data?.id);
-        return res.json({ success: true, emailSent: true });
+        return res.json({ success: true, reference, emailSent: true });
       }
 
       console.warn('No RESEND_API_KEY configured, skipping upload email');
-      res.json({ success: true, emailSent: false });
+      res.json({ success: true, reference, emailSent: false });
     } catch (error) {
       console.error('Document upload submission error:', error);
       res.status(500).json({ message: "Fehler beim Einreichen der Dokumente" });
     }
   });
 
-  app.post("/api/callback/submit", async (req, res) => {
+  app.post("/api/callback/submit", formLimit, async (req, res) => {
     try {
       let { name, phone, callbackTime, topic } = req.body;
 
@@ -899,10 +945,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           </div>
           <div style="padding: 20px; background-color: #f7f7f7;">
             <div style="background-color: white; padding: 15px; border-radius: 8px;">
-              <p><strong>Name:</strong> ${name}</p>
-              <p><strong>Telefon:</strong> <a href="tel:${phone}">${phone}</a></p>
-              <p><strong>Gewünschte Rückrufzeit:</strong> ${callbackTime}</p>
-              <p><strong>Thema:</strong> ${topic || 'Nicht angegeben'}</p>
+              <p><strong>Name:</strong> ${esc(name)}</p>
+              <p><strong>Telefon:</strong> <a href="tel:${esc(phone)}">${esc(phone)}</a></p>
+              <p><strong>Gewünschte Rückrufzeit:</strong> ${esc(callbackTime)}</p>
+              <p><strong>Thema:</strong> ${esc(topic || 'Nicht angegeben')}</p>
               <p><strong>Eingegangen am:</strong> ${now}</p>
             </div>
           </div>
@@ -975,15 +1021,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/instagram/generate", async (req, res) => {
+  app.post("/api/instagram/generate", requireAdmin, async (req, res) => {
     try {
       const { topicName, topicIcon, topicId } = req.body;
       if (!topicName) return res.status(400).json({ message: "topicName required" });
 
       const OpenAI = (await import('openai')).default;
       const openai = new OpenAI({
-        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY,
-        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL || undefined,
+        apiKey: process.env.OPENAI_API_KEY,
       });
 
       const prompt = `Du bist ein Experte für Instagram-Content für eine ERGO Versicherungsagentur in Ganderkesee (Norddeutschland).
@@ -1036,7 +1081,7 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
     }
   });
 
-  app.post("/api/neukunden/submit", async (req, res) => {
+  app.post("/api/neukunden/submit", formLimit, async (req, res) => {
     try {
       const {
         anrede, titel, adelspraedikat, berufstitel,
@@ -1057,7 +1102,7 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
       const now = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
 
       const row = (label: string, value: string | undefined) =>
-        value ? `<tr><td style="padding:6px 10px;color:#555;font-size:13px;white-space:nowrap;vertical-align:top;width:220px"><strong>${label}</strong></td><td style="padding:6px 10px;font-size:13px;color:#222">${value}</td></tr>` : '';
+        value ? `<tr><td style="padding:6px 10px;color:#555;font-size:13px;white-space:nowrap;vertical-align:top;width:220px"><strong>${label}</strong></td><td style="padding:6px 10px;font-size:13px;color:#222">${esc(value)}</td></tr>` : '';
 
       const section = (title: string, rows: string) =>
         `<tr><td colspan="2" style="padding:14px 10px 4px;background:#f7f7f7;font-size:11px;font-weight:bold;letter-spacing:1px;color:#888;text-transform:uppercase;border-top:1px solid #e5e5e5">${title}</td></tr>${rows}`;
@@ -1119,11 +1164,11 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
                   </tr>
                   ${(versicherungen as { art: string; gesellschaft: string; nummer: string; beitrag: string; kuendigungstermin: string }[]).map((v, i) => `
                   <tr style="background:${i % 2 === 0 ? '#fff' : '#f9f9f9'}">
-                    <td style="padding:6px 10px;font-size:12px;color:#222">${v.art || '–'}</td>
-                    <td style="padding:6px 10px;font-size:12px;color:#222">${v.gesellschaft || '–'}</td>
-                    <td style="padding:6px 10px;font-size:12px;color:#222;font-family:monospace">${v.nummer || '–'}</td>
-                    <td style="padding:6px 10px;font-size:12px;color:#222">${v.beitrag ? v.beitrag + ' €' : '–'}</td>
-                    <td style="padding:6px 10px;font-size:12px;color:#222">${v.kuendigungstermin || '–'}</td>
+                    <td style="padding:6px 10px;font-size:12px;color:#222">${esc(v.art || '–')}</td>
+                    <td style="padding:6px 10px;font-size:12px;color:#222">${esc(v.gesellschaft || '–')}</td>
+                    <td style="padding:6px 10px;font-size:12px;color:#222;font-family:monospace">${esc(v.nummer || '–')}</td>
+                    <td style="padding:6px 10px;font-size:12px;color:#222">${v.beitrag ? esc(v.beitrag) + ' €' : '–'}</td>
+                    <td style="padding:6px 10px;font-size:12px;color:#222">${esc(v.kuendigungstermin || '–')}</td>
                   </tr>`).join('')}
                 </table>
               </td></tr>` : ''}
@@ -1133,7 +1178,7 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
           </div>
         </div>`;
 
-      await storage.createSubmission({
+      const submission = await storage.createSubmission({
         type: 'neukunde',
         customerName: fullName,
         customerEmail: emailPrivat || emailDienstlich || '',
@@ -1142,6 +1187,8 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
         summary: `${fullName}${ort ? ' · ' + ort : ''}`,
         details: { anrede, titel, nachname, vorname, geburtsdatum, emailPrivat, mobilPrivat, beruf, stellung, plz, ort },
       });
+      const reference = referenceFor(submission.id);
+      sendReceipt(emailPrivat || emailDienstlich, fullName, 'Neukunden-Stammdaten', reference).catch(err => console.error('Receipt failed:', err));
 
       if (process.env.RESEND_API_KEY) {
         const { Resend } = await import('resend');
@@ -1149,12 +1196,12 @@ Antworte NUR mit einem validen JSON-Objekt in genau diesem Format:
         await resendClient.emails.send({
           from: 'ERGO Neukunden <neukunden@anfrage.ergo-stuebe.de>',
           to: 'morino.stuebe@ergo.de',
-          subject: `👤 Neukunden-Stammdaten: ${fullName} – ${now}`,
+          subject: `[${reference}] 👤 Neukunden-Stammdaten: ${fullName} – ${now}`,
           html: emailHtml,
         });
       }
 
-      res.json({ success: true });
+      res.json({ success: true, reference });
     } catch (error) {
       console.error('Neukunden submit error:', error);
       res.status(500).json({ message: "Fehler beim Übermitteln. Bitte versuchen Sie es erneut." });

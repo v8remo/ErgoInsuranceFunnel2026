@@ -1,0 +1,9 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mark-title mark-desc">
+  <title id="mark-title">Agentur Stübe</title>
+  <desc id="mark-desc">AS-Signet der Agentur Stübe</desc>
+  <rect x="8" y="8" width="176" height="176" rx="44" fill="#123D41"/>
+  <path d="M54 141L96 51L138 141" stroke="#FFFDF8" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M71 111H121" stroke="#FFFDF8" stroke-width="14" stroke-linecap="round"/>
+  <path d="M112 67C131 70 141 83 141 98C141 119 125 135 100 135C83 135 68 128 58 117" stroke="#C26B45" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="96" cy="51" r="9" fill="#C26B45"/>
+</svg>

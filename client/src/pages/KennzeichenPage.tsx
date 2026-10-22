@@ -1,13 +1,9 @@
-import { compressImageFile, exceedsUploadLimit, UPLOAD_LIMIT_MESSAGE } from '@/lib/uploads';
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'wouter';
-import {
-  CarFront, Tag, Lock, Zap, Check, ChevronLeft, FileText, Upload, X, Info,
-  HelpCircle, CheckCircle2, ClipboardList, MessageCircle, AlertTriangle,
-} from 'lucide-react';
+import { ArrowRight, Bike, Car, Check, ChevronLeft, Copy, FileText, Info, MessageCircle, Upload, X } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
-import Breadcrumb from "@/components/Breadcrumb";
+import ServiceLayout, { WHATSAPP_URL, PHONE_HREF, PHONE_DISPLAY } from "@/components/service/ServiceLayout";
 
 type KennzeichenType = 'evb' | 'kennzeichen';
 
@@ -154,22 +150,21 @@ export default function KennzeichenPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [reference, setReference] = useState<string | null>(null);
   const [confirm1, setConfirm1] = useState(false);
   const [confirm2, setConfirm2] = useState(false);
   const [fadeClass, setFadeClass] = useState('opacity-100 transition-opacity duration-300');
   const [abeFiles, setAbeFiles] = useState<AbeFile[]>([]);
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
-  const handleAbeFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAbeFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-    e.target.value = '';
-    const incoming = Array.from(files);
     const newFiles: AbeFile[] = [];
-    for (const raw of incoming) {
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
       if (abeFiles.length + newFiles.length >= 5) break;
-      if (!raw.type.startsWith('image/') && raw.type !== 'application/pdf') continue;
-      const f = await compressImageFile(raw);
+      if (!f.type.startsWith('image/') && f.type !== 'application/pdf') continue;
       if (f.size > 10 * 1024 * 1024) continue;
       const af: AbeFile = { file: f };
       if (f.type.startsWith('image/')) {
@@ -179,6 +174,7 @@ export default function KennzeichenPage() {
     }
     setAbeFiles(prev => [...prev, ...newFiles].slice(0, 5));
     if (errors.abeFiles) setErrors(prev => { const n = { ...prev }; delete n.abeFiles; return n; });
+    e.target.value = '';
   };
 
   const removeAbeFile = (index: number) => {
@@ -332,11 +328,6 @@ export default function KennzeichenPage() {
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
 
-    if (selectedType === 'kennzeichen' && exceedsUploadLimit(abeFiles.map(af => af.file))) {
-      setSubmitError(UPLOAD_LIMIT_MESSAGE);
-      return;
-    }
-
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -351,12 +342,13 @@ export default function KennzeichenPage() {
         );
       }
 
-      await apiRequest('POST', '/api/kennzeichen/submit', {
+      const res = await apiRequest('POST', '/api/kennzeichen/submit', {
         requestType: selectedType,
         ...formData,
         summary: buildSummary(),
         abeAttachments: abeAttachments.length > 0 ? abeAttachments : undefined,
       });
+      setReference((await res.json()).reference ?? null);
       goToStep(4);
     } catch (err: any) {
       setSubmitError(err.message || 'Fehler beim Senden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns per WhatsApp.');
@@ -366,899 +358,630 @@ export default function KennzeichenPage() {
     }
   };
 
-  const inputCls = (field: string) =>
-    `w-full p-3 border rounded text-base outline-none transition-colors ${errors[field] ? 'border-ergo-red' : 'border-ergo-line focus:border-ergo-red'}`;
 
-  const progressPercent = step === 1 ? 33 : step === 2 ? 66 : 100;
+  const clearError = (key: string) => {
+    if (errors[key]) setErrors(prev => { const n = { ...prev }; delete n[key]; return n; });
+  };
 
   const currentPremium = selectedType === 'kennzeichen' ? getPremium(formData.fahrzeugart, formData.versicherungsumfang, formData.versicherungsbeginn) : null;
+  const umfangLabel = formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko inkl. Diebstahlschutz';
+  const verwendungszweck = selectedType === 'kennzeichen' && formData.versicherungsbeginn
+    ? getVerwendungszweck(formData.fahrzeugart, formData.versicherungsumfang, formData.nachname, formData.vorname, formData.versicherungsbeginn)
+    : '';
+
+  const stepNames = ['Auswahl', 'Angaben', 'Prüfen', 'Fertig'];
+  const cardStyle = { display: 'flex', flexDirection: 'column', gap: 16 } as const;
+
+  const label = (id: string, text: string, required: boolean) => (
+    <label className="sv-label" htmlFor={id}>{text}{!required && <span className="sv-hint"> (optional)</span>}</label>
+  );
+
+  const renderField = (
+    field: keyof FormData,
+    text: string,
+    opts: { type?: string; placeholder?: string; required?: boolean; hint?: string; extra?: React.InputHTMLAttributes<HTMLInputElement> } = {},
+  ) => {
+    const id = `f-${field}`;
+    const required = opts.required ?? true;
+    return (
+      <div className="sv-field" data-field={field}>
+        {label(id, text, required)}
+        <input
+          id={id}
+          type={opts.type || 'text'}
+          value={formData[field] as string}
+          onChange={e => updateField(field, e.target.value)}
+          placeholder={opts.placeholder}
+          className="sv-input"
+          aria-invalid={!!errors[field]}
+          {...opts.extra}
+        />
+        {opts.hint && <span className="sv-hint">{opts.hint}</span>}
+        {errors[field] && <span className="sv-error">{errors[field]}</span>}
+      </div>
+    );
+  };
+
+  const renderSelect = (field: keyof FormData, text: string, options: { value: string; label: string }[], opts: { required?: boolean; hint?: string } = {}) => {
+    const id = `f-${field}`;
+    const required = opts.required ?? true;
+    return (
+      <div className="sv-field" data-field={field}>
+        {label(id, text, required)}
+        <select id={id} value={formData[field] as string} onChange={e => updateField(field, e.target.value)} className="sv-input" aria-invalid={!!errors[field]}>
+          <option value="">Bitte auswählen</option>
+          {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+        {opts.hint && <span className="sv-hint">{opts.hint}</span>}
+        {errors[field] && <span className="sv-error">{errors[field]}</span>}
+      </div>
+    );
+  };
+
+  const opts = (values: string[]) => values.map(v => ({ value: v, label: v }));
+
+  const renderChoice = (selected: boolean, onClick: () => void, title: string, desc?: string) => (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      style={{
+        minHeight: 52, padding: '12px 16px', borderRadius: 6, textAlign: 'left', cursor: 'pointer',
+        background: 'var(--sv-card)', color: 'var(--sv-ink)', font: 'inherit',
+        border: `1.5px solid ${selected ? 'var(--sv-ink)' : 'var(--sv-line)'}`,
+        display: 'flex', alignItems: 'flex-start', gap: 10,
+      }}
+    >
+      <span style={{ flex: 1 }}>
+        <span style={{ display: 'block', fontWeight: 700, fontSize: 15 }}>{title}</span>
+        {desc && <span className="sv-hint" style={{ display: 'block', marginTop: 2 }}>{desc}</span>}
+      </span>
+      {selected && <Check size={18} aria-hidden="true" style={{ flexShrink: 0, marginTop: 2 }} />}
+    </button>
+  );
+
+  const renderNote = (children: React.ReactNode) => (
+    <div className="sv-card" style={{ display: 'flex', gap: 12, alignItems: 'flex-start', fontSize: 15, lineHeight: 1.55, color: 'var(--sv-body)' }}>
+      <Info size={20} aria-hidden="true" style={{ flexShrink: 0, marginTop: 2, color: 'var(--sv-accent)' }} />
+      <div>{children}</div>
+    </div>
+  );
+
+  const renderCopyButton = (text: string, fieldName: string, labelText: string) => (
+    <button
+      type="button"
+      onClick={() => copyToClipboard(text, fieldName)}
+      aria-label={`${labelText} kopieren`}
+      style={{ minWidth: 44, minHeight: 44, border: 'none', background: 'none', cursor: 'pointer', color: 'var(--sv-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, flexShrink: 0, font: 'inherit', fontSize: 13, fontWeight: 600 }}
+    >
+      {copiedField === fieldName ? <><Check size={16} aria-hidden="true" style={{ color: 'var(--sv-ok)' }} /> Kopiert</> : <Copy size={18} aria-hidden="true" />}
+    </button>
+  );
+
+  const personalCard = (
+    <div className="sv-card" style={cardStyle}>
+      <h2 className="sv-section-title" style={{ marginTop: 0 }}>Persönliche Daten</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {renderField('vorname', 'Vorname', { extra: { autoComplete: 'given-name', enterKeyHint: 'next' } })}
+        {renderField('nachname', 'Nachname', { extra: { autoComplete: 'family-name', enterKeyHint: 'next' } })}
+      </div>
+      {renderField('geburtsdatum', 'Geburtsdatum', { type: 'date', extra: { autoComplete: 'bday' } })}
+      {renderField('strasse', 'Straße und Hausnummer', { extra: { autoComplete: 'street-address', enterKeyHint: 'next' } })}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {renderField('plz', 'PLZ', { extra: { inputMode: 'numeric', maxLength: 5, autoComplete: 'postal-code', enterKeyHint: 'next' } })}
+        {renderField('ort', 'Ort', { extra: { autoComplete: 'address-level2', enterKeyHint: 'next' } })}
+      </div>
+      {renderField('email', 'E-Mail', { type: 'email', placeholder: 'name@beispiel.de', extra: { inputMode: 'email', autoComplete: 'email', enterKeyHint: 'next' } })}
+      {renderField('telefon', 'Telefon', { type: 'tel', placeholder: '0151 12345678', extra: { inputMode: 'tel', autoComplete: 'tel', enterKeyHint: 'next' } })}
+    </div>
+  );
+
+  const hinweiseField = (
+    <div className="sv-field">
+      {label('f-hinweise', 'Hinweise', false)}
+      <textarea id="f-hinweise" value={formData.hinweise} onChange={e => updateField('hinweise', e.target.value)} rows={3} placeholder="Zusätzliche Hinweise oder Wünsche" className="sv-input" />
+    </div>
+  );
+
+  const step2Footer = (
+    <>
+      <button type="button" onClick={handleStep2Next} className="sv-btn">
+        Weiter zur Prüfung <ArrowRight size={18} aria-hidden="true" />
+      </button>
+      {Object.keys(errors).length > 0 && (
+        <p className="sv-error" role="alert" style={{ margin: 0, textAlign: 'center' }}>Bitte prüfen Sie die markierten Felder.</p>
+      )}
+    </>
+  );
 
   return (
-    <div className="min-h-screen bg-white" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <ServiceLayout>
       <SEO
-        title="eVB-Nummer & Versicherungskennzeichen – ERGO Agentur Stübe Ganderkesee"
-        description="eVB-Nummer für Kfz-Zulassung oder Versicherungskennzeichen für Kleinkraftrad anfragen. Schnell und unkompliziert bei Ihrer ERGO Agentur Stübe in Ganderkesee."
-        keywords="eVB-Nummer, Versicherungskennzeichen, Kfz-Zulassung, ERGO Ganderkesee, Kleinkraftrad Versicherung"
+        title="eVB-Nummer & Versicherungskennzeichen – Agentur Stübe Ganderkesee"
+        description="eVB-Nummer für Kfz-Zulassung oder Versicherungskennzeichen für Kleinkraftrad anfragen. Schnell und unkompliziert bei der Agentur Stübe in Ganderkesee."
+        keywords="eVB-Nummer, Versicherungskennzeichen, Kfz-Zulassung, Ganderkesee, Kleinkraftrad Versicherung"
       />
-      <Breadcrumb items={[{ label: "eVB & Kennzeichen" }]} />
-      <div className="max-w-[600px] mx-auto px-5 py-6">
+      <div className="sv-wrap" style={{ display: 'flex', flexDirection: 'column', gap: 20, paddingTop: 4, paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {step < 4 && (
-          <>
-            <div className="flex items-center justify-between mb-4">
-              {step > 1 ? (
-                <button onClick={() => goToStep(step - 1)} className="text-ergo-red font-bold text-sm flex items-center gap-1 min-h-[44px]">
-                  <ChevronLeft className="w-4 h-4" /> Zurück
-                </button>
-              ) : (
-                <div />
-              )}
-              <span className="text-xs text-ergo-stone font-medium">
-                Schritt {Math.min(step, 3)} von 3 — {step === 1 ? 'Auswahl' : step === 2 ? 'Angaben' : 'Absenden'}
-              </span>
-            </div>
-            <div className="h-1 bg-ergo-fog rounded-full mb-3 overflow-hidden">
-              <div className="h-full bg-ergo-red rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercent}%` }} />
-            </div>
-            <div className="flex items-center justify-center gap-3 text-[11px] text-ergo-mute mb-5">
-              <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> DSGVO-konform</span>
-              <span>·</span>
-              <span className="flex items-center gap-1"><Zap className="w-3 h-3" /> Schnelle Bearbeitung</span>
-              <span>·</span>
-              <span className="flex items-center gap-1"><Check className="w-3 h-3 text-ergo-check" /> ERGO Partner</span>
-            </div>
-          </>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {step > 1 ? (
+              <button type="button" onClick={() => goToStep(step - 1)} className="sv-link-btn" style={{ textDecoration: 'none', alignSelf: 'flex-start' }}>
+                <ChevronLeft size={18} aria-hidden="true" /> Zurück
+              </button>
+            ) : (
+              <Link href="/service" className="sv-link-btn" style={{ textDecoration: 'none', alignSelf: 'flex-start' }}>
+                <ChevronLeft size={18} aria-hidden="true" /> Alle Anliegen
+              </Link>
+            )}
+            <ol className="sv-steps" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+              {stepNames.map((name, i) => (
+                <li key={name} aria-current={i + 1 === step ? 'step' : undefined} style={{ display: 'flex', gap: 8 }}>
+                  {i > 0 && <span aria-hidden="true">·</span>}
+                  {name}
+                </li>
+              ))}
+            </ol>
+          </div>
         )}
 
         <div className={fadeClass}>
 
           {step === 1 && (
-            <div>
-              <div className="text-center mb-6">
-                <p className="ergo-eyebrow">ERGO Agentur Stübe · Kfz-Service</p>
-                <h1 className="text-[30px] md:text-[40px] leading-[1.25] mb-2">Was benötigen Sie?</h1>
-                <p className="text-sm text-ergo-stone">Morino Stübe stellt Ihnen die Unterlagen schnell und unkompliziert aus.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <h1 className="sv-h1">Was <em>benötigen</em> Sie?</h1>
+              <p style={{ margin: 0, color: 'var(--sv-body)' }}>Morino Stübe stellt Ihnen die Unterlagen unkompliziert aus.</p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {([
+                  {
+                    type: 'evb' as const, Icon: Car, title: 'eVB-Nummer (Kfz)',
+                    desc: 'Elektronische Versicherungsbestätigung für die Kfz-Zulassungsstelle (Auto, Motorrad ab 50ccm)',
+                    points: ['Für An- und Ummeldung', '7-stelliger Code für Behörde'],
+                  },
+                  {
+                    type: 'kennzeichen' as const, Icon: Bike, title: 'Versicherungskennzeichen',
+                    desc: 'Für Roller, Moped, Mofa, E-Scooter & Kleinkrafträder bis 50ccm',
+                    points: ['Kein Gang zur Zulassungsstelle', 'Kennzeichen direkt vom Berater', 'Gültig bis 28.02.2027'],
+                  },
+                ]).map(({ type, Icon, title, desc, points }) => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => handleSelectType(type)}
+                    aria-pressed={selectedType === type}
+                    className="sv-tile"
+                    style={{ border: 'none', font: 'inherit', color: 'var(--sv-ink)', textAlign: 'left', cursor: 'pointer', gap: 12 }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+                      <Icon size={26} strokeWidth={1.7} aria-hidden="true" style={{ flexShrink: 0, color: 'var(--sv-accent)' }} />
+                      <span style={{ flex: 1 }}>
+                        <span className="sv-row-title">{title}</span>
+                        <span className="sv-row-desc">{desc}</span>
+                      </span>
+                      <ArrowRight size={18} aria-hidden="true" style={{ flexShrink: 0, marginTop: 3 }} />
+                    </span>
+                    <ul style={{ margin: 0, padding: '0 0 0 40px', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4, fontSize: 14, color: 'var(--sv-body)' }}>
+                      {points.map(p => (
+                        <li key={p} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <Check size={15} aria-hidden="true" style={{ color: 'var(--sv-ok)', flexShrink: 0 }} /> {p}
+                        </li>
+                      ))}
+                    </ul>
+                  </button>
+                ))}
               </div>
 
-              <div className="flex flex-col gap-4">
-                <button
-                  onClick={() => handleSelectType('evb')}
-                  className="ergo-option p-5 text-left"
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="ergo-icon-disc w-10 h-10 shrink-0"><CarFront className="w-4 h-4" /></span>
-                    <div>
-                      <h3 className="font-sans font-bold text-ergo-ink text-base">eVB-Nummer (Kfz)</h3>
-                      <p className="text-xs text-ergo-stone">Elektronische Versicherungsbestätigung für die Kfz-Zulassungsstelle (Auto, Motorrad ab 50ccm)</p>
-                    </div>
-                  </div>
-                  <ul className="ergo-check-list text-sm text-ergo-stone ml-1">
-                    <li>Für An- und Ummeldung</li>
-                    <li>7-stelliger Code für Behörde</li>
-                    <li>Sofort nach Antragsstellung</li>
-                  </ul>
-                </button>
+              {renderNote(<>Das aktuelle Versicherungskennzeichen 2026/2027 ist <strong>SCHWARZ</strong>. Es gilt vom 01.03.2026 bis 28.02.2027.</>)}
 
-                <button
-                  onClick={() => handleSelectType('kennzeichen')}
-                  className="ergo-option p-5 text-left"
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="ergo-icon-disc w-10 h-10 shrink-0"><Tag className="w-4 h-4" /></span>
-                    <div>
-                      <h3 className="font-sans font-bold text-ergo-ink text-base">Versicherungskennzeichen</h3>
-                      <p className="text-xs text-ergo-stone">Für Roller, Moped, Mofa, E-Scooter & Kleinkrafträder bis 50ccm</p>
-                    </div>
-                  </div>
-                  <ul className="ergo-check-list text-sm text-ergo-stone ml-1">
-                    <li>Kein Gang zur Zulassungsstelle</li>
-                    <li>Kennzeichen direkt vom Berater</li>
-                    <li>Gültig bis 28.02.2027</li>
-                  </ul>
-                </button>
-              </div>
-
-              <div className="mt-5 bg-ergo-gray border border-ergo-line rounded-lg p-4 text-sm text-ergo-ink flex items-start gap-2">
-                <Info className="w-4 h-4 text-ergo-red shrink-0 mt-0.5" />
-                <span>Das aktuelle Versicherungskennzeichen 2026/2027 ist <strong>SCHWARZ</strong>. Es gilt vom 01.03.2026 bis 28.02.2027.</span>
-              </div>
-
-              <details className="mt-4 bg-white border border-ergo-line rounded-lg overflow-hidden">
-                <summary className="p-4 text-sm font-semibold text-ergo-ink cursor-pointer hover:bg-ergo-gray transition-colors">
-                  <HelpCircle className="w-4 h-4 text-ergo-red inline-block mr-1 -mt-0.5" /> Was ist eine eVB-Nummer?
+              <details className="sv-card" style={{ padding: 0 }}>
+                <summary style={{ padding: '14px 20px', minHeight: 48, display: 'flex', alignItems: 'center', fontWeight: 600, cursor: 'pointer' }}>
+                  Was ist eine eVB-Nummer?
                 </summary>
-                <div className="px-4 pb-4 text-xs text-ergo-stone leading-relaxed">
+                <p style={{ margin: 0, padding: '0 20px 18px', fontSize: 15, lineHeight: 1.6, color: 'var(--sv-body)' }}>
                   Die <strong>eVB (elektronische Versicherungsbestätigung)</strong> ist ein 7-stelliger Code, den Sie für die Kfz-Zulassungsstelle benötigen. Sie ersetzt die frühere Doppelkarte und bestätigt, dass Ihr Fahrzeug haftpflichtversichert ist. Die eVB wird für Neuzulassungen, Ummeldungen und Halterwechsel benötigt.
-                </div>
+                </p>
               </details>
-
-              <div className="mt-6 text-center">
-                <Link href="/" className="ergo-link text-sm">Zurück zur Startseite</Link>
-              </div>
             </div>
           )}
 
           {step === 2 && selectedType === 'evb' && (
-            <div>
-              <h2 className="text-[22px] mb-1 flex items-center gap-2"><CarFront className="w-5 h-5 text-ergo-red shrink-0" /> eVB-Nummer anfordern</h2>
-              <p className="text-sm text-ergo-stone mb-4">Bitte füllen Sie alle Pflichtfelder (*) aus.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <h1 className="sv-h1">eVB-Nummer <em>anfordern</em></h1>
 
-              <div className="bg-ergo-gray border border-ergo-line rounded-lg p-4 mb-5 text-sm text-ergo-ink flex items-start gap-2">
-                <Info className="w-4 h-4 text-ergo-red shrink-0 mt-0.5" />
-                <span><strong>Bitte beachten:</strong> Die eVB-Nummer kann nur im Zusammenhang mit dem Abschluss einer Kfz-Versicherung ausgestellt werden. Morino Stübe meldet sich nach Eingang Ihrer Anfrage umgehend bei Ihnen.</span>
+              {renderNote(<><strong>Bitte beachten:</strong> Die eVB-Nummer kann nur im Zusammenhang mit dem Abschluss einer Kfz-Versicherung ausgestellt werden. Morino Stübe meldet sich nach Eingang Ihrer Anfrage bei Ihnen.</>)}
+
+              {personalCard}
+
+              <div className="sv-card" style={cardStyle}>
+                <h2 className="sv-section-title" style={{ marginTop: 0 }}>Fahrzeugdaten</h2>
+                {renderSelect('fahrzeugart', 'Fahrzeugart', opts(['PKW', 'Motorrad (ab 50ccm)', 'LKW', 'Sonstiges']))}
+                {renderField('fahrzeughersteller', 'Fahrzeughersteller', { placeholder: 'z. B. VW, BMW, Mercedes' })}
+                {renderField('fahrzeugmodell', 'Fahrzeugmodell', { placeholder: 'z. B. Golf, 3er, A-Klasse' })}
+                {renderField('erstzulassung', 'Erstzulassung', { type: 'date', required: false })}
+                {renderField('fin', 'FIN (Fahrzeug-Identifizierungsnummer)', { placeholder: '17-stellige FIN aus Fahrzeugschein', required: false, extra: { autoCapitalize: 'characters', autoComplete: 'off' } })}
+                {renderField('bisherigVersicherer', 'Bisheriger Versicherer', { required: false })}
+                {renderField('bisherigSfKlasse', 'Bisherige SF-Klasse', { placeholder: 'z. B. SF 12', required: false })}
               </div>
 
-              <div className="ergo-card p-5 sm:p-6 flex flex-col gap-4">
-                <p className="ergo-eyebrow">Persönliche Daten</p>
+              <div className="sv-card" style={cardStyle}>
+                <h2 className="sv-section-title" style={{ marginTop: 0 }}>Versicherung</h2>
+                {renderSelect('jaehrlicheFahrleistung', 'Jährliche Fahrleistung', opts(['bis 5.000 km', '5.000–10.000 km', '10.000–15.000 km', '15.000–20.000 km', 'über 20.000 km']))}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1" data-field="vorname">
-                    <label className="text-sm font-semibold text-ergo-ink">Vorname *</label>
-                    <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} autoComplete="given-name" enterKeyHint="next" />
-                    {errors.vorname && <span className="text-xs text-ergo-red">{errors.vorname}</span>}
-                  </div>
-                  <div className="flex flex-col gap-1" data-field="nachname">
-                    <label className="text-sm font-semibold text-ergo-ink">Nachname *</label>
-                    <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} autoComplete="family-name" enterKeyHint="next" />
-                    {errors.nachname && <span className="text-xs text-ergo-red">{errors.nachname}</span>}
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="geburtsdatum">
-                  <label className="text-sm font-semibold text-ergo-ink">Geburtsdatum *</label>
-                  <input type="date" value={formData.geburtsdatum} onChange={e => updateField('geburtsdatum', e.target.value)} className={inputCls('geburtsdatum')} autoComplete="bday" />
-                  {errors.geburtsdatum && <span className="text-xs text-ergo-red">{errors.geburtsdatum}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="strasse">
-                  <label className="text-sm font-semibold text-ergo-ink">Straße + Hausnummer *</label>
-                  <input type="text" value={formData.strasse} onChange={e => updateField('strasse', e.target.value)} className={inputCls('strasse')} autoComplete="street-address" enterKeyHint="next" />
-                  {errors.strasse && <span className="text-xs text-ergo-red">{errors.strasse}</span>}
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1" data-field="plz">
-                    <label className="text-sm font-semibold text-ergo-ink">PLZ *</label>
-                    <input type="text" inputMode="numeric" value={formData.plz} onChange={e => updateField('plz', e.target.value)} maxLength={5} className={inputCls('plz')} autoComplete="postal-code" enterKeyHint="next" />
-                    {errors.plz && <span className="text-xs text-ergo-red">{errors.plz}</span>}
-                  </div>
-                  <div className="flex flex-col gap-1" data-field="ort">
-                    <label className="text-sm font-semibold text-ergo-ink">Ort *</label>
-                    <input type="text" value={formData.ort} onChange={e => updateField('ort', e.target.value)} className={inputCls('ort')} autoComplete="address-level2" enterKeyHint="next" />
-                    {errors.ort && <span className="text-xs text-ergo-red">{errors.ort}</span>}
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="email">
-                  <label className="text-sm font-semibold text-ergo-ink">E-Mail *</label>
-                  <input type="email" inputMode="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} autoComplete="email" enterKeyHint="next" />
-                  {errors.email && <span className="text-xs text-ergo-red">{errors.email}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="telefon">
-                  <label className="text-sm font-semibold text-ergo-ink">Telefon *</label>
-                  <input type="tel" inputMode="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} autoComplete="tel" enterKeyHint="next" />
-                  {errors.telefon && <span className="text-xs text-ergo-red">{errors.telefon}</span>}
-                </div>
-
-                <div className="border-t border-ergo-line pt-4 mt-2">
-                  <p className="ergo-eyebrow mb-4">Fahrzeugdaten</p>
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="fahrzeugart">
-                  <label className="text-sm font-semibold text-ergo-ink">Fahrzeugart *</label>
-                  <select value={formData.fahrzeugart} onChange={e => updateField('fahrzeugart', e.target.value)} className={`${inputCls('fahrzeugart')} bg-white`}>
-                    <option value="">Bitte auswählen</option>
-                    <option value="PKW">PKW</option>
-                    <option value="Motorrad (ab 50ccm)">Motorrad (ab 50ccm)</option>
-                    <option value="LKW">LKW</option>
-                    <option value="Sonstiges">Sonstiges</option>
-                  </select>
-                  {errors.fahrzeugart && <span className="text-xs text-ergo-red">{errors.fahrzeugart}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="fahrzeughersteller">
-                  <label className="text-sm font-semibold text-ergo-ink">Fahrzeughersteller *</label>
-                  <input type="text" value={formData.fahrzeughersteller} onChange={e => updateField('fahrzeughersteller', e.target.value)} placeholder="z.B. VW, BMW, Mercedes..." className={inputCls('fahrzeughersteller')} />
-                  {errors.fahrzeughersteller && <span className="text-xs text-ergo-red">{errors.fahrzeughersteller}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="fahrzeugmodell">
-                  <label className="text-sm font-semibold text-ergo-ink">Fahrzeugmodell *</label>
-                  <input type="text" value={formData.fahrzeugmodell} onChange={e => updateField('fahrzeugmodell', e.target.value)} placeholder="z.B. Golf, 3er, A-Klasse..." className={inputCls('fahrzeugmodell')} />
-                  {errors.fahrzeugmodell && <span className="text-xs text-ergo-red">{errors.fahrzeugmodell}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-ergo-ink">Erstzulassung</label>
-                  <input type="date" value={formData.erstzulassung} onChange={e => updateField('erstzulassung', e.target.value)} className={inputCls('erstzulassung')} />
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-ergo-ink">FIN (Fahrzeug-Identifizierungsnummer)</label>
-                  <input type="text" value={formData.fin} onChange={e => updateField('fin', e.target.value)} placeholder="17-stellige FIN aus Fahrzeugschein" className={inputCls('fin')} />
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-ergo-ink">Bisheriger Versicherer</label>
-                  <input type="text" value={formData.bisherigVersicherer} onChange={e => updateField('bisherigVersicherer', e.target.value)} className={inputCls('bisherigVersicherer')} />
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-ergo-ink">Bisherige SF-Klasse</label>
-                  <input type="text" value={formData.bisherigSfKlasse} onChange={e => updateField('bisherigSfKlasse', e.target.value)} placeholder="z.B. SF 12" className={inputCls('bisherigSfKlasse')} />
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="jaehrlicheFahrleistung">
-                  <label className="text-sm font-semibold text-ergo-ink">Jährliche Fahrleistung *</label>
-                  <select value={formData.jaehrlicheFahrleistung} onChange={e => updateField('jaehrlicheFahrleistung', e.target.value)} className={`${inputCls('jaehrlicheFahrleistung')} bg-white`}>
-                    <option value="">Bitte auswählen</option>
-                    <option value="bis 5.000 km">bis 5.000 km</option>
-                    <option value="5.000–10.000 km">5.000–10.000 km</option>
-                    <option value="10.000–15.000 km">10.000–15.000 km</option>
-                    <option value="15.000–20.000 km">15.000–20.000 km</option>
-                    <option value="über 20.000 km">über 20.000 km</option>
-                  </select>
-                  {errors.jaehrlicheFahrleistung && <span className="text-xs text-ergo-red">{errors.jaehrlicheFahrleistung}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="hauptfahrer">
-                  <label className="text-sm font-semibold text-ergo-ink">Hauptfahrer *</label>
+                <div className="sv-field" data-field="hauptfahrer" role="group" aria-labelledby="l-hauptfahrer">
+                  <span className="sv-label" id="l-hauptfahrer">Hauptfahrer</span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => updateField('hauptfahrer', 'selbst')}
-                      className={`ergo-option p-3 text-sm font-semibold text-ergo-ink ${
-                        formData.hauptfahrer === 'selbst'
-                          ? 'selected'
-                          : ''
-                      }`}
-                    >
-                      Versicherungsnehmer selbst
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => updateField('hauptfahrer', 'andere')}
-                      className={`ergo-option p-3 text-sm font-semibold text-ergo-ink ${
-                        formData.hauptfahrer === 'andere'
-                          ? 'selected'
-                          : ''
-                      }`}
-                    >
-                      Andere Person
-                    </button>
+                    {renderChoice(formData.hauptfahrer === 'selbst', () => updateField('hauptfahrer', 'selbst'), 'Versicherungsnehmer selbst')}
+                    {renderChoice(formData.hauptfahrer === 'andere', () => updateField('hauptfahrer', 'andere'), 'Andere Person')}
                   </div>
                 </div>
 
                 {formData.hauptfahrer === 'andere' && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-1" data-field="hauptfahrerName">
-                      <label className="text-sm font-semibold text-ergo-ink">Name des Hauptfahrers *</label>
-                      <input type="text" value={formData.hauptfahrerName} onChange={e => updateField('hauptfahrerName', e.target.value)} className={inputCls('hauptfahrerName')} />
-                      {errors.hauptfahrerName && <span className="text-xs text-ergo-red">{errors.hauptfahrerName}</span>}
-                    </div>
-                    <div className="flex flex-col gap-1" data-field="hauptfahrerGeburtsdatum">
-                      <label className="text-sm font-semibold text-ergo-ink">Geburtsdatum *</label>
-                      <input type="date" value={formData.hauptfahrerGeburtsdatum} onChange={e => updateField('hauptfahrerGeburtsdatum', e.target.value)} className={inputCls('hauptfahrerGeburtsdatum')} />
-                      {errors.hauptfahrerGeburtsdatum && <span className="text-xs text-ergo-red">{errors.hauptfahrerGeburtsdatum}</span>}
-                    </div>
+                  <div className="sv-subbox">
+                    {renderField('hauptfahrerName', 'Name des Hauptfahrers')}
+                    {renderField('hauptfahrerGeburtsdatum', 'Geburtsdatum des Hauptfahrers', { type: 'date' })}
                   </div>
                 )}
 
-                <div className="flex flex-col gap-1" data-field="versicherungsbeginn">
-                  <label className="text-sm font-semibold text-ergo-ink">Gewünschter Versicherungsbeginn *</label>
-                  <input type="date" value={formData.versicherungsbeginn} onChange={e => updateField('versicherungsbeginn', e.target.value)} min={todayISO()} className={inputCls('versicherungsbeginn')} />
-                  {errors.versicherungsbeginn && <span className="text-xs text-ergo-red">{errors.versicherungsbeginn}</span>}
-                </div>
+                {renderField('versicherungsbeginn', 'Gewünschter Versicherungsbeginn', { type: 'date', extra: { min: todayISO() } })}
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-semibold text-ergo-ink">Gewünschte Versicherungsart *</label>
-                  <label className="flex items-center gap-3 p-3 bg-ergo-gray rounded-lg cursor-not-allowed">
-                    <input type="checkbox" checked={true} disabled className="w-5 h-5 accent-ergo-red shrink-0 cursor-pointer" />
-                    <span className="text-sm text-ergo-ink">Kfz-Haftpflicht <span className="text-xs text-ergo-mute">(Pflicht)</span></span>
-                  </label>
-                  <label className="flex items-center gap-3 p-3 bg-white border border-ergo-line rounded-lg cursor-pointer hover:bg-ergo-gray">
-                    <input type="checkbox" checked={formData.versicherungsartTeilkasko} onChange={e => updateField('versicherungsartTeilkasko', e.target.checked)} className="w-5 h-5 accent-ergo-red shrink-0 cursor-pointer" />
-                    <span className="text-sm text-ergo-ink">Teilkasko</span>
-                  </label>
-                  <label className="flex items-center gap-3 p-3 bg-white border border-ergo-line rounded-lg cursor-pointer hover:bg-ergo-gray">
-                    <input type="checkbox" checked={formData.versicherungsartVollkasko} onChange={e => updateField('versicherungsartVollkasko', e.target.checked)} className="w-5 h-5 accent-ergo-red shrink-0 cursor-pointer" />
-                    <span className="text-sm text-ergo-ink">Vollkasko</span>
-                  </label>
-                  <label className="flex items-center gap-3 p-3 bg-white border border-ergo-line rounded-lg cursor-pointer hover:bg-ergo-gray">
-                    <input type="checkbox" checked={formData.versicherungsartSchutzbrief} onChange={e => updateField('versicherungsartSchutzbrief', e.target.checked)} className="w-5 h-5 accent-ergo-red shrink-0 cursor-pointer" />
-                    <span className="text-sm text-ergo-ink">Schutzbrief</span>
-                  </label>
-                </div>
+                <fieldset className="sv-field" style={{ border: 'none', margin: 0, padding: 0 }}>
+                  <legend className="sv-label" style={{ marginBottom: 8 }}>Gewünschte Versicherungsart</legend>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    <label className="sv-check" style={{ cursor: 'not-allowed' }}>
+                      <input type="checkbox" checked={true} disabled />
+                      <span>Kfz-Haftpflicht <span className="sv-hint">(Pflicht)</span></span>
+                    </label>
+                    <label className="sv-check">
+                      <input type="checkbox" checked={formData.versicherungsartTeilkasko} onChange={e => updateField('versicherungsartTeilkasko', e.target.checked)} />
+                      <span>Teilkasko</span>
+                    </label>
+                    <label className="sv-check">
+                      <input type="checkbox" checked={formData.versicherungsartVollkasko} onChange={e => updateField('versicherungsartVollkasko', e.target.checked)} />
+                      <span>Vollkasko</span>
+                    </label>
+                    <label className="sv-check">
+                      <input type="checkbox" checked={formData.versicherungsartSchutzbrief} onChange={e => updateField('versicherungsartSchutzbrief', e.target.checked)} />
+                      <span>Schutzbrief</span>
+                    </label>
+                  </div>
+                </fieldset>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-ergo-ink">Hinweise</label>
-                  <textarea value={formData.hinweise} onChange={e => updateField('hinweise', e.target.value)} rows={3} placeholder="Zusätzliche Hinweise oder Wünsche..." className={inputCls('hinweise')} />
-                </div>
-
-                <button
-                  onClick={handleStep2Next}
-                  className="ergo-btn ergo-btn--primary w-full mt-2"
-                >
-                  Weiter →
-                </button>
+                {hinweiseField}
               </div>
+
+              {step2Footer}
             </div>
           )}
 
           {step === 2 && selectedType === 'kennzeichen' && (
-            <div>
-              <h2 className="text-[22px] mb-1 flex items-center gap-2"><Tag className="w-5 h-5 text-ergo-red shrink-0" /> Versicherungskennzeichen anfordern</h2>
-              <p className="text-sm text-ergo-stone mb-4">Bitte füllen Sie alle Pflichtfelder (*) aus.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <h1 className="sv-h1">Versicherungs&shy;kennzeichen <em>anfordern</em></h1>
 
-              <div className="bg-ergo-gray border border-ergo-line rounded-lg p-4 mb-5 text-sm text-ergo-ink flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-ergo-check shrink-0 mt-0.5" />
-                <span>Das Versicherungskennzeichen erhalten Sie direkt bei Morino Stübe – kein Gang zur Zulassungsstelle nötig! Alles was Sie brauchen ist die Allgemeine Betriebserlaubnis (ABE) Ihres Fahrzeugs.</span>
+              {renderNote(<>Das Versicherungskennzeichen erhalten Sie direkt bei Morino Stübe – kein Gang zur Zulassungsstelle nötig. Alles, was Sie brauchen, ist die Allgemeine Betriebserlaubnis (ABE) Ihres Fahrzeugs.</>)}
+
+              {personalCard}
+
+              <div className="sv-card" style={{ display: 'flex', flexDirection: 'column', gap: 14 }} data-field="abeFiles">
+                <h2 className="sv-section-title" style={{ marginTop: 0 }}>ABE hochladen</h2>
+                <p className="sv-hint" style={{ margin: 0, fontSize: 14 }}>Bitte laden Sie die Allgemeine Betriebserlaubnis (ABE) Ihres Fahrzeugs hoch. Diese benötigen wir zur Ausstellung des Versicherungskennzeichens.</p>
+                <input
+                  id="abe-file-input"
+                  type="file"
+                  accept="image/*,.pdf"
+                  multiple
+                  onChange={handleAbeFileSelect}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => document.getElementById('abe-file-input')?.click()}
+                  disabled={abeFiles.length >= 5}
+                  className="sv-dropzone"
+                  aria-invalid={!!errors.abeFiles}
+                  style={errors.abeFiles ? { borderColor: 'var(--sv-error)' } : undefined}
+                >
+                  <Upload size={26} strokeWidth={1.7} aria-hidden="true" />
+                  <span style={{ fontWeight: 700 }}>ABE als Foto oder PDF auswählen</span>
+                  <span className="sv-hint">Max. 5 Dateien, je max. 10 MB</span>
+                </button>
+                {abeFiles.map((af, index) => (
+                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 12, borderTop: '1px solid var(--sv-line)', paddingTop: 10 }}>
+                    {af.preview ? (
+                      <img src={af.preview} alt="" style={{ width: 48, height: 48, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }} />
+                    ) : (
+                      <span style={{ width: 48, height: 48, borderRadius: 6, background: 'var(--sv-paper)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <FileText size={22} aria-hidden="true" />
+                      </span>
+                    )}
+                    <span style={{ flex: 1, minWidth: 0 }}>
+                      <span style={{ display: 'block', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{af.file.name}</span>
+                      <span className="sv-hint">{(af.file.size / 1024).toFixed(0)} KB</span>
+                    </span>
+                    <button type="button" onClick={() => removeAbeFile(index)} aria-label={`${af.file.name} entfernen`} style={{ width: 44, height: 44, border: 'none', background: 'none', cursor: 'pointer', color: 'var(--sv-ink)' }}>
+                      <X size={18} aria-hidden="true" />
+                    </button>
+                  </div>
+                ))}
+                {errors.abeFiles && <span className="sv-error">{errors.abeFiles}</span>}
+                <div className="sv-subbox" style={{ fontSize: 14, color: 'var(--sv-body)' }}>
+                  <span><strong>Wo finde ich die ABE?</strong> Die ABE wird beim Kauf des Fahrzeugs mitgeliefert. Sie enthält alle technischen Daten wie Hersteller, Typ, Hubraum und Höchstgeschwindigkeit. Bei Verlust kann eine Kopie beim Hersteller angefordert werden.</span>
+                </div>
               </div>
 
-              <div className="ergo-card p-5 sm:p-6 flex flex-col gap-4">
-                <p className="ergo-eyebrow">Persönliche Daten</p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1" data-field="vorname">
-                    <label className="text-sm font-semibold text-ergo-ink">Vorname *</label>
-                    <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} autoComplete="given-name" enterKeyHint="next" />
-                    {errors.vorname && <span className="text-xs text-ergo-red">{errors.vorname}</span>}
-                  </div>
-                  <div className="flex flex-col gap-1" data-field="nachname">
-                    <label className="text-sm font-semibold text-ergo-ink">Nachname *</label>
-                    <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} autoComplete="family-name" enterKeyHint="next" />
-                    {errors.nachname && <span className="text-xs text-ergo-red">{errors.nachname}</span>}
-                  </div>
+              <div className="sv-card" style={cardStyle}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <h2 className="sv-section-title" style={{ marginTop: 0 }}>Fahrzeugdaten</h2>
+                  <span className="sv-hint" style={{ fontSize: 14 }}>Alle folgenden Angaben finden Sie in der ABE Ihres Fahrzeugs.</span>
                 </div>
+                {renderSelect('fahrzeugart', 'Fahrzeugart', opts(['E-Scooter', 'Mofa / Moped / Mokick / Roller', 'Segway', 'S-Pedelec', 'Krankenfahrstuhl']))}
+                {renderField('fahrzeughersteller', 'Fahrzeughersteller')}
+                {renderField('fahrzeugmodell', 'Fahrzeugmodell')}
+                {renderField('fin', 'FIN (Fahrgestellnummer)', { placeholder: 'Fahrgestellnummer aus der ABE', extra: { autoCapitalize: 'characters', autoComplete: 'off' } })}
+                {renderSelect('hubraum', 'Hubraum', opts(['bis 25ccm', 'bis 50ccm', 'bis 125ccm (mit Führerschein A1)']), { required: false })}
+                {renderSelect('hoechstgeschwindigkeit', 'Höchstgeschwindigkeit', opts(['bis 25 km/h', 'bis 45 km/h', 'bis 60 km/h']))}
+                {renderField('erstzulassung', 'Erstzulassung / Baujahr', { placeholder: 'z. B. 2023', required: false, extra: { inputMode: 'numeric' } })}
+              </div>
 
-                <div className="flex flex-col gap-1" data-field="geburtsdatum">
-                  <label className="text-sm font-semibold text-ergo-ink">Geburtsdatum *</label>
-                  <input type="date" value={formData.geburtsdatum} onChange={e => updateField('geburtsdatum', e.target.value)} className={inputCls('geburtsdatum')} autoComplete="bday" />
-                  {errors.geburtsdatum && <span className="text-xs text-ergo-red">{errors.geburtsdatum}</span>}
-                </div>
+              <div className="sv-card" style={cardStyle}>
+                <h2 className="sv-section-title" style={{ marginTop: 0 }}>Versicherung</h2>
+                {renderSelect('versicherungsbeginn', 'Versicherungsbeginn', PREMIUM_MONTHS.map(m => ({ value: m, label: MONTH_LABELS[m] })), { hint: 'Das Versicherungsjahr läuft bis 28.02.2027' })}
 
-                <div className="flex flex-col gap-1" data-field="strasse">
-                  <label className="text-sm font-semibold text-ergo-ink">Straße + Hausnummer *</label>
-                  <input type="text" value={formData.strasse} onChange={e => updateField('strasse', e.target.value)} className={inputCls('strasse')} autoComplete="street-address" enterKeyHint="next" />
-                  {errors.strasse && <span className="text-xs text-ergo-red">{errors.strasse}</span>}
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1" data-field="plz">
-                    <label className="text-sm font-semibold text-ergo-ink">PLZ *</label>
-                    <input type="text" inputMode="numeric" value={formData.plz} onChange={e => updateField('plz', e.target.value)} maxLength={5} className={inputCls('plz')} autoComplete="postal-code" enterKeyHint="next" />
-                    {errors.plz && <span className="text-xs text-ergo-red">{errors.plz}</span>}
-                  </div>
-                  <div className="flex flex-col gap-1" data-field="ort">
-                    <label className="text-sm font-semibold text-ergo-ink">Ort *</label>
-                    <input type="text" value={formData.ort} onChange={e => updateField('ort', e.target.value)} className={inputCls('ort')} autoComplete="address-level2" enterKeyHint="next" />
-                    {errors.ort && <span className="text-xs text-ergo-red">{errors.ort}</span>}
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="email">
-                  <label className="text-sm font-semibold text-ergo-ink">E-Mail *</label>
-                  <input type="email" inputMode="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} autoComplete="email" enterKeyHint="next" />
-                  {errors.email && <span className="text-xs text-ergo-red">{errors.email}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="telefon">
-                  <label className="text-sm font-semibold text-ergo-ink">Telefon *</label>
-                  <input type="tel" inputMode="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} autoComplete="tel" enterKeyHint="next" />
-                  {errors.telefon && <span className="text-xs text-ergo-red">{errors.telefon}</span>}
-                </div>
-
-                <div className="border-t border-ergo-line pt-4 mt-2">
-                  <p className="ergo-eyebrow mb-2">ABE hochladen (Pflicht)</p>
-                  <p className="text-xs text-ergo-stone mb-3">Bitte laden Sie die Allgemeine Betriebserlaubnis (ABE) Ihres Fahrzeugs hoch. Diese benötigen wir zur Ausstellung des Versicherungskennzeichens.</p>
-                </div>
-
-                <div className="flex flex-col gap-2" data-field="abeFiles">
-                  <div
-                    className={`border-2 border-dashed rounded-lg p-5 text-center cursor-pointer transition-colors ${errors.abeFiles ? 'border-ergo-red bg-ergo-red-light' : 'border-ergo-line hover:border-ergo-red bg-white hover:bg-ergo-red-light'}`}
-                    onClick={() => document.getElementById('abe-file-input')?.click()}
-                  >
-                    <input
-                      id="abe-file-input"
-                      type="file"
-                      accept="image/*,.pdf"
-                      multiple
-                      onChange={handleAbeFileSelect}
-                      className="hidden"
-                    />
-                    <Upload className="w-7 h-7 text-ergo-red mx-auto mb-2" />
-                    <p className="text-sm font-semibold text-ergo-ink">ABE hochladen *</p>
-                    <p className="text-xs text-ergo-stone mt-1">Foto oder PDF der Allgemeinen Betriebserlaubnis</p>
-                    <p className="text-xs text-ergo-mute mt-1">Max. 5 Dateien, je max. 10 MB (Bilder oder PDF)</p>
-                  </div>
-                  {errors.abeFiles && <span className="text-xs text-ergo-red">{errors.abeFiles}</span>}
-
-                  {abeFiles.length > 0 && (
-                    <div className="flex flex-col gap-2 mt-1">
-                      {abeFiles.map((af, index) => (
-                        <div key={index} className="flex items-center gap-3 ergo-card p-3">
-                          {af.preview ? (
-                            <img src={af.preview} alt="ABE Vorschau" className="w-12 h-12 rounded object-cover flex-shrink-0" />
-                          ) : (
-                            <span className="ergo-icon-disc w-12 h-12 flex-shrink-0"><FileText className="w-5 h-5" /></span>
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-ergo-ink truncate">{af.file.name}</p>
-                            <p className="text-xs text-ergo-stone">{(af.file.size / 1024).toFixed(0)} KB</p>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => removeAbeFile(index)}
-                            className="text-ergo-red hover:text-ergo-red-hover px-2 py-1 min-h-[44px] flex items-center"
-                            aria-label="Datei entfernen"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="bg-ergo-gray border border-ergo-line rounded-lg p-3 text-xs text-ergo-stone">
-                    <strong className="text-ergo-ink">Wo finde ich die ABE?</strong> Die ABE wird beim Kauf des Fahrzeugs mitgeliefert. Sie enthält alle technischen Daten wie Hersteller, Typ, Hubraum und Höchstgeschwindigkeit. Bei Verlust kann eine Kopie beim Hersteller angefordert werden.
-                  </div>
-                </div>
-
-                <div className="border-t border-ergo-line pt-4 mt-2">
-                  <p className="ergo-eyebrow mb-2">Fahrzeugdaten (aus der ABE)</p>
-                  <p className="text-xs text-ergo-stone mb-4">Alle folgenden Angaben finden Sie in der ABE Ihres Fahrzeugs.</p>
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="fahrzeugart">
-                  <label className="text-sm font-semibold text-ergo-ink">Fahrzeugart *</label>
-                  <select value={formData.fahrzeugart} onChange={e => updateField('fahrzeugart', e.target.value)} className={`${inputCls('fahrzeugart')} bg-white`}>
-                    <option value="">Bitte auswählen</option>
-                    <option value="E-Scooter">E-Scooter</option>
-                    <option value="Mofa / Moped / Mokick / Roller">Mofa / Moped / Mokick / Roller</option>
-                    <option value="Segway">Segway</option>
-                    <option value="S-Pedelec">S-Pedelec</option>
-                    <option value="Krankenfahrstuhl">Krankenfahrstuhl</option>
-                  </select>
-                  {errors.fahrzeugart && <span className="text-xs text-ergo-red">{errors.fahrzeugart}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="fahrzeughersteller">
-                  <label className="text-sm font-semibold text-ergo-ink">Fahrzeughersteller *</label>
-                  <input type="text" value={formData.fahrzeughersteller} onChange={e => updateField('fahrzeughersteller', e.target.value)} className={inputCls('fahrzeughersteller')} />
-                  {errors.fahrzeughersteller && <span className="text-xs text-ergo-red">{errors.fahrzeughersteller}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="fahrzeugmodell">
-                  <label className="text-sm font-semibold text-ergo-ink">Fahrzeugmodell *</label>
-                  <input type="text" value={formData.fahrzeugmodell} onChange={e => updateField('fahrzeugmodell', e.target.value)} className={inputCls('fahrzeugmodell')} />
-                  {errors.fahrzeugmodell && <span className="text-xs text-ergo-red">{errors.fahrzeugmodell}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="fin">
-                  <label className="text-sm font-semibold text-ergo-ink">FIN (Fahrgestellnummer) *</label>
-                  <input type="text" value={formData.fin} onChange={e => updateField('fin', e.target.value)} placeholder="Fahrgestellnummer aus der ABE" className={inputCls('fin')} />
-                  {errors.fin && <span className="text-xs text-ergo-red">{errors.fin}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-ergo-ink">Hubraum</label>
-                  <select value={formData.hubraum} onChange={e => updateField('hubraum', e.target.value)} className={`${inputCls('hubraum')} bg-white`}>
-                    <option value="">Bitte auswählen</option>
-                    <option value="bis 25ccm">bis 25ccm</option>
-                    <option value="bis 50ccm">bis 50ccm</option>
-                    <option value="bis 125ccm (mit Führerschein A1)">bis 125ccm (mit Führerschein A1)</option>
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="hoechstgeschwindigkeit">
-                  <label className="text-sm font-semibold text-ergo-ink">Höchstgeschwindigkeit *</label>
-                  <select value={formData.hoechstgeschwindigkeit} onChange={e => updateField('hoechstgeschwindigkeit', e.target.value)} className={`${inputCls('hoechstgeschwindigkeit')} bg-white`}>
-                    <option value="">Bitte auswählen</option>
-                    <option value="bis 25 km/h">bis 25 km/h</option>
-                    <option value="bis 45 km/h">bis 45 km/h</option>
-                    <option value="bis 60 km/h">bis 60 km/h</option>
-                  </select>
-                  {errors.hoechstgeschwindigkeit && <span className="text-xs text-ergo-red">{errors.hoechstgeschwindigkeit}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-ergo-ink">Erstzulassung / Baujahr</label>
-                  <input type="text" value={formData.erstzulassung} onChange={e => updateField('erstzulassung', e.target.value)} placeholder="z.B. 2023" className={inputCls('erstzulassung')} />
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="versicherungsbeginn">
-                  <label className="text-sm font-semibold text-ergo-ink">Versicherungsbeginn *</label>
-                  <select value={formData.versicherungsbeginn} onChange={e => updateField('versicherungsbeginn', e.target.value)} className={`${inputCls('versicherungsbeginn')} bg-white`}>
-                    <option value="">Bitte auswählen</option>
-                    {PREMIUM_MONTHS.map(m => (
-                      <option key={m} value={m}>{MONTH_LABELS[m]}</option>
-                    ))}
-                  </select>
-                  <p className="text-xs text-ergo-stone">Das Versicherungsjahr läuft bis 28.02.2027</p>
-                  {errors.versicherungsbeginn && <span className="text-xs text-ergo-red">{errors.versicherungsbeginn}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1" data-field="bisherigVersichert">
-                  <label className="text-sm font-semibold text-ergo-ink">Bisherige Versicherung vorhanden?</label>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => updateField('bisherigVersichert', 'ja')}
-                      className={`ergo-option px-4 py-2 text-sm font-semibold text-ergo-ink ${
-                        formData.bisherigVersichert === 'ja'
-                          ? 'selected'
-                          : ''
-                      }`}
-                    >
-                      Ja
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => updateField('bisherigVersichert', 'nein')}
-                      className={`ergo-option px-4 py-2 text-sm font-semibold text-ergo-ink ${
-                        formData.bisherigVersichert === 'nein'
-                          ? 'selected'
-                          : ''
-                      }`}
-                    >
-                      Nein (Neuanmeldung)
-                    </button>
+                <div className="sv-field" data-field="bisherigVersichert" role="group" aria-labelledby="l-bisherigVersichert">
+                  <span className="sv-label" id="l-bisherigVersichert">Bisherige Versicherung vorhanden?</span>
+                  <div className="grid grid-cols-2 gap-3">
+                    {renderChoice(formData.bisherigVersichert === 'ja', () => updateField('bisherigVersichert', 'ja'), 'Ja')}
+                    {renderChoice(formData.bisherigVersichert === 'nein', () => updateField('bisherigVersichert', 'nein'), 'Nein', 'Neuanmeldung')}
                   </div>
                 </div>
 
                 {formData.bisherigVersichert === 'ja' && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-1" data-field="bisherigVersicherer">
-                      <label className="text-sm font-semibold text-ergo-ink">Bisheriger Versicherer *</label>
-                      <input type="text" value={formData.bisherigVersicherer} onChange={e => updateField('bisherigVersicherer', e.target.value)} className={inputCls('bisherigVersicherer')} />
-                      {errors.bisherigVersicherer && <span className="text-xs text-ergo-red">{errors.bisherigVersicherer}</span>}
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Bisheriges Kennzeichen</label>
-                      <input type="text" value={formData.bisherigesKennzeichen} onChange={e => updateField('bisherigesKennzeichen', e.target.value)} className={inputCls('bisherigesKennzeichen')} />
-                    </div>
+                  <div className="sv-subbox">
+                    {renderField('bisherigVersicherer', 'Bisheriger Versicherer')}
+                    {renderField('bisherigesKennzeichen', 'Bisheriges Kennzeichen', { required: false, extra: { autoCapitalize: 'characters' } })}
                   </div>
                 )}
 
-                <div className="flex flex-col gap-1" data-field="versicherungsumfang">
-                  <label className="text-sm font-semibold text-ergo-ink">Versicherungsumfang *</label>
-                  <div className="grid grid-cols-1 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => updateField('versicherungsumfang', 'haftpflicht')}
-                      className={`ergo-option p-4 text-left ${
-                        formData.versicherungsumfang === 'haftpflicht'
-                          ? 'selected'
-                          : ''
-                      }`}
-                    >
-                      <span className="font-semibold text-sm">Nur Haftpflicht</span>
-                      <p className="text-xs mt-1 text-ergo-stone">gesetzlich vorgeschrieben</p>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => updateField('versicherungsumfang', 'haftpflicht_teilkasko')}
-                      className={`ergo-option p-4 text-left ${
-                        formData.versicherungsumfang === 'haftpflicht_teilkasko'
-                          ? 'selected'
-                          : ''
-                      }`}
-                    >
-                      <span className="font-semibold text-sm">Haftpflicht + Teilkasko inkl. Diebstahlschutz</span>
-                      <p className="text-xs mt-1 text-ergo-stone">empfohlen, 150 € SB je Schadenfall</p>
-                    </button>
+                <div className="sv-field" data-field="versicherungsumfang" role="group" aria-labelledby="l-versicherungsumfang">
+                  <span className="sv-label" id="l-versicherungsumfang">Versicherungsumfang</span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {renderChoice(formData.versicherungsumfang === 'haftpflicht', () => updateField('versicherungsumfang', 'haftpflicht'), 'Nur Haftpflicht', 'gesetzlich vorgeschrieben')}
+                    {renderChoice(formData.versicherungsumfang === 'haftpflicht_teilkasko', () => updateField('versicherungsumfang', 'haftpflicht_teilkasko'), 'Haftpflicht + Teilkasko inkl. Diebstahlschutz', 'empfohlen, 150 € SB je Schadenfall')}
                   </div>
-                  {errors.versicherungsumfang && <span className="text-xs text-ergo-red">{errors.versicherungsumfang}</span>}
+                  {errors.versicherungsumfang && <span className="sv-error">{errors.versicherungsumfang}</span>}
                 </div>
 
                 {currentPremium !== null && (
-                  <div className="bg-ergo-red-light border border-ergo-red/30 rounded-lg p-5">
-                    <p className="ergo-eyebrow mb-3">Ihr Beitrag</p>
-                    <div className="flex flex-col gap-2 text-sm text-ergo-ink">
-                      <div className="flex justify-between">
-                        <span>Fahrzeugtyp</span>
-                        <span className="font-semibold">{formData.fahrzeugart}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Versicherungsumfang</span>
-                        <span className="font-semibold">{formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko inkl. Diebstahlschutz'}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Zeitraum</span>
-                        <span className="font-semibold">{getVersicherungszeitraum(formData.versicherungsbeginn)}</span>
-                      </div>
-                      <div className="border-t border-ergo-red/30 pt-3 mt-1 flex justify-between items-center">
-                        <span className="font-bold text-base">Beitrag</span>
-                        <span className="font-extrabold text-2xl text-ergo-red">{currentPremium.toFixed(2).replace('.', ',')} €</span>
-                      </div>
+                  <div className="sv-subbox" aria-live="polite">
+                    <span className="sv-group-title" style={{ margin: 0 }}>Ihr Beitrag</span>
+                    <dl className="sv-dl">
+                      <dt>Fahrzeugtyp</dt><dd>{formData.fahrzeugart}</dd>
+                      <dt>Umfang</dt><dd>{umfangLabel}</dd>
+                      <dt>Zeitraum</dt><dd>{getVersicherungszeitraum(formData.versicherungsbeginn)}</dd>
+                    </dl>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderTop: '1px solid var(--sv-line)', paddingTop: 12 }}>
+                      <span style={{ fontWeight: 700 }}>Beitrag</span>
+                      <span className="sv-ref">{currentPremium.toFixed(2).replace('.', ',')} €</span>
                     </div>
-                    <p className="text-xs text-ergo-stone mt-3">Versicherungssumme: 100 Mio. € pauschal</p>
+                    <span className="sv-hint">Versicherungssumme: 100 Mio. € pauschal</span>
                     {formData.versicherungsumfang === 'haftpflicht_teilkasko' && (
-                      <p className="text-xs text-ergo-stone mt-1">Teilkasko: 150 € Selbstbeteiligung je Schadenfall. Bei Totalentwendung des Fahrzeugs gilt eine Selbstbeteiligung von 300 €.</p>
+                      <span className="sv-hint">Teilkasko: 150 € Selbstbeteiligung je Schadenfall. Bei Totalentwendung des Fahrzeugs gilt eine Selbstbeteiligung von 300 €.</span>
                     )}
                   </div>
                 )}
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-ergo-ink">Hinweise</label>
-                  <textarea value={formData.hinweise} onChange={e => updateField('hinweise', e.target.value)} rows={3} placeholder="Zusätzliche Hinweise oder Wünsche..." className={inputCls('hinweise')} />
-                </div>
-
-                <button
-                  onClick={handleStep2Next}
-                  className="ergo-btn ergo-btn--primary w-full mt-2"
-                >
-                  Weiter →
-                </button>
+                {hinweiseField}
               </div>
+
+              {step2Footer}
             </div>
           )}
 
           {step === 3 && selectedType && (
-            <div>
-              <h2 className="text-[22px] mb-1">Zusammenfassung</h2>
-              <p className="text-sm text-ergo-stone mb-5">Bitte prüfen Sie Ihre Angaben vor dem Absenden.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <h1 className="sv-h1">Bitte <em>prüfen</em> Sie Ihre Angaben</h1>
 
-              <div className="ergo-card p-5 flex flex-col gap-4 mb-5">
-                <div>
-                  <p className="ergo-eyebrow mb-2">Antragsart</p>
-                  <p className="text-sm text-ergo-ink font-semibold flex items-center gap-2">
-                    {selectedType === 'evb' ? <CarFront className="w-4 h-4 text-ergo-red shrink-0" /> : <Tag className="w-4 h-4 text-ergo-red shrink-0" />}
-                    {selectedType === 'evb' ? 'eVB-Nummer (Kfz)' : 'Versicherungskennzeichen'}
-                  </p>
-                </div>
+              <div className="sv-card" style={cardStyle}>
+                <h2 className="sv-section-title" style={{ marginTop: 0 }}>{selectedType === 'evb' ? 'eVB-Nummer (Kfz)' : 'Versicherungskennzeichen'}</h2>
 
-                <div>
-                  <p className="ergo-eyebrow mb-2">Persönliche Daten</p>
-                  <div className="flex flex-col gap-1.5 text-sm text-ergo-ink">
-                    <p><span className="font-semibold">Name:</span> {formData.vorname} {formData.nachname}</p>
-                    <p><span className="font-semibold">Geburtsdatum:</span> {formatDateDE(formData.geburtsdatum)}</p>
-                    <p><span className="font-semibold">Adresse:</span> {formData.strasse}, {formData.plz} {formData.ort}</p>
-                    <p><span className="font-semibold">E-Mail:</span> {formData.email}</p>
-                    <p><span className="font-semibold">Telefon:</span> {formData.telefon}</p>
-                  </div>
-                </div>
+                <span className="sv-group-title" style={{ margin: 0 }}>Persönliche Daten</span>
+                <dl className="sv-dl">
+                  <dt>Name</dt><dd>{formData.vorname} {formData.nachname}</dd>
+                  <dt>Geburtsdatum</dt><dd>{formatDateDE(formData.geburtsdatum)}</dd>
+                  <dt>Adresse</dt><dd>{formData.strasse}, {formData.plz} {formData.ort}</dd>
+                  <dt>E-Mail</dt><dd style={{ wordBreak: 'break-all' }}>{formData.email}</dd>
+                  <dt>Telefon</dt><dd>{formData.telefon}</dd>
+                </dl>
 
-                <div>
-                  <p className="ergo-eyebrow mb-2">Fahrzeugdaten</p>
-                  <div className="flex flex-col gap-1.5 text-sm text-ergo-ink">
-                    <p><span className="font-semibold">Fahrzeugart:</span> {formData.fahrzeugart}</p>
-                    <p><span className="font-semibold">Hersteller:</span> {formData.fahrzeughersteller}</p>
-                    <p><span className="font-semibold">Modell:</span> {formData.fahrzeugmodell}</p>
-                    {formData.fin && <p><span className="font-semibold">FIN:</span> {formData.fin}</p>}
-                    {formData.erstzulassung && <p><span className="font-semibold">Erstzulassung:</span> {selectedType === 'evb' ? formatDateDE(formData.erstzulassung) : formData.erstzulassung}</p>}
-                    {selectedType === 'kennzeichen' && formData.hubraum && <p><span className="font-semibold">Hubraum:</span> {formData.hubraum}</p>}
-                    {selectedType === 'kennzeichen' && <p><span className="font-semibold">Höchstgeschwindigkeit:</span> {formData.hoechstgeschwindigkeit}</p>}
-                  </div>
-                </div>
+                <span className="sv-group-title" style={{ margin: 0 }}>Fahrzeugdaten</span>
+                <dl className="sv-dl">
+                  <dt>Fahrzeugart</dt><dd>{formData.fahrzeugart}</dd>
+                  <dt>Hersteller</dt><dd>{formData.fahrzeughersteller}</dd>
+                  <dt>Modell</dt><dd>{formData.fahrzeugmodell}</dd>
+                  {formData.fin && <><dt>FIN</dt><dd style={{ wordBreak: 'break-all' }}>{formData.fin}</dd></>}
+                  {formData.erstzulassung && <><dt>Erstzulassung</dt><dd>{selectedType === 'evb' ? formatDateDE(formData.erstzulassung) : formData.erstzulassung}</dd></>}
+                  {selectedType === 'kennzeichen' && formData.hubraum && <><dt>Hubraum</dt><dd>{formData.hubraum}</dd></>}
+                  {selectedType === 'kennzeichen' && <><dt>Höchstgeschwindigkeit</dt><dd>{formData.hoechstgeschwindigkeit}</dd></>}
+                </dl>
 
-                <div>
-                  <p className="ergo-eyebrow mb-2">Versicherung</p>
-                  <div className="flex flex-col gap-1.5 text-sm text-ergo-ink">
-                    <p><span className="font-semibold">Versicherungsbeginn:</span> {formatDateDE(formData.versicherungsbeginn)}</p>
-                    {selectedType === 'evb' && (
-                      <>
-                        <p><span className="font-semibold">Fahrleistung:</span> {formData.jaehrlicheFahrleistung}</p>
-                        <p><span className="font-semibold">Hauptfahrer:</span> {formData.hauptfahrer === 'selbst' ? 'Versicherungsnehmer selbst' : formData.hauptfahrerName}</p>
-                        <p><span className="font-semibold">Versicherungsart:</span> {
-                          ['Kfz-Haftpflicht',
-                            ...(formData.versicherungsartTeilkasko ? ['Teilkasko'] : []),
-                            ...(formData.versicherungsartVollkasko ? ['Vollkasko'] : []),
-                            ...(formData.versicherungsartSchutzbrief ? ['Schutzbrief'] : []),
-                          ].join(', ')
-                        }</p>
-                        {formData.bisherigVersicherer && <p><span className="font-semibold">Bisheriger Versicherer:</span> {formData.bisherigVersicherer}</p>}
-                        {formData.bisherigSfKlasse && <p><span className="font-semibold">SF-Klasse:</span> {formData.bisherigSfKlasse}</p>}
-                      </>
-                    )}
-                    {selectedType === 'kennzeichen' && (
-                      <>
-                        <p><span className="font-semibold">Versicherungsumfang:</span> {formData.versicherungsumfang === 'haftpflicht' ? 'Nur Haftpflicht' : 'Haftpflicht + Teilkasko inkl. Diebstahlschutz'}</p>
-                        {currentPremium !== null && (
-                          <>
-                            <p><span className="font-semibold">Zeitraum:</span> {getVersicherungszeitraum(formData.versicherungsbeginn)}</p>
-                            <p><span className="font-semibold">Beitrag:</span> <span className="text-ergo-red font-bold">{currentPremium.toFixed(2).replace('.', ',')} €</span></p>
-                          </>
-                        )}
-                        {formData.bisherigVersichert === 'ja' && formData.bisherigVersicherer && (
-                          <p><span className="font-semibold">Bisheriger Versicherer:</span> {formData.bisherigVersicherer}</p>
-                        )}
-                      </>
-                    )}
-                  </div>
-                </div>
+                <span className="sv-group-title" style={{ margin: 0 }}>Versicherung</span>
+                <dl className="sv-dl">
+                  <dt>Versicherungsbeginn</dt><dd>{formatDateDE(formData.versicherungsbeginn)}</dd>
+                  {selectedType === 'evb' && (
+                    <>
+                      <dt>Fahrleistung</dt><dd>{formData.jaehrlicheFahrleistung}</dd>
+                      <dt>Hauptfahrer</dt><dd>{formData.hauptfahrer === 'selbst' ? 'Versicherungsnehmer selbst' : formData.hauptfahrerName}</dd>
+                      <dt>Versicherungsart</dt><dd>{
+                        ['Kfz-Haftpflicht',
+                          ...(formData.versicherungsartTeilkasko ? ['Teilkasko'] : []),
+                          ...(formData.versicherungsartVollkasko ? ['Vollkasko'] : []),
+                          ...(formData.versicherungsartSchutzbrief ? ['Schutzbrief'] : []),
+                        ].join(', ')
+                      }</dd>
+                      {formData.bisherigVersicherer && <><dt>Bisheriger Versicherer</dt><dd>{formData.bisherigVersicherer}</dd></>}
+                      {formData.bisherigSfKlasse && <><dt>SF-Klasse</dt><dd>{formData.bisherigSfKlasse}</dd></>}
+                    </>
+                  )}
+                  {selectedType === 'kennzeichen' && (
+                    <>
+                      <dt>Versicherungsumfang</dt><dd>{umfangLabel}</dd>
+                      {currentPremium !== null && (
+                        <>
+                          <dt>Zeitraum</dt><dd>{getVersicherungszeitraum(formData.versicherungsbeginn)}</dd>
+                          <dt>Beitrag</dt><dd style={{ color: 'var(--sv-accent)' }}>{currentPremium.toFixed(2).replace('.', ',')} €</dd>
+                        </>
+                      )}
+                      {formData.bisherigVersichert === 'ja' && formData.bisherigVersicherer && (
+                        <><dt>Bisheriger Versicherer</dt><dd>{formData.bisherigVersicherer}</dd></>
+                      )}
+                    </>
+                  )}
+                </dl>
 
                 {selectedType === 'kennzeichen' && abeFiles.length > 0 && (
-                  <div>
-                    <p className="ergo-eyebrow mb-2">ABE (Betriebserlaubnis)</p>
-                    <div className="flex flex-col gap-1.5 text-sm text-ergo-ink">
+                  <>
+                    <span className="sv-group-title" style={{ margin: 0 }}>ABE (Betriebserlaubnis)</span>
+                    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6, fontSize: 15 }}>
                       {abeFiles.map((af, i) => (
-                        <p key={i} className="flex items-center gap-1.5"><FileText className="w-3.5 h-3.5 text-ergo-red shrink-0" /> {af.file.name} ({(af.file.size / 1024).toFixed(0)} KB)</p>
+                        <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+                          <FileText size={16} aria-hidden="true" style={{ flexShrink: 0 }} />
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{af.file.name}</span>
+                          <span className="sv-hint" style={{ flexShrink: 0 }}>{(af.file.size / 1024).toFixed(0)} KB</span>
+                        </li>
                       ))}
-                    </div>
-                  </div>
+                    </ul>
+                  </>
                 )}
 
                 {formData.hinweise && (
-                  <div>
-                    <p className="ergo-eyebrow mb-2">Hinweise</p>
-                    <p className="text-sm text-ergo-ink">{formData.hinweise}</p>
-                  </div>
+                  <>
+                    <span className="sv-group-title" style={{ margin: 0 }}>Hinweise</span>
+                    <p style={{ margin: 0, fontSize: 15, color: 'var(--sv-body)' }}>{formData.hinweise}</p>
+                  </>
                 )}
+
+                <button type="button" onClick={() => goToStep(2)} className="sv-link-btn" style={{ alignSelf: 'flex-start', fontSize: 14 }}>Angaben bearbeiten</button>
               </div>
 
-              <div className="flex flex-col gap-3 mb-5">
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" checked={confirm1} onChange={e => { setConfirm1(e.target.checked); if (errors.confirm1) setErrors(prev => { const n = { ...prev }; delete n.confirm1; return n; }); }} className="mt-1 w-4 h-4 accent-ergo-red" />
-                  <span className="text-sm text-ergo-ink">Ich bestätige, dass alle Angaben korrekt und vollständig sind.</span>
-                </label>
-                {errors.confirm1 && <span className="text-xs text-ergo-red ml-7">{errors.confirm1}</span>}
-
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" checked={confirm2} onChange={e => { setConfirm2(e.target.checked); if (errors.confirm2) setErrors(prev => { const n = { ...prev }; delete n.confirm2; return n; }); }} className="mt-1 w-4 h-4 accent-ergo-red" />
-                  <span className="text-sm text-ergo-ink">Ich bin einverstanden, dass meine Daten zur Bearbeitung meiner Anfrage verwendet werden. (Datenschutz nach DSGVO)</span>
-                </label>
-                {errors.confirm2 && <span className="text-xs text-ergo-red ml-7">{errors.confirm2}</span>}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div>
+                  <label className="sv-check">
+                    <input type="checkbox" checked={confirm1} onChange={e => { setConfirm1(e.target.checked); clearError('confirm1'); }} />
+                    <span>Ich bestätige, dass alle Angaben korrekt und vollständig sind.</span>
+                  </label>
+                  {errors.confirm1 && <p className="sv-error" style={{ margin: '6px 0 0 34px' }}>{errors.confirm1}</p>}
+                </div>
+                <div>
+                  <label className="sv-check">
+                    <input type="checkbox" checked={confirm2} onChange={e => { setConfirm2(e.target.checked); clearError('confirm2'); }} />
+                    <span>Ich bin einverstanden, dass meine Daten zur Bearbeitung meiner Anfrage verwendet werden. Die <Link href="/datenschutz" style={{ fontWeight: 600 }}>Datenschutzhinweise</Link> habe ich gelesen.</span>
+                  </label>
+                  {errors.confirm2 && <p className="sv-error" style={{ margin: '6px 0 0 34px' }}>{errors.confirm2}</p>}
+                </div>
               </div>
 
               {submitError && (
-                <div className="bg-ergo-red-light border border-ergo-red/30 rounded-lg p-4 mb-4 text-sm text-ergo-red">{submitError}</div>
+                <div className="sv-notice sv-notice--error" role="alert">{submitError}</div>
               )}
 
-              <button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="ergo-btn ergo-btn--primary w-full"
-              >
-                {isSubmitting ? (
-                  <>
-                    <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Anfrage wird gesendet...
-                  </>
-                ) : (
-                  selectedType === 'evb' ? 'eVB-Nummer anfordern' : 'Versicherungskennzeichen anfordern'
-                )}
+              <button type="button" onClick={handleSubmit} disabled={isSubmitting} className="sv-btn">
+                {isSubmitting
+                  ? <><span className="sv-spin" aria-hidden="true" /> Wird gesendet …</>
+                  : <>{selectedType === 'evb' ? 'eVB-Nummer anfordern' : 'Versicherungskennzeichen anfordern'} <ArrowRight size={18} aria-hidden="true" /></>}
               </button>
             </div>
           )}
 
           {step === 4 && selectedType && (
-            <div className="text-center py-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
               {submitError ? (
-                <div className="bg-ergo-red-light border border-ergo-red/30 rounded-lg p-4 mb-6 text-left">
-                  <p className="text-ergo-red font-semibold text-sm mb-1 flex items-center gap-2"><AlertTriangle className="w-4 h-4 shrink-0" /> Fehler beim Übermitteln</p>
-                  <p className="text-ergo-red text-sm">{submitError}</p>
-                  <p className="text-ergo-red text-xs mt-2">Bitte versuchen Sie es erneut oder kontaktieren Sie uns per WhatsApp.</p>
-                </div>
-              ) : (
-                <div className="w-16 h-16 mx-auto mb-4 bg-ergo-check rounded-full flex items-center justify-center">
-                  <Check className="w-8 h-8 text-white" />
-                </div>
-              )}
-
-              <h2 className="text-[22px] mb-2">
-                {submitError
-                  ? 'Fehler beim Senden'
-                  : selectedType === 'evb'
-                    ? 'eVB-Anfrage eingegangen!'
-                    : 'Anfrage für Versicherungskennzeichen eingegangen!'}
-              </h2>
-              <p className="text-sm text-ergo-stone mb-6">
-                {submitError
-                  ? 'Bitte versuchen Sie es erneut oder kontaktieren Sie uns per WhatsApp.'
-                  : selectedType === 'evb'
-                    ? 'Morino Stübe meldet sich schnellstmöglich bei Ihnen, um die eVB-Nummer auszustellen. In der Regel noch am selben Werktag.'
-                    : 'Morino Stübe meldet sich bei Ihnen zur Abwicklung. Das Kennzeichen (SCHWARZ, gültig bis 28.02.2027) erhalten Sie direkt von Ihrem ERGO Berater.'}
-              </p>
-
-              {!submitError && selectedType === 'evb' && (
-                <div className="bg-ergo-gray border border-ergo-line rounded-lg p-4 mb-5 text-left text-sm text-ergo-ink flex items-start gap-2">
-                  <Info className="w-4 h-4 text-ergo-red shrink-0 mt-0.5" />
-                  <span>Die eVB-Nummer ist 6 Monate gültig. Sie können Ihr Fahrzeug in dieser Zeit bei der Zulassungsstelle anmelden.</span>
-                </div>
-              )}
-
-              {!submitError && selectedType === 'kennzeichen' && (
                 <>
-                  <div className="bg-ergo-gray border border-ergo-line rounded-lg p-4 mb-5 text-left text-sm text-ergo-ink flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-ergo-check shrink-0 mt-0.5" />
-                    <span>Das aktuelle Versicherungskennzeichen 2026/2027 ist <strong>SCHWARZ</strong>.</span>
-                  </div>
+                  <h1 className="sv-h1">Das hat leider <em>nicht geklappt</em></h1>
+                  <div className="sv-notice sv-notice--error" role="alert">{submitError}</div>
+                  <p style={{ margin: 0, color: 'var(--sv-body)' }}>
+                    Bitte versuchen Sie es erneut oder schreiben Sie uns per WhatsApp.
+                  </p>
+                  <button type="button" onClick={() => goToStep(3)} className="sv-btn">
+                    Erneut versuchen <ArrowRight size={18} aria-hidden="true" />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <h1 className="sv-h1">Vielen Dank – <em>ist angekommen.</em></h1>
+                  <p style={{ margin: 0, color: 'var(--sv-body)' }}>
+                    {selectedType === 'evb'
+                      ? 'Ihre Anfrage liegt jetzt bei Morino Stübe. Er meldet sich bei Ihnen, um die eVB-Nummer auszustellen.'
+                      : 'Ihre Anfrage liegt jetzt bei Morino Stübe. Er meldet sich bei Ihnen zur Abwicklung. Das Kennzeichen (SCHWARZ, gültig bis 28.02.2027) erhalten Sie direkt von Ihrem Berater.'}
+                  </p>
+                  {reference && (
+                    <div className="sv-card" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <span className="sv-hint">Ihre Vorgangsnummer</span>
+                      <span className="sv-ref">{reference}</span>
+                    </div>
+                  )}
 
-                  {currentPremium !== null && (
-                    <div className="ergo-card p-5 mb-5 text-left">
-                      <p className="ergo-eyebrow mb-4">Überweisungsdaten</p>
-                      <div className="flex flex-col gap-3 text-sm text-ergo-ink">
-                        <div>
-                          <p className="text-xs text-ergo-stone mb-0.5">Empfänger</p>
-                          <p className="font-semibold">Morino Stübe</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-ergo-stone mb-0.5">IBAN</p>
-                          <div className="flex items-center gap-2">
-                            <p className="font-semibold font-mono">DE09 1101 0101 5121 0459 76</p>
-                            <button
-                              type="button"
-                              onClick={() => copyToClipboard('DE09110101015121045976', 'iban')}
-                              className="text-ergo-red hover:text-ergo-red-hover transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-                              aria-label="IBAN kopieren"
-                            >
-                              {copiedField === 'iban' ? <span className="text-xs text-ergo-check font-semibold">Kopiert!</span> : <ClipboardList className="w-4 h-4" />}
-                            </button>
-                          </div>
-                        </div>
-                        <div>
-                          <p className="text-xs text-ergo-stone mb-0.5">Verwendungszweck</p>
-                          <div className="flex items-center gap-2">
-                            <p className="font-semibold text-sm break-all">{getVerwendungszweck(formData.fahrzeugart, formData.versicherungsumfang, formData.nachname, formData.vorname, formData.versicherungsbeginn)}</p>
-                            <button
-                              type="button"
-                              onClick={() => copyToClipboard(getVerwendungszweck(formData.fahrzeugart, formData.versicherungsumfang, formData.nachname, formData.vorname, formData.versicherungsbeginn), 'verwendungszweck')}
-                              className="text-ergo-red hover:text-ergo-red-hover transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0"
-                              aria-label="Verwendungszweck kopieren"
-                            >
-                              {copiedField === 'verwendungszweck' ? <span className="text-xs text-ergo-check font-semibold">Kopiert!</span> : <ClipboardList className="w-4 h-4" />}
-                            </button>
-                          </div>
-                        </div>
-                        <div>
-                          <p className="text-xs text-ergo-stone mb-0.5">Betrag</p>
-                          <p className="font-extrabold text-xl text-ergo-red">{currentPremium.toFixed(2).replace('.', ',')} €</p>
+                  {selectedType === 'evb' && renderNote(<>Die eVB-Nummer ist 6 Monate gültig. Sie können Ihr Fahrzeug in dieser Zeit bei der Zulassungsstelle anmelden.</>)}
+
+                  {selectedType === 'kennzeichen' && renderNote(<>Das aktuelle Versicherungskennzeichen 2026/2027 ist <strong>SCHWARZ</strong>.</>)}
+
+                  {selectedType === 'kennzeichen' && currentPremium !== null && (
+                    <div className="sv-card" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                      <h2 className="sv-section-title" style={{ marginTop: 0 }}>Überweisungsdaten</h2>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <span className="sv-hint">Empfänger</span>
+                        <span style={{ fontWeight: 600 }}>Morino Stübe</span>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <span className="sv-hint">IBAN</span>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                          <span style={{ fontWeight: 600, fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', fontSize: 15 }}>DE09 1101 0101 5121 0459 76</span>
+                          {renderCopyButton('DE09110101015121045976', 'iban', 'IBAN')}
                         </div>
                       </div>
-                      <p className="text-xs text-ergo-stone mt-4 leading-relaxed">Bitte überweisen Sie den Betrag innerhalb von 7 Tagen. Nach Zahlungseingang erhalten Sie Ihr Versicherungskennzeichen bzw. Ihre Versicherungsplakette von Ihrem ERGO Berater.</p>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <span className="sv-hint">Verwendungszweck</span>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                          <span style={{ fontWeight: 600, fontSize: 15, wordBreak: 'break-all' }}>{verwendungszweck}</span>
+                          {renderCopyButton(verwendungszweck, 'verwendungszweck', 'Verwendungszweck')}
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <span className="sv-hint">Betrag</span>
+                        <span className="sv-ref">{currentPremium.toFixed(2).replace('.', ',')} €</span>
+                      </div>
+                      <p className="sv-hint" style={{ margin: 0, fontSize: 14, lineHeight: 1.55 }}>Bitte überweisen Sie den Betrag innerhalb von 7 Tagen. Nach Zahlungseingang erhalten Sie Ihr Versicherungskennzeichen bzw. Ihre Versicherungsplakette von Ihrem Berater.</p>
                     </div>
                   )}
                 </>
               )}
 
-              <div className="ergo-card p-4 text-left mb-6">
-                <div className="flex flex-col gap-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-ergo-stone">Antragsart</span>
-                    <span className="font-semibold text-ergo-ink">{selectedType === 'evb' ? 'eVB-Nummer' : 'Versicherungskennzeichen'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-ergo-stone">Name</span>
-                    <span className="font-semibold text-ergo-ink">{formData.vorname} {formData.nachname}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-ergo-stone">Fahrzeug</span>
-                    <span className="font-semibold text-ergo-ink">{formData.fahrzeughersteller} {formData.fahrzeugmodell}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-ergo-stone">Versicherungsbeginn</span>
-                    <span className="font-semibold text-ergo-ink">{formatDateDE(formData.versicherungsbeginn)}</span>
-                  </div>
-                </div>
+              <div className="sv-card">
+                <dl className="sv-dl">
+                  <dt>Antragsart</dt><dd>{selectedType === 'evb' ? 'eVB-Nummer' : 'Versicherungskennzeichen'}</dd>
+                  <dt>Name</dt><dd>{formData.vorname} {formData.nachname}</dd>
+                  <dt>Fahrzeug</dt><dd>{formData.fahrzeughersteller} {formData.fahrzeugmodell}</dd>
+                  <dt>Versicherungsbeginn</dt><dd>{formatDateDE(formData.versicherungsbeginn)}</dd>
+                </dl>
               </div>
 
               <a
-                href={`https://wa.me/4915566771019?text=${encodeURIComponent(
-                  selectedType === 'evb'
-                    ? `Hallo Herr Stübe, ich habe soeben eine eVB-Anfrage über Ihre Website eingereicht. Viele Grüße, ${formData.vorname} ${formData.nachname}`
-                    : `Hallo Herr Stübe, ich habe soeben eine Anfrage für ein Versicherungskennzeichen über Ihre Website eingereicht. Viele Grüße, ${formData.vorname} ${formData.nachname}`
+                href={`${WHATSAPP_URL}?text=${encodeURIComponent(
+                  `Hallo Herr Stübe, ich habe soeben ${selectedType === 'evb' ? 'eine eVB-Anfrage' : 'eine Anfrage für ein Versicherungskennzeichen'} über Ihre Website eingereicht${reference ? ` (Vorgang ${reference})` : ''}. Viele Grüße, ${formData.vorname} ${formData.nachname}`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ergo-btn ergo-btn--whatsapp w-full mb-3"
+                className="sv-btn sv-btn--ghost"
               >
-                <MessageCircle className="w-5 h-5" /> WhatsApp schreiben
+                <MessageCircle size={18} aria-hidden="true" /> Per WhatsApp schreiben
               </a>
-
-              <Link
-                href="/"
-                className="ergo-btn ergo-btn--tertiary w-full"
-              >
-                <ChevronLeft className="w-5 h-5" /> Zurück zur Startseite
-              </Link>
-
-              <p className="text-xs text-ergo-mute mt-4">Bei Fragen: 015566771019</p>
+              <Link href="/service" className="sv-link-btn" style={{ alignSelf: 'center' }}>Weiteres Anliegen erledigen</Link>
+              <p className="sv-hint" style={{ margin: 0, textAlign: 'center', fontSize: 14 }}>
+                Bei Fragen: <a href={PHONE_HREF} style={{ fontWeight: 600 }}>{PHONE_DISPLAY}</a>
+              </p>
             </div>
           )}
 
         </div>
       </div>
-    </div>
+    </ServiceLayout>
   );
 }

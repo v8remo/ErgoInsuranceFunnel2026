@@ -1,0 +1,152 @@
+/* Service-Center – Design „Handschlag“: warmes Papier, Fraunces + Source Sans 3,
+   Aubergine als einziger Akzent. Schriften lokal (kein Google-Fonts-Abruf). */
+@import "@fontsource-variable/fraunces/opsz.css";
+@import "@fontsource-variable/fraunces/opsz-italic.css";
+@import "@fontsource/source-sans-3/latin-400.css";
+@import "@fontsource/source-sans-3/latin-600.css";
+@import "@fontsource/source-sans-3/latin-700.css";
+
+.sv {
+  --sv-paper: #f6f1ea;
+  --sv-card: #ffffff;
+  --sv-ink: #2b211c;
+  --sv-body: #4a3d35;
+  --sv-muted: #6a5b52;
+  --sv-line: #d9ccbc;
+  --sv-soft: #e6dbcc;
+  --sv-accent: #6b2350;
+  --sv-accent-dark: #521a3d;
+  --sv-accent-soft: #f3e6ee;
+  --sv-error: #a3261b;
+  --sv-ok: #2f5d50;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--sv-paper);
+  color: var(--sv-ink);
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.sv a:not(.sv-feature):not(.sv-btn) { color: inherit; }
+.sv-serif { font-family: "Fraunces Variable", Georgia, serif; }
+.sv-wrap { width: 100%; max-width: 640px; margin: 0 auto; padding: 0 20px; box-sizing: border-box; }
+
+.sv-h1 {
+  margin: 0;
+  font-family: "Fraunces Variable", Georgia, serif;
+  font-weight: 500;
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 640px) { .sv-h1 { font-size: 42px; } }
+.sv-h1 em { font-style: italic; color: var(--sv-accent); }
+.sv-group-title {
+  margin: 0 0 6px;
+  font-family: "Fraunces Variable", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--sv-muted);
+}
+
+/* Listen-Einträge (Startseite) */
+.sv-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 2px; border-top: 1px solid var(--sv-line);
+  text-decoration: none; min-height: 48px;
+}
+.sv-row:last-child { border-bottom: 1px solid var(--sv-line); }
+.sv-row:hover .sv-row-title { color: var(--sv-accent); }
+.sv-row-title { font-weight: 700; font-size: 16px; display: block; }
+.sv-row-desc { font-size: 14px; color: var(--sv-muted); display: block; }
+.sv-tile {
+  background: var(--sv-card); border-radius: 6px; padding: 16px;
+  display: flex; flex-direction: column; gap: 8px; text-decoration: none;
+}
+.sv-tile:hover { outline: 1.5px solid var(--sv-ink); }
+.sv-feature {
+  background: var(--sv-accent); color: #fff; border-radius: 6px; padding: 18px;
+  display: flex; align-items: center; gap: 14px; text-decoration: none;
+}
+.sv-feature:hover { background: var(--sv-accent-dark); }
+
+/* Buttons */
+.sv-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; padding: 0 20px; border-radius: 6px; border: none;
+  background: var(--sv-accent); color: #fff; font: inherit; font-weight: 700; font-size: 17px;
+  cursor: pointer; text-decoration: none; width: 100%;
+}
+.sv-btn:hover { background: var(--sv-accent-dark); }
+.sv-btn:disabled { opacity: .55; cursor: not-allowed; }
+.sv-btn--ghost { background: transparent; color: var(--sv-ink); border: 1.5px solid var(--sv-ink); }
+.sv-btn--ghost:hover { background: var(--sv-card); }
+.sv-link-btn {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0;
+  background: none; border: none; font: inherit; font-size: 15px; font-weight: 600;
+  color: var(--sv-ink); cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* Formulare */
+.sv-card { background: var(--sv-card); border-radius: 6px; padding: 20px; }
+.sv-section-title {
+  margin: 8px 0 0; font-family: "Fraunces Variable", Georgia, serif;
+  font-weight: 600; font-size: 19px;
+}
+.sv-field { display: flex; flex-direction: column; gap: 6px; }
+.sv-label { font-size: 15px; font-weight: 600; color: var(--sv-ink); }
+.sv-hint { font-size: 13px; color: var(--sv-muted); }
+.sv-error { font-size: 13px; font-weight: 600; color: var(--sv-error); }
+.sv-input {
+  width: 100%; box-sizing: border-box; min-height: 48px; padding: 10px 14px;
+  border: 1.5px solid var(--sv-line); border-radius: 6px; background: #fff;
+  font: inherit; font-size: 16px; color: var(--sv-ink); outline: none;
+}
+.sv-input:focus { border-color: var(--sv-accent); box-shadow: 0 0 0 3px var(--sv-accent-soft); }
+.sv-input[aria-invalid="true"] { border-color: var(--sv-error); }
+textarea.sv-input { resize: vertical; }
+.sv-check { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; color: var(--sv-body); cursor: pointer; }
+.sv-check input { width: 22px; height: 22px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--sv-accent); }
+.sv-subbox { background: var(--sv-paper); border-radius: 6px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+.sv-steps {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--sv-muted);
+}
+.sv-steps [aria-current="step"] { color: var(--sv-accent); }
+
+.sv-sign {
+  position: relative; height: 190px; background: #fff; border-radius: 6px;
+}
+.sv-sign canvas { width: 100%; height: 100%; display: block; touch-action: none; border-radius: 6px; }
+.sv-sign-line {
+  position: absolute; left: 16px; right: 16px; bottom: 34px; border-bottom: 1.5px solid var(--sv-ink);
+  pointer-events: none;
+}
+.sv-sign-caption { position: absolute; left: 16px; bottom: 10px; font-size: 13px; color: var(--sv-muted); pointer-events: none; }
+
+.sv-dropzone {
+  width: 100%; border: 1.5px dashed var(--sv-ink); border-radius: 6px; background: #fff;
+  padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font: inherit; color: var(--sv-ink); cursor: pointer;
+}
+.sv-dropzone:disabled { opacity: .45; cursor: not-allowed; }
+
+.sv-notice { border-radius: 6px; padding: 14px 16px; font-size: 15px; }
+.sv-notice--error { background: #fbe9e7; color: var(--sv-error); }
+.sv-ref {
+  font-family: "Fraunces Variable", Georgia, serif; font-weight: 600; font-size: 28px;
+  letter-spacing: .02em; color: var(--sv-accent);
+}
+.sv-dl { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 0; font-size: 15px; }
+.sv-dl dt { color: var(--sv-muted); }
+.sv-dl dd { margin: 0; font-weight: 600; text-align: right; }
+
+.sv-spin {
+  width: 18px; height: 18px; border-radius: 999px;
+  border: 2.5px solid rgba(255, 255, 255, .35); border-top-color: #fff;
+  animation: sv-spin .8s linear infinite;
+}
+@keyframes sv-spin { to { transform: rotate(360deg); } }

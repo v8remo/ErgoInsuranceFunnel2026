@@ -32,14 +32,14 @@ export default function SEO({
     document.title = title;
 
     updateMetaTag("description", description);
-    updateMetaTag("keywords", keywords || "ERGO Versicherung, Versicherungen, Ganderkesee, Hausrat, Haftpflicht, Wohngebäude, Rechtsschutz, Zahnzusatz");
+    updateMetaTag("keywords", keywords || "Agentur Stübe, Versicherungen, Ganderkesee, Hausrat, Haftpflicht, Wohngebäude, Rechtsschutz, Zahnzusatz");
     
     updateMetaTag("og:title", title, "property");
     updateMetaTag("og:description", description, "property");
     updateMetaTag("og:type", ogType, "property");
     updateMetaTag("og:url", fullUrl, "property");
     updateMetaTag("og:image", `${baseUrl}${ogImage}`, "property");
-    updateMetaTag("og:site_name", "ERGO Versicherung Ganderkesee", "property");
+    updateMetaTag("og:site_name", "Agentur Stübe Ganderkesee", "property");
     
     updateMetaTag("twitter:card", "summary_large_image", "name");
     updateMetaTag("twitter:title", title, "name");

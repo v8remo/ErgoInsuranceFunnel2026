@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, MessageCircle } from 'lucide-react';
 import { trackEvent, trackConversion } from '@/lib/analytics';
 import '@/styles/funnel.css';
 
@@ -35,7 +34,7 @@ interface ContactData {
 
 const contextQuestions: Record<BestandskundenContext, Question[]> = {
   jahrescheck: [
-    { question: 'Wie viele ERGO-Verträge haben Sie?', options: ['1', '2–3', '4–5', 'Mehr als 5'] },
+    { question: 'Wie viele Versicherungsverträge haben Sie?', options: ['1', '2–3', '4–5', 'Mehr als 5'] },
     { question: 'Hat sich Ihre Lebenssituation im letzten Jahr verändert?', options: ['Ja', 'Nein', 'Nicht wesentlich'] },
     { question: 'Wie zufrieden sind Sie mit Ihrem aktuellen Versicherungsschutz?', options: ['Sehr zufrieden', 'Eher zufrieden', 'Unsicher', 'Nicht zufrieden'] },
     { question: 'Wie möchten Sie den Jahrescheck durchführen?', options: ['Telefonat', 'Persönliches Treffen', 'Video-Call'] },
@@ -52,7 +51,7 @@ const contextQuestions: Record<BestandskundenContext, Question[]> = {
   ],
   hauskauf: [
     { question: 'Handelt es sich um eine selbstgenutzte oder vermietete Immobilie?', options: ['Selbstgenutzt', 'Vermietet', 'Beides'] },
-    { question: 'Haben Sie bereits eine Wohngebäudeversicherung?', options: ['Ja, über ERGO', 'Ja, anderer Anbieter', 'Noch nicht'] },
+    { question: 'Haben Sie bereits eine Wohngebäudeversicherung?', options: ['Ja, bei Agentur Stübe', 'Ja, anderer Anbieter', 'Noch nicht'] },
     { question: 'Besteht Elementarschutz (Überschwemmung, Starkregen)?', options: ['Ja', 'Nein', 'Weiß nicht'] },
   ],
   umzug: [
@@ -80,6 +79,16 @@ const contextTitles: Record<BestandskundenContext, string> = {
   umzug: 'Umzug',
   jobwechsel: 'Jobwechsel / Selbstständigkeit',
   ruhestand: 'Ruhestand',
+};
+
+const contextEmojis: Record<BestandskundenContext, string> = {
+  jahrescheck: '📋',
+  heirat: '💍',
+  nachwuchs: '👶',
+  hauskauf: '🏠',
+  umzug: '📦',
+  jobwechsel: '💼',
+  ruhestand: '🌅',
 };
 
 const stepVariants = {
@@ -224,6 +233,7 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
   if (!isOpen) return null;
 
   const title = label || contextTitles[context];
+  const emoji = contextEmojis[context];
 
   return (
     <AnimatePresence>
@@ -252,21 +262,25 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
 
           <div className="funnel-nav">
             {step > 0 && step < doneStep && (
-              <button
+              <motion.button
                 className="funnel-back-btn"
                 onClick={() => goTo(step - 1)}
                 aria-label="Zurück"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
                 ←
-              </button>
+              </motion.button>
             )}
-            <button
+            <motion.button
               className="funnel-close-btn"
               onClick={onClose}
               aria-label="Schließen"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
               ×
-            </button>
+            </motion.button>
           </div>
 
           <div className="funnel-step-content" style={{ overflow: 'hidden' }}>
@@ -283,9 +297,14 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   className="funnel-step funnel-step-hook"
                 >
-                  <div className="funnel-badge-pill">
-                    Für ERGO-Bestandskunden
-                  </div>
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.15, duration: 0.4 }}
+                    className="funnel-badge-pill"
+                  >
+                    {emoji} Für Bestandskunden der Agentur Stübe
+                  </motion.div>
                   <h2 className="funnel-hook-headline">
                     {context === 'jahrescheck'
                       ? 'Ihr kostenloser Jahrescheck – in 2 Minuten starten'
@@ -296,13 +315,15 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
                       ? 'Beantworten Sie 4 kurze Fragen und wir prüfen Ihre bestehenden Verträge auf Lücken und Sparpotenzial.'
                       : `Beantworten Sie ${questions.length} kurze Fragen zu Ihrer Situation und erhalten Sie eine persönliche Empfehlung von Ihrem Berater.`}
                   </p>
-                  <button
+                  <motion.button
                     className="funnel-cta-btn"
                     onClick={() => goTo(1)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
                   >
                     Jetzt starten →
-                  </button>
-                  <p className="funnel-trust-line">Unverbindlich & kostenlos · Datenschutz nach DSGVO</p>
+                  </motion.button>
+                  <p className="funnel-trust-line">🔒 Unverbindlich & kostenlos · Datenschutz nach DSGVO</p>
                 </motion.div>
               )}
 
@@ -329,6 +350,8 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: i * 0.08 }}
+                          whileHover={{ x: 4 }}
+                          whileTap={{ scale: 0.98 }}
                           className={`funnel-full-option ${answers[idx] === opt ? 'selected' : ''}`}
                           onClick={() => selectAnswer(idx, opt)}
                         >
@@ -351,7 +374,7 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   className="funnel-step"
                 >
-                  <h2 className="funnel-headline">Fast geschafft! Ihre Kontaktdaten</h2>
+                  <h2 className="funnel-headline">Fast geschafft! Ihre Kontaktdaten 📞</h2>
                   <p className="funnel-subtext">Wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
                   <div>
                     <div className="funnel-form-row">
@@ -421,13 +444,15 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
                         {errors.submit}
                       </div>
                     )}
-                    <button
+                    <motion.button
                       className="funnel-cta-btn funnel-cta-mt"
                       onClick={submitLead}
                       disabled={isSubmitting}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.97 }}
                     >
                       {isSubmitting ? 'Wird gesendet...' : 'Absenden →'}
-                    </button>
+                    </motion.button>
                   </div>
                 </motion.div>
               )}
@@ -443,7 +468,14 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   className="funnel-step funnel-step-hook"
                 >
-                  <CheckCircle2 className="w-12 h-12 text-white mx-auto mb-4" aria-hidden="true" />
+                  <motion.div
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
+                    style={{ fontSize: '48px', marginBottom: '16px' }}
+                  >
+                    ✅
+                  </motion.div>
                   <h2 className="funnel-hook-headline">Vielen Dank!</h2>
                   <p className="funnel-hook-subtext">
                     {context === 'jahrescheck'
@@ -455,16 +487,20 @@ export default function BestandskundenFunnel({ isOpen, onClose, context, label }
                       href={`https://wa.me/15566771019?text=${encodeURIComponent(`Hallo Herr Stübe, ich habe gerade den ${context === 'jahrescheck' ? 'Jahrescheck' : title}-Fragebogen ausgefüllt und hätte gerne einen Termin.`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ergo-btn ergo-btn--whatsapp w-full"
+                      className="funnel-cta-btn"
+                      style={{ background: '#25d366', textAlign: 'center', textDecoration: 'none' }}
                     >
-                      <MessageCircle className="w-4 h-4" /> Per WhatsApp kontaktieren
+                      💬 Per WhatsApp kontaktieren
                     </a>
-                    <button
-                      className="ergo-btn ergo-btn--inverted w-full"
+                    <motion.button
+                      className="funnel-cta-btn"
+                      style={{ background: '#6b7280' }}
                       onClick={onClose}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.97 }}
                     >
                       Schließen
-                    </button>
+                    </motion.button>
                   </div>
                 </motion.div>
               )}

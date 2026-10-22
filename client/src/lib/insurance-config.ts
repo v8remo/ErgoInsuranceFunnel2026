@@ -15,7 +15,7 @@ import zahnzusatzImage from '@assets/generated_images/Zahnzusatzversicherung_Bil
 export const insuranceConfig = {
   hausrat: {
     title: "Hausratversicherung",
-    description: "ERGO Hausratversicherung Ganderkesee - Rundum-Schutz für Ihr Hab und Gut. Absicherung gegen Einbruch, Feuer, Wasser und Sturm. Persönliche Beratung durch Morino Stübe.",
+    description: "Hausratversicherung in Ganderkesee – Rundum-Schutz für Ihr Hab und Gut. Absicherung gegen Einbruch, Feuer, Wasser und Sturm. Persönliche Beratung durch Morino Stübe.",
     price: "ab 15€/Monat",
     icon: Home,
     image: hausratImage,
@@ -64,7 +64,7 @@ export const insuranceConfig = {
   },
   haftpflicht: {
     title: "Haftpflichtversicherung",
-    description: "ERGO Haftpflichtversicherung Ganderkesee - Schutz vor existenzbedrohenden Schadenersatzforderungen. Ein Muss für jeden. Persönliche Beratung durch Morino Stübe.",
+    description: "Haftpflichtversicherung in Ganderkesee – Schutz vor existenzbedrohenden Schadenersatzforderungen. Ein Muss für jeden. Persönliche Beratung durch Morino Stübe.",
     price: "ab 8€/Monat",
     icon: Handshake,
     image: haftpflichtImage,
@@ -138,7 +138,7 @@ export const insuranceConfig = {
       },
       {
         title: "Beitragsersparnis bei Modernisierung", 
-        description: "ERGO belohnt Ihre Modernisierungs- und Präventionsmaßnahmen"
+        description: "Modernisierungs- und Präventionsmaßnahmen können den Beitrag reduzieren"
       },
       {
         title: "Schnelle Hilfe im Schadenfall",
@@ -174,7 +174,7 @@ export const insuranceConfig = {
   },
   rechtsschutz: {
     title: "Rechtsschutzversicherung",
-    description: "ERGO Rechtsschutzversicherung Ganderkesee - Durchsetzen Ihres Rechts ohne finanzielle Sorgen. Anwalts- und Gerichtskosten abgedeckt. Persönliche Beratung durch Morino Stübe.",
+    description: "Rechtsschutzversicherung in Ganderkesee – Durchsetzen Ihres Rechts ohne finanzielle Sorgen. Anwalts- und Gerichtskosten abgedeckt. Persönliche Beratung durch Morino Stübe.",
     price: "ab 18€/Monat",
     icon: Scale,
     image: rechtsschutzImage,
@@ -271,7 +271,7 @@ export const insuranceConfig = {
   },
   "leben-vorsorge": {
     title: "Leben & Vorsorge",
-    description: "Private Rentenversicherung, Berufsunfähigkeit, Risikoleben & betriebliche Altersvorsorge bei ERGO. Persönliche Beratung von Morino Stübe in Ganderkesee.",
+    description: "Private Rentenversicherung, Berufsunfähigkeit, Risikoleben und betriebliche Altersvorsorge. Persönliche Beratung von Morino Stübe in Ganderkesee.",
     price: "ab 25€/Monat",
     icon: Home,
     image: hausratImage,
@@ -286,7 +286,7 @@ export const insuranceConfig = {
       },
       {
         title: "FFF+ Bestnote",
-        description: "Top-Bewertung von Franke & Bornberg für die ERGO Rentenversicherung"
+        description: "Top-Bewertung von Franke & Bornberg für ausgewählte Rententarife"
       }
     ],
     benefits: [

@@ -16,6 +16,7 @@ const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
 const Impressum = lazy(() => import("@/pages/Impressum"));
 const Datenschutz = lazy(() => import("@/pages/Datenschutz"));
 const DokumentePage = lazy(() => import("@/pages/DokumentePage"));
+const ServiceCenter = lazy(() => import("@/pages/ServiceCenter"));
 const SchadenPage = lazy(() => import("@/pages/SchadenPage"));
 const KennzeichenPage = lazy(() => import("@/pages/KennzeichenPage"));
 const Erstinformation = lazy(() => import("@/pages/Erstinformation"));
@@ -38,7 +39,7 @@ const SpartenLandingPage = lazy(() => import("@/pages/SpartenLandingPage"));
 function PageLoader() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="w-8 h-8 border-4 border-ergo-red border-t-transparent rounded-full animate-spin" />
+      <div className="w-8 h-8 border-4 border-[#1d5558] border-t-transparent rounded-full animate-spin" />
     </div>
   );
 }
@@ -54,10 +55,19 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [isBU] = useRoute("/berufsunfaehigkeit");
   const [isZahn] = useRoute("/zahnzusatz");
   const [isUnternehmen] = useRoute("/unternehmensversicherung");
+  // Service-Center bringt eigenen Kopf/Fuß mit.
+  const [isServiceHome] = useRoute("/service");
+  const [isServiceSub] = useRoute("/service/:rest*");
+  const [isDokumente] = useRoute("/dokumente");
+  const [isSchaden] = useRoute("/schaden");
+  const [isUnfall] = useRoute("/schaden-unfall");
+  const [isKennzeichen] = useRoute("/kennzeichen");
+  const [isNeukunden] = useRoute("/neukunden");
+  const isService = isServiceHome || isServiceSub || isSchaden || isUnfall || isKennzeichen || isNeukunden;
 
   const isSparten = isKfz || isHausrat || isHaftpflicht || isRechtsschutz || isBU || isZahn || isUnternehmen;
-  const hideHeader = isAdmin || isInstagram || isBeratung;
-  const hideFooter = isAdmin || isInstagram || isBeratung || isSparten;
+  const hideHeader = isAdmin || isInstagram || isBeratung || isService || isDokumente;
+  const hideFooter = isAdmin || isInstagram || isBeratung || isSparten || isService || isDokumente;
 
   return (
     <>
@@ -77,7 +87,9 @@ function AppContent() {
       <Suspense fallback={<PageLoader />}>
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/dokumente" component={DokumentePage} />
+          <Route path="/dokumente">{() => <DokumentePage />}</Route>
+          <Route path="/service" component={ServiceCenter} />
+          <Route path="/service/:typ">{(params) => <DokumentePage initialType={params.typ} />}</Route>
           <Route path="/admin" component={AdminDashboard} />
           <Route path="/impressum" component={Impressum} />
           <Route path="/datenschutz" component={Datenschutz} />

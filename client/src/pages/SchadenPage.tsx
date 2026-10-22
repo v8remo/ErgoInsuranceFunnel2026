@@ -1,14 +1,9 @@
-import { compressImageFile, exceedsUploadLimit, UPLOAD_LIMIT_MESSAGE } from '@/lib/uploads';
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Link, useLocation } from 'wouter';
-import {
-  CarFront, Zap, Home, Building2, Scale, Shield, Briefcase, ClipboardList, Ambulance,
-  Lock, Check, ChevronLeft, Camera, Upload, FileText, X, Star, AlertTriangle, MessageCircle,
-  type LucideIcon,
-} from 'lucide-react';
+import { Link } from 'wouter';
+import { ArrowRight, Briefcase, Building2, Camera, Car, CarFront, Check, ChevronLeft, ClipboardList, FileText, HeartPulse, House, MessageCircle, Phone, Scale, Shield, Upload, X, type LucideIcon } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import SEO from "@/components/SEO";
-import Breadcrumb from "@/components/Breadcrumb";
+import ServiceLayout, { PHONE_DISPLAY, PHONE_HREF, WHATSAPP_URL } from "@/components/service/ServiceLayout";
 
 type DamageType = 'kfz' | 'glasschaden' | 'hausrat' | 'gebaeude' | 'rechtsschutz' | 'bu' | 'haftpflicht' | 'sonstiges';
 
@@ -81,9 +76,9 @@ const initialFormData: FormData = {
 };
 
 const damageTypes: { type: DamageType; icon: LucideIcon; title: string; subtitle?: string }[] = [
-  { type: 'kfz', icon: CarFront, title: 'Kfz-Schaden' },
-  { type: 'glasschaden', icon: Zap, title: 'Kfz-Glasschaden', subtitle: 'In Kooperation mit Carglass' },
-  { type: 'hausrat', icon: Home, title: 'Hausrat-Schaden' },
+  { type: 'kfz', icon: Car, title: 'Kfz-Schaden' },
+  { type: 'glasschaden', icon: CarFront, title: 'Kfz-Glasschaden', subtitle: 'In Kooperation mit Carglass' },
+  { type: 'hausrat', icon: House, title: 'Hausrat-Schaden' },
   { type: 'gebaeude', icon: Building2, title: 'Gebäudeschaden' },
   { type: 'rechtsschutz', icon: Scale, title: 'Rechtsschutz-Fall' },
   { type: 'haftpflicht', icon: Shield, title: 'Haftpflicht-Schaden' },
@@ -91,19 +86,18 @@ const damageTypes: { type: DamageType; icon: LucideIcon; title: string; subtitle
   { type: 'sonstiges', icon: ClipboardList, title: 'Sonstiger Schaden' },
 ];
 
-const damageTypeLabels: Record<DamageType, { icon: LucideIcon; title: string }> = {
-  kfz: { icon: CarFront, title: 'Kfz-Schaden' },
-  glasschaden: { icon: Zap, title: 'Kfz-Glasschaden' },
-  hausrat: { icon: Home, title: 'Hausrat-Schaden' },
-  gebaeude: { icon: Building2, title: 'Gebäudeschaden' },
-  rechtsschutz: { icon: Scale, title: 'Rechtsschutz-Fall' },
-  haftpflicht: { icon: Shield, title: 'Haftpflicht-Schaden' },
-  bu: { icon: Briefcase, title: 'Berufsunfähigkeit' },
-  sonstiges: { icon: ClipboardList, title: 'Sonstiger Schaden' },
+const damageTypeLabels: Record<DamageType, { title: string }> = {
+  kfz: { title: 'Kfz-Schaden' },
+  glasschaden: { title: 'Kfz-Glasschaden' },
+  hausrat: { title: 'Hausrat-Schaden' },
+  gebaeude: { title: 'Gebäudeschaden' },
+  rechtsschutz: { title: 'Rechtsschutz-Fall' },
+  haftpflicht: { title: 'Haftpflicht-Schaden' },
+  bu: { title: 'Berufsunfähigkeit' },
+  sonstiges: { title: 'Sonstiger Schaden' },
 };
 
 export default function SchadenPage() {
-  const [, setLocation] = useLocation();
   const [step, setStep] = useState(1);
   const [selectedType, setSelectedType] = useState<DamageType | null>(null);
   const [formData, setFormData] = useState<FormData>({ ...initialFormData });
@@ -111,6 +105,7 @@ export default function SchadenPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [reference, setReference] = useState<string | null>(null);
   const [confirm1, setConfirm1] = useState(false);
   const [confirm2, setConfirm2] = useState(false);
   const [fadeClass, setFadeClass] = useState('opacity-100 transition-opacity duration-300');
@@ -149,14 +144,13 @@ export default function SchadenPage() {
     if (errors[field]) setErrors(prev => { const n = { ...prev }; delete n[field]; return n; });
   };
 
-  const handleFiles = async (newFiles: FileList | null) => {
+  const handleFiles = (newFiles: FileList | null) => {
     if (!newFiles) return;
-    const incoming = Array.from(newFiles);
     const valid: File[] = [];
-    for (const raw of incoming) {
-      if (files.length + valid.length >= 5) break;
-      const f = await compressImageFile(raw);
+    for (let i = 0; i < newFiles.length; i++) {
+      const f = newFiles[i];
       if (f.size > 5 * 1024 * 1024) continue;
+      if (files.length + valid.length >= 5) break;
       valid.push(f);
     }
     setFiles(prev => [...prev, ...valid].slice(0, 5));
@@ -336,11 +330,6 @@ export default function SchadenPage() {
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
 
-    if (exceedsUploadLimit(files)) {
-      setSubmitError(UPLOAD_LIMIT_MESSAGE);
-      return;
-    }
-
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -380,7 +369,8 @@ export default function SchadenPage() {
         payload.estimatedDamage = formData.geschaetzterSchaden || null;
       }
 
-      await apiRequest('POST', '/api/schaden/submit', payload);
+      const res = await apiRequest('POST', '/api/schaden/submit', payload);
+      setReference((await res.json().catch(() => ({}))).reference ?? null);
       goToStep(4);
     } catch (err: any) {
       setSubmitError(err.message || 'Fehler beim Senden. Bitte versuchen Sie es erneut.');
@@ -389,27 +379,10 @@ export default function SchadenPage() {
     }
   };
 
-  const inputCls = (field: string) =>
-    `w-full p-3 border rounded text-base outline-none transition-colors ${errors[field] ? 'border-ergo-red' : 'border-ergo-line focus:border-ergo-red'}`;
 
-  const renderRadioGroup = (field: keyof FormData, options: { value: string; label: string }[]) => (
-    <div className="flex flex-wrap gap-2">
-      {options.map(opt => (
-        <button
-          key={opt.value}
-          type="button"
-          onClick={() => updateField(field, opt.value)}
-          className={`ergo-option px-4 py-2 text-sm font-semibold text-ergo-ink ${
-            formData[field] === opt.value ? 'selected' : ''
-          }`}
-        >
-          {opt.label}
-        </button>
-      ))}
-    </div>
-  );
-
-  const progressPercent = step === 1 ? 33 : step === 2 ? 66 : 100;
+  const clearError = (key: string) => {
+    if (errors[key]) setErrors(prev => { const n = { ...prev }; delete n[key]; return n; });
+  };
 
   const formatFileSize = (bytes: number): string => {
     if (bytes < 1024) return `${bytes} B`;
@@ -417,645 +390,506 @@ export default function SchadenPage() {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
-  return (
-    <div className="min-h-screen bg-white" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
-      <SEO
-        title="Schaden melden – ERGO Agentur Stübe Ganderkesee"
-        description="Versicherungsschaden schnell und einfach online melden. Kfz-Schaden, Glasschaden, Hausrat oder Haftpflicht – Ihre ERGO Agentur Stübe in Ganderkesee hilft sofort."
-        keywords="Schaden melden, Versicherungsschaden, ERGO Ganderkesee, Kfz-Schaden, Glasschaden melden, Schadensmeldung"
+  const cardStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 16 };
+
+  const renderField = (label: string, field: keyof FormData, type = 'text', opts: { placeholder?: string; required?: boolean; transform?: (v: string) => string; extra?: React.InputHTMLAttributes<HTMLInputElement> } = {}) => {
+    const required = opts.required ?? true;
+    return (
+      <div className="sv-field">
+        <label className="sv-label" htmlFor={`f-${field}`}>{label}{!required && <span className="sv-hint"> (optional)</span>}</label>
+        <input
+          id={`f-${field}`}
+          type={type}
+          value={formData[field]}
+          onChange={e => updateField(field, opts.transform ? opts.transform(e.target.value) : e.target.value)}
+          placeholder={opts.placeholder}
+          className="sv-input"
+          aria-invalid={!!errors[field]}
+          {...opts.extra}
+        />
+        {errors[field] && <span className="sv-error">{errors[field]}</span>}
+      </div>
+    );
+  };
+
+  const renderTextarea = (label: string, field: keyof FormData, rows: number, opts: { placeholder?: string; hint?: string } = {}) => (
+    <div className="sv-field">
+      <label className="sv-label" htmlFor={`f-${field}`}>{label}</label>
+      {opts.hint && <span className="sv-hint" id={`h-${field}`}>{opts.hint}</span>}
+      <textarea
+        id={`f-${field}`}
+        value={formData[field]}
+        onChange={e => updateField(field, e.target.value)}
+        placeholder={opts.placeholder}
+        rows={rows}
+        className="sv-input"
+        aria-invalid={!!errors[field]}
+        aria-describedby={opts.hint ? `h-${field}` : undefined}
       />
-      <Breadcrumb items={[{ label: "Schaden melden" }]} />
-      <div className="max-w-[600px] mx-auto px-5 py-6">
+      {errors[field] && <span className="sv-error">{errors[field]}</span>}
+    </div>
+  );
+
+  const renderSelect = (label: string, field: keyof FormData, options: string[]) => (
+    <div className="sv-field">
+      <label className="sv-label" htmlFor={`f-${field}`}>{label}</label>
+      <select id={`f-${field}`} value={formData[field]} onChange={e => updateField(field, e.target.value)} className="sv-input" aria-invalid={!!errors[field]}>
+        <option value="">Bitte auswählen</option>
+        {options.map(o => <option key={o} value={o}>{o}</option>)}
+      </select>
+      {errors[field] && <span className="sv-error">{errors[field]}</span>}
+    </div>
+  );
+
+  // Auswahl als echte Buttons: weiße Karte, ausgewählt mit Rand in Tintenfarbe.
+  const renderChoice = (label: string, field: keyof FormData, options: { value: string; label: string }[], opts: { stacked?: boolean; onSelect?: (value: string) => void } = {}) => (
+    <fieldset className="sv-field" style={{ border: 'none', margin: 0, padding: 0 }}>
+      <legend className="sv-label" style={{ marginBottom: 8 }}>{label}</legend>
+      <div style={{ display: 'grid', gap: 8, gridTemplateColumns: opts.stacked ? '1fr' : `repeat(${Math.min(options.length, 3)}, minmax(0, 1fr))` }}>
+        {options.map(opt => {
+          const selected = formData[field] === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              aria-pressed={selected}
+              onClick={() => (opts.onSelect ? opts.onSelect(opt.value) : updateField(field, opt.value))}
+              style={{
+                minHeight: 48, padding: '10px 14px', borderRadius: 6, background: '#fff',
+                border: `1.5px solid ${selected ? 'var(--sv-ink)' : 'var(--sv-line)'}`,
+                display: 'flex', alignItems: 'center', justifyContent: opts.stacked ? 'space-between' : 'center', gap: 8,
+                font: 'inherit', fontSize: 15, fontWeight: selected ? 700 : 600, color: 'var(--sv-ink)',
+                textAlign: opts.stacked ? 'left' : 'center', cursor: 'pointer',
+              }}
+            >
+              {opt.label}
+              {selected && <Check size={18} aria-hidden="true" style={{ flexShrink: 0 }} />}
+            </button>
+          );
+        })}
+      </div>
+      {errors[field] && <span className="sv-error">{errors[field]}</span>}
+    </fieldset>
+  );
+
+  const openCamera = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment';
+    input.onchange = (e) => { handleFiles((e.target as HTMLInputElement).files); };
+    input.click();
+  };
+
+  const stepNames = ['Schadenart', 'Angaben', 'Prüfen', 'Fertig'];
+  const currentStepName = stepNames[step - 1];
+  const SelectedIcon = selectedType ? damageTypes.find(d => d.type === selectedType)!.icon : null;
+
+  return (
+    <ServiceLayout>
+      <SEO
+        title="Schaden melden – Agentur Stübe Ganderkesee"
+        description="Versicherungsschaden schnell und einfach online melden. Kfz-Schaden, Glasschaden, Hausrat oder Haftpflicht – die Agentur Stübe in Ganderkesee hilft Ihnen weiter."
+        keywords="Schaden melden, Versicherungsschaden, Ganderkesee, Kfz-Schaden, Glasschaden melden, Schadensmeldung"
+      />
+      <div className="sv-wrap" style={{ display: 'flex', flexDirection: 'column', gap: 20, paddingTop: 4, paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {step < 4 && (
-          <>
-            <div className="flex items-center justify-between mb-4">
-              {step > 1 ? (
-                <button onClick={() => goToStep(step - 1)} className="text-ergo-red font-bold text-sm flex items-center gap-1 min-h-[44px]">
-                  <ChevronLeft className="w-4 h-4" /> Zurück
-                </button>
-              ) : (
-                <div />
-              )}
-              <span className="text-xs text-ergo-stone font-medium">
-                Schritt {Math.min(step, 3)} von 3 — {step === 1 ? 'Schadenart' : step === 2 ? 'Details' : 'Absenden'}
-              </span>
-            </div>
-            <div className="h-1 bg-ergo-fog rounded-full mb-3 overflow-hidden">
-              <div className="h-full bg-ergo-red rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercent}%` }} />
-            </div>
-            <div className="flex items-center justify-center gap-3 text-[11px] text-ergo-mute mb-5">
-              <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> DSGVO-konform</span>
-              <span>·</span>
-              <span className="flex items-center gap-1"><Zap className="w-3 h-3" /> Antwort in 24h</span>
-              <span>·</span>
-              <span className="flex items-center gap-1"><Check className="w-3 h-3 text-ergo-check" /> Kostenlos</span>
-            </div>
-          </>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {step > 1 ? (
+              <button type="button" onClick={() => goToStep(step - 1)} className="sv-link-btn" style={{ textDecoration: 'none', alignSelf: 'flex-start' }}>
+                <ChevronLeft size={18} aria-hidden="true" /> Zurück
+              </button>
+            ) : (
+              <Link href="/service" className="sv-link-btn" style={{ textDecoration: 'none', alignSelf: 'flex-start' }}>
+                <ChevronLeft size={18} aria-hidden="true" /> Alle Anliegen
+              </Link>
+            )}
+            <ol className="sv-steps" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+              {stepNames.map((name, i) => (
+                <li key={name} aria-current={name === currentStepName ? 'step' : undefined} style={{ display: 'flex', gap: 8 }}>
+                  {i > 0 && <span aria-hidden="true">·</span>}
+                  {name}
+                </li>
+              ))}
+            </ol>
+          </div>
         )}
 
         <div className={fadeClass}>
 
           {step === 1 && (
-            <div>
-              <div className="text-center mb-6">
-                <p className="ergo-eyebrow">ERGO Agentur Stübe · Schadenservice</p>
-                <h1 className="text-[30px] md:text-[40px] leading-[1.25] mb-2">Schaden melden</h1>
-                <p className="text-sm text-ergo-stone">Wählen Sie die Art des Schadens aus</p>
-              </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <h1 className="sv-h1">Schaden <em>melden</em></h1>
+              <p style={{ margin: 0, color: 'var(--sv-body)' }}>Welche Art von Schaden möchten Sie melden?</p>
               <div className="grid grid-cols-2 gap-3">
-                {damageTypes.map(card => (
-                  <button
-                    key={card.type}
-                    onClick={() => handleSelectType(card.type)}
-                    className="ergo-option p-4 text-center flex flex-col items-center gap-2"
-                  >
-                    <span className="ergo-icon-disc w-10 h-10"><card.icon className="w-4 h-4" /></span>
-                    <span className="font-sans font-bold text-ergo-ink text-sm">{card.title}</span>
-                    {card.subtitle && <span className="text-xs text-ergo-stone -mt-1">{card.subtitle}</span>}
-                  </button>
-                ))}
-                <Link
-                  href="/schaden-unfall"
-                  className="ergo-option p-4 text-center flex flex-col items-center gap-2"
-                >
-                  <span className="ergo-icon-disc w-10 h-10"><Ambulance className="w-4 h-4" /></span>
-                  <span className="font-sans font-bold text-ergo-ink text-sm">Unfall</span>
-                  <span className="text-xs text-ergo-stone -mt-1">Unfallversicherung</span>
+                {damageTypes.map(card => {
+                  const Icon = card.icon;
+                  return (
+                    <button
+                      key={card.type}
+                      type="button"
+                      onClick={() => handleSelectType(card.type)}
+                      aria-pressed={selectedType === card.type}
+                      className="sv-tile"
+                      style={{ border: 'none', font: 'inherit', color: 'var(--sv-ink)', textAlign: 'left', cursor: 'pointer', minHeight: 96 }}
+                    >
+                      <Icon size={24} strokeWidth={1.7} aria-hidden="true" />
+                      <span style={{ fontWeight: 700, fontSize: 15 }}>{card.title}</span>
+                      {card.subtitle && <span className="sv-hint">{card.subtitle}</span>}
+                    </button>
+                  );
+                })}
+                <Link href="/schaden-unfall" className="sv-tile" style={{ minHeight: 96 }}>
+                  <HeartPulse size={24} strokeWidth={1.7} aria-hidden="true" />
+                  <span style={{ fontWeight: 700, fontSize: 15 }}>Unfall</span>
+                  <span className="sv-hint">Unfallversicherung</span>
                 </Link>
-              </div>
-              <div className="mt-6 text-center">
-                <Link href="/" className="ergo-link text-sm">Zurück zur Startseite</Link>
               </div>
             </div>
           )}
 
           {step === 2 && selectedType && (
-            <div>
-              <h2 className="text-[22px] mb-1 flex items-center gap-2">
-                {(() => { const TypeIcon = damageTypeLabels[selectedType].icon; return <TypeIcon className="w-5 h-5 text-ergo-red shrink-0" />; })()}
-                {damageTypeLabels[selectedType].title}
-              </h2>
-              {selectedType === 'glasschaden' && <p className="text-xs text-ergo-stone mb-1">In Kooperation mit Carglass</p>}
-              <p className="text-sm text-ergo-stone mb-5">Bitte füllen Sie alle Pflichtfelder (*) aus.</p>
-              <div className="ergo-card p-5 sm:p-6 flex flex-col gap-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <h1 className="sv-h1">{damageTypeLabels[selectedType].title}</h1>
+                {selectedType === 'glasschaden' && <span className="sv-hint" style={{ fontSize: 15 }}>In Kooperation mit Carglass</span>}
+              </div>
 
+              <div className="sv-card" style={cardStyle}>
+                <h2 className="sv-section-title" style={{ marginTop: 0 }}>Persönliche Daten</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold text-ergo-ink">Vorname *</label>
-                    <input type="text" value={formData.vorname} onChange={e => updateField('vorname', e.target.value)} className={inputCls('vorname')} autoComplete="given-name" enterKeyHint="next" />
-                    {errors.vorname && <span className="text-xs text-ergo-red">{errors.vorname}</span>}
+                  {renderField('Vorname', 'vorname', 'text', { extra: { autoComplete: 'given-name', enterKeyHint: 'next' } })}
+                  {renderField('Nachname', 'nachname', 'text', { extra: { autoComplete: 'family-name', enterKeyHint: 'next' } })}
+                </div>
+                {renderField('Telefon', 'telefon', 'tel', { extra: { inputMode: 'tel', autoComplete: 'tel', enterKeyHint: 'next' } })}
+                {renderField('E-Mail', 'email', 'email', { placeholder: 'name@beispiel.de', extra: { inputMode: 'email', autoComplete: 'email', enterKeyHint: 'next' } })}
+              </div>
+
+              {selectedType === 'glasschaden' && (
+                <>
+                  <div className="sv-card" style={cardStyle}>
+                    <h2 className="sv-section-title" style={{ marginTop: 0 }}>Fahrzeug</h2>
+                    {renderField('Fahrzeugidentifikationsnummer (FIN)', 'fin', 'text', { placeholder: 'z. B. WVWZZZ3CZWE123456', extra: { autoCapitalize: 'characters', autoComplete: 'off' } })}
+                    {renderField('Kennzeichen', 'glasKennzeichen', 'text', { placeholder: 'z. B. OL-AB 1234', transform: v => v.toUpperCase(), extra: { autoCapitalize: 'characters', autoComplete: 'off' } })}
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-semibold text-ergo-ink">Nachname *</label>
-                    <input type="text" value={formData.nachname} onChange={e => updateField('nachname', e.target.value)} className={inputCls('nachname')} autoComplete="family-name" enterKeyHint="next" />
-                    {errors.nachname && <span className="text-xs text-ergo-red">{errors.nachname}</span>}
-                  </div>
-                </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-ergo-ink">Telefon *</label>
-                  <input type="tel" inputMode="tel" value={formData.telefon} onChange={e => updateField('telefon', e.target.value)} className={inputCls('telefon')} autoComplete="tel" enterKeyHint="next" />
-                  {errors.telefon && <span className="text-xs text-ergo-red">{errors.telefon}</span>}
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-semibold text-ergo-ink">E-Mail *</label>
-                  <input type="email" inputMode="email" value={formData.email} onChange={e => updateField('email', e.target.value)} className={inputCls('email')} autoComplete="email" enterKeyHint="next" />
-                  {errors.email && <span className="text-xs text-ergo-red">{errors.email}</span>}
-                </div>
-
-                {selectedType === 'glasschaden' && (
-                  <>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Fahrzeugidentifikationsnummer (FIN) *</label>
-                      <input type="text" value={formData.fin} onChange={e => updateField('fin', e.target.value)} placeholder="z.B. WVWZZZ3CZWE123456" className={inputCls('fin')} />
-                      {errors.fin && <span className="text-xs text-ergo-red">{errors.fin}</span>}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Kennzeichen *</label>
-                      <input type="text" value={formData.glasKennzeichen} onChange={e => updateField('glasKennzeichen', e.target.value.toUpperCase())} placeholder="z.B. OL-AB 1234" className={inputCls('glasKennzeichen')} />
-                      {errors.glasKennzeichen && <span className="text-xs text-ergo-red">{errors.glasKennzeichen}</span>}
-                    </div>
-
-                    <div className="border-t border-ergo-line pt-4 mt-2">
-                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Schadenfragen</h3>
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Welche Scheibe ist beschädigt? *</label>
-                      <div className="flex flex-col gap-2">
-                        {[
-                          { value: 'frontscheibe', label: 'Frontscheibe' },
-                          { value: 'heckscheibe', label: 'Heckscheibe' },
-                          { value: 'seitenscheibe_lv', label: 'Seitenscheibe links vorne' },
-                          { value: 'seitenscheibe_lh', label: 'Seitenscheibe links hinten' },
-                          { value: 'seitenscheibe_rv', label: 'Seitenscheibe rechts vorne' },
-                          { value: 'seitenscheibe_rh', label: 'Seitenscheibe rechts hinten' },
-                          { value: 'dachscheibe', label: 'Dachscheibe / Panoramadach' },
-                        ].map(opt => (
-                          <button
-                            key={opt.value}
-                            type="button"
-                            onClick={() => updateField('glasScheibe', opt.value)}
-                            className={`ergo-option w-full text-left px-4 py-3 text-sm font-semibold text-ergo-ink ${
-                              formData.glasScheibe === opt.value
-                                ? 'selected'
-                                : ''
-                            }`}
-                          >
-                            {opt.label}
-                          </button>
-                        ))}
-                      </div>
-                      {errors.glasScheibe && <span className="text-xs text-ergo-red">{errors.glasScheibe}</span>}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Was liegt vor? *</label>
-                      <div className="flex flex-col gap-2">
-                        {[
-                          { value: 'steinschlag', label: 'Steinschlag (einzeln)' },
-                          { value: 'mehrere_steinschlaege', label: 'Mehrere Steinschläge' },
-                          { value: 'riss', label: 'Riss' },
-                          { value: 'eingeschlagen', label: 'Eingeschlagen / zerstört' },
-                        ].map(opt => (
-                          <button
-                            key={opt.value}
-                            type="button"
-                            onClick={() => {
-                              updateField('glasSchadensart', opt.value);
-                              if (!['steinschlag', 'mehrere_steinschlaege', 'riss'].includes(opt.value)) {
-                                updateField('glasBereich', '');
-                              }
-                              if (opt.value !== 'steinschlag') {
-                                updateField('glasGroesse', '');
-                              }
-                            }}
-                            className={`ergo-option w-full text-left px-4 py-3 text-sm font-semibold text-ergo-ink ${
-                              formData.glasSchadensart === opt.value
-                                ? 'selected'
-                                : ''
-                            }`}
-                          >
-                            {opt.label}
-                          </button>
-                        ))}
-                      </div>
-                      {errors.glasSchadensart && <span className="text-xs text-ergo-red">{errors.glasSchadensart}</span>}
-                    </div>
-
+                  <div className="sv-card" style={cardStyle}>
+                    <h2 className="sv-section-title" style={{ marginTop: 0 }}>Schadenfragen</h2>
+                    {renderChoice('Welche Scheibe ist beschädigt?', 'glasScheibe', [
+                      { value: 'frontscheibe', label: 'Frontscheibe' },
+                      { value: 'heckscheibe', label: 'Heckscheibe' },
+                      { value: 'seitenscheibe_lv', label: 'Seitenscheibe links vorne' },
+                      { value: 'seitenscheibe_lh', label: 'Seitenscheibe links hinten' },
+                      { value: 'seitenscheibe_rv', label: 'Seitenscheibe rechts vorne' },
+                      { value: 'seitenscheibe_rh', label: 'Seitenscheibe rechts hinten' },
+                      { value: 'dachscheibe', label: 'Dachscheibe / Panoramadach' },
+                    ], { stacked: true })}
+                    {renderChoice('Was liegt vor?', 'glasSchadensart', [
+                      { value: 'steinschlag', label: 'Steinschlag (einzeln)' },
+                      { value: 'mehrere_steinschlaege', label: 'Mehrere Steinschläge' },
+                      { value: 'riss', label: 'Riss' },
+                      { value: 'eingeschlagen', label: 'Eingeschlagen / zerstört' },
+                    ], {
+                      stacked: true,
+                      onSelect: value => {
+                        updateField('glasSchadensart', value);
+                        if (!['steinschlag', 'mehrere_steinschlaege', 'riss'].includes(value)) {
+                          updateField('glasBereich', '');
+                        }
+                        if (value !== 'steinschlag') {
+                          updateField('glasGroesse', '');
+                        }
+                      },
+                    })}
                     {['steinschlag', 'mehrere_steinschlaege', 'riss'].includes(formData.glasSchadensart) && (
-                      <div className="flex flex-col gap-1">
-                        <label className="text-sm font-semibold text-ergo-ink">In welchem Bereich befindet sich der Schaden? *</label>
-                        <div className="flex flex-col gap-2">
-                          {[
-                            { value: 'rand', label: 'Weniger als 10 cm vom Rand' },
-                            { value: 'fahrsichtfeld', label: 'Fahrsichtfeld über dem Lenkrad' },
-                            { value: 'anderer', label: 'Anderer Bereich' },
-                          ].map(opt => (
-                            <button
-                              key={opt.value}
-                              type="button"
-                              onClick={() => updateField('glasBereich', opt.value)}
-                              className={`ergo-option w-full text-left px-4 py-3 text-sm font-semibold text-ergo-ink ${
-                                formData.glasBereich === opt.value
-                                  ? 'selected'
-                                  : ''
-                              }`}
-                            >
-                              {opt.label}
-                            </button>
-                          ))}
-                        </div>
-                        {errors.glasBereich && <span className="text-xs text-ergo-red">{errors.glasBereich}</span>}
+                      <div className="sv-subbox">
+                        {renderChoice('In welchem Bereich befindet sich der Schaden?', 'glasBereich', [
+                          { value: 'rand', label: 'Weniger als 10 cm vom Rand' },
+                          { value: 'fahrsichtfeld', label: 'Fahrsichtfeld über dem Lenkrad' },
+                          { value: 'anderer', label: 'Anderer Bereich' },
+                        ], { stacked: true })}
                       </div>
                     )}
-
                     {formData.glasSchadensart === 'steinschlag' && (
-                      <div className="flex flex-col gap-1">
-                        <label className="text-sm font-semibold text-ergo-ink">Größe des Schlags *</label>
-                        <div className="flex flex-col gap-2">
-                          {[
-                            { value: 'kleiner', label: 'Kleiner als eine 2-€-Münze' },
-                            { value: 'groesser', label: 'Größer als eine 2-€-Münze' },
-                          ].map(opt => (
-                            <button
-                              key={opt.value}
-                              type="button"
-                              onClick={() => updateField('glasGroesse', opt.value)}
-                              className={`ergo-option w-full text-left px-4 py-3 text-sm font-semibold text-ergo-ink ${
-                                formData.glasGroesse === opt.value
-                                  ? 'selected'
-                                  : ''
-                              }`}
-                            >
-                              {opt.label}
-                            </button>
-                          ))}
-                        </div>
-                        {errors.glasGroesse && <span className="text-xs text-ergo-red">{errors.glasGroesse}</span>}
+                      <div className="sv-subbox">
+                        {renderChoice('Größe des Schlags', 'glasGroesse', [
+                          { value: 'kleiner', label: 'Kleiner als eine 2-€-Münze' },
+                          { value: 'groesser', label: 'Größer als eine 2-€-Münze' },
+                        ], { stacked: true })}
                       </div>
                     )}
-
-                    <div className="bg-ergo-gray border border-ergo-line rounded-lg p-4 mt-2">
-                      <p className="text-sm text-ergo-ink">
-                        <span className="font-bold">Hinweis:</span> Nach Eingang Ihrer Meldung koordinieren wir gemeinsam mit unserem Partner Carglass einen Reparaturtermin – direkt bei Ihnen oder in einer Carglass-Filiale.
-                      </p>
-                    </div>
-                  </>
-                )}
-
-                {selectedType !== 'glasschaden' && (
-                  <>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Versicherungsnummer *</label>
-                      <input type="text" value={formData.versicherungsnummer} onChange={e => updateField('versicherungsnummer', e.target.value)} className={inputCls('versicherungsnummer')} />
-                      {errors.versicherungsnummer && <span className="text-xs text-ergo-red">{errors.versicherungsnummer}</span>}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Schadendatum *</label>
-                      <input type="date" value={formData.schadendatum} onChange={e => updateField('schadendatum', e.target.value)} className={inputCls('schadendatum')} />
-                      {errors.schadendatum && <span className="text-xs text-ergo-red">{errors.schadendatum}</span>}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Schadenort *</label>
-                      <input type="text" value={formData.schadenort} onChange={e => updateField('schadenort', e.target.value)} placeholder="Straße, Ort wo der Schaden passiert ist" className={inputCls('schadenort')} />
-                      {errors.schadenort && <span className="text-xs text-ergo-red">{errors.schadenort}</span>}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Schadensbeschreibung *</label>
-                      <textarea value={formData.beschreibung} onChange={e => updateField('beschreibung', e.target.value)} placeholder="Bitte beschreiben Sie den Schaden so genau wie möglich..." rows={4} className={inputCls('beschreibung')} />
-                      {errors.beschreibung && <span className="text-xs text-ergo-red">{errors.beschreibung}</span>}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Bereits polizeilich gemeldet?</label>
-                      {renderRadioGroup('polizeiGemeldet', [
-                        { value: 'ja', label: 'Ja' },
-                        { value: 'nein', label: 'Nein' },
-                        { value: 'nicht_zutreffend', label: 'Nicht zutreffend' },
-                      ])}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Geschätzter Schaden in €</label>
-                      <input type="number" value={formData.geschaetzterSchaden} onChange={e => updateField('geschaetzterSchaden', e.target.value)} className={inputCls('geschaetzterSchaden')} />
-                    </div>
-                  </>
-                )}
-
-                {selectedType === 'kfz' && (
-                  <>
-                    <div className="border-t border-ergo-line pt-4 mt-2">
-                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Kfz-spezifische Angaben</h3>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Kennzeichen *</label>
-                      <input type="text" value={formData.kennzeichen} onChange={e => updateField('kennzeichen', e.target.value)} className={inputCls('kennzeichen')} />
-                      {errors.kennzeichen && <span className="text-xs text-ergo-red">{errors.kennzeichen}</span>}
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Unfallgegner vorhanden?</label>
-                      {renderRadioGroup('unfallgegner', [
-                        { value: 'ja', label: 'Ja' },
-                        { value: 'nein', label: 'Nein' },
-                      ])}
-                    </div>
-                    {formData.unfallgegner === 'ja' && (
-                      <>
-                        <div className="flex flex-col gap-1">
-                          <label className="text-sm font-semibold text-ergo-ink">Name des Gegners</label>
-                          <input type="text" value={formData.gegnerName} onChange={e => updateField('gegnerName', e.target.value)} className={inputCls('gegnerName')} />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <label className="text-sm font-semibold text-ergo-ink">Kennzeichen des Gegners</label>
-                          <input type="text" value={formData.gegnerKennzeichen} onChange={e => updateField('gegnerKennzeichen', e.target.value)} className={inputCls('gegnerKennzeichen')} />
-                        </div>
-                      </>
-                    )}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Fahrzeug fahrbereit?</label>
-                      {renderRadioGroup('fahrbereit', [
-                        { value: 'ja', label: 'Ja' },
-                        { value: 'nein', label: 'Nein' },
-                      ])}
-                    </div>
-                  </>
-                )}
-
-                {(selectedType === 'hausrat' || selectedType === 'gebaeude') && (
-                  <>
-                    <div className="border-t border-ergo-line pt-4 mt-2">
-                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Weitere Angaben</h3>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Betroffene Räume/Bereiche</label>
-                      <input type="text" value={formData.betroffeneRaeume} onChange={e => updateField('betroffeneRaeume', e.target.value)} className={inputCls('betroffeneRaeume')} />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Ursache</label>
-                      <select value={formData.ursache} onChange={e => updateField('ursache', e.target.value)} className={`${inputCls('ursache')} bg-white`}>
-                        <option value="">Bitte auswählen</option>
-                        <option value="Einbruch">Einbruch</option>
-                        <option value="Wasserschaden">Wasserschaden</option>
-                        <option value="Sturm/Hagel">Sturm/Hagel</option>
-                        <option value="Brand">Brand</option>
-                        <option value="Sonstiges">Sonstiges</option>
-                      </select>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Wurden bereits Notmaßnahmen ergriffen?</label>
-                      {renderRadioGroup('notmassnahmen', [
-                        { value: 'ja', label: 'Ja' },
-                        { value: 'nein', label: 'Nein' },
-                      ])}
-                    </div>
-                  </>
-                )}
-
-                {selectedType === 'rechtsschutz' && (
-                  <>
-                    <div className="border-t border-ergo-line pt-4 mt-2">
-                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Rechtsschutz-Angaben</h3>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Gegenseite</label>
-                      <input type="text" value={formData.gegenseite} onChange={e => updateField('gegenseite', e.target.value)} placeholder="Name/Firma des Gegners" className={inputCls('gegenseite')} />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Art des Rechtsstreits</label>
-                      <select value={formData.rechtsstreitArt} onChange={e => updateField('rechtsstreitArt', e.target.value)} className={`${inputCls('rechtsstreitArt')} bg-white`}>
-                        <option value="">Bitte auswählen</option>
-                        <option value="Arbeitsrecht">Arbeitsrecht</option>
-                        <option value="Verkehrsrecht">Verkehrsrecht</option>
-                        <option value="Mietrecht">Mietrecht</option>
-                        <option value="Vertragsrecht">Vertragsrecht</option>
-                        <option value="Sonstiges">Sonstiges</option>
-                      </select>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Anwalt bereits beauftragt?</label>
-                      {renderRadioGroup('anwaltBeauftragt', [
-                        { value: 'ja', label: 'Ja' },
-                        { value: 'nein', label: 'Nein' },
-                      ])}
-                    </div>
-                  </>
-                )}
-
-                {selectedType === 'bu' && (
-                  <>
-                    <div className="border-t border-ergo-line pt-4 mt-2">
-                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">BU-spezifische Angaben</h3>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Erkrankung/Ursache</label>
-                      <input type="text" value={formData.erkrankung} onChange={e => updateField('erkrankung', e.target.value)} className={inputCls('erkrankung')} />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Arbeitsunfähig seit</label>
-                      <input type="date" value={formData.arbeitsunfaehigSeit} onChange={e => updateField('arbeitsunfaehigSeit', e.target.value)} className={inputCls('arbeitsunfaehigSeit')} />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Arzt bereits aufgesucht?</label>
-                      {renderRadioGroup('arztAufgesucht', [
-                        { value: 'ja', label: 'Ja' },
-                        { value: 'nein', label: 'Nein' },
-                      ])}
-                    </div>
-                  </>
-                )}
-
-                {selectedType === 'haftpflicht' && (
-                  <>
-                    <div className="border-t border-ergo-line pt-4 mt-2">
-                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Haftpflicht-Angaben</h3>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Bitte beschreiben Sie den Haftpflichtfall *</label>
-                      <p className="text-xs text-ergo-stone mb-1">z.B. wem gegenüber ein Schaden entstanden ist, wie es dazu kam, geschätzter Schadenbetrag</p>
-                      <textarea value={formData.weitereDetails} onChange={e => updateField('weitereDetails', e.target.value)} rows={4} className={inputCls('weitereDetails')} />
-                      {errors.weitereDetails && <span className="text-xs text-ergo-red">{errors.weitereDetails}</span>}
-                    </div>
-                  </>
-                )}
-
-                {selectedType === 'sonstiges' && (
-                  <>
-                    <div className="border-t border-ergo-line pt-4 mt-2">
-                      <h3 className="text-base font-sans font-bold text-ergo-ink mb-3">Weitere Angaben</h3>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-semibold text-ergo-ink">Weitere Details</label>
-                      <textarea value={formData.weitereDetails} onChange={e => updateField('weitereDetails', e.target.value)} rows={3} className={inputCls('weitereDetails')} />
-                    </div>
-                  </>
-                )}
-
-                <div className="border-t border-ergo-line pt-4 mt-2">
-                  <h3 className="text-base font-sans font-bold text-ergo-ink mb-2 flex items-center gap-2"><Camera className="w-4 h-4 text-ergo-red" /> Fotos & Dokumente anhängen (optional)</h3>
-                  <p className="text-xs text-ergo-stone mb-3">Fotografieren Sie den Schaden direkt oder laden Sie vorhandene Bilder hoch. Das beschleunigt die Bearbeitung erheblich.</p>
-
-                  <div className="flex gap-2 mb-3">
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      className="ergo-btn ergo-btn--secondary ergo-btn--sm flex-1"
-                    >
-                      <Upload className="w-4 h-4" /> Dateien auswählen
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const input = document.createElement('input');
-                        input.type = 'file';
-                        input.accept = 'image/*';
-                        input.capture = 'environment';
-                        input.onchange = (e) => { handleFiles((e.target as HTMLInputElement).files); };
-                        input.click();
-                      }}
-                      className="ergo-btn ergo-btn--tertiary ergo-btn--sm"
-                    >
-                      <Camera className="w-4 h-4" /> Kamera
-                    </button>
+                    <p className="sv-hint" style={{ margin: 0, fontSize: 14 }}>
+                      Nach Eingang Ihrer Meldung stimmen wir mit unserem Partner Carglass einen Reparaturtermin mit Ihnen ab – bei Ihnen vor Ort oder in einer Carglass-Filiale.
+                    </p>
                   </div>
+                </>
+              )}
 
-                  <div
-                    onClick={() => fileInputRef.current?.click()}
-                    onDragOver={e => { e.preventDefault(); setIsDragOver(true); }}
-                    onDragLeave={() => setIsDragOver(false)}
-                    onDrop={e => { e.preventDefault(); setIsDragOver(false); handleFiles(e.dataTransfer.files); }}
-                    className={`border-dashed border-2 rounded-lg p-4 text-center cursor-pointer transition-colors ${
-                      isDragOver ? 'border-ergo-red bg-ergo-red-light' : 'border-ergo-line hover:border-ergo-red'
-                    }`}
-                  >
-                    <p className="text-xs text-ergo-mute">Oder Dateien hierher ziehen (max. 5 Dateien, je max. 5 MB)</p>
-                  </div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*,application/pdf"
-                    multiple
-                    className="hidden"
-                    onChange={e => { handleFiles(e.target.files); e.target.value = ''; }}
-                  />
-                  {files.length > 0 && (
-                    <div className="mt-3">
-                      <p className="text-xs font-semibold text-ergo-ink mb-2">{files.length} Datei{files.length !== 1 ? 'en' : ''} ausgewählt:</p>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {files.map((file, i) => (
-                          <div key={i} className="relative group ergo-card overflow-hidden">
-                            {file.type.startsWith('image/') ? (
-                              <img src={URL.createObjectURL(file)} alt="" className="w-full h-24 object-cover" />
-                            ) : (
-                              <div className="w-full h-24 bg-ergo-gray flex items-center justify-center"><FileText className="w-6 h-6 text-ergo-red" /></div>
-                            )}
-                            <div className="p-2">
-                              <p className="text-xs font-medium text-ergo-ink truncate">{file.name}</p>
-                              <p className="text-xs text-ergo-mute">{formatFileSize(file.size)}</p>
-                            </div>
-                            <button
-                              onClick={() => removeFile(i)}
-                              className="absolute -top-1 -right-1 w-8 h-8 bg-ergo-red text-white rounded-full flex items-center justify-center opacity-90 hover:opacity-100"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
+              {selectedType !== 'glasschaden' && (
+                <div className="sv-card" style={cardStyle}>
+                  <h2 className="sv-section-title" style={{ marginTop: 0 }}>Zum Schaden</h2>
+                  {renderField('Versicherungsnummer', 'versicherungsnummer', 'text', { extra: { autoComplete: 'off' } })}
+                  {renderField('Schadendatum', 'schadendatum', 'date')}
+                  {renderField('Schadenort', 'schadenort', 'text', { placeholder: 'Straße, Ort, an dem der Schaden passiert ist' })}
+                  {renderTextarea('Schadensbeschreibung', 'beschreibung', 4, { placeholder: 'Bitte beschreiben Sie den Schaden so genau wie möglich …', hint: 'Mindestens 20 Zeichen.' })}
+                  {renderChoice('Bereits polizeilich gemeldet?', 'polizeiGemeldet', [
+                    { value: 'ja', label: 'Ja' },
+                    { value: 'nein', label: 'Nein' },
+                    { value: 'nicht_zutreffend', label: 'Nicht zutreffend' },
+                  ])}
+                  {renderField('Geschätzter Schaden in €', 'geschaetzterSchaden', 'number', { required: false, extra: { inputMode: 'decimal' } })}
+                </div>
+              )}
+
+              {selectedType === 'kfz' && (
+                <div className="sv-card" style={cardStyle}>
+                  <h2 className="sv-section-title" style={{ marginTop: 0 }}>Fahrzeug</h2>
+                  {renderField('Kennzeichen', 'kennzeichen', 'text', { extra: { autoCapitalize: 'characters', autoComplete: 'off' } })}
+                  {renderChoice('Unfallgegner vorhanden?', 'unfallgegner', [
+                    { value: 'ja', label: 'Ja' },
+                    { value: 'nein', label: 'Nein' },
+                  ])}
+                  {formData.unfallgegner === 'ja' && (
+                    <div className="sv-subbox">
+                      {renderField('Name des Gegners', 'gegnerName')}
+                      {renderField('Kennzeichen des Gegners', 'gegnerKennzeichen', 'text', { extra: { autoCapitalize: 'characters', autoComplete: 'off' } })}
                     </div>
                   )}
+                  {renderChoice('Fahrzeug fahrbereit?', 'fahrbereit', [
+                    { value: 'ja', label: 'Ja' },
+                    { value: 'nein', label: 'Nein' },
+                  ])}
                 </div>
+              )}
 
+              {(selectedType === 'hausrat' || selectedType === 'gebaeude') && (
+                <div className="sv-card" style={cardStyle}>
+                  <h2 className="sv-section-title" style={{ marginTop: 0 }}>Weitere Angaben</h2>
+                  {renderField('Betroffene Räume/Bereiche', 'betroffeneRaeume')}
+                  {renderSelect('Ursache', 'ursache', ['Einbruch', 'Wasserschaden', 'Sturm/Hagel', 'Brand', 'Sonstiges'])}
+                  {renderChoice('Wurden bereits Notmaßnahmen ergriffen?', 'notmassnahmen', [
+                    { value: 'ja', label: 'Ja' },
+                    { value: 'nein', label: 'Nein' },
+                  ])}
+                </div>
+              )}
+
+              {selectedType === 'rechtsschutz' && (
+                <div className="sv-card" style={cardStyle}>
+                  <h2 className="sv-section-title" style={{ marginTop: 0 }}>Rechtsschutz-Angaben</h2>
+                  {renderField('Gegenseite', 'gegenseite', 'text', { placeholder: 'Name/Firma des Gegners' })}
+                  {renderSelect('Art des Rechtsstreits', 'rechtsstreitArt', ['Arbeitsrecht', 'Verkehrsrecht', 'Mietrecht', 'Vertragsrecht', 'Sonstiges'])}
+                  {renderChoice('Anwalt bereits beauftragt?', 'anwaltBeauftragt', [
+                    { value: 'ja', label: 'Ja' },
+                    { value: 'nein', label: 'Nein' },
+                  ])}
+                </div>
+              )}
+
+              {selectedType === 'bu' && (
+                <div className="sv-card" style={cardStyle}>
+                  <h2 className="sv-section-title" style={{ marginTop: 0 }}>Angaben zur Berufsunfähigkeit</h2>
+                  {renderField('Erkrankung/Ursache', 'erkrankung')}
+                  {renderField('Arbeitsunfähig seit', 'arbeitsunfaehigSeit', 'date')}
+                  {renderChoice('Arzt bereits aufgesucht?', 'arztAufgesucht', [
+                    { value: 'ja', label: 'Ja' },
+                    { value: 'nein', label: 'Nein' },
+                  ])}
+                </div>
+              )}
+
+              {selectedType === 'haftpflicht' && (
+                <div className="sv-card" style={cardStyle}>
+                  <h2 className="sv-section-title" style={{ marginTop: 0 }}>Haftpflicht-Angaben</h2>
+                  {renderTextarea('Bitte beschreiben Sie den Haftpflichtfall', 'weitereDetails', 4, { hint: 'z. B. wem gegenüber ein Schaden entstanden ist, wie es dazu kam, geschätzter Schadenbetrag' })}
+                </div>
+              )}
+
+              {selectedType === 'sonstiges' && (
+                <div className="sv-card" style={cardStyle}>
+                  <h2 className="sv-section-title" style={{ marginTop: 0 }}>Weitere Angaben</h2>
+                  {renderTextarea('Weitere Details', 'weitereDetails', 3)}
+                </div>
+              )}
+
+              <div className="sv-card" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <h2 className="sv-section-title" style={{ marginTop: 0 }}>Fotos &amp; Dokumente <span className="sv-hint" style={{ fontFamily: 'inherit' }}>(optional)</span></h2>
+                <p className="sv-hint" style={{ margin: 0, fontSize: 14 }}>Fotografieren Sie den Schaden direkt oder laden Sie vorhandene Bilder hoch. Fotos helfen uns bei der Bearbeitung.</p>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*,application/pdf"
+                  multiple
+                  className="hidden"
+                  onChange={e => { handleFiles(e.target.files); e.target.value = ''; }}
+                />
                 <button
-                  onClick={handleStep2Next}
-                  className="ergo-btn ergo-btn--primary w-full mt-2"
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={e => { e.preventDefault(); setIsDragOver(true); }}
+                  onDragLeave={() => setIsDragOver(false)}
+                  onDrop={e => { e.preventDefault(); setIsDragOver(false); handleFiles(e.dataTransfer.files); }}
+                  disabled={files.length >= 5}
+                  className="sv-dropzone"
+                  style={isDragOver ? { background: 'var(--sv-accent-soft)', borderColor: 'var(--sv-accent)' } : undefined}
                 >
-                  Weiter zur Übersicht →
+                  <Upload size={26} strokeWidth={1.7} aria-hidden="true" />
+                  <span style={{ fontWeight: 700 }}>Fotos oder PDFs auswählen</span>
+                  <span className="sv-hint">Bis zu 5 Dateien, je max. 5 MB</span>
                 </button>
+                <button type="button" onClick={openCamera} disabled={files.length >= 5} className="sv-btn sv-btn--ghost">
+                  <Camera size={18} aria-hidden="true" /> Foto aufnehmen
+                </button>
+                {files.map((file, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, borderTop: '1px solid var(--sv-line)', paddingTop: 10 }}>
+                    {file.type.startsWith('image/') ? (
+                      <img src={URL.createObjectURL(file)} alt="" style={{ width: 48, height: 48, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }} />
+                    ) : (
+                      <span style={{ width: 48, height: 48, borderRadius: 6, background: 'var(--sv-paper)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <FileText size={22} aria-hidden="true" />
+                      </span>
+                    )}
+                    <span style={{ flex: 1, minWidth: 0 }}>
+                      <span style={{ display: 'block', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</span>
+                      <span className="sv-hint">{formatFileSize(file.size)}</span>
+                    </span>
+                    <button type="button" onClick={() => removeFile(i)} aria-label={`${file.name} entfernen`} style={{ width: 44, height: 44, border: 'none', background: 'none', cursor: 'pointer', color: 'var(--sv-ink)' }}>
+                      <X size={18} aria-hidden="true" />
+                    </button>
+                  </div>
+                ))}
               </div>
+
+              <button type="button" onClick={handleStep2Next} className="sv-btn">
+                Weiter zur Übersicht <ArrowRight size={18} aria-hidden="true" />
+              </button>
+              {Object.keys(errors).length > 0 && (
+                <p className="sv-error" role="alert" style={{ margin: 0, textAlign: 'center' }}>Bitte prüfen Sie die markierten Felder.</p>
+              )}
             </div>
           )}
 
           {step === 3 && selectedType && (
-            <div>
-              <h2 className="text-[22px] mb-4">Zusammenfassung</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <h1 className="sv-h1">Alles richtig? <em>Bitte prüfen.</em></h1>
 
-              <div className="ergo-card p-5 flex flex-col gap-3 mb-5">
-                <div className="flex items-center gap-3">
-                  <span className="ergo-icon-disc w-10 h-10">
-                    {(() => { const TypeIcon = damageTypeLabels[selectedType].icon; return <TypeIcon className="w-4 h-4" />; })()}
-                  </span>
-                  <span className="font-sans font-bold text-ergo-ink">{damageTypeLabels[selectedType].title}</span>
+              <div className="sv-card" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  {SelectedIcon && <SelectedIcon size={22} strokeWidth={1.7} aria-hidden="true" />}
+                  <span style={{ fontWeight: 700 }}>{damageTypeLabels[selectedType].title}</span>
                 </div>
-                <div className="flex flex-col gap-1.5 text-sm text-ergo-ink">
-                  <p><span className="font-semibold">Name:</span> {formData.vorname} {formData.nachname}</p>
-                  <p><span className="font-semibold">E-Mail:</span> {formData.email}</p>
-                  <p><span className="font-semibold">Telefon:</span> {formData.telefon}</p>
+                <dl className="sv-dl">
+                  <dt>Name</dt><dd>{formData.vorname} {formData.nachname}</dd>
+                  <dt>E-Mail</dt><dd style={{ overflowWrap: 'anywhere' }}>{formData.email}</dd>
+                  <dt>Telefon</dt><dd>{formData.telefon}</dd>
                   {selectedType === 'glasschaden' ? (
                     <>
-                      <p><span className="font-semibold">FIN:</span> {formData.fin}</p>
-                      <p><span className="font-semibold">Kennzeichen:</span> {formData.glasKennzeichen}</p>
-                      <p><span className="font-semibold">Scheibe:</span> {glasScheibeLabel(formData.glasScheibe)}</p>
-                      <p><span className="font-semibold">Schadensart:</span> {glasSchadensartLabel(formData.glasSchadensart)}</p>
-                      {formData.glasBereich && <p><span className="font-semibold">Bereich:</span> {glasBereichLabel(formData.glasBereich)}</p>}
-                      {formData.glasGroesse && <p><span className="font-semibold">Größe:</span> {glasGroesseLabel(formData.glasGroesse)}</p>}
+                      <dt>FIN</dt><dd style={{ overflowWrap: 'anywhere' }}>{formData.fin}</dd>
+                      <dt>Kennzeichen</dt><dd>{formData.glasKennzeichen}</dd>
+                      <dt>Scheibe</dt><dd>{glasScheibeLabel(formData.glasScheibe)}</dd>
+                      <dt>Schadensart</dt><dd>{glasSchadensartLabel(formData.glasSchadensart)}</dd>
+                      {formData.glasBereich && <><dt>Bereich</dt><dd>{glasBereichLabel(formData.glasBereich)}</dd></>}
+                      {formData.glasGroesse && <><dt>Größe</dt><dd>{glasGroesseLabel(formData.glasGroesse)}</dd></>}
                     </>
                   ) : (
                     <>
-                      <p><span className="font-semibold">Schadendatum:</span> {formData.schadendatum}</p>
-                      <p><span className="font-semibold">Schadenort:</span> {formData.schadenort}</p>
-                      <p><span className="font-semibold">Beschreibung:</span> {formData.beschreibung.length > 200 ? formData.beschreibung.slice(0, 200) + '...' : formData.beschreibung}</p>
+                      <dt>Schadendatum</dt><dd>{formData.schadendatum}</dd>
+                      <dt>Schadenort</dt><dd>{formData.schadenort}</dd>
                     </>
                   )}
-                  <p><span className="font-semibold">Anzahl Dateien:</span> {files.length}</p>
-                </div>
-                <p className="text-xs text-ergo-stone mt-1">Alles korrekt? Bitte prüfen Sie Ihre Angaben.</p>
+                  <dt>Dateien</dt><dd>{files.length}</dd>
+                </dl>
+                {selectedType !== 'glasschaden' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 15 }}>
+                    <span style={{ color: 'var(--sv-muted)' }}>Beschreibung</span>
+                    <span style={{ color: 'var(--sv-body)', overflowWrap: 'anywhere' }}>{formData.beschreibung.length > 200 ? formData.beschreibung.slice(0, 200) + '…' : formData.beschreibung}</span>
+                  </div>
+                )}
+                <button type="button" onClick={() => goToStep(2)} className="sv-link-btn" style={{ alignSelf: 'flex-start', fontSize: 14 }}>Angaben bearbeiten</button>
               </div>
 
-              <div className="flex flex-col gap-3 mb-5">
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" checked={confirm1} onChange={e => { setConfirm1(e.target.checked); if (errors.confirm1) setErrors(prev => { const n = { ...prev }; delete n.confirm1; return n; }); }} className="mt-0.5 w-5 h-5 accent-ergo-red shrink-0 cursor-pointer" />
-                  <span className="text-sm text-ergo-ink">Alle Angaben sind korrekt und vollständig.</span>
-                </label>
-                {errors.confirm1 && <span className="text-xs text-ergo-red ml-7">{errors.confirm1}</span>}
-
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" checked={confirm2} onChange={e => { setConfirm2(e.target.checked); if (errors.confirm2) setErrors(prev => { const n = { ...prev }; delete n.confirm2; return n; }); }} className="mt-0.5 w-5 h-5 accent-ergo-red shrink-0 cursor-pointer" />
-                  <span className="text-sm text-ergo-ink">Ich bin mit der elektronischen Übermittlung einverstanden.</span>
-                </label>
-                {errors.confirm2 && <span className="text-xs text-ergo-red ml-7">{errors.confirm2}</span>}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div>
+                  <label className="sv-check">
+                    <input type="checkbox" checked={confirm1} onChange={e => { setConfirm1(e.target.checked); clearError('confirm1'); }} />
+                    <span>Alle Angaben sind korrekt und vollständig.</span>
+                  </label>
+                  {errors.confirm1 && <p className="sv-error" style={{ margin: '6px 0 0 34px' }}>{errors.confirm1}</p>}
+                </div>
+                <div>
+                  <label className="sv-check">
+                    <input type="checkbox" checked={confirm2} onChange={e => { setConfirm2(e.target.checked); clearError('confirm2'); }} />
+                    <span>Ich bin mit der elektronischen Übermittlung einverstanden. Die <Link href="/datenschutz" style={{ fontWeight: 600 }}>Datenschutzhinweise</Link> habe ich gelesen.</span>
+                  </label>
+                  {errors.confirm2 && <p className="sv-error" style={{ margin: '6px 0 0 34px' }}>{errors.confirm2}</p>}
+                </div>
               </div>
 
               {submitError && (
-                <div className="bg-ergo-red-light border border-ergo-red/30 rounded-lg p-4 mb-4 text-sm text-ergo-red">{submitError}</div>
+                <div className="sv-notice sv-notice--error" role="alert">
+                  {submitError}
+                  <span style={{ display: 'block', marginTop: 6, color: 'var(--sv-ink)' }}>
+                    Sie können den Schaden auch per{' '}
+                    <a href={`${WHATSAPP_URL}?text=${encodeURIComponent('Hallo Herr Stübe, ich möchte einen Schaden melden.')}`} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>WhatsApp</a>
+                    {' '}melden.
+                  </span>
+                </div>
               )}
 
-              <button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="ergo-btn ergo-btn--primary w-full"
-              >
-                {isSubmitting ? 'Wird übermittelt...' : 'Schaden jetzt melden'}
+              <button type="button" onClick={handleSubmit} disabled={isSubmitting} className="sv-btn">
+                {isSubmitting ? <><span className="sv-spin" aria-hidden="true" /> Wird gesendet …</> : <>Schaden melden <ArrowRight size={18} aria-hidden="true" /></>}
               </button>
-              <p className="text-center text-xs text-ergo-mute mt-3">
+              <p className="sv-hint" style={{ margin: 0, textAlign: 'center', fontSize: 14 }}>
                 Lieber per WhatsApp?{' '}
-                <a href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20m%C3%B6chte%20einen%20Schaden%20melden." target="_blank" rel="noopener noreferrer" className="text-[#1da851] font-bold underline">
-                  Direkt schreiben →
-                </a>
+                <a href={`${WHATSAPP_URL}?text=${encodeURIComponent('Hallo Herr Stübe, ich möchte einen Schaden melden.')}`} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>Direkt schreiben</a>
               </p>
             </div>
           )}
 
           {step === 4 && selectedType && (
-            <div className="text-center">
-              <div className="flex justify-center mb-4">
-                <div className="w-16 h-16 bg-ergo-check rounded-full flex items-center justify-center">
-                  <Check className="w-8 h-8 text-white" />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <h1 className="sv-h1">Vielen Dank – <em>ist angekommen.</em></h1>
+              <p style={{ margin: 0, color: 'var(--sv-body)' }}>
+                Ihre Schadenmeldung liegt jetzt bei Morino Stübe. Wir melden uns bei Ihnen.
+                {formData.email && <> Eine Eingangsbestätigung geht an <strong>{formData.email}</strong>.</>}
+              </p>
+              {reference && (
+                <div className="sv-card" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <span className="sv-hint">Ihre Vorgangsnummer</span>
+                  <span className="sv-ref">{reference}</span>
                 </div>
+              )}
+
+              <div className="sv-card">
+                <dl className="sv-dl">
+                  <dt>Schadenart</dt><dd>{damageTypeLabels[selectedType].title}</dd>
+                  <dt>Name</dt><dd>{formData.vorname} {formData.nachname}</dd>
+                  <dt>Eingereicht am</dt><dd>{new Date().toLocaleDateString('de-DE')}</dd>
+                </dl>
               </div>
 
-              <h2 className="text-2xl mb-2">Schadensmeldung eingegangen!</h2>
-              <p className="text-sm text-ergo-stone mb-4">Morino Stübe wurde informiert und wird sich innerhalb von 24 Stunden bei Ihnen melden.</p>
-              <div className="flex items-center justify-center gap-3 mb-5 text-xs text-ergo-stone">
-                <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 fill-ergo-yellow text-ergo-yellow" /> 4,9/5 Bewertung</span>
-                <span>·</span>
-                <span>ERGO Versicherungsfachmann</span>
-              </div>
-
-              <div className="bg-ergo-red-light border border-ergo-red/30 rounded-lg p-4 mb-5 text-left">
-                <p className="text-sm font-semibold text-ergo-red flex items-center gap-2"><AlertTriangle className="w-4 h-4 shrink-0" /> Bei dringendem Notfall rufen Sie bitte direkt an:</p>
-                <a href="tel:015566771019" className="text-base font-bold text-ergo-red underline mt-1 inline-block">015566771019</a>
-              </div>
-
-              <div className="ergo-card p-4 mb-5 text-left flex flex-col gap-1.5 text-sm text-ergo-ink">
-                <p><span className="font-semibold">Schadensart:</span> {damageTypeLabels[selectedType].title}</p>
-                <p><span className="font-semibold">Name:</span> {formData.vorname} {formData.nachname}</p>
-                <p><span className="font-semibold">Eingereicht am:</span> {new Date().toLocaleDateString('de-DE')}</p>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <a
-                  href="https://wa.me/4915566771019?text=Hallo%20Herr%20St%C3%BCbe%2C%20ich%20habe%20gerade%20eine%20Schadensmeldung%20eingereicht."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ergo-btn ergo-btn--whatsapp w-full"
-                >
-                  <MessageCircle className="w-5 h-5" /> WhatsApp schreiben
+              <div className="sv-card" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <span style={{ fontWeight: 600 }}>Dringender Notfall?</span>
+                <span style={{ color: 'var(--sv-body)', fontSize: 15 }}>Dann rufen Sie bitte direkt an.</span>
+                <a href={PHONE_HREF} className="sv-link-btn" style={{ alignSelf: 'flex-start' }}>
+                  <Phone size={16} aria-hidden="true" /> {PHONE_DISPLAY}
                 </a>
-                <Link href="/" className="ergo-btn ergo-btn--tertiary w-full">
-                  <ChevronLeft className="w-5 h-5" /> Zurück zur Startseite
-                </Link>
               </div>
+
+              <a
+                href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Hallo Herr Stübe, ich habe gerade eine Schadensmeldung eingereicht${reference ? ` (Vorgang ${reference})` : ''}.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sv-btn sv-btn--ghost"
+              >
+                <MessageCircle size={18} aria-hidden="true" /> Per WhatsApp schreiben
+              </a>
+              <Link href="/service" className="sv-link-btn" style={{ alignSelf: 'center' }}>Weiteres Anliegen melden</Link>
             </div>
           )}
 
         </div>
       </div>
-    </div>
+    </ServiceLayout>
   );
 }

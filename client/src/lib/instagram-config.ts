@@ -1,4 +1,4 @@
-// ERGO Instagram Master Config 2026
+// Instagram Master Config 2026
 // Brand constants, topic templates, and content generation
 
 export const ERGO = {
@@ -12,7 +12,7 @@ export const ERGO = {
   accentBg: '#FFF0F3',
   fontHeadline: "'Montserrat', 'Inter', sans-serif",
   fontBody: "'Inter', 'Montserrat', sans-serif",
-  logoText: 'ERGO',
+  logoText: 'STÜBE',
   logoWeight: 900,
   logoSpacing: '8px',
   agency: 'Agentur Morino Stübe',
@@ -126,8 +126,8 @@ Schick das deinen Eltern. Ernsthaft.
 
 Schreib mir CHECK — ich schau mir das kostenlos an.
 
-#haftpflicht #versicherung #ergo #oldenburg #finanziellesicherheit`,
-    hashtags: ['#haftpflicht', '#versicherung', '#ergo', '#oldenburg', '#finanziellesicherheit'],
+#haftpflicht #versicherung #morinostuebe #oldenburg #finanziellesicherheit`,
+    hashtags: ['#haftpflicht', '#versicherung', '#morinostuebe', '#oldenburg', '#finanziellesicherheit'],
     heygenScript: `Acht Euro gespart. Fünfzigtausend Euro Schaden.
 
 Ein Kunde von mir, 28 Jahre alt, hat vor ein paar Monaten seine Haftpflichtversicherung gekündigt. „Brauche ich nicht", hat er gesagt. Will sparen.
@@ -193,8 +193,8 @@ Schick das deinen Eltern. Die sollten das wissen.
 
 Schreib mir HAUS — ich prüfe das für dich.
 
-#elementarversicherung #hochwasser #ergo #delmenhorst #versicherung`,
-    hashtags: ['#elementarversicherung', '#hochwasser', '#ergo', '#delmenhorst', '#versicherung'],
+#elementarversicherung #hochwasser #morinostuebe #delmenhorst #versicherung`,
+    hashtags: ['#elementarversicherung', '#hochwasser', '#morinostuebe', '#delmenhorst', '#versicherung'],
     heygenScript: `Dein Keller läuft voll. In zwanzig Minuten. Und dann?
 
 Letzten Sommer — Starkregen in Delmenhorst. Eine Familie ruft mich an. Keller unter Wasser. Heizung kaputt. Möbel zerstört. Schimmel an den Wänden.
@@ -257,8 +257,8 @@ Wie sieht es bei dir aus? Bist du abgesichert?
 
 Schreib mir SCHUTZ — ich schau mir das kostenlos an.
 
-#berufsunfähigkeit #buversicherung #ergo #ganderkesee #absicherung`,
-    hashtags: ['#berufsunfähigkeit', '#buversicherung', '#ergo', '#ganderkesee', '#absicherung'],
+#berufsunfähigkeit #buversicherung #morinostuebe #ganderkesee #absicherung`,
+    hashtags: ['#berufsunfähigkeit', '#buversicherung', '#morinostuebe', '#ganderkesee', '#absicherung'],
     heygenScript: `Jeder Vierte wird berufsunfähig. Jeder Vierte!
 
 Ich hatte letztens einen Kunden in der Beratung. Dreiundvierzig Jahre alt, Handwerker, zwanzig Jahre auf dem Bau. Bandscheibenvorfall. Von heute auf morgen konnte er nicht mehr arbeiten.
@@ -323,8 +323,8 @@ Es war nicht ihr Enkel. Es war ein Betrüger. Das Geld ist weg.
 
 Schreib mir BETRUG — ich schicke dir eine Checkliste.
 
-#enkeltrick #betrug #ergo #oldenburg #schutz`,
-    hashtags: ['#enkeltrick', '#betrug', '#ergo', '#oldenburg', '#schutz'],
+#enkeltrick #betrug #morinostuebe #oldenburg #schutz`,
+    hashtags: ['#enkeltrick', '#betrug', '#morinostuebe', '#oldenburg', '#schutz'],
     heygenScript: `Fünftausend Euro weg. An einem Nachmittag.
 
 Eine Kundin von mir, zweiundsiebzig Jahre alt, lebt allein. Bekommt einen Anruf. „Oma, ich hatte einen Unfall. Ich brauche sofort Geld. Bitte hilf mir."
@@ -391,8 +391,8 @@ Bist du abgesichert?
 
 Schreib mir CHECK — ich prüfe das für dich.
 
-#rechtsschutz #anwalt #ergo #delmenhorst #versicherung`,
-    hashtags: ['#rechtsschutz', '#anwalt', '#ergo', '#delmenhorst', '#versicherung'],
+#rechtsschutz #anwalt #morinostuebe #delmenhorst #versicherung`,
+    hashtags: ['#rechtsschutz', '#anwalt', '#morinostuebe', '#delmenhorst', '#versicherung'],
     heygenScript: `Der Anwalt kostet dreitausend Euro. Die du nicht hast.
 
 Ein Kunde von mir, zwölf Jahre in seinem Unternehmen. Bekommt von heute auf morgen die Kündigung. Ohne Vorwarnung. Ohne Abfindung.
@@ -457,8 +457,8 @@ Speicher dir das. Du wirst es brauchen.
 
 Schreib mir CHECK — ich schau mir das kostenlos an.
 
-#hausratversicherung #einbruch #ergo #ganderkesee #versicherung`,
-    hashtags: ['#hausratversicherung', '#einbruch', '#ergo', '#ganderkesee', '#versicherung'],
+#hausratversicherung #einbruch #morinostuebe #ganderkesee #versicherung`,
+    hashtags: ['#hausratversicherung', '#einbruch', '#morinostuebe', '#ganderkesee', '#versicherung'],
     heygenScript: `Deine Hausrat deckt das nicht ab.
 
 Ein Paar von mir kommt aus dem Urlaub. Wohnungstür aufgebrochen. Laptop weg, Schmuck weg, Bargeld weg.
@@ -523,8 +523,8 @@ Schick das jemandem, der gerade „Versicherungen kündigen" googelt.
 
 Schreib mir CHECK — ich optimiere das kostenlos.
 
-#versicherung #sparen #ergo #oldenburg #finanziellesicherheit`,
-    hashtags: ['#versicherung', '#sparen', '#ergo', '#oldenburg', '#finanziellesicherheit'],
+#versicherung #sparen #morinostuebe #oldenburg #finanziellesicherheit`,
+    hashtags: ['#versicherung', '#sparen', '#morinostuebe', '#oldenburg', '#finanziellesicherheit'],
     heygenScript: `Acht Euro gespart. Und alles riskiert.
 
 Ein Kunde von mir wollte sparen. Verständlich, oder? Hat seine Haftpflicht gekündigt. Seinen Rechtsschutz auch. „Brauche ich eh nie", hat er gesagt.
