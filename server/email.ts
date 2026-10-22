@@ -155,7 +155,7 @@ export function referenceFor(id: number): string {
 // Eingangsbestätigung an den Kunden – ohne Anhänge, damit bei einer
 // vertippten Adresse keine Unterlagen bei Fremden landen.
 export async function sendReceipt(to: string, name: string, anliegen: string, reference: string): Promise<void> {
-  if (!process.env.RESEND_API_KEY) return;
+  if (!process.env.RESEND_API_KEY || !to) return;
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#2b211c;line-height:1.55">
       <p style="font-size:20px;font-family:Georgia,serif;margin:0 0 16px">Guten Tag ${esc(name)},</p>
